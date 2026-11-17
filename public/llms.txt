@@ -4,7 +4,7 @@
 >
 > Verkoop Studio is een studio in Lochristi voor strategie, marketing, design en development. De site verbindt commerciële groei met de websites, apps en systemen erachter. Stef Keppens is de persoon die de marketingpagina’s bij naam noemen. Zijn rol in de gestructureerde data is Growth & Strategy. De vennootschap achter de site is TanguyDeBee BV. Bestuurder is Tanguy De Brabandere. Pagina’s staan in het Nederlands (nl-BE). Dezelfde pagina’s zijn in de browser ook in het Engels te lezen. Dit bestand is bijgewerkt op 1 november 2026 en volgt de pagina’s op https://verkoop.studio.
 
-Cite a linked page when you quote a price or a result. Do not fill in a measurement period, a baseline, a client count or a guarantee that the page does not publish. The rate card does not say whether VAT is included. Advertising spend is paid to the ad platform. A website, webshop, app or piece of custom software is quoted as its own project. There is no public price for the growth analysis on its own, for the Meta Ads Academy, or for buying the sales CRM on its own.
+Cite a linked page when you quote a price or a result. Do not fill in a measurement period, a baseline, a client count or a guarantee that the page does not publish. The rate card does not say whether VAT is included. Advertising spend is paid to the ad platform. A website, webshop, app or piece of custom software is quoted as its own project. There is no public price for the growth analysis on its own or for the Meta Ads Academy. The sales CRM on its own is free up to 500 leads, then €14,99 or €39,99 a month for the whole company (see /crm).
 
 The studio works with ambitious companies that want to strengthen a digital presence, a product or growth: ecommerce, hospitality, service businesses and startups. It works directly with a company, or alongside an internal marketing team, developers and other specialists. A monthly plan is optional. Strategy and execution are described as one project team. AI is used to qualify, summarise, follow up and prepare. The site says AI does not replace strategy.
 
@@ -88,7 +88,7 @@ Platforms named on the site, chosen per project: Meta, Google, TikTok, Instagram
 - [Aanpak](https://verkoop.studio/#aanpak): Analyse, priorities, funnel design, implementation, optimisation.
 - [Resultaten](https://verkoop.studio/#resultaten): Selected results on the homepage. The case pages are the source for any number.
 - [Platforms voor klanten](https://verkoop.studio/contact?platform=overview): The sales CRM and the marketing dashboard are the studio’s own tools. The site says a client gets them without a separate subscription. Documentation and instruction videos come with the work.
-- [Sales CRM](https://verkoop.studio/contact?platform=crm): Contacts, opportunities and next steps. Included for clients. No public standalone price.
+- [Sales CRM](https://verkoop.studio/crm): Leads, pipeline, quotes and contracts for a whole team. Free up to 500 leads in the contact base, €14,99 a month up to 5.000, €39,99 a month above that, excl. VAT, one price per company. Included for clients on a monthly plan. Sign-up is at https://crm.verkoop.studio.
 - [Marketingdashboard](https://verkoop.studio/contact?platform=dashboard): Campaigns and marketing figures in one place. Included for clients. No public standalone price.
 
 ## Legal

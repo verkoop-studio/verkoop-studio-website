@@ -12,6 +12,7 @@ import Contact from './pages/Contact'
 import LegalPage from './pages/LegalPage'
 import Academy from './pages/Academy'
 import GratisWebsite from './pages/GratisWebsite'
+import SalesCrm from './pages/SalesCrm'
 import Performance from './pages/Performance'
 
 export default function App({ location }: { location?: string }) {
@@ -41,6 +42,7 @@ export default function App({ location }: { location?: string }) {
 
           <Route path="funnel-audit" element={<FunnelAudit />} />
           <Route path="gratis-website" element={<GratisWebsite />} />
+          <Route path="crm" element={<SalesCrm />} />
           <Route path="performance" element={<Performance />} />
           <Route path="agency" element={<OverStef />} />
           <Route path="email-marketing" element={<ServicePage slug="email-marketing" />} />

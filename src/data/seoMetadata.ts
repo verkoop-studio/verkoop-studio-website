@@ -21,6 +21,10 @@ export const seoMetadata: Record<string, Partial<Record<'nl' | 'en', Metadata>>>
     nl: { title: 'Gratis website voor één bedrijf' },
     en: { title: 'A free website for one business' },
   },
+  '/crm': {
+    nl: { title: 'Sales CRM voor je hele team' },
+    en: { title: 'A sales CRM for your whole team' },
+  },
   '/funnel-audit': { nl: { title: 'Groeianalyse voor je bedrijf' }, en: { title: 'Growth analysis for your business' } },
   '/funnels': { nl: { title: 'Salesfunnels en klantopvolging' }, en: { title: 'Sales funnels and lead nurturing' } },
   '/meta-ads': { nl: { title: 'Meta Ads voor leads en verkoop' }, en: { title: 'Meta Ads for leads and sales' } },

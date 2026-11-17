@@ -3,8 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { isLegalPath } from '../data/legal'
 import { persistentCta, persistentCtaHref } from '../data/nav'
 import { services } from '../data/services'
+import { trackCrmSignupClick, trackEvent } from '../lib/analytics'
+import { crmLanding, signupHref } from '../data/crmLanding'
 import { performance } from '../data/performance'
-import { trackEvent } from '../lib/analytics'
 import { useLang } from '../i18n/LanguageContext'
 
 /** Opening and closing actions. The bar stays hidden while one of these is already on screen. */
@@ -14,6 +15,7 @@ const PRIMARY_ACTION = [
   '.service-hero .button-dark',
   '.closing-cta .hero-actions .button-dark',
   '.pina-case-cta .button-dark',
+  '.crm-signup',
   '.performance-hero .button-dark',
   '#starten form',
 ].join(', ')
@@ -60,6 +62,19 @@ export default function StickyMobileCTA() {
 
   return (
     <div className={`mobile-contact-bar pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/95 p-3 backdrop-blur lg:hidden${suppressed ? ' is-suppressed' : ''}`}>
+      {pathname === crmLanding.path ? (
+        // The CRM page has one action, so the bar repeats it instead of offering a call.
+        <a
+          href={crmLanding.signupUrl}
+          onClick={(event) => {
+            event.currentTarget.href = signupHref(window.location.search)
+            trackCrmSignupClick('sticky_mobile')
+          }}
+          className="block rounded-full bg-accent px-5 py-3.5 text-center text-[15px] font-semibold text-accent-ink"
+        >
+          {crmLanding.cta[lang]}
+        </a>
+      ) : (
       <Link
         to={onPerformance ? `${pathname}#starten` : onService ? `${pathname}#audit-formulier-section` : persistentCtaHref}
         onClick={() => trackEvent('audit_cta_clicked', { placement: 'sticky_mobile' })}
@@ -67,6 +82,7 @@ export default function StickyMobileCTA() {
       >
         {onPerformance ? performance.hero.cta[lang] : persistentCta[lang]}
       </Link>
+      )}
     </div>
   )
 }

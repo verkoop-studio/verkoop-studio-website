@@ -22,6 +22,7 @@ export type TrackingEvent =
   | 'proposal_sent'
   | 'project_won'
   | 'project_value'
+  | 'crm_signup_clicked'
 
 declare global {
   interface Window {
@@ -81,6 +82,26 @@ export function trackAcademyConversion(receipt: { ok?: boolean; captured?: unkno
   if (typeof window === 'undefined' || !submissionId) return
   if (receipt.ok !== true || !Array.isArray(receipt.captured) || !receipt.captured.includes('resend_contact')) return
   sendLeadConversion(`academy_${submissionId}`, formId, 'academy_signup', 'Meta Ads Academy aanmelding')
+}
+
+/**
+ * The CRM landing page sends people to sign up on crm.verkoop.studio, so this site
+ * never sees a finished registration. It counts the click on "Start je CRM" as the
+ * Lead, once per session, and says so in the label. A CompleteRegistration belongs
+ * inside the CRM, after the account exists.
+ */
+export function trackCrmSignupClick(placement: string) {
+  if (typeof window === 'undefined') return
+  trackEvent('crm_signup_clicked', { placement })
+  // Meta only: GA4 and Current count confirmed enquiries, and a click is not one.
+  if (typeof window.fbq === 'function') {
+    trackLeadOnce('sk_meta_lead_crm_signup', () => {
+      window.fbq!('trackSingle', '29297541076513579', 'Lead', {
+        content_name: 'Sales CRM sign-up click',
+        form_id: 'crm-landing',
+      }, { eventID: `crm_signup_${Date.now().toString(36)}` })
+    })
+  }
 }
 
 /** Performance sign-ups are the leads the paid ads buy; their own label lets Meta optimise and report on them apart. */
