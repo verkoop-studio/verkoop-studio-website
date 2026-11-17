@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { isLegalPath } from '../data/legal'
+import { performance } from '../data/performance'
 import { useLang } from '../i18n/LanguageContext'
 import { trackNewsletterConversion } from '../lib/analytics'
 import './EmailCapture.css'
@@ -58,7 +59,8 @@ export default function EmailCapture({ openRequest = 0, automatic = true }: { op
   const pending = useRef(false)
   const submissionId = useRef('')
   const panel = useRef<HTMLElement>(null)
-  const excluded = pathname === '/contact' || pathname === '/funnel-audit' || isLegalPath(pathname)
+  // A paid landing page keeps one action: the newsletter does not open on its own there.
+  const excluded = pathname === '/contact' || pathname === '/funnel-audit' || pathname === performance.path || isLegalPath(pathname)
 
   useEffect(() => {
     if (!openRequest) return

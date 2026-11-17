@@ -5,6 +5,7 @@ import { persistentCta, persistentCtaHref } from '../data/nav'
 import { services } from '../data/services'
 import { trackCrmSignupClick, trackEvent } from '../lib/analytics'
 import { crmLanding, signupHref } from '../data/crmLanding'
+import { performance } from '../data/performance'
 import { useLang } from '../i18n/LanguageContext'
 
 /** Opening and closing actions. The bar stays hidden while one of these is already on screen. */
@@ -15,6 +16,8 @@ const PRIMARY_ACTION = [
   '.closing-cta .hero-actions .button-dark',
   '.pina-case-cta .button-dark',
   '.crm-signup',
+  '.performance-hero .button-dark',
+  '#starten form',
 ].join(', ')
 
 export default function StickyMobileCTA() {
@@ -22,6 +25,8 @@ export default function StickyMobileCTA() {
   const { pathname } = useLocation()
   const [suppressed, setSuppressed] = useState(false)
   const onService = services.some((service) => pathname === `/${service.slug}`)
+  // The Performance landing page has one action: the bar leads to its sign-up form.
+  const onPerformance = pathname === performance.path
 
   useLayoutEffect(() => {
     const desktop = window.matchMedia('(min-width: 1024px)')
@@ -71,11 +76,11 @@ export default function StickyMobileCTA() {
         </a>
       ) : (
       <Link
-        to={onService ? `${pathname}#audit-formulier-section` : persistentCtaHref}
+        to={onPerformance ? `${pathname}#starten` : onService ? `${pathname}#audit-formulier-section` : persistentCtaHref}
         onClick={() => trackEvent('audit_cta_clicked', { placement: 'sticky_mobile' })}
         className="block rounded-full bg-accent px-5 py-3.5 text-center text-[15px] font-semibold text-accent-ink"
       >
-        {persistentCta[lang]}
+        {onPerformance ? performance.hero.cta[lang] : persistentCta[lang]}
       </Link>
       )}
     </div>

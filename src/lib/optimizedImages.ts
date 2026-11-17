@@ -26,7 +26,19 @@ import crmLeads from '../assets/crm/crm-leads.webp'
 import crmLeadsSmall from '../assets/crm/crm-leads-800.webp'
 import crmHero from '../assets/crm/crm-hero.webp'
 import crmHeroSmall from '../assets/crm/crm-hero-710.webp'
+import perfOverview from '../assets/performance/overview.webp'
+import perfOverviewSmall from '../assets/performance/overview-640.webp'
+import perfAds from '../assets/performance/ads.webp'
+import perfAdsSmall from '../assets/performance/ads-640.webp'
+import perfCustomers from '../assets/performance/customers.webp'
+import perfCustomersSmall from '../assets/performance/customers-640.webp'
+import perfAdvice from '../assets/performance/advice.webp'
+import perfAdviceSmall from '../assets/performance/advice-640.webp'
 export const optimizedImages: Record<string, {width:number; height:number; srcSet?:string}> = {
+  [perfOverview]: {width:1440, height:700, srcSet:`${perfOverviewSmall} 640w, ${perfOverview} 1440w`},
+  [perfAds]: {width:1440, height:700, srcSet:`${perfAdsSmall} 640w, ${perfAds} 1440w`},
+  [perfCustomers]: {width:1440, height:700, srcSet:`${perfCustomersSmall} 640w, ${perfCustomers} 1440w`},
+  [perfAdvice]: {width:1440, height:700, srcSet:`${perfAdviceSmall} 640w, ${perfAdvice} 1440w`},
   [healthfactor]: {width:1440, height:749, srcSet:`${healthfactorSmall} 640w, ${healthfactor} 1440w`},
   '/images/ads/healthfactor-personal.jpg': {width:720, height:1280},
   [image0]: {width:1254, height:1254, srcSet:`${small0} 640w, ${image0} 1254w`},
