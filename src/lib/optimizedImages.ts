@@ -18,6 +18,14 @@ import image6 from '../assets/cases/ekart.webp'
 import small6 from '../assets/cases/ekart-640.webp'
 import healthfactor from '../assets/cases/healthfactor-website.webp'
 import healthfactorSmall from '../assets/cases/healthfactor-website-640.webp'
+import crmDashboard from '../assets/crm/crm-dashboard.webp'
+import crmDashboardSmall from '../assets/crm/crm-dashboard-800.webp'
+import crmProspectflow from '../assets/crm/crm-prospectflow.webp'
+import crmProspectflowSmall from '../assets/crm/crm-prospectflow-800.webp'
+import crmLeads from '../assets/crm/crm-leads.webp'
+import crmLeadsSmall from '../assets/crm/crm-leads-800.webp'
+import crmHero from '../assets/crm/crm-hero.webp'
+import crmHeroSmall from '../assets/crm/crm-hero-710.webp'
 export const optimizedImages: Record<string, {width:number; height:number; srcSet?:string}> = {
   [healthfactor]: {width:1440, height:749, srcSet:`${healthfactorSmall} 640w, ${healthfactor} 1440w`},
   '/images/ads/healthfactor-personal.jpg': {width:720, height:1280},
@@ -32,5 +40,9 @@ export const optimizedImages: Record<string, {width:number; height:number; srcSe
   [image6]: {width:1440, height:1080, srcSet:`${small6} 640w, ${image6} 1440w`},
 
   '/partners/eonlog-website.webp': {width:1280, height:800, srcSet:'/partners/eonlog-website-640.webp 640w, /partners/eonlog-website.webp 1280w'},
+  [crmHero]: {width:1420, height:1110, srcSet:`${crmHeroSmall} 710w, ${crmHero} 1420w`},
+  [crmDashboard]: {width:1600, height:1000, srcSet:`${crmDashboardSmall} 800w, ${crmDashboard} 1600w`},
+  [crmProspectflow]: {width:1600, height:1000, srcSet:`${crmProspectflowSmall} 800w, ${crmProspectflow} 1600w`},
+  [crmLeads]: {width:1600, height:1000, srcSet:`${crmLeadsSmall} 800w, ${crmLeads} 1600w`},
   '/partners/lyte-logo.png': {width:1984, height:688},
 }
