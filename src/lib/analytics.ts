@@ -26,7 +26,7 @@ export type TrackingEvent =
 declare global {
   interface Window {
     dataLayer?: Record<string, unknown>[]
-    fbq?: (command: 'trackSingle', pixelId: string, event: 'Lead', params: Record<string, unknown>, options: { eventID: string }) => void
+    fbq?: (command: 'trackSingle', pixelId: string, event: 'Lead' | 'ViewContent', params: Record<string, unknown>, options?: { eventID: string }) => void
     oaiq?: (command: 'measure', event: 'lead_created', params: { type: 'customer_action' }, options: { event_id: string }) => void
     current?: (command: 'lead', data: Record<string, unknown>) => void
     gtag?: {
@@ -81,6 +81,32 @@ export function trackAcademyConversion(receipt: { ok?: boolean; captured?: unkno
   if (typeof window === 'undefined' || !submissionId) return
   if (receipt.ok !== true || !Array.isArray(receipt.captured) || !receipt.captured.includes('resend_contact')) return
   sendLeadConversion(`academy_${submissionId}`, formId, 'academy_signup', 'Meta Ads Academy aanmelding')
+}
+
+/** Performance sign-ups are the leads the paid ads buy; their own label lets Meta optimise and report on them apart. */
+export function trackPerformanceConversion(receipt: { ok?: boolean; captured?: unknown; openai_event_id?: string }, submissionId: string, formId: string) {
+  if (typeof window === 'undefined' || !submissionId) return
+  if (receipt.ok !== true || !Array.isArray(receipt.captured) || !receipt.captured.includes('resend_contact')) return
+  sendLeadConversion(`performance_${submissionId}`, formId, 'performance_signup', 'Verkoop Studio Performance aanmelding')
+  if (typeof window.oaiq === 'function') {
+    trackLeadOnce(`sk_openai_lead_${submissionId}`, () => {
+      window.oaiq!('measure', 'lead_created', { type: 'customer_action' }, {
+        event_id: receipt.openai_event_id || `website_lead_${submissionId}`,
+      })
+    })
+  }
+}
+
+/**
+ * The PageView in index.html fires on the first load only. A visitor who reaches a
+ * landing page through the site's own links gets no PageView for it, so the page
+ * also sends ViewContent: retargeting audiences can be built on either.
+ */
+export function trackLandingView(contentName: string) {
+  if (typeof window === 'undefined' || typeof window.fbq !== 'function') return
+  try {
+    window.fbq('trackSingle', '29297541076513579', 'ViewContent', { content_name: contentName })
+  } catch { /* Analytics must never break the page. */ }
 }
 
 /** Newsletter success needs a segment receipt; a honeypot acknowledgement is not a lead. */

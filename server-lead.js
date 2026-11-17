@@ -1,5 +1,5 @@
 import { enquiryTemplate } from './server-templates.js'
-import { GIVEAWAY_FORM_ID } from './server-crm.js'
+import { GIVEAWAY_FORM_ID, PERFORMANCE_FORM_ID } from './server-crm.js'
 import { createHash } from 'node:crypto'
 
 export const WEBSITE_ENQUIRY_SEGMENT = 'd6c1a8b8-b0a0-4ea8-af19-e93f4b07800d'
@@ -48,6 +48,13 @@ export async function saveLeadContact(resend, body, request = resendRequest) {
   }
 }
 
+/** The first words of the studio's notification subject, by the form the lead came from. */
+function notificationLabel(formId) {
+  if (formId === GIVEAWAY_FORM_ID) return 'Nieuwe deelname gratis website van'
+  if (formId === PERFORMANCE_FORM_ID) return 'Nieuwe aanmelding Verkoop Studio Performance van'
+  return 'Nieuwe groeianalyse-aanvraag van'
+}
+
 export async function captureLead({ resend, body, from, to = 'stefkeppens@gmail.com', crm, request = resendRequest, segmentId = WEBSITE_ENQUIRY_SEGMENT }) {
   if (!resend) return { ok: false, status: 503, captured: [], failed: ['resend_not_configured'] }
   const key = leadKey(body)
@@ -60,7 +67,7 @@ export async function captureLead({ resend, body, from, to = 'stefkeppens@gmail.
     }],
     ['resend_email', () => request(() => resend.emails.send({
       from, to: [...new Set(['stefkeppens@gmail.com', to].filter(Boolean))], replyTo: body.email,
-      subject: `${body.form_id === GIVEAWAY_FORM_ID ? 'Nieuwe deelname gratis website van' : 'Nieuwe groeianalyse-aanvraag van'} ${String(body.bedrijf || body.naam).replace(/[\r\n]/g, ' ').slice(0, 80)}`,
+      subject: `${notificationLabel(body.form_id)} ${String(body.bedrijf || body.naam).replace(/[\r\n]/g, ' ').slice(0, 80)}`,
       template: enquiryTemplate(body),
     }, { idempotencyKey: `lead-notification/${key}` }))],
   ]
