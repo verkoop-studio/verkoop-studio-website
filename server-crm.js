@@ -6,6 +6,16 @@ export const WEBSITE_CAMPAIGN = 'Verkoop Studio website'
 export const GIVEAWAY_FORM_ID = 'gratis-website-actie'
 /** Campaign for the free-website giveaway. The CRM reads this name to badge the lead. */
 export const GIVEAWAY_CAMPAIGN = 'Verkoop Studio gratis website'
+/** The sign-up form on /performance posts this form_id. */
+export const PERFORMANCE_FORM_ID = 'performance-aanmelding'
+/** Campaign for sign-ups from the Verkoop Studio Performance landing page (the paid ads land there). */
+export const PERFORMANCE_CAMPAIGN = 'Verkoop Studio Performance'
+
+/** Form ids that file their leads under a campaign of their own. Everything else is a website enquiry. */
+const CAMPAIGN_BY_FORM = new Map([
+  [GIVEAWAY_FORM_ID, GIVEAWAY_CAMPAIGN],
+  [PERFORMANCE_FORM_ID, PERFORMANCE_CAMPAIGN],
+])
 
 /**
  * The CRM campaign a lead is filed under, derived from the form it came from.
@@ -13,9 +23,7 @@ export const GIVEAWAY_CAMPAIGN = 'Verkoop Studio gratis website'
  * renamed from the browser; only the form_id the page itself posts is read.
  */
 export function campaignForForm(formId) {
-  return (typeof formId === 'string' ? formId.trim() : '') === GIVEAWAY_FORM_ID
-    ? GIVEAWAY_CAMPAIGN
-    : WEBSITE_CAMPAIGN
+  return CAMPAIGN_BY_FORM.get(typeof formId === 'string' ? formId.trim() : '') ?? WEBSITE_CAMPAIGN
 }
 
 export function crmPayload(body, { campaign = campaignForForm(body?.form_id) } = {}) {

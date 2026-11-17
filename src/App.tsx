@@ -12,6 +12,7 @@ import Contact from './pages/Contact'
 import LegalPage from './pages/LegalPage'
 import Academy from './pages/Academy'
 import GratisWebsite from './pages/GratisWebsite'
+import Performance from './pages/Performance'
 
 export default function App({ location }: { location?: string }) {
   const Router = location ? StaticRouter : BrowserRouter
@@ -40,6 +41,7 @@ export default function App({ location }: { location?: string }) {
 
           <Route path="funnel-audit" element={<FunnelAudit />} />
           <Route path="gratis-website" element={<GratisWebsite />} />
+          <Route path="performance" element={<Performance />} />
           <Route path="agency" element={<OverStef />} />
           <Route path="email-marketing" element={<ServicePage slug="email-marketing" />} />
           <Route path="data-analytics" element={<ServicePage slug="data-analytics" />} />
