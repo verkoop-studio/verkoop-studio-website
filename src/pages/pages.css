@@ -790,7 +790,7 @@
 .pr-h1 { margin: 0; font-size: clamp(48px, 7vw, 120px); }
 .pr-hero .vs-lead { margin: 0; max-width: 56ch; }
 .pr-hero .sv-hero-actions { position: relative; margin-top: 10px; }
-.pr-note { position: absolute; left: calc(100% + 16px); top: -10px; white-space: nowrap; }
+.pr-note { position: relative; white-space: nowrap; }
 .pr-builder { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
 .pr-builder .vs-lead { margin: 12px 0 24px; }
 .pr-q { margin: 0 0 18px; padding: 0; border: 0; }
@@ -798,9 +798,9 @@
 .pr-switch { display: inline-flex; padding: 4px; border-radius: 99px; background: var(--vs-stone); }
 .pr-switch button { position: relative; min-width: 84px; min-height: 42px; padding: 0 18px; border: 0; border-radius: 99px; background: none; color: var(--vs-ink-2); font: 600 15px/1 var(--font-sans); cursor: pointer; }
 .pr-switch button[aria-checked='true'] { color: var(--vs-paper); }
-.pr-switch button span { position: relative; z-index: 1; }
+.pr-switch button > span:last-child { position: relative; z-index: 1; }
 .pr-switch button:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
-.pr-switch-pill { position: absolute; inset: 0; border-radius: inherit; background: var(--vs-ink); }
+.pr-switch .pr-switch-pill { position: absolute; inset: 0; z-index: 0; border-radius: inherit; background: var(--vs-ink); }
 .pr-result { position: sticky; top: 100px; }
 .pr-result-label { margin: 0 0 10px; color: var(--vs-mute); font-size: 14px; }
 .pr-result-card { display: grid; justify-items: start; gap: 10px; padding: clamp(22px, 3vw, 32px); border-radius: 24px; background: var(--vs-ink); color: var(--vs-paper); }
@@ -839,3 +839,20 @@
 .pr-result::before { content: ''; position: absolute; inset: -6% -8%; z-index: -1; background: radial-gradient(50% 50% at 50% 45%, rgb(43 75 242 / 0.18), transparent 70%); pointer-events: none; }
 @media (max-width: 900px) { .pr-result::before { inset: -4% 0; } }
 .cs-story-product img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+/* Pricing hero: one promise on the left, the three monthly prices as big figures on the right. */
+.pr-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr); align-items: end; gap: 28px clamp(28px, 5vw, 72px); }
+.pr-hero-copy { display: grid; justify-items: start; gap: 14px; }
+.pr-promise { margin: 0; font: 500 clamp(22px, 2.2vw, 30px)/1.2 var(--font-display); letter-spacing: -0.02em; color: var(--vs-ink-2); }
+.pr-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; padding: 0; list-style: none; }
+.pr-tile { display: grid; align-content: space-between; gap: 18px; height: 100%; box-sizing: border-box; padding: 18px; border-radius: 20px; background: #fff; box-shadow: 0 1px 2px rgb(17 17 16 / 0.05), inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); text-decoration: none; transition: translate 0.35s var(--vs-ease), box-shadow 0.35s var(--vs-ease); }
+.pr-tile:hover, .pr-tile:focus-visible { translate: 0 -4px; box-shadow: 0 26px 44px -28px rgb(17 17 16 / 0.5), inset 0 0 0 1px var(--vs-line); }
+.pr-tile:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 3px; }
+.pr-tile--2 { background: var(--vs-ink); color: var(--vs-paper); box-shadow: none; }
+.pr-tile b { font-size: 13.5px; font-weight: 600; }
+.pr-tile strong { display: block; font: 500 clamp(30px, 3vw, 44px)/1 var(--font-display); letter-spacing: -0.035em; font-variant-numeric: tabular-nums; }
+.pr-tile small { display: block; margin-top: 4px; color: var(--vs-mute); font-size: 12.5px; }
+.pr-tile--2 small { color: #b9b5ac; }
+@media (max-width: 900px) { .pr-hero { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 520px) { .pr-tiles { grid-template-columns: minmax(0, 1fr); } .pr-tile { grid-template-columns: 1fr auto; align-items: end; } }
+@media (prefers-reduced-motion: reduce) { .pr-tile { transition: none; } .pr-tile:hover { translate: none; } }

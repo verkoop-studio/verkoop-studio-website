@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
 import Cta from '../components/brand/Cta'
 import { useArrive } from '../components/brand/useArrive'
@@ -38,6 +39,7 @@ const COPY = {
     perf: 'Performance',
     faq: 'Vragen over prijzen',
     note: 'alles excl. btw :)',
+    promise: 'Drie pakketten. Eén volledige aanpak.',
   },
   en: {
     seoTitle: 'Pricing',
@@ -57,6 +59,7 @@ const COPY = {
     perf: 'Performance',
     faq: 'Questions about pricing',
     note: 'all excl. VAT :)',
+    promise: 'Three plans. One full approach.',
   },
 }
 
@@ -130,14 +133,29 @@ export default function Pricing() {
       <Seo title={t.seoTitle} description={t.seoDescription} path="/prijzen" />
 
       <section className="vs-wrap pr-hero" aria-labelledby="pricing-page-title">
-        <motion.p className="vs-label" {...arrive(0)}>{t.label}</motion.p>
-        <SplitHeadline as="h1" id="pricing-page-title" className="vs-h1 pr-h1" parts={t.title} onMount />
-        <motion.p className="vs-lead" {...arrive(0.55)}>{faqItems[14].answer[lang]}</motion.p>
-        <motion.div className="sv-hero-actions" {...arrive(0.7)}>
-          <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'pricing_hero' })}>{t.cta}</Cta>
-          <TextLink href="#builder-title">{t.builder}</TextLink>
-          <HandNote point="up-left" className="pr-note">{t.note}</HandNote>
-        </motion.div>
+        <div className="pr-hero-copy">
+          <motion.p className="vs-label" {...arrive(0)}>{t.label}</motion.p>
+          <SplitHeadline as="h1" id="pricing-page-title" className="vs-h1 pr-h1" parts={t.title} onMount />
+          <motion.p className="pr-promise" {...arrive(0.55)}>{t.promise}</motion.p>
+          <motion.div className="sv-hero-actions" {...arrive(0.7)}>
+            <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'pricing_hero' })}>{t.cta}</Cta>
+            <TextLink href="#builder-title">{t.builder}</TextLink>
+            <HandNote point="up-left" className="pr-note">{t.note}</HandNote>
+          </motion.div>
+        </div>
+        <motion.ul className="pr-tiles" {...arrive(0.85)}>
+          {pricingTiers.map((tier, i) => {
+            const [figure, per] = tier.price[lang].split(' / ')
+            return (
+              <li key={tier.key}>
+                <Link to={`/contact?pakket=${tier.key}`} className={`pr-tile pr-tile--${i}`} onClick={() => trackEvent('audit_cta_clicked', { placement: 'pricing_hero_tile', tier: tier.key })}>
+                  <b>{tier.name[lang]}</b>
+                  <span><strong>{figure}</strong><small>{per ? `/ ${per}` : ''}</small></span>
+                </Link>
+              </li>
+            )
+          })}
+        </motion.ul>
       </section>
 
       <Builder lang={lang} />
