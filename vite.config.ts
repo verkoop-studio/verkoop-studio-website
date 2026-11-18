@@ -8,6 +8,8 @@ export default defineConfig({
   server: {
     port: 5183,
     strictPort: true,
+    // Build output is rewritten by `npm run build`; watching it can crash the dev server on Windows (EBUSY).
+    watch: { ignored: ['**/dist/**', '**/dist-ssr/**'] },
     // Forward API calls to the Express server (run `npm run dev:server`) so the
     // lead form works end-to-end in local development.
     proxy: {
