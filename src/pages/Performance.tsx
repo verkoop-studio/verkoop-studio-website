@@ -22,7 +22,6 @@ import adviceShot from '../assets/performance/advice.webp'
 import { PRODUCT_STYLES, usePageStyles } from '../lib/deferredStyles'
 
 const SHOTS = { ads: adsShot, customers: customersShot, advice: adviceShot } as const
-const TINTS = ['#2b4bf2', '#ff7a59', '#c9f26a']
 /** Upper bound of monthly ad spend for each plan, in the order of performance.pricing.plans. */
 const LIMITS = [5000, 15000, 50000, 150000, Infinity]
 
@@ -127,6 +126,39 @@ function PlanSlider({ lang }: { lang: 'nl' | 'en' }) {
   )
 }
 
+/** The three dashboard screens, one large at a time: tabs pick the screen, the pointer zooms in where it rests. */
+function ShotViewer({ lang }: { lang: 'nl' | 'en' }) {
+  const t = T[lang]
+  const items = p.screens.items[lang]
+  const [active, setActive] = useState(0)
+  const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null)
+  const reduce = useReducedMotion()
+  const screen = items[active]
+  const onMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (reduce || event.pointerType !== 'mouse') return
+    const box = event.currentTarget.getBoundingClientRect()
+    setZoom({ x: ((event.clientX - box.left) / box.width) * 100, y: ((event.clientY - box.top) / box.height) * 100 })
+  }
+  return (
+    <div className="pp-viewer">
+      <div className="pp-viewer-tabs" role="tablist" aria-label={p.screens.title[lang]}>
+        {items.map((item, i) => (
+          <button key={item.key} type="button" role="tab" aria-selected={active === i} className={active === i ? 'is-on' : ''} onClick={() => setActive(i)}>
+            <span>{String(i + 1).padStart(2, '0')}</span>{item.title}
+          </button>
+        ))}
+      </div>
+      <div className="tx-win pp-viewer-win">
+        <div className="tx-win-bar"><i /><i /><i /><b>Performance</b><em>{t.sample}</em></div>
+        <div className={`pp-viewer-stage${zoom ? ' is-zoom' : ''}`} onPointerMove={onMove} onPointerLeave={() => setZoom(null)}>
+          <ResponsiveImage key={screen.key} src={SHOTS[screen.key]} alt={screen.alt} sizes="(max-width: 1024px) 100vw, 1200px" loading="lazy" className="pp-viewer-shot" style={zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined} />
+        </div>
+      </div>
+      <p className="pp-viewer-body">{screen.body}</p>
+    </div>
+  )
+}
+
 export default function Performance() {
   usePageStyles(PRODUCT_STYLES)
   const { lang } = useLang()
@@ -194,23 +226,7 @@ export default function Performance() {
       <section ref={screens} id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
         <div className="vs-wrap">
           <SplitHeadline id="schermen-titel" className="vs-h2" parts={[{ text: p.screens.title[lang] }]} />
-          <div className="pp-cards">
-            {p.screens.items[lang].map((screen, i) => (
-              <Tilted key={screen.key} lean={i % 2 ? 0.8 : -0.8} className="tx-card pp-card is-on" style={{ '--t': TINTS[i] } as CSSProperties}>
-                <div className="tx-stage pp-card-stage">
-                  <div className="tx-win">
-                    <div className="tx-win-bar"><i /><i /><i /><b>Performance</b><em>{t.sample}</em></div>
-                    <ResponsiveImage src={SHOTS[screen.key]} alt={screen.alt} sizes="(max-width: 1024px) 100vw, 900px" loading="lazy" className="pp-shot" />
-                  </div>
-                </div>
-                <div className="tx-info">
-                  <p className="tx-step">{String(i + 1).padStart(2, '0')} / 03</p>
-                  <h3 className="tx-title">{screen.title}</h3>
-                  <p className="tx-body">{screen.body}</p>
-                </div>
-              </Tilted>
-            ))}
-          </div>
+          <ShotViewer lang={lang} />
           <p className="pp-fine">{p.sampleNote[lang]}</p>
         </div>
       </section>

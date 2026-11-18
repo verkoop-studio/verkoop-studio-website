@@ -47,12 +47,7 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
 
 /* What you do with it: one wide card per screen */
 .pp-screens { padding-block: clamp(72px, 10vw, 128px); background: var(--vs-stone); background-image: linear-gradient(rgb(17 17 16 / 0.045) 1px, transparent 1px), linear-gradient(90deg, rgb(17 17 16 / 0.045) 1px, transparent 1px); background-size: 44px 44px; }
-.pp-cards { display: grid; gap: clamp(28px, 4vw, 48px); margin-top: clamp(32px, 4vw, 52px); }
-.pp-card { width: min(100%, 980px) !important; }
-.pp-card:nth-child(even) { justify-self: end; }
-.pp-card-stage { height: auto; aspect-ratio: 16 / 8.2; }
 .pp-shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; padding: 0 !important; flex: 1; min-height: 0; }
-.pp-card .tx-body { max-width: 62ch; margin-bottom: 0; }
 .pp-fine { margin: 28px 0 0; color: var(--vs-mute); font-size: 14px; }
 .pp-narrow { max-width: 38em; margin-top: 16px; }
 
@@ -107,7 +102,6 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
   .pp-hero-note { display: none; }
   .pp-today { width: 200px; }
   .pp-pain:nth-child(n) { margin-left: 0; }
-  .pp-card-stage { padding-left: 18px; }
   .pp-pill > span { display: none; }
   .pp-pill { padding-left: 7px; }
 }
@@ -201,3 +195,19 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
 .pp-pricing { background-image: var(--vs-grain); }
 .cx-stage::before { content: ''; position: absolute; inset: -12% -8%; z-index: -1; background: radial-gradient(50% 50% at 50% 50%, rgb(43 75 242 / 0.16), transparent 70%); pointer-events: none; }
 .cx-stepper { isolation: isolate; }
+/* Performance screens: one large panel, tabs to switch, zoom where the pointer rests. */
+.pp-viewer { display: grid; gap: 18px; margin-top: clamp(28px, 4vw, 48px); }
+.pp-viewer-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.pp-viewer-tabs button { display: inline-flex; align-items: baseline; gap: 8px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink-2); font: 600 14.5px/1 var(--font-sans); cursor: pointer; transition: background-color 0.25s, color 0.25s, box-shadow 0.25s; }
+.pp-viewer-tabs button span { color: var(--vs-mute); font-size: 12px; font-variant-numeric: tabular-nums; }
+.pp-viewer-tabs button:hover { box-shadow: inset 0 0 0 1px var(--vs-ink); color: var(--vs-ink); }
+.pp-viewer-tabs button.is-on { background: var(--vs-ink); box-shadow: none; color: var(--vs-paper); }
+.pp-viewer-tabs button.is-on span { color: #b9b5ac; }
+.pp-viewer-tabs button:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 2px; }
+.pp-viewer-win { overflow: hidden; border-radius: 18px; box-shadow: 0 40px 80px -44px rgb(17 17 16 / 0.5); }
+.pp-viewer-stage { overflow: hidden; aspect-ratio: 16 / 9; background: #fff; cursor: zoom-in; }
+.pp-viewer-shot { display: block; width: 100%; height: 100%; object-fit: cover; object-position: left top; transition: transform 0.35s var(--vs-ease); animation: pp-viewer-in 0.4s var(--vs-ease); }
+.pp-viewer-stage.is-zoom .pp-viewer-shot { transform: scale(1.8); }
+@keyframes pp-viewer-in { from { opacity: 0; translate: 0 10px; } }
+.pp-viewer-body { max-width: 62ch; margin: 0; color: var(--vs-ink-2); font-size: 16.5px; line-height: 1.6; }
+@media (prefers-reduced-motion: reduce) { .pp-viewer-shot { animation: none; transition: none; } .pp-viewer-stage { cursor: default; } }
