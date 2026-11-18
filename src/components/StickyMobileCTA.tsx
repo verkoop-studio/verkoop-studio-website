@@ -61,7 +61,7 @@ export default function StickyMobileCTA() {
   if (pathname === '/contact' || pathname === '/funnel-audit' || isLegalPath(pathname)) return null
 
   return (
-    <div className={`mobile-contact-bar pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/95 p-3 backdrop-blur lg:hidden${suppressed ? ' is-suppressed' : ''}`}>
+    <div className={`mobile-contact-bar pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-ink/95 p-3 backdrop-blur lg:hidden ${suppressed ? 'is-suppressed' : ''}`}>
       {pathname === crmLanding.path ? (
         // The CRM page has one action, so the bar repeats it instead of offering a call.
         <a
