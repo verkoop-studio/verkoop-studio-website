@@ -5,6 +5,7 @@ import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
+import { NoteCard } from '../components/brand/Playful'
 import RollingNumber from '../components/brand/RollingNumber'
 import BelgiumMap from '../components/brand/blocks/BelgiumMap'
 import { cases } from '../data/cases'
@@ -65,6 +66,12 @@ const COPY = {
     cta: 'Plan a call',
     cases: 'See the cases',
   },
+}
+
+/** The original line from the contact page, in Stef's hand. */
+const NOTE = {
+  nl: ['Vertel ons je doel', 'en wat vandaag vastloopt.', 'We bespreken je aanpak', 'en zoeken samen', 'waar de grootste kans zit.'],
+  en: ['Tell us your goal', 'and what is holding you back.', 'We discuss your approach', 'and look together for', 'the biggest opportunity.'],
 }
 
 /** The five steps on one line that draws itself as the section scrolls past. */
@@ -144,6 +151,10 @@ export default function OverStef() {
             </Reveal>
           ))}
         </ul>
+      </section>
+
+      <section className="vs-wrap vs-note-wrap" aria-label={lang === 'nl' ? 'Een woordje van Stef' : 'A note from Stef'}>
+        <NoteCard lines={NOTE[lang]} sign="Stef" />
       </section>
 
       <section className="vs-wrap vs-section ag-map" aria-labelledby="agency-map">

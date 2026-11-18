@@ -670,7 +670,6 @@
 .vs-band-wave { position: absolute; left: 0; right: 0; bottom: calc(100% - 1px); width: 100%; height: clamp(36px, 5vw, 72px); }
 .vs-band-wave-fill { fill: var(--vs-blue); }
 .vs-band-wave-line { fill: none; stroke: #ffd23f; stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
-.vs-band-bot { position: absolute; right: clamp(24px, 12vw, 200px); top: calc(clamp(36px, 5vw, 72px) * -1 - 40px); }
 .vs-band-inner { display: grid; gap: 28px; }
 .vs-band-title { margin: 0; font: 600 clamp(56px, 11vw, 176px)/0.9 var(--font-display); letter-spacing: -0.055em; color: var(--vs-paper); }
 .vs-band-actions { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
@@ -769,7 +768,6 @@
   .vs-bento-card { grid-column: 1 / -1; }
   .vs-news-pill .vs-field input { padding-right: 16px; }
   .vs-news-submit { position: static; width: 100%; height: 52px; margin-top: 8px; }
-  .vs-band-bot { right: 18px; }
 }
 @media (prefers-reduced-motion: reduce) { .vs-footer-letter > span { transition: none; } }
 
@@ -870,3 +868,44 @@
 @keyframes cs-draw { to { stroke-dashoffset: 0; } }
 @media (max-width: 860px) { .vs-split-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .vs-split-report li { animation: none; } .vs-split-spark path { animation: none; stroke-dashoffset: 0; } }
+
+/* Playful pieces: wavy edges, the dark doodle section, the ribbon with characters, the handwritten note. */
+.vs-wave { display: block; width: 100%; height: clamp(28px, 4vw, 56px); fill: var(--vs-ink); }
+.vs-wave--flip { transform: scaleY(-1); }
+
+.vs-dark { position: relative; overflow: hidden; margin-block: clamp(40px, 6vw, 80px); background: var(--vs-ink); color: var(--vs-paper); }
+.vs-dark > .vs-wave:first-child { margin-top: -1px; background: var(--vs-paper); }
+.vs-dark > .vs-wave:last-child { margin-bottom: -1px; background: var(--vs-paper); }
+.vs-dark .vs-h2 { color: var(--vs-paper); }
+.vs-dark .vs-services { border-color: rgb(255 255 255 / 0.12); }
+.vs-dark .vs-service { border-color: rgb(255 255 255 / 0.12); color: var(--vs-paper); }
+.vs-dark .vs-service .vs-label, .vs-dark .vs-service-copy { color: #9c988f; }
+.vs-dark .vs-service-arrow { color: #cfcbc3; }
+.vs-dark .vs-service:hover .vs-service-arrow { color: #9fb0ff; }
+.vs-dark > section { position: relative; z-index: 1; }
+.vs-doodles { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.vs-doodles path { fill: none; stroke: #fff; stroke-opacity: 0.07; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.vs-doodles-rect { animation: vs-doodle-drift 60s linear infinite; }
+@keyframes vs-doodle-drift { to { transform: translate(-480px, -320px); } }
+
+.vs-ribbon { position: relative; height: clamp(90px, 10vw, 140px); margin-block: clamp(20px, 4vw, 48px); pointer-events: none; }
+.vs-ribbon-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.vs-ribbon-svg path { fill: none; stroke: #ffd23f; stroke-width: 22; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.vs-ribbon-sit { position: absolute; left: 33%; top: calc(50% - 64px); }
+.vs-ribbon-hang { position: absolute; left: 68%; top: 34%; display: grid; justify-items: center; transform-origin: 50% 0; animation: vs-ribbon-sway 3.2s ease-in-out infinite alternate; }
+.vs-ribbon-string { display: block; width: 2px; height: 46px; background: var(--vs-ink); }
+@keyframes vs-ribbon-sway { from { translate: -2px 0; } to { translate: 2px 0; } }
+.vs-band-ribbon { position: absolute; left: 0; right: 0; top: calc(clamp(36px, 5vw, 72px) * -1 - 70px); margin: 0; z-index: 2; }
+.vs-band .vs-ribbon-string { background: var(--vs-paper); }
+
+.vs-note-wrap { display: grid; justify-items: center; }
+.vs-notecard { position: relative; width: min(100%, 460px); margin: 0; padding: 40px 36px 28px; background: #fffdf6; box-shadow: 0 2px 4px rgb(17 17 16 / 0.05), 0 40px 70px -40px rgb(17 17 16 / 0.45); background-image: repeating-linear-gradient(transparent 0 33px, rgb(43 75 242 / 0.12) 33px 34px); }
+.vs-notecard-tape { position: absolute; left: 50%; top: -14px; width: 120px; height: 30px; margin-left: -60px; background: rgb(255 210 63 / 0.7); mix-blend-mode: multiply; rotate: 2deg; }
+.vs-notecard blockquote { display: grid; margin: 0; color: var(--vs-ink); font: 500 clamp(24px, 2.6vw, 30px)/34px var(--font-hand); }
+.vs-notecard-line { display: block; }
+.vs-notecard figcaption { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 14px; color: var(--vs-ink-2); font: 500 22px/1 var(--font-hand); }
+.vs-notecard-sign { width: 96px; height: 32px; }
+.vs-notecard-sign path { fill: none; stroke: var(--vs-blue); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+@media (max-width: 640px) { .vs-ribbon-sit { left: 18%; } .vs-ribbon-hang { left: 72%; } }
+@media (prefers-reduced-motion: reduce) { .vs-doodles-rect, .vs-ribbon-hang { animation: none; } }

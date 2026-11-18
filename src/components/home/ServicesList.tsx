@@ -6,13 +6,14 @@ import type { ServiceSlug } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import SplitHeadline from '../brand/SplitHeadline'
+import { DoodleField, WaveEdge } from '../brand/Playful'
 import { EASE, VIEWPORT } from '../brand/motion'
 
 const ORDER: ServiceSlug[] = ['meta-ads', 'google-ads', 'landing-pages', 'funnels', 'websites', 'email-marketing', 'data-analytics', 'ai-automatiseringen']
 
 const COPY = {
-  nl: { title: [{ text: 'Wat we' }, { text: 'doen', tone: 'accent' as const }], label: 'Strategie · marketing · design · development' },
-  en: { title: [{ text: 'What we' }, { text: 'do', tone: 'accent' as const }], label: 'Strategy · marketing · design · development' },
+  nl: { title: [{ text: 'Wat we' }, { text: 'doen', tone: 'accent' as const }] },
+  en: { title: [{ text: 'What we' }, { text: 'do', tone: 'accent' as const }] },
 }
 
 export default function ServicesList() {
@@ -22,10 +23,12 @@ export default function ServicesList() {
   const list = ORDER.map((slug) => services.find((s) => s.slug === slug)).filter((s) => s !== undefined)
 
   return (
+    <div className="vs-dark">
+    <WaveEdge />
+    <DoodleField />
     <section id="expertise" className="vs-section vs-wrap" aria-labelledby="services-title">
       <div className="vs-section-head">
         <SplitHeadline id="services-title" className="vs-h2" parts={t.title} />
-        <span className="vs-label">{t.label}</span>
       </div>
       <div className="vs-services">
         {list.map((service, i) => (
@@ -46,5 +49,7 @@ export default function ServicesList() {
         ))}
       </div>
     </section>
+    <WaveEdge flip />
+    </div>
   )
 }

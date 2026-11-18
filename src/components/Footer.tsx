@@ -10,7 +10,7 @@ import { services } from '../data/services'
 import { useLang } from '../i18n/LanguageContext'
 import { trackEvent } from '../lib/analytics'
 import Arrow from './brand/Arrow'
-import BotAvatar from './brand/BotAvatar'
+import { Ribbon } from './brand/Playful'
 import Cta from './brand/Cta'
 import HandNote from './brand/HandNote'
 import SoftwarePreview from './brand/SoftwarePreview'
@@ -95,7 +95,7 @@ function CtaBand({ home }: { home: boolean }) {
         <path className="vs-band-wave-fill" d="M0 80V40C160 8 320 8 480 32s320 56 480 32 320-48 480-24V80Z" />
         <motion.path className="vs-band-wave-line" d="M0 40C160 8 320 8 480 32s320 56 480 32 320-48 480-24" initial={reduce ? false : { pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 1.4, ease: EASE }} />
       </svg>
-      <span className="vs-band-bot" aria-hidden="true"><BotAvatar shape="bunny" size={72} color="#ffd23f" live /></span>
+      <Ribbon className="vs-band-ribbon" />
       <div className="vs-wrap vs-band-inner">
         <h2 id="band-title" className="vs-band-title">{t.band}</h2>
         <div className="vs-band-actions">

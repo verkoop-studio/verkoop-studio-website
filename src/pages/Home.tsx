@@ -7,6 +7,13 @@ import ResultBand from '../components/home/ResultBand'
 import ServicesList from '../components/home/ServicesList'
 import SoftwareShowcase from '../components/home/SoftwareShowcase'
 import RunItSplit from '../components/home/RunItSplit'
+import { NoteCard, Ribbon } from '../components/brand/Playful'
+
+/** The original line from the contact page, in Stef's hand. */
+const NOTE = {
+  nl: ['Vertel ons je doel', 'en wat vandaag vastloopt.', 'We bespreken je aanpak', 'en zoeken samen', 'waar de grootste kans zit.'],
+  en: ['Tell us your goal', 'and what is holding you back.', 'We discuss your approach', 'and look together for', 'the biggest opportunity.'],
+}
 import PlansSection from '../components/home/PlansSection'
 import { useLang } from '../i18n/LanguageContext'
 
@@ -30,11 +37,15 @@ export default function Home() {
       <HomeHero />
       <SystemTeardown />
       <WorkScroller />
+      <Ribbon />
       <ResultBand />
       <ServicesList />
       <SoftwareShowcase />
       <RunItSplit />
       <PlansSection />
+      <section className="vs-wrap vs-section vs-note-wrap" aria-label={lang === 'nl' ? 'Een woordje van Stef' : 'A note from Stef'}>
+        <NoteCard lines={NOTE[lang]} sign="Stef" />
+      </section>
       <FAQ />
     </div>
   )
