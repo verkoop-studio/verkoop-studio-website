@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import Seo from '../components/Seo'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
-import HandNote from '../components/brand/HandNote'
+import Polaroids from '../components/brand/Polaroids'
 import ProcessLine from '../components/brand/ProcessLine'
 import Reveal from '../components/brand/Reveal'
 import { NoteCard } from '../components/brand/Playful'
@@ -80,9 +80,6 @@ export default function OverStef() {
   const t = COPY[lang]
   const reduce = useReducedMotion()
   const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
-  const polaroid = (delay: number, rotate: number) =>
-    reduce ? {} : { initial: { opacity: 0, y: 80, rotate: rotate * 3 }, animate: { opacity: 1, y: 0, rotate }, transition: { type: 'spring' as const, stiffness: 80, damping: 14, delay } }
-
   return (
     <div className="vs-page ag-page">
       <Seo title={t.seoTitle} description={t.seoDescription} path="/agency" />
@@ -97,19 +94,7 @@ export default function OverStef() {
             <TextLink to="/cases">{t.cases}</TextLink>
           </motion.div>
         </div>
-        <div className="ag-polaroids" aria-hidden="true">
-          <motion.figure className="ag-polaroid ag-polaroid--a" {...polaroid(0.4, -5)}>
-            <ResponsiveImage src={stef} alt="" sizes="(max-width: 900px) 60vw, 320px" />
-            <figcaption>Stef</figcaption>
-          </motion.figure>
-          <motion.figure className="ag-polaroid ag-polaroid--b" {...polaroid(0.6, 4)}>
-            <ResponsiveImage src={tanguy} alt="" sizes="(max-width: 900px) 60vw, 320px" />
-            <figcaption>Tanguy</figcaption>
-          </motion.figure>
-          <span className="ag-tape ag-tape--a" />
-          <span className="ag-tape ag-tape--b" />
-          <HandNote point="down-right" className="ag-note">{t.note}</HandNote>
-        </div>
+        <Polaroids photos={[{ src: stef, name: 'Stef' }, { src: tanguy, name: 'Tanguy' }]} note={t.note} />
       </section>
 
       <section className="vs-wrap vs-section" aria-labelledby="agency-team">
