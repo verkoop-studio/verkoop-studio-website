@@ -1,5 +1,8 @@
 import { useAcademyTranslation } from '../i18n/academy'
-import { useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
+import Field from './brand/forms/Field'
+import SubmitButton from './brand/forms/SubmitButton'
+import { formatPhone, validEmail, validName, validPhone } from './brand/forms/validate'
 import type { FormEvent } from 'react'
 import { captureAttribution, getGa4Context, trackAcademyConversion, trackEvent } from '../lib/analytics'
 
@@ -27,6 +30,11 @@ export default function AcademySignup({ formId, variant = 'compact', requestType
   const [error, setError] = useState('')
   const [niveau, setNiveau] = useState('')
   const [budget, setBudget] = useState('')
+  const [valid, setValid] = useState<Record<string, boolean>>({})
+  const [newsletter, setNewsletter] = useState(false)
+  const onValidChange = useCallback((name: string, ok: boolean) => setValid((prev) => (prev[name] === ok ? prev : { ...prev, [name]: ok })), [])
+  const nl = lang === 'nl'
+  const ready = Boolean(valid.naam && valid.email && valid.telefoon)
   const submissionId = useRef('')
   const started = useRef(false)
 
@@ -76,17 +84,20 @@ export default function AcademySignup({ formId, variant = 'compact', requestType
 
   return <form className={`ac-signup ${full ? 'ac-signup-full' : 'ac-signup-compact'}`} onSubmit={submit} onInput={start} noValidate data-clarity-mask="true">
     <div className="ac-signup-fields">
-      <label className={`ac-field ${full ? '' : 'ac-field-wide'}`}><span className={full ? '' : 'sr-only'}>{t("Naam")}</span><input name="naam" autoComplete="name" required maxLength={200} placeholder={full ? '' : t("Je naam")} /></label>
-      <label className="ac-field"><span className={full ? '' : 'sr-only'}>{t("E-mailadres")}</span><input name="email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false} required maxLength={200} placeholder={full ? '' : t("Je e-mailadres")} /></label>
-      <label className="ac-field"><span className={full ? '' : 'sr-only'}>{t("Telefoon")}</span><input name="telefoon" type="tel" autoComplete="tel" required maxLength={60} placeholder={full ? '' : t("Je telefoonnummer")} /></label>
-      {full && <label className="ac-field"><span>{t("Bedrijf") + " "}<em>{t("optioneel")}</em></span><input name="bedrijf" autoComplete="organization" maxLength={200} /></label>}
-      {full && <label className="ac-field ac-field-wide"><span>{t("Website of webshop") + " "}<em>{t("optioneel")}</em></span><input name="website" type="url" inputMode="url" autoCapitalize="none" spellCheck={false} maxLength={300} placeholder="https://" /></label>}
+      <Field name="naam" label={t("Naam")} autoComplete="name" className={full ? '' : 'ac-field-wide'} disabled={status === 'pending'}
+        validate={validName} message={nl ? 'Vul je naam in.' : 'Enter your name.'} onValidChange={onValidChange} />
+      <Field name="email" type="email" inputMode="email" label={t("E-mailadres")} autoComplete="email" disabled={status === 'pending'}
+        validate={validEmail} message={nl ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'} onValidChange={onValidChange} />
+      <Field name="telefoon" type="tel" inputMode="tel" label={t("Telefoon")} autoComplete="tel" maxLength={60} prefix="BE" format={formatPhone} disabled={status === 'pending'}
+        validate={validPhone} message={nl ? 'Vul een telefoonnummer in, bijvoorbeeld 0470 12 34 56.' : 'Enter a phone number, for example 0470 12 34 56.'} onValidChange={onValidChange} />
+      {full && <Field name="bedrijf" label={t("Bedrijf") + " " + t("optioneel")} autoComplete="organization" required={false} disabled={status === 'pending'} />}
+      {full && <Field name="website" type="url" inputMode="url" label={t("Website of webshop") + " " + t("optioneel")} maxLength={300} required={false} className="ac-field-wide" disabled={status === 'pending'} />}
     </div>
     {full && <Choices legend={t("Waar sta je met adverteren?")} options={levels} value={niveau} onChange={value => { start(); setNiveau(value) }} />}
     {full && <Choices legend={t("Maandelijks advertentiebudget")} options={budgets} value={budget} onChange={value => { start(); setBudget(value) }} />}
     <input className="ac-honeypot" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-    {full && <label className="ac-consent"><input type="checkbox" name="nieuwsbrief" /><span>{t("Ja, ik ontvang graag marketingtips en nieuws van Verkoop Studio per e-mail.")}</span></label>}
-    <button type="submit" className="ac-button ac-signup-submit" disabled={status === 'pending'}>{status === 'pending' ? t("Even geduld…") : (submitLabel ?? t('Plan een kennismaking'))}</button>
+    {full && <label className="ac-consent vs-check-box" data-checked={newsletter || undefined}><input type="checkbox" name="nieuwsbrief" checked={newsletter} onChange={(event) => setNewsletter(event.target.checked)} /><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="5" /><path d="M5.5 10.5 8.5 13.5 14.5 6.5" pathLength={1} /></svg><span>{t("Ja, ik ontvang graag marketingtips en nieuws van Verkoop Studio per e-mail.")}</span></label>}
+    <SubmitButton state={status === 'pending' ? 'pending' : ready ? 'ready' : 'locked'} label={submitLabel ?? t('Plan een kennismaking')} pendingLabel={t("Even geduld…")} />
     {error && <p className="ac-form-error" role="alert">{t(error)}</p>}
   </form>
 }

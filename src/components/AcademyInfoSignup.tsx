@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { useAcademyTranslation } from '../i18n/academy'
+import Field from './brand/forms/Field'
+import SubmitButton from './brand/forms/SubmitButton'
+import { validEmail } from './brand/forms/validate'
 
 export default function AcademyInfoSignup({ onSuccess }: { onSuccess: () => void }) {
   const { lang, t } = useAcademyTranslation()
   const [pending, setPending] = useState(false)
   const [error, setError] = useState('')
+  const [emailOk, setEmailOk] = useState(false)
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (pending) return
@@ -24,9 +28,10 @@ export default function AcademyInfoSignup({ onSuccess }: { onSuccess: () => void
     } finally { setPending(false) }
   }
   return <form className="ac-info-form" onSubmit={submit} data-clarity-mask="true">
-    <label className="ac-field"><span>{t('E-mailadres')}</span><input name="email" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false} required maxLength={200} placeholder={t('Je e-mailadres')} disabled={pending} /></label>
+    <Field name="email" type="email" inputMode="email" label={t('E-mailadres')} autoComplete="email" disabled={pending}
+      validate={validEmail} message={lang === 'nl' ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'} onValidChange={(_, ok) => setEmailOk(ok)} />
     <input className="ac-honeypot" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-    <button type="submit" className="ac-button" disabled={pending}>{pending ? t('Even geduld…') : t('Stuur mij de info')}</button>
+    <SubmitButton state={pending ? 'pending' : emailOk ? 'ready' : 'locked'} label={t('Stuur mij de info')} pendingLabel={t('Even geduld…')} />
     {error && <p className="ac-form-error" role="alert">{t(error)}</p>}
   </form>
 }
