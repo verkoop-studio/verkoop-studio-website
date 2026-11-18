@@ -183,16 +183,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-hero-video { min-width: 0; }
 .vs-hero-video .hero-video { border-radius: 22px; overflow: hidden; box-shadow: 0 40px 80px -40px rgb(17 17 16 / 0.35); }
 .vs-hero-form { min-width: 0; display: flex; }
-.vs-hero-form .hero-request { margin: 0; width: 100%; padding: 28px; border: 1px solid var(--vs-line); border-radius: 22px; background: var(--vs-card); color: var(--vs-ink); box-shadow: 0 1px 2px rgb(17 17 16 / 0.04); display: flex; flex-direction: column; justify-content: center; }
-.vs-hero-form .hero-request h2 { color: var(--vs-ink); font-size: clamp(22px, 2vw, 28px); font-weight: 500; letter-spacing: -0.03em; margin-bottom: 20px; }
-.vs-hero-form .hero-request label > span { color: var(--vs-mute); font: 500 13px/1 var(--font-sans); margin-bottom: 7px; }
-.vs-hero-form .hero-request input { border-color: var(--vs-line); background: var(--vs-paper); color: var(--vs-ink); border-radius: 12px; min-height: 48px; transition: border-color 0.2s, background 0.2s; }
-.vs-hero-form .hero-request input:focus { outline: 2px solid var(--vs-blue); outline-offset: 1px; background: #fff; }
-.vs-hero-form .hero-request .hero-request-fields { grid-template-columns: minmax(0, 1fr); }
-.vs-hero-form .hero-request .hero-request-submit { border-radius: 9999px; background: var(--vs-ink); min-height: 50px; font-size: 15px; font-weight: 500; transition: background 0.25s, transform 0.3s var(--vs-ease); }
-.vs-hero-form .hero-request .hero-request-submit:hover { background: var(--vs-blue); transform: translateY(-1px); }
-.vs-hero-form .hero-request .hero-request-note { color: var(--vs-mute); }
-.vs-hero-form .hero-request-note a { color: var(--vs-ink); }
 @media (max-width: 960px) { .vs-hero-media { grid-template-columns: minmax(0, 1fr); } }
 
 /* Letter-slide headline: words in clipped masks, letters counter-slide */
@@ -431,8 +421,6 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 
 /* ---------- Form feedback: error shake, success check ---------- */
 
-.hero-request form:has(.hero-request-error) .hero-request-fields { animation: vs-shake 0.42s var(--vs-ease); }
-@keyframes vs-shake { 0%, 100% { transform: translateX(0); } 18% { transform: translateX(-8px); } 36% { transform: translateX(8px); } 54% { transform: translateX(-6px); } 72% { transform: translateX(6px); } 88% { transform: translateX(-2px); } }
 .hero-request-error { animation: vs-drop 0.3s var(--vs-ease) both; }
 @keyframes vs-drop { from { opacity: 0; transform: translateY(-4px); } }
 
@@ -445,7 +433,7 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 @media (prefers-reduced-motion: reduce) {
   .vs-ripple, .vs-cursor { display: none; }
   .vs-roll > span, .vs-page .faq-item summary { transition: none; }
-  .hero-request form:has(.hero-request-error) .hero-request-fields, .hero-request-error, .vs-check { animation: none; }
+  .hero-request-error, .vs-check { animation: none; }
   .vs-check-tick { animation: none; stroke-dashoffset: 0; }
 }
 
