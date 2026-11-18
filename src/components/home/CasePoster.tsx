@@ -144,7 +144,7 @@ function TickerPoster({ name }: PosterProps) {
       <rect width={W} height={H} fill="#0d1424" />
       <g className="vs-p-text" fontSize="17" fill="#f5f3ee">
         {TICKER_ROWS.map((row, i) => (
-          <text key={i} x="-40" y={92 + i * 52} opacity={i === 3 ? 0.2 : 0.07} className={i === 3 ? 'vs-ticker-live' : undefined}>
+          <text key={i} x="-40" y={92 + i * 52} opacity={i === 3 ? 0.42 : 0.13} className={i === 3 ? 'vs-ticker-live' : undefined}>
             {`${row}   ·   ${row}`}
           </text>
         ))}

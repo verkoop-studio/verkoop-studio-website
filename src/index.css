@@ -10,6 +10,8 @@
   --font-sans: 'Geist Variable', system-ui, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Funnel Display Variable', 'Geist Variable', system-ui, sans-serif;
   --font-hand: 'Caveat Variable', 'Segoe Print', cursive;
+  --font-condensed: 'Bebas Neue', 'Arial Narrow', sans-serif;
+  --font-dots: 'Doto Variable', ui-monospace, monospace;
   --font-serif: 'Instrument Serif', Georgia, serif;
 
   --color-ink: #f5f3ee;

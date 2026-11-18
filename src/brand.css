@@ -701,10 +701,64 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 /* Unfocused posters: one even paper veil over the whole frame instead of a filter on the art,
    which Chrome can paint in tiles when the poster is half outside the scroller. */
 .vs-slide .vs-poster, .vs-slide:not(.is-active) .vs-poster { opacity: 1; filter: none; animation: none; }
-.vs-slide-frame::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #f5f3ee; opacity: 0.5; transition: opacity 0.4s ease; }
+.vs-slide-frame::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #ebe8e0; opacity: 0.74; transition: opacity 0.4s ease; }
 .vs-slide.is-active .vs-slide-frame::after { opacity: 0; }
 @supports (animation-timeline: view()) {
   .vs-slide .vs-slide-frame::after { opacity: unset; animation: vs-veil linear both; animation-timeline: --vs-slide; }
 }
-@keyframes vs-veil { 0% { opacity: 0.5; } 45%, 55% { opacity: 0; } 100% { opacity: 0.5; } }
+@keyframes vs-veil { 0% { opacity: 0.74; } 42%, 58% { opacity: 0; } 100% { opacity: 0.74; } }
 @media (prefers-reduced-motion: reduce) { .vs-slide .vs-slide-frame::after { animation: none; } }
+
+/* ---------- Teardown: larger type, readable app window for the active layer ---------- */
+
+.vs-td-title { font-size: clamp(56px, 7.2vw, 116px); line-height: 0.95; margin-bottom: 18px; }
+.vs-td-body { font-size: clamp(18px, 1.45vw, 21px); max-width: 30ch; }
+.vs-td-specs li { font-size: 16px; padding: 14px 0; }
+.vs-td-count { font-family: var(--font-condensed); font-weight: 400; font-size: clamp(34px, 3.4vw, 52px); letter-spacing: 0.02em; }
+.vs-td-stage { position: relative; }
+.vs-td-pop { position: absolute; right: 0; bottom: 6%; width: min(360px, 78%); z-index: 5; }
+
+.vs-dots { font-family: var(--font-dots); font-weight: 700; font-variant-numeric: tabular-nums; letter-spacing: 0.02em; }
+
+/* App window: the traffic-light mini UI used in mocks. */
+.vs-win { overflow: hidden; border-radius: 14px; background: #fbfaf7; color: #111110; box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.55), 0 0 0 1px rgb(17 17 16 / 0.08); font-size: 14px; }
+.vs-win-bar { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #e6e2d8; background: #f3f0e8; }
+.vs-win-dots { display: inline-flex; gap: 5px; }
+.vs-win-dots i { width: 9px; height: 9px; border-radius: 50%; background: #d9d5ca; }
+.vs-win-dots i:first-child { background: #ff6b5e; } .vs-win-dots i:nth-child(2) { background: #febc2e; } .vs-win-dots i:last-child { background: #29c840; }
+.vs-win-title { flex: 1; font-weight: 600; font-size: 13px; color: #3b3a36; }
+.vs-win-sample { font-size: 11px; color: #8a867e; border: 1px solid #ddd8cc; border-radius: 999px; padding: 2px 8px; }
+.vs-win-body { display: flex; flex-direction: column; gap: 10px; padding: 16px; }
+.vs-win-muted { color: #66635d; font-size: 12px; }
+.vs-win-image { height: 90px; border-radius: 10px; background: linear-gradient(135deg, #2b4bf2, #7d93ff 55%, #ffd23f); }
+.vs-win-head { font: 600 16px/1.25 var(--font-display); letter-spacing: -0.01em; }
+.vs-win-head--big { font-size: 21px; }
+.vs-win-button { align-self: flex-start; padding: 8px 14px; border-radius: 999px; background: #ece9e1; font-weight: 600; font-size: 13px; }
+.vs-win-button--ink { background: #111110; color: #f5f3ee; }
+.vs-win-line { height: 8px; border-radius: 4px; background: #e3dfd5; } .vs-win-line--short { width: 60%; }
+.vs-win-field { display: flex; flex-direction: column; gap: 3px; padding: 8px 10px; border: 1px solid #e3dfd5; border-radius: 8px; background: #fff; }
+.vs-win-field em { font-style: normal; font-size: 11px; color: #8a867e; }
+.vs-win-toast { align-self: flex-end; padding: 6px 10px; border-radius: 8px; background: #111110; color: #c9f26a; font-size: 12px; font-weight: 600; }
+.vs-win-kanban { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.vs-win-kanban div { display: flex; flex-direction: column; gap: 5px; padding: 6px; border-radius: 8px; background: #efece4; min-height: 96px; }
+.vs-win-kanban em { font-style: normal; font-size: 10.5px; font-weight: 600; color: #3b3a36; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vs-win-kanban span { height: 18px; border-radius: 5px; background: #fff; box-shadow: 0 1px 0 rgb(17 17 16 / 0.06); }
+.vs-win-kanban div:nth-child(3) span:first-child { background: #c9f26a; }
+.vs-win-meter { position: relative; display: block; padding-bottom: 10px; font-size: 12px; color: #66635d; }
+.vs-win-meter b { color: #111110; font-size: 15px; }
+.vs-win-meter i { position: absolute; left: 0; right: 0; bottom: 0; height: 5px; border-radius: 3px; background: linear-gradient(90deg, #2b4bf2 var(--fill), #e3dfd5 var(--fill)); }
+.vs-win-feed, .vs-win-report { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.vs-win-feed li { display: flex; justify-content: space-between; padding: 8px 10px; border-radius: 8px; background: #efece4; }
+.vs-win-feed li:last-child { background: #111110; color: #f5f3ee; }
+.vs-win-feed b { font-size: 13px; }
+.vs-win-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.vs-win-stats span { display: flex; flex-direction: column; gap: 4px; padding: 8px; border-radius: 8px; background: #efece4; }
+.vs-win-stats em { font-style: normal; font-size: 11px; color: #66635d; }
+.vs-win-stats b { font-size: 18px; }
+.vs-win-bars { display: flex; align-items: flex-end; gap: 6px; height: 70px; }
+.vs-win-bars i { flex: 1; border-radius: 4px 4px 0 0; background: #2b4bf2; opacity: 0.85; }
+.vs-win-report li { padding-left: 18px; position: relative; } .vs-win-report li::before { content: ''; position: absolute; left: 0; top: 7px; width: 8px; height: 8px; border-radius: 50%; background: #2b4bf2; }
+.vs-win-report li:last-child { font-weight: 600; }
+
+.vs-td--list .vs-td-item { grid-template-columns: minmax(0, 1fr); }
+.vs-td--list .vs-win { max-width: 380px; }
