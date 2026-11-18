@@ -9,11 +9,11 @@ import { persistentCta, persistentCtaHref } from '../data/nav'
 import { services } from '../data/services'
 import { useLang } from '../i18n/LanguageContext'
 import { trackEvent } from '../lib/analytics'
-import Arrow from './brand/Arrow'
+import Arrow, { Go } from './brand/Arrow'
 import { Ribbon } from './brand/Playful'
 import Cta from './brand/Cta'
 import HandNote from './brand/HandNote'
-import SoftwarePreview from './brand/SoftwarePreview'
+import ProductMini from './brand/ProductMini'
 import Watcher from './brand/Watcher'
 import NewsletterInline from './brand/forms/NewsletterInline'
 import { EASE } from './brand/motion'
@@ -150,9 +150,9 @@ export default function Footer() {
               {[{ href: '/crm', kind: 'crm' as const, name: 'Sales CRM', fact: t.crm }, { href: '/performance', kind: 'performance' as const, name: 'Performance', fact: t.perf }].map((p) => (
                 <li key={p.href}>
                   <Link to={p.href} className="vs-bento-product">
-                    <SoftwarePreview kind={p.kind} reduce={Boolean(reduce)} />
-                    <span><b>{p.name}</b><em>{p.fact}</em></span>
-                    <Arrow size={15} />
+                    <span className="vs-bento-thumb"><ProductMini kind={p.kind} lang={lang} on={!reduce} id={`footer-${p.kind}`} /></span>
+                    <span className="vs-bento-product-text"><b>{p.name}</b><em>{p.fact}</em></span>
+                    <Go />
                   </Link>
                 </li>
               ))}

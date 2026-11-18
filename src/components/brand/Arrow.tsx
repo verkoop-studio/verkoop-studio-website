@@ -17,3 +17,11 @@ export default function Arrow({ direction = 'right', size = 17 }: { direction?: 
     </span>
   )
 }
+
+/**
+ * The site's round arrow button: at rest a quiet ring, under the hovered or focused link it
+ * fills with the accent, the arrow swaps through and then turns to point up and right.
+ */
+export function Go({ size = 15, className = '' }: { size?: number; className?: string }) {
+  return <span className={`vs-go ${className}`.trim()} aria-hidden="true"><Arrow size={size} /></span>
+}

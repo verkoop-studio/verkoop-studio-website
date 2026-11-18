@@ -1,13 +1,16 @@
 import { AnimatePresence, motion, useReducedMotion, type Variants } from 'motion/react'
-import { ChevronDown, Megaphone, MessageCircle, ShoppingBag, Sparkles } from 'lucide-react'
+import { ChevronDown, CircleCheck, Megaphone, MessageCircle, ShoppingBag, Sparkles } from 'lucide-react'
 import team from '../../assets/studio-flyers-640.webp'
 import { caseHeadline, getCase } from '../../data/cases'
 import { whatsappHref } from '../../data/contact'
 import { trackEvent } from '../../lib/analytics'
 import CasePoster from '../home/CasePoster'
 import HandNote from './HandNote'
-import SoftwarePreview from './SoftwarePreview'
-import Arrow from './Arrow'
+import Arrow, { Go } from './Arrow'
+import Cta from './Cta'
+import ProductMini from './ProductMini'
+import TextLink from './TextLink'
+import Watcher from './Watcher'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type RefObject } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { menuTabs, type MenuGroup, type MenuLink, type MenuTab } from '../../data/nav'
@@ -60,27 +63,27 @@ function Roll({ children }: { children: string }) {
 }
 
 /** One link: dot, title and a one-line note. Shared by the panel and the drawer. */
-function Item({ link, lang, onClick, onPreview }: { link: MenuLink; lang: Lang; onClick: () => void; onPreview?: (href: string) => void }) {
+function Item({ link, lang, onClick, onPreview, tone = 0 }: { link: MenuLink; lang: Lang; onClick: () => void; onPreview?: (href: string) => void; tone?: number }) {
   const { pathname } = useLocation()
   return (
     <Link
       to={link.href}
-      className="vs-mi"
+      className={`vs-mi vs-mi--t${tone}`}
       aria-current={pathname === link.href ? 'page' : undefined}
       onClick={onClick}
       onMouseEnter={onPreview && (() => onPreview(link.href))}
       onFocus={onPreview && (() => onPreview(link.href))}
     >
-      <span className="vs-mi-dot" aria-hidden="true" />
-      <span className="vs-mi-t">{link.title[lang]}<Arrow size={13} /></span>
+      <span className="vs-mi-t">{link.title[lang]}</span>
       <span className="vs-mi-n">{link.note[lang]}</span>
+      <span className="vs-mi-go" aria-hidden="true"><Arrow size={12} /></span>
     </Link>
   )
 }
 
 const PANEL_COPY = {
-  nl: { call: 'Plan een gesprek', whatsapp: 'WhatsApp', read: 'Lees de case', featured: 'Pinacello · online omzet', unsure: 'Niet zeker wat je nodig hebt?', unsureBody: 'Vraag je gratis groeiplan aan. We zeggen welke aanpak past.', unsureCta: 'Vraag je groeiplan aan', bundled: 'CRM en dashboard zitten in elk maandpakket', bundledLink: 'Bekijk de pakketten', crmFact: 'Gratis tot 500 leads', perfFact: 'Vanaf €49 per maand', us: 'dit zijn wij :)' },
-  en: { call: 'Plan a call', whatsapp: 'WhatsApp', read: 'Read the case', featured: 'Pinacello · online revenue', unsure: 'Not sure what you need?', unsureBody: 'Ask for your free growth plan. We tell you which approach fits.', unsureCta: 'Ask for your growth plan', bundled: 'CRM and dashboard come with every monthly plan', bundledLink: 'See the plans', crmFact: 'Free up to 500 leads', perfFact: 'From €49 a month', us: 'this is us :)' },
+  nl: { call: 'Plan een gesprek', whatsapp: 'WhatsApp', read: 'Lees de case', featured: 'Pinacello · online omzet', unsure: 'Niet zeker wat je nodig hebt?', unsureBody: 'Vraag je gratis groeiplan aan. We zeggen welke aanpak past.', unsureCta: 'Vraag je groeiplan', unsureNote: 'gratis, echt :)', bundled: 'CRM en dashboard zitten in elk maandpakket', bundledLink: 'Bekijk de pakketten', crmFact: 'Gratis tot 500 leads', perfFact: 'Vanaf €49 per maand', us: 'dit zijn wij :)' },
+  en: { call: 'Plan a call', whatsapp: 'WhatsApp', read: 'Read the case', featured: 'Pinacello · online revenue', unsure: 'Not sure what you need?', unsureBody: 'Ask for your free growth plan. We tell you which approach fits.', unsureCta: 'Get your growth plan', unsureNote: 'free, really :)', bundled: 'CRM and dashboard come with every monthly plan', bundledLink: 'See the plans', crmFact: 'Free up to 500 leads', perfFact: 'From €49 a month', us: 'this is us :)' },
 }
 
 const GROUP_ICONS = [Megaphone, ShoppingBag, Sparkles]
@@ -124,13 +127,13 @@ function ServicesPanel({ groups, lang, onNavigate, item }: { groups: MenuGroup[]
         {groups.map((group, g) => {
           const Icon = GROUP_ICONS[g % GROUP_ICONS.length]
           return (
-            <div key={g} role="group" aria-labelledby={`vs-mega-diensten-${g}`}>
+            <div key={g} role="group" className="vs-mega-group" aria-labelledby={`vs-mega-diensten-${g}`}>
               <p id={`vs-mega-diensten-${g}`} className="vs-mega-group-head"><span className={`vs-mega-icon vs-mega-icon--${g}`} aria-hidden="true"><Icon size={16} /></span>{group.label[lang]}</p>
               <ul>
                 {group.links.map((link) => (
                   <motion.li key={link.href} variants={item} className="vs-mega-bedded" onMouseEnter={() => setHover(link.href)} onFocus={() => setHover(link.href)}>
                     {hover === link.href && <motion.span layoutId="vs-mega-bed" className="vs-mega-bed" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
-                    <Item link={link} lang={lang} onClick={onNavigate} />
+                    <Item link={link} lang={lang} onClick={onNavigate} tone={g} />
                   </motion.li>
                 ))}
               </ul>
@@ -139,9 +142,11 @@ function ServicesPanel({ groups, lang, onNavigate, item }: { groups: MenuGroup[]
         })}
       </div>
       <motion.div className="vs-mega-dark" variants={item}>
+        <span className="vs-mega-dark-eyes"><Watcher shape="Ball" size={40} poke={false} within=".vs-mega" /></span>
         <p className="vs-mega-dark-title">{c.unsure}</p>
         <p>{c.unsureBody}</p>
-        <Link to="/#groeiplan" className="vs-mega-dark-cta" onClick={() => { trackEvent('audit_cta_clicked', { placement: 'nav_services' }); onNavigate() }}>{c.unsureCta}<Arrow size={15} /></Link>
+        <Cta to="/#groeiplan" variant="paper" className="vs-mega-dark-cta" onClick={() => { trackEvent('audit_cta_clicked', { placement: 'nav_services' }); onNavigate() }}>{c.unsureCta}</Cta>
+        <HandNote point="up-left" className="vs-mega-dark-note">{c.unsureNote}</HandNote>
       </motion.div>
     </div>
   )
@@ -159,15 +164,15 @@ function SoftwarePanel({ lang, onNavigate, reduce, item }: { lang: Lang; onNavig
       <ul className="vs-mega-products">
         {products.map((product) => (
           <motion.li key={product.href} variants={item}>
-            <Link to={product.href} className="vs-mega-product" onClick={onNavigate}>
-              <SoftwarePreview kind={product.kind} reduce={reduce} />
-              <span className="vs-mega-product-row"><b>{product.title}</b><Arrow size={15} /></span>
+            <Link to={product.href} className={`vs-mega-product vs-mega-product--${product.kind}`} onClick={onNavigate}>
+              <ProductMini kind={product.kind} lang={lang} on={!reduce} id={`mega-${product.kind}`} />
+              <span className="vs-mega-product-row"><b>{product.title}</b><Go /></span>
               <span className="vs-mega-product-fact">{product.fact}</span>
             </Link>
           </motion.li>
         ))}
       </ul>
-      <motion.p className="vs-mega-bundled" variants={item}>{c.bundled} · <Link to="/#groeipakketten" onClick={onNavigate}>{c.bundledLink}</Link></motion.p>
+      <motion.p className="vs-mega-bundled" variants={item}><CircleCheck size={16} aria-hidden="true" />{c.bundled} <TextLink to="/#groeipakketten" onClick={onNavigate}>{c.bundledLink}</TextLink></motion.p>
     </div>
   )
 }
@@ -201,6 +206,12 @@ function PanelContent({ tab, width, dir, lang, reduce, onNavigate }: { tab: Menu
     enter: { opacity: 0, y: reduce ? 0 : 8 },
     center: { opacity: 1, y: 0, transition: reduce ? INSTANT : { duration: 0.4, ease: EASE } },
   }
+  // The strip's three actions stagger up after the tiles.
+  const strip: Variants = {
+    enter: {},
+    center: { transition: reduce ? INSTANT : { staggerChildren: 0.04, delayChildren: 0.18 } },
+  }
+  const count = groups.reduce((n, group) => n + group.links.length, 0)
   const body = tab.id === 'cases' && groups[0] ? <CasesPanel group={groups[0]} lang={lang} onNavigate={onNavigate} item={item} />
     : tab.id === 'diensten' ? <ServicesPanel groups={groups} lang={lang} onNavigate={onNavigate} item={item} />
     : tab.id === 'software' ? <SoftwarePanel lang={lang} onNavigate={onNavigate} reduce={reduce} item={item} />
@@ -208,10 +219,10 @@ function PanelContent({ tab, width, dir, lang, reduce, onNavigate }: { tab: Menu
   return (
     <motion.div className="vs-mega-in" data-menu-content={tab.id} style={{ width }} custom={dir} variants={content} initial="enter" animate="center" exit="exit">
       {body}
-      <motion.div className="vs-mega-strip" variants={item}>
-        <Link to="/contact" className="vs-mega-strip-cta" onClick={() => { trackEvent('audit_cta_clicked', { placement: 'nav_panel' }); onNavigate() }}>{c.call}<Arrow size={14} /></Link>
-        <a href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="vs-mega-strip-link" onClick={() => trackEvent('whatsapp_clicked', { placement: 'nav_panel', channel: 'whatsapp' })}><MessageCircle size={15} aria-hidden="true" />{c.whatsapp}</a>
-        {tab.more && <Link className="vs-mega-more vs-mega-strip-more" to={tab.href} onClick={onNavigate}>{tab.more[lang]}<Arrow size={15} /></Link>}
+      <motion.div className="vs-mega-strip" variants={strip}>
+        <motion.span variants={item}><Cta to="/contact" className="vs-mega-strip-cta" onClick={() => { trackEvent('audit_cta_clicked', { placement: 'nav_panel' }); onNavigate() }}>{c.call}</Cta></motion.span>
+        <motion.a variants={item} href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="vs-mega-strip-link" onClick={() => trackEvent('whatsapp_clicked', { placement: 'nav_panel', channel: 'whatsapp' })}><span className="vs-mega-wa-dot" aria-hidden="true" /><MessageCircle size={15} aria-hidden="true" />{c.whatsapp}</motion.a>
+        {tab.more && <motion.span variants={item} className="vs-mega-strip-more"><Link className="vs-textlink vs-textlink--arrow vs-mega-more" to={tab.href} onClick={onNavigate}>{tab.more[lang]}<span className="vs-mega-count" aria-hidden="true">{count}</span><Arrow size={15} /></Link></motion.span>}
       </motion.div>
     </motion.div>
   )

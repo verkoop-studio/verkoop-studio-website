@@ -149,16 +149,21 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-mega-more { display: flex; align-items: center; gap: 6px; min-height: 44px; margin-top: 8px; padding: 6px 12px 0; border-top: 1px solid var(--vs-line); color: var(--vs-ink); font-size: 14px; font-weight: 500; text-decoration: none; }
 .vs-mega-more svg { transition: transform 0.3s var(--vs-ease); }
 .vs-mega-more:hover svg { transform: translateX(3px); }
-.vs-mi { position: relative; isolation: isolate; display: grid; grid-template-columns: 6px minmax(0, 1fr); column-gap: 12px; padding: 10px 12px; border-radius: 12px; color: var(--vs-ink); text-decoration: none; }
-.vs-mi::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: rgb(17 17 16 / 0.05); opacity: 0; transform: translateX(-10px); transition: opacity 0.25s, transform 0.35s var(--vs-ease); }
-.vs-mi-dot { width: 6px; height: 6px; margin-top: 7px; border-radius: 50%; background: #c4bfb3; transition: background 0.25s; }
+.vs-mi { --mi: var(--vs-blue); --mi-on: #fff; --mi-tint: rgb(43 75 242 / 0.08); position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) 26px; column-gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px; color: var(--vs-ink); text-decoration: none; }
+.vs-mi::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--mi-tint); opacity: 0; transform: translateX(-10px); transition: opacity 0.25s, transform 0.35s var(--vs-ease); }
 .vs-mi-t { font-size: 14.5px; font-weight: 550; line-height: 1.4; transition: transform 0.3s var(--vs-ease); }
-.vs-mi-t .vs-arrow { display: inline-flex; margin-left: 6px; vertical-align: -1px; opacity: 0; transition: opacity 0.2s; }
-.vs-mi:hover .vs-mi-t .vs-arrow, .vs-mi:focus-visible .vs-mi-t .vs-arrow { opacity: 1; }
-.vs-mi-n { grid-column: 2; color: var(--vs-mute); font-size: 13px; line-height: 1.4; }
+.vs-mi-t { grid-column: 1; }
+.vs-mi-n { grid-column: 1; color: var(--vs-mute); font-size: 13px; line-height: 1.4; }
+.vs-mi--t1 { --mi: #f5c400; --mi-on: var(--vs-ink); --mi-tint: rgb(255 210 63 / 0.2); }
+.vs-mi--t2 { --mi: #ff7ab8; --mi-on: var(--vs-ink); --mi-tint: rgb(255 159 208 / 0.22); }
+.vs-mi-go { grid-column: 2; grid-row: 1 / span 2; justify-self: end; display: grid; place-items: center; width: 8px; height: 8px; border-radius: 50%; background: var(--mi); color: var(--mi-on); transition: width 0.3s var(--vs-ease), height 0.3s var(--vs-ease); }
+.vs-mi-go .vs-arrow { opacity: 0; transition: opacity 0.2s, rotate 0.25s var(--vs-ease); }
+.vs-mi:hover .vs-mi-go, .vs-mi:focus-visible .vs-mi-go, .vs-mi[aria-current] .vs-mi-go { width: 26px; height: 26px; }
+.vs-mi:hover .vs-mi-go .vs-arrow, .vs-mi:focus-visible .vs-mi-go .vs-arrow { opacity: 1; }
+.vs-mi:active { scale: 0.99; }
+.vs-mi:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 1px; }
 .vs-mi:hover::before, .vs-mi:focus-visible::before { opacity: 1; transform: none; }
-.vs-mi:hover .vs-mi-dot, .vs-mi:focus-visible .vs-mi-dot, .vs-mi[aria-current] .vs-mi-dot { background: var(--vs-blue); }
-.vs-mi:hover .vs-mi-t, .vs-mi:focus-visible .vs-mi-t { transform: translateX(3px); }
+.vs-mi:hover .vs-mi-t, .vs-mi:focus-visible .vs-mi-t { transform: translateX(4px); }
 
 .vs-header-end { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
 .vs-lang { display: inline-flex; border-radius: 9999px; padding: 3px; box-shadow: inset 0 0 0 1px var(--vs-line); }
@@ -286,7 +291,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 @media (prefers-reduced-motion: reduce) {
   .vs-ripple, .vs-cursor { display: none; }
-  .vs-roll > span, .vs-tab-caret, .vs-mi::before, .vs-mi-t, .vs-mega-more svg { transition: none; }
+  .vs-roll > span, .vs-tab-caret, .vs-mi::before, .vs-mi-t, .vs-mi-go, .vs-mega-more svg { transition: none; }
   .hero-request-error, .vs-check { animation: none; }
   .vs-check-tick { animation: none; stroke-dashoffset: 0; }
 }
@@ -391,13 +396,23 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-arrow > span + span { transform: translateX(-110%); }
 .vs-arrow--left > span + span { transform: translateX(110%); }
 .vs-arrow--up-right > span + span { transform: translate(-110%, 110%); }
-:is(a, button, .vs-cta):hover > .vs-arrow > span:first-child, :is(a, button, .vs-cta):hover .vs-cta-circle .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-arrow > span:first-child { transform: translateX(110%); }
+:is(a, button, .vs-cta):hover .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-arrow > span:first-child { transform: translateX(110%); }
 :is(a, button, .vs-cta):hover .vs-arrow--left > span:first-child { transform: translateX(-110%); }
 :is(a, button, .vs-cta):hover .vs-arrow--up-right > span:first-child, :is(a, button):focus-visible .vs-arrow--up-right > span:first-child { transform: translate(110%, -110%); }
 :is(a, button, .vs-cta):hover .vs-arrow > span + span, :is(a, button):focus-visible .vs-arrow > span + span { transform: none; }
 .vs-cta:hover .vs-cta-circle:has(.vs-arrow--up-right) { rotate: 45deg; }
 .vs-cta:hover .vs-cta-circle:has(.vs-arrow--up-right) .vs-arrow { rotate: -45deg; }
 .vs-textlink--arrow { display: inline-flex; align-items: center; gap: 6px; }
+/* The round arrow button: a quiet ring at rest; under the hovered link it fills, the arrow swaps through, then turns to point up and right. */
+.vs-go { display: inline-grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease; }
+.vs-go .vs-arrow { transition: rotate 0.25s var(--vs-ease); }
+:is(a, button):hover .vs-go, :is(a, button):focus-visible .vs-go { background: var(--vs-blue); box-shadow: none; color: #fff; }
+:is(a, button):hover .vs-go .vs-arrow, :is(a, button):focus-visible .vs-go .vs-arrow, .vs-textlink:hover .vs-arrow, .vs-textlink:focus-visible .vs-arrow { rotate: -45deg; transition: rotate 0.25s var(--vs-ease) 0.22s; }
+:is(.vs-dark, .vs-footer, .vs-split-panel--dark, .pp-pricing, .vs-mega-dark) .vs-go { background: rgb(255 255 255 / 0.08); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); color: var(--vs-paper); }
+.vs-textlink:focus-visible { color: var(--vs-ink); background-size: 100% 1px; outline: 2px solid var(--vs-blue); outline-offset: 4px; border-radius: 4px; }
+.vs-textlink:active { scale: 0.98; }
+/* The CTA's arrow circle never takes the colour of the ground it sits on: on the accent it turns ink. */
+.vs-band .vs-cta-circle, [data-surface="accent"] .vs-cta-circle { background: var(--vs-ink); color: var(--vs-paper); }
 @media (prefers-reduced-motion: reduce) { .vs-arrow > span { transition: none; } }
 
 /* ---------- Hero: headline beside a live proof card ---------- */
@@ -466,3 +481,9 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 /* The Verkoop dot beside the home hero proof card, watching the pointer inside the hero. */
 .vs-hero-watcher { position: absolute; left: -34px; bottom: 14%; z-index: 3; }
 @media (max-width: 960px) { .vs-hero-watcher { left: auto; right: 6px; bottom: -22px; } }
+@media (prefers-reduced-motion: reduce) {
+  :is(a, button):hover .vs-go .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-go .vs-arrow > span:first-child, .vs-textlink:hover .vs-arrow > span:first-child { transform: none; }
+  :is(a, button):hover .vs-go .vs-arrow > span + span, :is(a, button):focus-visible .vs-go .vs-arrow > span + span, .vs-textlink:hover .vs-arrow > span + span { transform: translateX(-110%); }
+  :is(a, button):hover .vs-go .vs-arrow, :is(a, button):focus-visible .vs-go .vs-arrow, .vs-textlink:hover .vs-arrow, .vs-textlink:focus-visible .vs-arrow { rotate: none; }
+  .vs-textlink:active { scale: none; }
+}
