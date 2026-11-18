@@ -80,8 +80,6 @@
   .pricing-first-step .button-dark { min-height: 48px; }
   form { min-width: 0; }
   div:has(> form) { padding: 22px 16px; }
-  .goal-option-description { font-size: 13px; }
-  .goal-option-body { min-height: 74px; }
   .contact-studio { padding: 8px 16px 28px; }
   .contact-portrait { height: clamp(260px, 70vw, 360px); border-radius: 20px; }
   .contact-portrait img { object-position: center 18%; }

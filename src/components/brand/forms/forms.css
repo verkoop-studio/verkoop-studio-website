@@ -67,3 +67,31 @@
   .vs-burst, .vs-hero-form:focus-within .vs-hero-form-note { display: contents; animation: none; }
   .vs-burst i { display: none; }
 }
+
+/* Multi-line field */
+.vs-field--area textarea { display: block; width: 100%; box-sizing: border-box; min-height: 110px; padding: 28px 44px 12px 16px; border: 1px solid var(--vs-line); border-radius: 14px; background: transparent; color: var(--vs-ink); font: 500 16px/1.45 var(--font-sans); outline: none; resize: vertical; }
+.vs-field[data-focus] textarea { border-color: transparent; }
+
+/* Contact form */
+.vs-qform { padding: clamp(22px, 3vw, 36px); }
+.vs-qform-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.vs-qform-wide { grid-column: 1 / -1; }
+.vs-qform-more { align-self: flex-start; min-height: 40px; border: 0; background: none; cursor: pointer; font: 500 15px/1 var(--font-sans); }
+@media (max-width: 640px) { .vs-qform-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* Goal picker: a pill slides to the chosen goal */
+.vs-goals { margin: 6px 0 0; padding: 0; border: 0; min-width: 0; }
+.vs-goals legend { padding: 0; font: 500 18px/1.2 var(--font-display); letter-spacing: -0.01em; }
+.vs-goals-hint { margin: 4px 0 12px; color: var(--vs-mute); font-size: 14px; }
+.vs-goals-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); gap: 8px; }
+.vs-goal { position: relative; isolation: isolate; display: flex; flex-direction: column; gap: 3px; padding: 14px 16px; border: 1px solid var(--vs-line); border-radius: 14px; cursor: pointer; transition: border-color 0.2s ease, transform 0.3s var(--vs-ease); }
+.vs-goal:hover { border-color: var(--vs-ink-2); transform: translateY(-2px); }
+.vs-goal:active { transform: scale(0.98); }
+.vs-goal:focus-within { outline: 3px solid #839bff; outline-offset: 2px; }
+.vs-goal strong { font-size: 15px; font-weight: 600; transition: color 0.2s ease; }
+.vs-goal span:last-child { color: var(--vs-mute); font-size: 13px; line-height: 1.4; transition: color 0.2s ease; }
+.vs-goal-pill { position: absolute; inset: -1px; z-index: -1; border-radius: inherit; background: var(--vs-ink); }
+.vs-goal[data-checked] { border-color: var(--vs-ink); }
+.vs-goal[data-checked] strong { color: var(--vs-paper); }
+.vs-goal[data-checked] span:last-child { color: #c9c6bf; }
+.vs-qform-done { text-align: left; }
