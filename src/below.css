@@ -870,7 +870,7 @@
 .vs-doodles-rect { animation: vs-doodle-drift 60s linear infinite; }
 @keyframes vs-doodle-drift { to { transform: translate(-480px, -320px); } }
 
-.vs-ribbon { position: relative; height: clamp(90px, 10vw, 140px); margin-block: clamp(20px, 4vw, 48px); pointer-events: none; }
+.vs-ribbon { position: relative; overflow-x: clip; height: clamp(90px, 10vw, 140px); margin-block: clamp(20px, 4vw, 48px); pointer-events: none; }
 .vs-ribbon-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .vs-ribbon-svg path { fill: none; stroke: #ffd23f; stroke-width: 22; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .vs-ribbon-sit { position: absolute; left: 33%; top: calc(50% - 64px); }
