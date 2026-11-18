@@ -1,4 +1,8 @@
 import { useEffect, useState } from 'react'
+import ekartSite from '../assets/cases/ekart-640.webp'
+import healthfactorSite from '../assets/cases/healthfactor-website-640.webp'
+import noomsSite from '../assets/cases/nooms-640.webp'
+import pinacelloSite from '../assets/cases/pinacello-640.webp'
 import { Link, useParams } from 'react-router-dom'
 import Seo from '../components/Seo'
 import Breadcrumbs from '../components/Breadcrumbs'
@@ -26,6 +30,28 @@ function localized(article: Article, lang: 'nl' | 'en'): Article & { en: boolean
 const COPY = {
   nl: { title: 'Inzichten voor ondernemers in Gent en omgeving', description: 'Praktische artikelen over marketing, Google Ads en websites voor bedrijven in Gent en omgeving. Vanuit Verkoop Studio in Lochristi.', by: 'Door', updated: 'Bijgewerkt op', from: 'Vanuit Lochristi', toc: 'In dit artikel', apply: 'Van lezen naar toepassen', cta: 'Bespreek jouw groeivraag', all: 'Alle artikelen', read: 'Lees het artikel', dutchOnly: '', headline: [{ text: 'Inzichten voor ondernemers' }, { text: 'in Gent.', tone: 'accent' as const }], note: 'gratis te lezen :)' },
   en: { title: 'Insights for businesses in and around Ghent', description: 'Practical articles on marketing, Google Ads and websites for businesses in and around Ghent. From Verkoop Studio in Lochristi.', by: 'By', updated: 'Updated', from: 'From Lochristi', toc: 'In this article', apply: 'Putting it into practice', cta: 'Talk to us about your growth', all: 'All articles', read: 'Read the article', dutchOnly: 'This article is only available in Dutch for now.', headline: [{ text: 'Insights for businesses' }, { text: 'in Ghent.', tone: 'accent' as const }], note: 'free to read :)' },
+}
+
+/** A real page per article, annotated with lines from the article's own checklist (first checklist, by position). */
+const COVERS: Record<string, { image: string; picks: number[] }> = {
+  'landingspagina-of-website': { image: pinacelloSite, picks: [0, 1, 4] },
+  'google-ads-gent-budget-aanvragen': { image: pinacelloSite, picks: [0, 1, 2] },
+  'website-gent-meer-aanvragen': { image: ekartSite, picks: [0, 1, 3] },
+  'marketingbureau-gent-kiezen': { image: noomsSite, picks: [0, 2, 3] },
+  'google-ads-advertentie-niet-zichtbaar': { image: healthfactorSite, picks: [1, 3] },
+}
+
+function ArticleCover({ article }: { article: Article }) {
+  const cover = COVERS[article.slug]
+  const list = article.sections.find((section) => section.checklist)?.checklist ?? []
+  if (!cover) return null
+  const notes = cover.picks.map((i) => list[i]).filter(Boolean)
+  return (
+   <figure className="bl-shot" aria-hidden="true">
+    <img src={cover.image} alt="" width={640} height={400} decoding="async" />
+    {notes.map((note, i) => <figcaption key={note} className={`bl-shot-note bl-shot-note--${i}`}><span>{i + 1}</span>{note}</figcaption>)}
+   </figure>
+  )
 }
 
 /** The article's own short answer as three options side by side (landingspagina-of-website, first section). */
@@ -65,7 +91,6 @@ export default function Blog() {
  const description = article?.description ?? c.description
  const pageLang = article ? (article.en ? 'en' : 'nl') : lang
  const path = article ? `/blog/${article.slug}` : '/blog'
- const cover = article ? nlArticles.findIndex((a) => a.slug === article.slug) % 4 : 0
  const compare = article ? COMPARE[article.slug]?.[lang] : undefined
  return <div lang={pageLang} className="vs-page bl-page">
   <Seo title={title} description={description} path={path} language={pageLang} />
@@ -74,12 +99,11 @@ export default function Blog() {
    <div className="vs-wrap bl-article">
     <header className="bl-head">
      <Breadcrumbs items={[{ label: 'Blog', href: '/blog' }, { label: article.category }]} />
-     <span className={`bl-cover bl-cover--${cover} bl-cover--hero`} aria-hidden="true"><span>{article.category}</span></span>
-     <span className="bl-chip">{article.category}</span>
      <h1 className="vs-h1 bl-h1">{title}</h1>
      <p className="vs-lead">{description}</p>
      <p className="bl-byline">{c.by} <Link to="/agency">Verkoop Studio</Link> · <time dateTime={article.publishedAt}>{dateLabel(article.publishedAt!, lang)}</time>{article.modifiedAt && <> · {c.updated} <time dateTime={article.modifiedAt}>{dateLabel(article.modifiedAt, lang)}</time></>} · {c.from}</p>
      {lang === 'en' && !article.en && <p className="bl-note" lang="en">{c.dutchOnly}</p>}
+     <ArticleCover article={article} />
     </header>
     <div className="bl-layout">
      <nav aria-label={c.toc} className="bl-toc"><p>{c.toc}</p><ol>{article.sections.map((s, i) => <li key={s.title}><a href={`#deel-${i + 1}`} className={current === i ? 'is-on' : undefined} aria-current={current === i ? 'location' : undefined}><span>0{i + 1}</span>{s.title}</a></li>)}</ol></nav>
@@ -87,12 +111,12 @@ export default function Blog() {
       <article className="bl-body">{article.sections.map((s, i) => (
        <section key={s.title} id={`deel-${i + 1}`} className="bl-section">
         <h2>{s.title}</h2>
-        {s.paragraphs.map((para) => <p key={para}>{para}</p>)}
         {i === 0 && compare && (
          <div className="bl-compare" role="group" aria-label={s.title}>
           {compare.map(([option, when], k) => <div key={option} className={`bl-compare-col bl-compare-col--${k}`}><span className="bl-compare-n">{k + 1}</span><b>{option}</b><p>{when}</p></div>)}
          </div>
         )}
+        {s.paragraphs.map((para) => <p key={para}>{para}</p>)}
         {s.checklist && <ul className="bl-check">{s.checklist.map((item) => <li key={item}><span className="sv-tick" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7.5 6 10.5 11 4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg></span>{item}</li>)}</ul>}
        </section>
       ))}</article>
