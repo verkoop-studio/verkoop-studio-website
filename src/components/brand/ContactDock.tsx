@@ -7,6 +7,7 @@ import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import { useFooterInView } from '../../lib/useFooterInView'
 import Arrow from './Arrow'
+import DockChat from './DockChat'
 import { EASE } from './motion'
 import Watcher from './Watcher'
 
@@ -15,6 +16,8 @@ const COPY = {
     title: 'Vraag over je groei?',
     body: 'Stuur ons een bericht op WhatsApp of bel. We antwoorden snel en persoonlijk.',
     reply: 'Antwoord binnen 24 uur',
+    ask: 'Stel een vraag',
+    talk: 'Praat met Stef',
     whatsapp: 'WhatsApp',
     call: 'Bellen',
     open: 'Contactopties openen',
@@ -26,6 +29,8 @@ const COPY = {
     title: 'A question about growth?',
     body: 'Send us a WhatsApp message or call. We reply quickly and in person.',
     reply: 'Reply within 24 hours',
+    ask: 'Ask a question',
+    talk: 'Talk to Stef',
     whatsapp: 'WhatsApp',
     call: 'Call',
     open: 'Open contact options',
@@ -89,6 +94,7 @@ export default function ContactDock() {
   const [past, setPast] = useState(false)
   const footerInView = useFooterInView()
   const [open, setOpen] = useState(false)
+  const [tab, setTab] = useState<'ask' | 'talk'>('ask')
   const [greet, setGreet] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)
   const rotateX = useSpring(0, { stiffness: 200, damping: 20 })
@@ -189,18 +195,29 @@ export default function ContactDock() {
                 aria-label={t.title}
                 style={{ rotateX, rotateY, transformPerspective: 900, transformOrigin: '100% 100%' }}
                 initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: 'blur(8px)' }}
-                animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, filter: 'blur(0px)', transition: { type: 'spring', stiffness: 320, damping: 24 } }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, scale: [0.6, 1.04, 1], filter: 'blur(0px)', transition: { duration: 0.55, times: [0, 0.62, 1], ease: [0.34, 1.4, 0.64, 1] } }}
                 exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: 'blur(8px)', transition: { duration: 0.22, ease: EASE } }}
-                onPointerMove={tilt}
+                onPointerMove={tab === 'talk' ? tilt : undefined}
                 onPointerLeave={untilt}
               >
-                <motion.div className="vs-dock-head" variants={lines} custom={0} initial="hidden" animate="shown">
+                <motion.div className="vs-dock-tabs" role="tablist" variants={lines} custom={0} initial="hidden" animate="shown">
+                  {(['ask', 'talk'] as const).map((key) => (
+                    <button key={key} type="button" role="tab" aria-selected={tab === key} className={tab === key ? 'is-on' : ''} onClick={() => setTab(key)}>
+                      {tab === key && <motion.span layoutId="vs-dock-tab" className="vs-dock-tab-bed" transition={{ type: 'spring', stiffness: 420, damping: 32 }} />}
+                      <span>{key === 'ask' ? t.ask : t.talk}</span>
+                    </button>
+                  ))}
+                </motion.div>
+                {tab === 'ask' ? (
+                  <motion.div variants={lines} custom={1} initial="hidden" animate="shown"><DockChat lang={lang} onNavigate={() => setOpen(false)} /></motion.div>
+                ) : <>
+                <motion.div className="vs-dock-head" variants={lines} custom={1} initial="hidden" animate="shown">
                   <span className="vs-dock-ava"><img src={stef} alt="" width={44} height={44} decoding="async" /><i /></span>
                   <span><b>Stef</b><em>{t.reply}</em></span>
                 </motion.div>
-                <motion.strong className="vs-dock-title" variants={lines} custom={1} initial="hidden" animate="shown">{t.title}</motion.strong>
-                <motion.div variants={lines} custom={2} initial="hidden" animate="shown"><Typing text={t.body} reduce={reduce} /></motion.div>
-                <motion.div className="vs-dock-actions" variants={lines} custom={3} initial="hidden" animate="shown">
+                <motion.strong className="vs-dock-title" variants={lines} custom={2} initial="hidden" animate="shown">{t.title}</motion.strong>
+                <motion.div variants={lines} custom={3} initial="hidden" animate="shown"><Typing text={t.body} reduce={reduce} /></motion.div>
+                <motion.div className="vs-dock-actions" variants={lines} custom={4} initial="hidden" animate="shown">
                   <motion.a
                     href={whatsappHref(t.message)}
                     target="_blank"
@@ -222,6 +239,7 @@ export default function ContactDock() {
                     <span className="vs-roll" aria-hidden="true"><span>{t.call}</span><span>{STUDIO_PHONE_LOCAL}</span></span>
                   </motion.a>
                 </motion.div>
+                </>}
               </motion.div>
             )}
           </AnimatePresence>
