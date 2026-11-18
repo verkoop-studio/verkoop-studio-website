@@ -118,7 +118,7 @@
 
 /* ---------- Rolling number ---------- */
 
-.vs-roll-number { display: inline-flex; align-items: flex-start; font-variant-numeric: tabular-nums; color: var(--vs-ink); }
+.vs-roll-number { display: inline-flex; align-items: flex-start; font-variant-numeric: tabular-nums; color: inherit; }
 
 .vs-result-figure .vs-roll-number > .vs-roll-suffix { color: var(--vs-blue); }
 .vs-roll-digit { display: inline-block; height: 1em; line-height: 1em; overflow: clip; overflow-clip-margin: 0.04em; }
@@ -1216,4 +1216,48 @@
   .st-chips.is-on li, .st-chips.is-on .st-check, .st-chips.is-on .st-check path, .st-flow.is-run span, .st-btn.is-press, .st-approve.is-press, .st-sort.is-press { animation: none; }
   .st-btn.is-press::after, .st-approve.is-press::after { display: none; }
   .st-track i, .st-track b, .st-prio-bar i, .st-meter i { transition: none; }
+}
+
+/* ---------- Proof bento: posters, published figures, ad stills and the team ---------- */
+
+.pb-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-flow: dense; gap: 14px; margin-top: clamp(28px, 4vw, 44px); }
+.pb-tile { --lean: -1deg; position: relative; display: grid; overflow: hidden; min-height: 170px; border-radius: 22px; color: inherit; text-decoration: none; box-shadow: 0 1px 2px rgb(17 17 16 / 0.05); transition: transform 0.45s var(--vs-ease), box-shadow 0.45s var(--vs-ease); }
+.pb-tile:nth-child(even) { --lean: 1deg; }
+.pb-tile:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
+@media (hover: hover) {
+  .pb-tile:hover { transform: translateY(-6px) rotate(var(--lean)); box-shadow: 0 34px 60px -36px rgb(17 17 16 / 0.55); }
+}
+.pb-poster { grid-column: span 2; background: #e9e6dd; }
+.pb-poster--wide { grid-row: span 2; }
+.pb-poster-frame { position: relative; display: block; width: 100%; aspect-ratio: 960 / 680; }
+.pb-poster--wide .pb-poster-frame { height: 100%; aspect-ratio: auto; min-height: 340px; }
+.pb-go { position: absolute; right: 14px; top: 14px; z-index: 2; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--vs-blue); color: #fff; rotate: -45deg; transition: rotate 0.35s var(--vs-ease), scale 0.35s var(--vs-ease); }
+.pb-tile:hover .pb-go, .pb-tile:focus-visible .pb-go { rotate: 0deg; scale: 1.08; }
+.pb-stat { align-content: space-between; gap: 18px; padding: 22px; background: var(--vs-blue); color: var(--vs-paper); }
+.pb-stat b { font: 500 clamp(44px, 4.6vw, 72px)/0.95 var(--font-display); letter-spacing: -0.04em; }
+.pb-stat span { max-width: 22ch; font-size: 14.5px; line-height: 1.4; opacity: 0.85; }
+.pb-stat--1 { background: var(--vs-ink); }
+.pb-stat--2 { background: #ffd23f; color: var(--vs-ink); }
+.pb-stat--2 b { font-size: clamp(36px, 3.4vw, 54px); }
+.pb-still { grid-row: span 2; background: var(--vs-ink); }
+.pb-still img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale 0.6s var(--vs-ease); }
+.pb-tile:hover .pb-still img, .pb-still:hover img { scale: 1.04; }
+.pb-still-label { position: absolute; left: 12px; right: 12px; bottom: 12px; padding: 7px 11px; border-radius: 99px; background: rgb(17 17 16 / 0.65); color: #fff; font-size: 12.5px; backdrop-filter: blur(6px); }
+.pb-team { grid-column: span 2; grid-template-columns: auto 1fr; align-items: center; gap: 18px; padding: 18px 22px; background: #fff; }
+.pb-team-photos { display: flex; }
+.pb-team-photos img { width: 78px; height: 78px; border: 3px solid #fff; border-radius: 50%; object-fit: cover; box-shadow: 0 8px 16px -10px rgb(17 17 16 / 0.5); transition: translate 0.4s var(--vs-ease); }
+.pb-team-photos img + img { margin-left: -18px; }
+.pb-team:hover .pb-team-photos img + img { translate: 10px 0; }
+.pb-team > span:last-child { display: grid; gap: 2px; color: var(--vs-mute); font-size: 14.5px; }
+.pb-team b { color: var(--vs-ink); font: 500 22px/1.1 var(--font-display); letter-spacing: -0.02em; }
+@media (max-width: 900px) {
+  .pb-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .pb-poster--wide { grid-row: auto; }
+  .pb-poster--wide .pb-poster-frame { height: auto; aspect-ratio: 960 / 680; min-height: 0; }
+  .pb-stat { padding: 16px; min-height: 150px; }
+  .pb-team-photos img { width: 58px; height: 58px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pb-tile, .pb-tile:hover { transform: none; transition: none; }
+  .pb-go, .pb-still img, .pb-team-photos img { transition: none; }
 }

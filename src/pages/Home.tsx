@@ -3,6 +3,7 @@ import FAQ from '../components/FAQ'
 import HomeHero from '../components/home/HomeHero'
 import SystemTeardown from '../components/home/SystemTeardown'
 import WorkScroller from '../components/home/WorkScroller'
+import ProofBento from '../components/cases/ProofBento'
 import ResultBand from '../components/home/ResultBand'
 import ServicesList from '../components/home/ServicesList'
 import SoftwareShowcase from '../components/home/SoftwareShowcase'
@@ -41,6 +42,7 @@ export default function Home() {
       <PainsBlock />
       <SystemTeardown />
       <WorkScroller />
+      <ProofBento lang={lang} placement="home_bento" title={false} />
       {/* Reviews go here once real client quotes are available; none are published yet. */}
       <Ribbon />
       <ResultBand />
