@@ -243,7 +243,7 @@ export default function Performance() {
         <div className="vs-wrap">
           <SplitHeadline id="starten-titel" className="pp-final-title" parts={[{ text: p.form.title[lang], tone: 'accent' }]} />
           <p className="vs-lead pp-narrow">{p.form.body[lang]}</p>
-          <div className="pp-form-box"><PerformanceSignupForm /></div>
+          <div className="pp-form-box"><PerformanceSignupForm preview /></div>
         </div>
       </section>
 

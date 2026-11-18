@@ -1,35 +1,51 @@
+import { motion, useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { pricingTiers } from '../data/pricing'
 import Seo from '../components/Seo'
 import QualificationForm from '../components/QualificationForm'
-import ResponsiveImage from '../components/ResponsiveImage'
+import HandNote from '../components/brand/HandNote'
+import SplitHeadline from '../components/brand/SplitHeadline'
+import TextLink from '../components/brand/TextLink'
+import { EASE } from '../components/brand/motion'
+import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
-import stefDesk from '../assets/stef-desk.webp'
-import stefDeskSmall from '../assets/stef-desk-640.webp'
+import stefSmall from '../assets/stef-desk-640.webp'
 
 const COPY = {
   nl: {
     seoTitle: 'Contact',
     seoDescription: 'Bespreek je website, software, app of groeiplan met Verkoop Studio in Lochristi.',
-    title: 'Waar wil je bedrijf naartoe?',
-    body: 'Vertel ons je doel en wat vandaag vastloopt. We bespreken je huidige aanpak, bepalen waar de grootste kans zit en bekijken welke samenwerking past.',
-    meeting: 'Plan een groeigesprek',
-    meetingTooltip: 'De agenda-koppeling volgt. Vul ondertussen het formulier in.',
+    label: 'Contact',
+    title: [{ text: 'Waar wil je bedrijf' }, { text: 'naartoe?', tone: 'accent' as const }],
+    platformTitle: [{ text: 'Toegang tot' }, { text: 'onze platforms.', tone: 'accent' as const }],
+    body: 'Vertel ons je doel en wat vandaag vastloopt. We bekijken waar de grootste kans zit en welke samenwerking past.',
+    platformBody: (name: string) => `Je wilt meer weten over ${name}. Deze platforms zijn gratis voor klanten van Verkoop Studio. Vertel ons waarvoor je het wilt gebruiken.`,
+    reply: 'Je hoort binnen 24 uur van ons.',
+    note: 'drie korte stappen :)',
+    academy: ['Je wilt Meta ads leren met', 'een begeleid leertraject', 'Naar de academy'],
+    package: ['Je wilt meer weten over', 'Pakketten bekijken'],
   },
   en: {
     seoTitle: 'Contact',
     seoDescription: 'Discuss your website, software, app or growth plan with Verkoop Studio in Lochristi.',
-    title: 'Where do you want your business to go?',
-    body: 'Tell us your goal and what is holding you back. We discuss your current approach, identify the biggest opportunity and explore how we can help.',
-    meeting: 'Schedule a growth call',
-    meetingTooltip: 'The calendar link is coming soon. Fill in the form below in the meantime.',
+    label: 'Contact',
+    title: [{ text: 'Where do you want your business' }, { text: 'to go?', tone: 'accent' as const }],
+    platformTitle: [{ text: 'Access to' }, { text: 'our platforms.', tone: 'accent' as const }],
+    body: 'Tell us your goal and what is holding you back. We look at where the biggest opportunity is and which way of working fits.',
+    platformBody: (name: string) => `You’re interested in ${name}. These platforms are free for Verkoop Studio clients. Tell us how you would like to use it.`,
+    reply: 'You’ll hear from us within 24 hours.',
+    note: 'three short steps :)',
+    academy: ['You want to learn Meta ads with', 'a guided learning track', 'Back to the academy'],
+    package: ['You’re interested in', 'View packages'],
   },
 }
 
 export default function Contact() {
+  usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
   const t = COPY[lang]
+  const reduce = useReducedMotion()
   const [params] = useSearchParams()
   const [ready, setReady] = useState(false)
   useEffect(() => { setReady(true) }, [])
@@ -38,70 +54,41 @@ export default function Contact() {
   const platformNames = { overview: lang === 'nl' ? 'onze klantenplatforms' : 'our client platforms', crm: 'Sales CRM', dashboard: lang === 'nl' ? 'het marketingdashboard' : 'the marketing dashboard' }
   const platformKey = ready ? params.get('platform') : null
   const selectedPlatform = platformKey && Object.hasOwn(platformNames, platformKey) ? platformNames[platformKey as keyof typeof platformNames] : undefined
-
-  const steps = lang === 'nl'
-    ? ['Jij deelt je doel en uitdaging.', 'We bespreken de kansen en prioriteiten.', 'Je krijgt een voorstel met scope en budget.']
-    : ['You share your goal and challenge.', 'We discuss opportunities and priorities.', 'You receive a proposal with scope and budget.']
+  const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
 
   return (
-    <div>
+    <div className="vs-page ct-page">
       <Seo title={t.seoTitle} description={t.seoDescription} path="/contact" />
 
-      <section className="contact-studio" aria-labelledby="contact-title">
-        <aside className="contact-aside">
-          <figure className="contact-portrait">
-            <picture>
-              <source media="(max-width: 600px)" srcSet={stefDeskSmall} />
-              <ResponsiveImage
-                src={stefDesk}
-                alt={lang === 'nl' ? 'Stef Keppens aan zijn laptop' : 'Stef Keppens at his laptop'}
-                sizes="(max-width: 800px) 100vw, 420px"
-                loading="eager"
-                fetchPriority="high"
-              />
-            </picture>
-          </figure>
-          <div className="contact-note">
-            <p className="contact-who">
-              <strong>Stef Keppens</strong>
-            </p>
-            <a className="contact-mail" href="mailto:stef@verkoop.studio">stef@verkoop.studio</a>
-            {!selectedPlatform && (
-              <ol className="contact-steps">
-                {steps.map((step) => <li key={step}>{step}</li>)}
-              </ol>
-            )}
-          </div>
-        </aside>
-
-        <div className="panel contact-form-panel">
-          <h1 id="contact-title" className="font-display text-balance">
-            {selectedPlatform ? (lang === 'nl' ? 'Toegang tot onze platforms' : 'Access our platforms') : t.title}
-          </h1>
-          <p className="contact-lead">
-            {selectedPlatform
-              ? (lang === 'nl'
-                ? `Je wilt meer weten over ${selectedPlatform}. Deze platforms zijn gratis voor klanten van Verkoop Studio. Laat je gegevens achter en vertel ons waarvoor je het platform wilt gebruiken.`
-                : `You’re interested in ${selectedPlatform}. These platforms are free for Verkoop Studio clients. Leave your details and tell us how you would like to use the platform.`)
-              : t.body}
-          </p>
+      <section className="vs-wrap ct-hero" aria-labelledby="contact-title">
+        <div className="ct-hero-copy">
+          <motion.p className="vs-label" {...arrive(0)}>{t.label}</motion.p>
+          <SplitHeadline as="h1" id="contact-title" className="vs-h1 ct-h1" parts={selectedPlatform ? t.platformTitle : t.title} onMount />
+          <motion.p className="vs-lead" {...arrive(0.55)}>{selectedPlatform ? t.platformBody(selectedPlatform) : t.body}</motion.p>
           {academyInterest && !selectedPackage && !selectedPlatform && (
-            <div className="selected-package">
-              {lang === 'nl' ? 'Je wilt Meta ads leren met' : 'You want to learn Meta ads with'} <strong>{lang === 'nl' ? 'een begeleid leertraject' : 'a guided learning track'}</strong>.
-              <Link to="/academy">{lang === 'nl' ? 'Naar de academy' : 'Back to the academy'}</Link>
-            </div>
+            <p className="ct-context">{t.academy[0]} <strong>{t.academy[1]}</strong>. <TextLink to="/academy">{t.academy[2]}</TextLink></p>
           )}
           {selectedPackage && (
-            <div className="selected-package">
-              {lang === 'nl' ? 'Je wilt meer weten over' : 'You’re interested in'} <strong>{selectedPackage.name[lang]}</strong>.
-              <Link to="/#groeipakketten">{lang === 'nl' ? 'Pakketten bekijken' : 'View packages'}</Link>
-            </div>
+            <p className="ct-context">{t.package[0]} <strong>{selectedPackage.name[lang]}</strong>. <TextLink to="/#groeipakketten">{t.package[1]}</TextLink></p>
           )}
-          <h2 className="font-display">
-            {selectedPlatform ? (lang === 'nl' ? 'Vraag toegang aan' : 'Request access') : (lang === 'nl' ? 'Vertel ons over je project' : 'Tell us about your project')}
-          </h2>
-          <QualificationForm id="audit-formulier-contact" inquiryContext={selectedPlatform ? `Platform: ${selectedPlatform}` : selectedPackage ? `Pakket: ${selectedPackage.name[lang]}` : academyInterest ? 'Academy: begeleid Meta Ads-leertraject' : undefined} />
         </div>
+        <motion.div className="ct-who" {...arrive(0.7)}>
+          <img src={stefSmall} alt="" width={56} height={56} decoding="async" />
+          <span>
+            <strong>Stef Keppens</strong>
+            <TextLink href="mailto:stef@verkoop.studio" arrow={false}>stef@verkoop.studio</TextLink>
+            <em>{t.reply}</em>
+          </span>
+        </motion.div>
+      </section>
+
+      <section className="vs-wrap ct-form" aria-label={lang === 'nl' ? 'Contactformulier' : 'Contact form'}>
+        <HandNote point="down-left" className="ct-note">{t.note}</HandNote>
+        <QualificationForm
+          id="audit-formulier-contact"
+          preview
+          inquiryContext={selectedPlatform ? `Platform: ${selectedPlatform}` : selectedPackage ? `Pakket: ${selectedPackage.name[lang]}` : academyInterest ? 'Academy: begeleid Meta Ads-leertraject' : undefined}
+        />
       </section>
     </div>
   )

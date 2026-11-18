@@ -1,10 +1,12 @@
 import { motion, useReducedMotion } from 'motion/react'
-import { useRef, useState, type FormEvent } from 'react'
+import { useEffect, useRef, useState, type FormEvent } from 'react'
 import SuccessCheck from './brand/SuccessCheck'
 import Burst from './brand/forms/Burst'
 import Field from './brand/forms/Field'
 import FieldError from './brand/forms/FieldError'
-import FormProgress from './brand/forms/FormProgress'
+import FormTrail from './brand/forms/FormTrail'
+import PreviewCard from './brand/forms/PreviewCard'
+import StepRail from './brand/forms/StepRail'
 import SubmitButton from './brand/forms/SubmitButton'
 import { formatPhone, validEmail, validName, validPhone } from './brand/forms/validate'
 import { Link } from 'react-router-dom'
@@ -50,6 +52,13 @@ const COPY = {
       model: 'Kies hoe je verkoopt.',
     },
     sendError: 'Versturen lukt even niet. Probeer opnieuw of mail stef@verkoop.studio.',
+    steps: ['Je gegevens', 'Je winkel'],
+    stepOf: (n: number, total: number) => `Stap ${n} van ${total}`,
+    rail: 'Stappen van het formulier',
+    next: 'Volgende',
+    back: 'Terug',
+    card: { band: 'Jouw Performance-workspace', title: (name: string) => `Workspace voor ${name}`, placeholder: 'Jouw workspace', budget: 'Budget', model: 'Verkoop', setupRow: 'Opstart', setupYes: 'De studio koppelt alles', setupNo: 'Zelf koppelen', ring: 'Ingevulde velden', back: 'Wat er nu gebeurt', toFront: 'Terug naar je workspace',
+      next: ['We zetten je workspace klaar', 'Je krijgt de link om in te loggen', 'Je krijgt een bevestiging per mail'] },
   },
   en: {
     naam: 'Name',
@@ -77,6 +86,13 @@ const COPY = {
       model: 'Please choose how you sell.',
     },
     sendError: 'We couldn’t send your sign-up. Try again or email stef@verkoop.studio.',
+    steps: ['Your details', 'Your shop'],
+    stepOf: (n: number, total: number) => `Step ${n} of ${total}`,
+    rail: 'Form steps',
+    next: 'Next',
+    back: 'Back',
+    card: { band: 'Your Performance workspace', title: (name: string) => `Workspace for ${name}`, placeholder: 'Your workspace', budget: 'Budget', model: 'Selling', setupRow: 'Setup', setupYes: 'The studio connects it all', setupNo: 'Connect it myself', ring: 'Fields filled in', back: 'What happens next', toFront: 'Back to your workspace',
+      next: ['We set up your workspace', 'You get the link to log in', 'You get a confirmation by email'] },
   },
 }
 
@@ -106,7 +122,10 @@ function signupDestination(base: string, email: string, lang: string): string | 
   }
 }
 
-export default function PerformanceSignupForm({ id = performance.formId }: { id?: string }) {
+/** Required fields per step. */
+const STEP_FIELDS: (keyof FormState)[][] = [['naam', 'bedrijf', 'email', 'telefoon'], ['spend', 'model']]
+
+export default function PerformanceSignupForm({ id = performance.formId, preview = false }: { id?: string; preview?: boolean }) {
   const { lang } = useLang()
   const t = COPY[lang]
   const reduce = useReducedMotion()
@@ -115,6 +134,15 @@ export default function PerformanceSignupForm({ id = performance.formId }: { id?
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [status, setStatus] = useState<'idle' | 'submitting' | 'done' | 'redirecting'>('idle')
   const [sendError, setSendError] = useState(false)
+  const [step, setStep] = useState(0)
+  const [tried, setTried] = useState<boolean[]>([])
+  const formRef = useRef<HTMLFormElement>(null)
+  const arrived = useRef(false)
+  // After a step change, focus moves to the first control of the new step.
+  useEffect(() => {
+    if (!arrived.current) { arrived.current = true; return }
+    formRef.current?.querySelector<HTMLElement>('.vs-step-panel input')?.focus()
+  }, [step])
   const submissionRef = useRef('')
   const honeypotRef = useRef('')
   const startedRef = useRef(false)
@@ -141,9 +169,28 @@ export default function PerformanceSignupForm({ id = performance.formId }: { id?
     return Object.keys(next).length === 0
   }
 
+  const required = {
+    naam: validName(values.naam),
+    bedrijf: values.bedrijf.trim().length > 0,
+    email: validEmail(values.email),
+    telefoon: validPhone(values.telefoon),
+    spend: Boolean(values.spend),
+    model: Boolean(values.model),
+  }
+  const stepValid = (index: number) => STEP_FIELDS[index].every((key) => required[key as keyof typeof required])
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    if (status !== 'idle' || !validate()) return
+    if (step === 0) {
+      if (stepValid(0)) setStep(1)
+      else setTried([true])
+      return
+    }
+    if (status !== 'idle') return
+    if (!validate()) {
+      if (!stepValid(0)) { setTried([true, true]); setStep(0) }
+      return
+    }
     submissionRef.current ||= crypto.randomUUID()
     setStatus('submitting')
     setSendError(false)
@@ -197,20 +244,12 @@ export default function PerformanceSignupForm({ id = performance.formId }: { id?
     }
   }
 
-  const required = {
-    naam: validName(values.naam),
-    bedrijf: values.bedrijf.trim().length > 0,
-    email: validEmail(values.email),
-    telefoon: validPhone(values.telefoon),
-    spend: Boolean(values.spend),
-    model: Boolean(values.model),
-  }
   const done = Object.values(required).filter(Boolean).length
   const total = Object.keys(required).length
-  const attempted = Object.keys(errors).length > 0
+  const attempted = Boolean(tried[0]) || Object.keys(errors).length > 0
+  const finished = status === 'done' || status === 'redirecting'
 
-  if (status === 'done' || status === 'redirecting') {
-    return (
+  const success = (
       <motion.div
         ref={ref}
         className="hero-request vs-form-success vs-qform-done"
@@ -223,8 +262,7 @@ export default function PerformanceSignupForm({ id = performance.formId }: { id?
         <h2>{t.doneTitle}</h2>
         <p role="status">{status === 'redirecting' ? t.redirecting : t.doneBody}</p>
       </motion.div>
-    )
-  }
+  )
 
   const busy = status === 'submitting'
 
@@ -247,24 +285,28 @@ export default function PerformanceSignupForm({ id = performance.formId }: { id?
     </fieldset>
   )
 
-  return (
+  const form = (
     <div ref={ref} id={id} className="hero-request vs-qform">
-      <form onSubmit={handleSubmit} noValidate aria-busy={busy} data-clarity-mask="true">
-        <FormProgress done={done} total={total} lang={lang} />
-        <div className="vs-qform-grid">
-          <Field name="naam" label={t.naam} autoComplete="name" disabled={busy} value={values.naam} onValueChange={(v) => update('naam', v)}
+      <form ref={formRef} onSubmit={handleSubmit} noValidate aria-busy={busy} data-clarity-mask="true">
+        <StepRail steps={t.steps} current={step} label={t.rail} stepOf={t.stepOf(step + 1, t.steps.length)} />
+        {step === 0 && (
+        <div className="vs-step-panel vs-qform-grid" key="who">
+          <Field name="naam" label={t.naam} autoComplete="name" disabled={busy} icon="person" value={values.naam} onValueChange={(v) => update('naam', v)}
             validate={validName} message={t.errors.naam} showError={attempted} />
-          <Field name="bedrijf" label={t.bedrijf} autoComplete="organization" disabled={busy} value={values.bedrijf} onValueChange={(v) => update('bedrijf', v)}
+          <Field name="bedrijf" label={t.bedrijf} autoComplete="organization" disabled={busy} icon="building" value={values.bedrijf} onValueChange={(v) => update('bedrijf', v)}
             message={t.errors.bedrijf} showError={attempted} />
-          <Field name="email" type="email" inputMode="email" label={t.email} autoComplete="email" disabled={busy} value={values.email} onValueChange={(v) => update('email', v)}
+          <Field name="email" type="email" inputMode="email" label={t.email} autoComplete="email" disabled={busy} icon="mail" value={values.email} onValueChange={(v) => update('email', v)}
             validate={validEmail} message={lang === 'nl' ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'} showError={attempted} />
-          <Field name="telefoon" type="tel" inputMode="tel" label={t.telefoon} autoComplete="tel" maxLength={60} prefix="BE" format={formatPhone} disabled={busy}
+          <Field name="telefoon" type="tel" inputMode="tel" label={t.telefoon} autoComplete="tel" maxLength={60} prefix="BE" format={formatPhone} disabled={busy} icon="phone"
             value={values.telefoon} onValueChange={(v) => update('telefoon', v)} validate={validPhone}
             message={lang === 'nl' ? 'Vul een telefoonnummer in, bijvoorbeeld 0470 12 34 56.' : 'Enter a phone number, for example 0470 12 34 56.'} showError={attempted} />
         </div>
+        )}
+        {step === 1 && (
+        <div className="vs-step-panel" key="shop">
         {choices('spend', t.spend, SPEND[lang], errors.spend)}
         {choices('model', t.model, MODEL[lang], errors.model)}
-        <Field name="website" inputMode="url" label={t.website} maxLength={300} required={false} disabled={busy}
+        <Field name="website" inputMode="url" label={t.website} maxLength={300} required={false} disabled={busy} icon="globe"
           value={values.website} onValueChange={(v) => update('website', v)} />
 
         <label className="vs-check-box vs-check-row" data-checked={setup || undefined}>
@@ -272,6 +314,8 @@ export default function PerformanceSignupForm({ id = performance.formId }: { id?
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="5" /><path d="M5.5 10.5 8.5 13.5 14.5 6.5" pathLength={1} /></svg>
           <span>{t.setup}</span>
         </label>
+        </div>
+        )}
 
         {/* Honeypot: hidden from users, visible to bots. */}
         <div aria-hidden className="hero-request-trap">
@@ -281,9 +325,51 @@ export default function PerformanceSignupForm({ id = performance.formId }: { id?
         </div>
 
         {sendError && <p className="hero-request-error" role="alert">{t.sendError}</p>}
-        <SubmitButton state={busy ? 'pending' : done === total ? 'ready' : 'locked'} label={t.submit} pendingLabel={t.submitting} />
+        <div className="vs-step-actions">
+          {step > 0 && (
+            <button type="button" className="vs-step-back" onClick={() => setStep(0)} disabled={busy}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>{t.back}
+            </button>
+          )}
+          {step === 0 ? (
+            <div className="vs-step-next"><SubmitButton state={stepValid(0) ? 'ready' : 'locked'} label={t.next} pendingLabel={t.next} confirm={false} /></div>
+          ) : (
+            <div className="vs-step-next vs-step-next--send"><SubmitButton state={busy ? 'pending' : done === total ? 'ready' : 'locked'} label={t.submit} pendingLabel={t.submitting} /></div>
+          )}
+        </div>
         <p className="hero-request-note">{t.note} <Link to="/privacy">{t.privacy}</Link></p>
       </form>
+    </div>
+  )
+
+  const body = finished ? success : form
+  if (!preview) return body
+  const c = t.card
+  const who = values.bedrijf.trim() || values.naam.trim().split(/\s+/)[0]
+  return (
+    <div className="vs-form-duo">
+      {body}
+      <aside className="vs-form-side" aria-label={c.band}>
+        <PreviewCard
+          band={c.band}
+          title={who ? c.title(who) : ''}
+          placeholder={c.placeholder}
+          rows={[
+            { label: c.budget, value: values.spend },
+            { label: c.model, value: values.model },
+            { label: c.setupRow, value: values.spend || values.model ? (setup ? c.setupYes : c.setupNo) : '' },
+          ]}
+          done={done}
+          total={total}
+          ringLabel={c.ring}
+          showBack={done === total && !finished}
+          settled={finished}
+          backTitle={c.back}
+          backItems={c.next}
+          flipLabels={{ toBack: c.back, toFront: c.toFront }}
+        />
+        <FormTrail happy={finished} thinking={busy} />
+      </aside>
     </div>
   )
 }

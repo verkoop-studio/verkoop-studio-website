@@ -1,6 +1,5 @@
 import { RefreshCw } from 'lucide-react'
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 'react'
-import './preview.css'
 
 const TILT_X = 6
 const TILT_Y = 8

@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { motion, useReducedMotion } from 'motion/react'
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { captureAttribution, trackEvent, trackLeadConversion, getGa4Context } from '../lib/analytics'
 import { useInView } from '../lib/useInView'
@@ -7,7 +7,9 @@ import SuccessCheck from './brand/SuccessCheck'
 import Burst from './brand/forms/Burst'
 import Field from './brand/forms/Field'
 import FieldError from './brand/forms/FieldError'
-import FormProgress from './brand/forms/FormProgress'
+import FormTrail from './brand/forms/FormTrail'
+import PreviewCard from './brand/forms/PreviewCard'
+import StepRail from './brand/forms/StepRail'
 import SubmitButton from './brand/forms/SubmitButton'
 import { formatPhone, validEmail, validName, validPhone } from './brand/forms/validate'
 
@@ -42,7 +44,14 @@ const COPY = {
       uitdaging: 'Beschrijf kort je grootste uitdaging.',
     },
     optioneel: 'Optioneel',
-    addOptional: '+ Extra info toevoegen (optioneel)',
+    steps: ['Wie je bent', 'Wat je nodig hebt', 'Details'],
+    stepOf: (n: number, total: number) => `Stap ${n} van ${total}`,
+    rail: 'Stappen van het formulier',
+    next: 'Volgende',
+    back: 'Terug',
+    detailsHint: 'Alles hier is optioneel. Het helpt ons om beter voorbereid te bellen.',
+    card: { band: 'Jouw aanvraag', title: (name: string) => `Aanvraag van ${name}`, placeholder: 'Jouw aanvraag', company: 'Bedrijf', goal: 'Doel', challenge: 'Uitdaging', ring: 'Ingevulde velden', back: 'Wat er nu gebeurt', toBack: 'Wat er nu gebeurt', toFront: 'Terug naar je aanvraag',
+      next: ['We lezen je aanvraag', 'We bespreken de kansen en prioriteiten', 'Je krijgt een voorstel met scope en budget', 'Je hoort binnen 24 uur van ons'] },
     submitting: 'Even geduld…',
     submit: 'Verstuur je aanvraag',
     doneTitle: 'Bedankt.',
@@ -73,7 +82,14 @@ const COPY = {
       uitdaging: 'Briefly describe your biggest challenge.',
     },
     optioneel: 'Optional',
-    addOptional: '+ Add more info (optional)',
+    steps: ['Who you are', 'What you need', 'Details'],
+    stepOf: (n: number, total: number) => `Step ${n} of ${total}`,
+    rail: 'Form steps',
+    next: 'Next',
+    back: 'Back',
+    detailsHint: 'Everything here is optional. It helps us prepare for the call.',
+    card: { band: 'Your enquiry', title: (name: string) => `Enquiry from ${name}`, placeholder: 'Your enquiry', company: 'Company', goal: 'Goal', challenge: 'Challenge', ring: 'Fields filled in', back: 'What happens next', toBack: 'What happens next', toFront: 'Back to your enquiry',
+      next: ['We read your enquiry', 'We discuss opportunities and priorities', 'You get a proposal with scope and budget', 'You hear from us within 24 hours'] },
     submitting: 'One moment…',
     submit: 'Send your enquiry',
     doneTitle: 'Thank you.',
@@ -113,11 +129,17 @@ const initialState: FormState = {
 
 interface QualificationFormProps {
   id?: string
+  /** Leaves out the optional details step. */
   compact?: boolean
   inquiryContext?: string
+  /** Shows the live preview card and the margin trail beside the form (wide layouts only). */
+  preview?: boolean
 }
 
-export default function QualificationForm({ id = 'audit-formulier', compact = false, inquiryContext }: QualificationFormProps) {
+/** Which required fields each step asks for; the last step only holds optional ones. */
+const STEP_FIELDS: (keyof FormState)[][] = [['naam', 'email', 'telefoon'], ['doel', 'uitdaging'], []]
+
+export default function QualificationForm({ id = 'audit-formulier', compact = false, inquiryContext, preview = false }: QualificationFormProps) {
   const { lang } = useLang()
   const t = COPY[lang]
   const reduce = useReducedMotion()
@@ -125,7 +147,10 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [status, setStatus] = useState<'idle' | 'submitting' | 'done'>('idle')
   const [submitError, setSubmitError] = useState(false)
-  const [showOptional, setShowOptional] = useState(false)
+  const [step, setStep] = useState(0)
+  const [tried, setTried] = useState<boolean[]>([])
+  const formRef = useRef<HTMLFormElement>(null)
+  const arrived = useRef(false)
   const submissionRef = useRef('')
   const honeypotRef = useRef('')
   const startedRef = useRef(false)
@@ -144,12 +169,26 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
     return () => window.removeEventListener('beforeunload', handleLeave)
   }, [id, status])
 
+  // After a step change, focus moves to the first field of the new step.
+  useEffect(() => {
+    if (!arrived.current) { arrived.current = true; return }
+    formRef.current?.querySelector<HTMLElement>('.vs-step-panel input:not([type=radio]), .vs-step-panel textarea, .vs-step-panel input[type=radio]')?.focus()
+  }, [step])
+
   function update<K extends keyof FormState>(key: K, value: string) {
     if (!startedRef.current) {
       startedRef.current = true
       trackEvent('form_started', { form_id: id })
     }
     setValues((prev) => ({ ...prev, [key]: value }))
+  }
+
+  const required = {
+    naam: validName(values.naam),
+    email: validEmail(values.email),
+    telefoon: validPhone(values.telefoon),
+    doel: Boolean(values.doel),
+    uitdaging: values.uitdaging.trim().length > 0,
   }
 
   function validate(): boolean {
@@ -163,9 +202,31 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
     return Object.keys(next).length === 0
   }
 
+  const lastStep = compact ? 1 : 2
+
+  function stepValid(index: number) {
+    return STEP_FIELDS[index].every((key) => required[key as keyof typeof required])
+  }
+
+  function goNext() {
+    if (!stepValid(step)) {
+      setTried((prev) => { const next = [...prev]; next[step] = true; return next })
+      if (STEP_FIELDS[step].includes('doel') && !values.doel) setErrors((prev) => ({ ...prev, doel: t.errors.doel }))
+      return
+    }
+    setStep((n) => Math.min(lastStep, n + 1))
+  }
+
   async function handleSubmit(event: FormEvent) {
     event.preventDefault()
-    if (status === 'submitting' || !validate()) return
+    if (step < lastStep) { goNext(); return }
+    if (status === 'submitting') return
+    if (!validate()) {
+      // Send the visitor back to the first step that still needs something.
+      const back = STEP_FIELDS.findIndex((keys) => keys.some((key) => !required[key as keyof typeof required]))
+      if (back >= 0) { setTried((prev) => { const next = [...prev]; next[back] = true; return next }); setStep(back) }
+      return
+    }
     submissionRef.current ||= crypto.randomUUID()
 
     setStatus('submitting')
@@ -200,98 +261,90 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
     }
   }
 
-  const required = {
-    naam: validName(values.naam),
-    email: validEmail(values.email),
-    telefoon: validPhone(values.telefoon),
-    doel: Boolean(values.doel),
-    uitdaging: values.uitdaging.trim().length > 0,
-  }
   const done = Object.values(required).filter(Boolean).length
   const total = Object.keys(required).length
-  const attempted = Object.keys(errors).length > 0
   const busy = status === 'submitting'
+  const shown = (index: number) => Boolean(tried[index]) || Object.keys(errors).length > 0
+  const goal = GOALS.find((item) => item.key === values.doel)?.[lang][0] ?? ''
+  const firstName = values.naam.trim().split(/\s+/)[0]
 
-  if (status === 'done') {
-    return (
-      <motion.div
-        ref={ref}
-        className="hero-request vs-form-success vs-qform-done"
-        initial={reduce ? false : { rotateX: -70, opacity: 0, y: 10 }}
-        animate={{ rotateX: 0, opacity: 1, y: 0 }}
-        transition={{ type: 'spring', stiffness: 160, damping: 18 }}
-      >
-        <Burst />
-        <SuccessCheck />
-        <h2>{t.doneTitle}</h2>
-        <p role="status">{t.doneBody}</p>
-      </motion.div>
-    )
-  }
+  const success = (
+    <motion.div
+      ref={ref}
+      className="hero-request vs-form-success vs-qform-done"
+      initial={reduce ? false : { rotateX: -70, opacity: 0, y: 10 }}
+      animate={{ rotateX: 0, opacity: 1, y: 0 }}
+      transition={{ type: 'spring', stiffness: 160, damping: 18, delay: preview ? 0.35 : 0 }}
+    >
+      <Burst />
+      <SuccessCheck />
+      <h2>{t.doneTitle}</h2>
+      <p role="status">{t.doneBody}</p>
+    </motion.div>
+  )
 
-  return (
+  const form = (
     <div ref={ref} id={id} className="hero-request vs-qform">
-      <form onSubmit={handleSubmit} noValidate data-clarity-mask="true">
-        <FormProgress done={done} total={total} lang={lang} />
-        <div className="vs-qform-grid">
-          <Field name="naam" label={t.labels.naam} autoComplete="name" disabled={busy}
-            value={values.naam} onValueChange={(v) => update('naam', v)} validate={validName}
-            message={t.errors.naam} showError={attempted} />
-          <Field name="bedrijf" label={t.labels.bedrijf} autoComplete="organization" disabled={busy} required={false}
-            value={values.bedrijf} onValueChange={(v) => update('bedrijf', v)} />
-          <Field name="email" type="email" inputMode="email" label={t.labels.email} autoComplete="email" disabled={busy}
-            value={values.email} onValueChange={(v) => update('email', v)} validate={validEmail}
-            message={lang === 'nl' ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'} showError={attempted} />
-          <Field name="telefoon" type="tel" inputMode="tel" label={t.labels.telefoon} autoComplete="tel" maxLength={60} disabled={busy} prefix="BE"
-            value={values.telefoon} onValueChange={(v) => update('telefoon', v)} validate={validPhone} format={formatPhone}
-            message={lang === 'nl' ? 'Vul een telefoonnummer in, bijvoorbeeld 0470 12 34 56.' : 'Enter a phone number, for example 0470 12 34 56.'} showError={attempted} />
-          <Field name="website" inputMode="url" label={t.labels.website} disabled={busy} required={false} className="vs-qform-wide"
-            value={values.website} onValueChange={(v) => update('website', v)} />
-        </div>
+      <form ref={formRef} onSubmit={handleSubmit} noValidate data-clarity-mask="true">
+        <StepRail steps={t.steps.slice(0, lastStep + 1)} current={step} label={t.rail} stepOf={t.stepOf(step + 1, lastStep + 1)} />
 
-        <fieldset className="vs-goals" aria-describedby={`${id}-goal-hint${errors.doel ? ` ${id}-goal-error` : ''}`} disabled={busy}>
-          <legend>{t.labels.doel}</legend>
-          <p id={`${id}-goal-hint`} className="vs-goals-hint">{lang === 'nl' ? 'Kies wat het best past. De details bekijken we samen.' : 'Choose the closest fit. We’ll work out the details together.'}</p>
-          <div className="vs-goals-options">
-            {GOALS.map((goal) => {
-              const checked = values.doel === goal.key
-              return (
-                <label key={goal.key} className="vs-goal" data-checked={checked || undefined}>
-                  <input type="radio" name={`${id}-goal`} value={goal.key} checked={checked} onChange={() => update('doel', goal.key)} className="sr-only" required aria-invalid={Boolean(errors.doel)} />
-                  {checked && <motion.span layoutId={`${id}-goal-pill`} className="vs-goal-pill" transition={{ type: 'spring', stiffness: 380, damping: 30 }} />}
-                  <strong>{goal[lang][0]}</strong>
-                  <span>{goal[lang][1]}</span>
-                </label>
-              )
-            })}
+        {step === 0 && (
+          <div className="vs-step-panel vs-qform-grid" key="who">
+            <Field name="naam" label={t.labels.naam} autoComplete="name" disabled={busy} icon="person"
+              value={values.naam} onValueChange={(v) => update('naam', v)} validate={validName}
+              message={t.errors.naam} showError={shown(0)} />
+            <Field name="bedrijf" label={t.labels.bedrijf} autoComplete="organization" disabled={busy} required={false} icon="building"
+              value={values.bedrijf} onValueChange={(v) => update('bedrijf', v)} />
+            <Field name="email" type="email" inputMode="email" label={t.labels.email} autoComplete="email" disabled={busy} icon="mail"
+              hint={lang === 'nl' ? 'We antwoorden op dit adres.' : 'We reply to this address.'}
+              value={values.email} onValueChange={(v) => update('email', v)} validate={validEmail}
+              message={lang === 'nl' ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'} showError={shown(0)} />
+            <Field name="telefoon" type="tel" inputMode="tel" label={t.labels.telefoon} autoComplete="tel" maxLength={60} disabled={busy} prefix="BE" icon="phone"
+              value={values.telefoon} onValueChange={(v) => update('telefoon', v)} validate={validPhone} format={formatPhone}
+              message={lang === 'nl' ? 'Vul een telefoonnummer in, bijvoorbeeld 0470 12 34 56.' : 'Enter a phone number, for example 0470 12 34 56.'} showError={shown(0)} />
+            <Field name="website" inputMode="url" label={t.labels.website} disabled={busy} required={false} className="vs-qform-wide" icon="globe"
+              value={values.website} onValueChange={(v) => update('website', v)} />
           </div>
-          {errors.doel && <FieldError id={`${id}-goal-error`}>{t.errors.doel}</FieldError>}
-        </fieldset>
-
-        <Field name="uitdaging" multiline rows={3} label={t.labels.uitdaging} disabled={busy} maxLength={2000}
-          value={values.uitdaging} onValueChange={(v) => update('uitdaging', v)}
-          message={t.errors.uitdaging} showError={attempted} />
-
-        {!compact && !showOptional && (
-          <button type="button" onClick={() => setShowOptional(true)} className="vs-textlink vs-qform-more">{t.addOptional}</button>
         )}
 
-        <AnimatePresence initial={false}>
-          {!compact && showOptional && (
-            <motion.div
-              className="vs-qform-grid"
-              initial={reduce ? false : { opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-              style={{ overflow: 'hidden' }}
-            >
-              <Field name="investering" label={t.labels.investering} required={false} disabled={busy} value={values.investering} onValueChange={(v) => update('investering', v)} />
-              <Field name="kanalen" label={t.labels.kanalen} required={false} disabled={busy} value={values.kanalen} onValueChange={(v) => update('kanalen', v)} />
+        {step === 1 && (
+          <div className="vs-step-panel" key="need">
+            <fieldset className="vs-goals" aria-describedby={`${id}-goal-hint${errors.doel ? ` ${id}-goal-error` : ''}`} disabled={busy}>
+              <legend>{t.labels.doel}</legend>
+              <p id={`${id}-goal-hint`} className="vs-goals-hint">{lang === 'nl' ? 'Kies wat het best past. De details bekijken we samen.' : 'Choose the closest fit. We’ll work out the details together.'}</p>
+              <div className="vs-goals-options">
+                {GOALS.map((item) => {
+                  const checked = values.doel === item.key
+                  return (
+                    <label key={item.key} className="vs-goal" data-checked={checked || undefined}>
+                      <input type="radio" name={`${id}-goal`} value={item.key} checked={checked} onChange={() => { update('doel', item.key); setErrors((prev) => ({ ...prev, doel: undefined })) }} className="sr-only" required aria-invalid={Boolean(errors.doel)} />
+                      {checked && <motion.span layoutId={`${id}-goal-pill`} className="vs-goal-pill" transition={{ type: 'spring', stiffness: 380, damping: 30 }} />}
+                      <strong>{item[lang][0]}</strong>
+                      <span>{item[lang][1]}</span>
+                    </label>
+                  )
+                })}
+              </div>
+              {errors.doel && <FieldError id={`${id}-goal-error`}>{t.errors.doel}</FieldError>}
+            </fieldset>
+            <Field name="uitdaging" multiline rows={3} label={t.labels.uitdaging} disabled={busy} maxLength={2000} icon="chat"
+              hint={lang === 'nl' ? 'Een paar zinnen is genoeg.' : 'A few sentences is enough.'}
+              value={values.uitdaging} onValueChange={(v) => update('uitdaging', v)}
+              message={t.errors.uitdaging} showError={shown(1)} />
+          </div>
+        )}
+
+        {step === 2 && !compact && (
+          <div className="vs-step-panel" key="details">
+            <p className="vs-goals-hint">{t.detailsHint}</p>
+            <div className="vs-qform-grid">
+              <Field name="investering" label={t.labels.investering} required={false} disabled={busy} icon="euro" value={values.investering} onValueChange={(v) => update('investering', v)} />
+              <Field name="kanalen" label={t.labels.kanalen} required={false} disabled={busy} icon="globe" value={values.kanalen} onValueChange={(v) => update('kanalen', v)} />
               <Field name="timing" label={t.labels.timing} required={false} disabled={busy} value={values.timing} onValueChange={(v) => update('timing', v)} />
-              <Field name="extra" label={t.labels.extra} required={false} disabled={busy} value={values.extra} onValueChange={(v) => update('extra', v)} />
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <Field name="extra" label={t.labels.extra} required={false} disabled={busy} icon="chat" value={values.extra} onValueChange={(v) => update('extra', v)} />
+            </div>
+          </div>
+        )}
 
         {/* Honeypot: hidden from users, visible to bots. */}
         <div aria-hidden className="hero-request-trap">
@@ -308,8 +361,53 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
         </div>
 
         {submitError && <p className="hero-request-error" role="alert">{t.errorNote}</p>}
-        <SubmitButton state={busy ? 'pending' : done === total ? 'ready' : 'locked'} label={t.submit} pendingLabel={t.submitting} />
+        <div className="vs-step-actions">
+          {step > 0 && (
+            <button type="button" className="vs-step-back" onClick={() => setStep((n) => Math.max(0, n - 1))} disabled={busy}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3 5 8l5 5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>{t.back}
+            </button>
+          )}
+          {step < lastStep ? (
+            <div className="vs-step-next">
+              <SubmitButton state={stepValid(step) ? 'ready' : 'locked'} label={t.next} pendingLabel={t.next} confirm={false} />
+            </div>
+          ) : (
+            <div className="vs-step-next vs-step-next--send">
+              <SubmitButton state={busy ? 'pending' : done === total ? 'ready' : 'locked'} label={t.submit} pendingLabel={t.submitting} />
+            </div>
+          )}
+        </div>
       </form>
+    </div>
+  )
+
+  const body = status === 'done' ? success : form
+  if (!preview) return body
+  const c = t.card
+  return (
+    <div className="vs-form-duo">
+      {body}
+      <aside className="vs-form-side" aria-label={c.band}>
+        <PreviewCard
+          band={c.band}
+          title={firstName ? c.title(firstName) : ''}
+          placeholder={c.placeholder}
+          rows={[
+            { label: c.company, value: values.bedrijf.trim() },
+            { label: c.goal, value: goal },
+            { label: c.challenge, value: values.uitdaging.trim().length > 70 ? `${values.uitdaging.trim().slice(0, 68)}…` : values.uitdaging.trim() },
+          ]}
+          done={done}
+          total={total}
+          ringLabel={c.ring}
+          showBack={done === total && status !== 'done'}
+          settled={status === 'done'}
+          backTitle={c.back}
+          backItems={c.next}
+          flipLabels={{ toBack: c.toBack, toFront: c.toFront }}
+        />
+        <FormTrail happy={status === 'done'} thinking={busy} />
+      </aside>
     </div>
   )
 }

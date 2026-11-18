@@ -444,3 +444,17 @@
   .ag-process-dot { position: absolute; left: 0; top: -6px; }
 }
 @media (prefers-reduced-motion: reduce) { .ag-person-photo img { transition: none; } }
+
+/* ---------- Contact ---------- */
+
+.ct-hero { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: 24px clamp(28px, 5vw, 80px); padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(28px, 4vw, 48px); }
+.ct-h1 { margin-top: 16px; font-size: clamp(40px, 5.4vw, 84px); }
+.ct-hero-copy .vs-lead { margin-top: 20px; max-width: 46ch; }
+.ct-context { margin: 16px 0 0; padding: 12px 16px; border-radius: 14px; background: rgb(43 75 242 / 0.07); color: var(--vs-ink-2); }
+.ct-who { display: flex; align-items: center; gap: 14px; padding: 12px 18px 12px 12px; border: 1px solid var(--vs-line); border-radius: 20px; background: #fff; }
+.ct-who img { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; object-position: 40% 25%; }
+.ct-who > span { display: grid; gap: 2px; font-size: 14.5px; }
+.ct-who em { color: var(--vs-mute); font-style: normal; font-size: 13px; }
+.ct-form { position: relative; padding-top: 28px; padding-bottom: clamp(60px, 8vw, 120px); }
+.ct-note { position: absolute; left: calc(var(--vs-gutter) + 26px); top: -6px; }
+@media (max-width: 900px) { .ct-hero { grid-template-columns: minmax(0, 1fr); align-items: start; } }

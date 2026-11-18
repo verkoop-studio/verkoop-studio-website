@@ -68,10 +68,10 @@ function SlideToConfirm({ label, state }: { label: string; state: State }) {
  * Submit button that looks asleep until the form is valid, wakes with a small bounce,
  * and turns into a round spinner while sending. On phones it becomes slide-to-confirm.
  */
-export default function SubmitButton({ label, pendingLabel, state }: { label: string; pendingLabel: string; state: State }) {
+export default function SubmitButton({ label, pendingLabel, state, confirm = true }: { label: string; pendingLabel: string; state: State; /** false keeps a plain button on phones, for steps that only move on. */ confirm?: boolean }) {
   const reduce = useReducedMotion()
   const slide = useSlide()
-  if (slide) return <SlideToConfirm label={label} state={state} />
+  if (slide && confirm) return <SlideToConfirm label={label} state={state} />
   const pending = state === 'pending'
   return (
     <motion.button

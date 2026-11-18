@@ -152,7 +152,7 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
 .pp-tiers--five strong { font-size: clamp(32px, 3.2vw, 46px); }
 .pp-terms { list-style: none; margin: 34px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 0 48px; color: #b9b6af; font-size: 15px; }
 .pp-terms li { padding: 12px 0; border-top: 1px solid var(--vs-line-dark); }
-.pp-form-box { margin-top: 36px; max-width: 760px; }
+.pp-form-box { margin-top: 36px; max-width: 1100px; }
 @media (max-width: 900px) { .pp-row { grid-template-columns: 0.9fr 1fr 1fr; font-size: 14px; } .pp-problem .pp-pain:nth-child(n) { margin-left: 0; } }
 @media (prefers-reduced-motion: reduce) { .pp-claim path { stroke-dashoffset: 0; } .pp-row strong { opacity: 1; translate: none; } .pp-chart-bars i, .pp-chart-bars b { scale: 1 1; } }
 
