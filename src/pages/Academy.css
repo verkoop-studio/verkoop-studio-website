@@ -954,3 +954,6 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 /* One sticky action on phones: the Academy's own, not the site-wide bar. */
 body:has(.academy-page) .mobile-contact-bar { display: none; }
 /* Same as the homepage: the video plays muted with burned-in subtitles, without a sound toggle. */
+.ac-hero > .ac-hero-video { position: relative; grid-area: video; align-self: start; width: min(100%, 900px); }
+.ac-hero-video > .hero-video { width: 100%; }
+.ac-hero-note { position: absolute; right: 4%; top: -38px; z-index: 2; }

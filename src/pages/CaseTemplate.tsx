@@ -348,6 +348,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
         <section className="vs-wrap vs-section cs-next" aria-label={t.next}>
           <Link to={`/cases/${next.slug}`} className="cs-next-link vs-case-live" onClick={() => trackEvent('case_viewed', { case: next.slug, placement: `case_${c.slug}_next` })}>
             <span className="cs-next-copy">
+              <HandNote point="down-right" className="cs-next-note">{lang === 'nl' ? 'nog eentje :)' : 'one more :)'}</HandNote>
               <span className="cs-next-label">{t.next}<Arrow size={18} /></span>
               <span className="cs-next-name">{next.name}</span>
               <span className="cs-next-result">{caseHeadline(next, lang)}</span>

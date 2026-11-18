@@ -54,7 +54,12 @@ export default function BelgiumMap({ lang }: { lang: Lang }) {
         >
           {place.home && <circle r={9} className="vs-map-pulse" />}
           <circle r={place.home ? 4.2 : 3.4} className={place.home ? 'vs-map-home' : 'vs-map-client'} />
-          <text x={place.home ? 8 : -8} y={place.home ? -8 : 14} textAnchor={place.home ? 'start' : 'end'} className="vs-map-label">{place.label}</text>
+          {/* A paper pill with a short leader line, so the label never sits on the dots. */}
+          <g transform={`translate(${place.home ? 22 : -22} ${place.home ? -22 : 22})`}>
+            <line x1={place.home ? -22 : 22} y1={place.home ? 22 : -22} x2={0} y2={0} className="vs-map-leader" />
+            <rect x={place.home ? 0 : -(place.label.length * 3.3 + 10)} y={-7} width={place.label.length * 3.3 + 10} height={14} rx={4} className="vs-map-pill" />
+            <text x={place.home ? 5 : -5} y={2.3} textAnchor={place.home ? 'start' : 'end'} className="vs-map-label">{place.label}</text>
+          </g>
         </motion.g>
         </g>
       ))}

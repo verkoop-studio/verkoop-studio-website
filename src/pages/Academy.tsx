@@ -7,6 +7,7 @@ import BrandMark from '../components/BrandMark'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Seo from '../components/Seo'
 import HeroVideo from '../components/HeroVideo'
+import HandNote from '../components/brand/HandNote'
 import HeroRequestForm from '../components/HeroRequestForm'
 import { academyFaq as sourceFaq, academyModules as sourceModules, academyTests as sourceTests } from '../data/academy'
 import { cases } from '../data/cases'
@@ -282,7 +283,10 @@ export default function Academy() {
           <p className="ac-hero-target">{t('Doel: 3× rendement op je advertentiebudget.')}</p>
           <p className="ac-hero-intro">{t('Van bedrijfsanalyse tot campagnes en opvolging. Van A tot Z, 1-op-1 met Stef.')}</p>
         </div>
-        <HeroVideo lang={lang} videoId="pXlZ6lWWg68" title="Verkoop Studio Academy — VSL" heading={t('Zo werkt de Academy')} />
+        <div className="ac-hero-video">
+          <HandNote point="down-left" className="ac-hero-note">{lang === 'nl' ? '1-op-1, met Stef :)' : '1-to-1, with Stef :)'}</HandNote>
+          <HeroVideo lang={lang} videoId="pXlZ6lWWg68" title="Verkoop Studio Academy — VSL" heading={t('Zo werkt de Academy')} />
+        </div>
         <div className="ac-hero-conversion">
           <div id="academy-hero-signup" className="ac-hero-signup">
             {signedUp ? <div className="ac-welcome-card" role="status">

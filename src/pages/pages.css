@@ -646,6 +646,8 @@
 .vs-map-pulse { fill: none; stroke: var(--vs-blue); stroke-width: 1.4; transform-box: fill-box; transform-origin: center; animation: vs-map-pulse 2.2s ease-out infinite; }
 @keyframes vs-map-pulse { from { opacity: 0.9; scale: 0.4; } to { opacity: 0; scale: 1.6; } }
 .vs-map-label { fill: var(--vs-ink); font: 600 6.2px/1 var(--font-sans); }
+.vs-map-pill { fill: #f4f3ef; stroke: var(--vs-line); stroke-width: 0.6; }
+.vs-map-leader { stroke: var(--vs-ink); stroke-width: 0.6; stroke-opacity: 0.5; }
 @media (max-width: 900px) { .ag-map { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .vs-map-pulse { animation: none; } .vs-map-dots circle { transition: none; } }
 
@@ -780,3 +782,9 @@
 @media (max-width: 900px) { .gw-prize, .gw-why, .gw-proof, .gw-rules ol, .gw-facts { grid-template-columns: minmax(0, 1fr); } }
 .gw-page .sv-h1 { font-size: clamp(38px, 4.6vw, 68px); }
 .gw-hero-shot { min-width: 0; }
+
+/* Hand notes added in the personality pass. */
+.bl-handnote-inline { justify-self: start; margin-top: -6px; }
+.bl-apply { position: relative; }
+.bl-apply-note { position: absolute; right: 18px; top: -26px; }
+.cs-next-note { justify-self: start; margin-bottom: 4px; }

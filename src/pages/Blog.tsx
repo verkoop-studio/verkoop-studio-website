@@ -61,6 +61,7 @@ export default function Blog() {
        </section>
       ))}</article>
       <aside className="bl-apply">
+       <HandNote point="down-left" className="bl-apply-note">{lang === 'nl' ? 'nu jij :)' : 'your turn :)'}</HandNote>
        <h2>{c.apply}</h2>
        <ul>{article.links.map((l) => <li key={l.href}>{l.href.startsWith('https://') ? <a className="vs-textlink vs-textlink--arrow" href={l.href}>{l.label}<Arrow direction="up-right" size={14} /></a> : <Link className="vs-textlink vs-textlink--arrow" to={l.href}>{l.label}<Arrow size={14} /></Link>}</li>)}</ul>
       </aside>
