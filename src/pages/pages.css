@@ -820,7 +820,7 @@
 .pr-soft h3 { margin: 0; font: 500 26px/1.1 var(--font-display); }
 .pr-soft > p { margin: 0; color: var(--vs-ink-2); line-height: 1.5; }
 .pr-soft-note { color: var(--vs-mute); font-size: 12.5px; }
-@media (max-width: 900px) { .pr-builder, .pr-software-grid { grid-template-columns: minmax(0, 1fr); } .pr-result { position: relative; top: auto; } .pr-builder .pr-note { display: none; } }
+@media (max-width: 900px) { .pr-builder, .pr-software-grid { grid-template-columns: minmax(0, 1fr); } .pr-result { position: relative; top: auto; } .vs-note.pr-note { display: none; } }
 
 /* Service pages: who it is for, and the next service. */
 .sv-next-link { display: grid; gap: 8px; padding: clamp(24px, 3vw, 40px); border-radius: 26px; background: var(--vs-ink); color: var(--vs-paper); text-decoration: none; transition: transform 0.5s var(--vs-ease); }
@@ -844,3 +844,4 @@
 .vs-statement-pill img { width: 0.9em; height: 0.9em; border-radius: 50%; object-fit: cover; }
 .pr-result { isolation: isolate; }
 .pr-result::before { content: ''; position: absolute; inset: -6% -8%; z-index: -1; background: radial-gradient(50% 50% at 50% 45%, rgb(43 75 242 / 0.18), transparent 70%); pointer-events: none; }
+@media (max-width: 900px) { .pr-result::before { inset: -4% 0; } }
