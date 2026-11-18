@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { useEffect, useId, useState, type ChangeEvent, type HTMLInputTypeAttribute, type KeyboardEvent } from 'react'
 import { trackSpotlight } from '../spotlight'
+import FieldIcon, { type FieldIconName } from './FieldIcon'
 import './forms.css'
 
 /**
@@ -25,6 +26,8 @@ export default function Field({
   message,
   showError,
   prefix,
+  icon,
+  hint,
   value: controlled,
   onValueChange,
   onValidChange,
@@ -49,6 +52,10 @@ export default function Field({
   showError?: boolean
   /** Small chip at the start of the field, e.g. the country code. */
   prefix?: string
+  /** Glyph at the start of the field; it nudges on focus and turns into a tick when the value is good. */
+  icon?: FieldIconName
+  /** One line of help, shown under the field while it has focus. */
+  hint?: string
   value?: string
   onValueChange?: (value: string) => void
   onValidChange?: (name: string, valid: boolean) => void
@@ -109,6 +116,8 @@ export default function Field({
       data-valid={(valid && value.trim().length > 0) || undefined}
       data-invalid={invalid || undefined}
       data-prefix={prefix ? true : undefined}
+      data-icon={icon || undefined}
+      data-hint={hint ? true : undefined}
       onPointerMove={trackSpotlight}
       animate={shake && invalid && !reduce ? { x: [0, -8, 8, -6, 6, -2, 0] } : undefined}
       transition={{ duration: 0.42 }}
@@ -117,6 +126,7 @@ export default function Field({
         <svg className="vs-field-ring" aria-hidden="true" preserveAspectRatio="none">
           <rect x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="13" pathLength={1} />
         </svg>
+        {icon && <FieldIcon name={icon} />}
         {prefix && <span className="vs-field-prefix" aria-hidden="true">{prefix}</span>}
         {multiline
           ? <textarea {...shared} rows={rows} />
@@ -135,12 +145,12 @@ export default function Field({
         </svg>
       </div>
       <p id={messageId} className="vs-field-message" aria-live="polite">
-        {invalid && message && (
+        {invalid && message ? (
           <>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6.25" stroke="currentColor" strokeWidth="1.5" /><path d="M7 3.8v3.6M7 9.6v.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
             {message}
           </>
-        )}
+        ) : hint ? <span className="vs-field-hint-text">{hint}</span> : null}
       </p>
     </motion.div>
   )

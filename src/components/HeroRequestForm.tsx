@@ -8,10 +8,19 @@ import SuccessCheck from './brand/SuccessCheck'
 import Burst from './brand/forms/Burst'
 import Field from './brand/forms/Field'
 import FormProgress from './brand/forms/FormProgress'
+import FormTrail from './brand/forms/FormTrail'
+import PreviewCard from './brand/forms/PreviewCard'
 import SubmitButton from './brand/forms/SubmitButton'
 import { formatPhone, validEmail, validName, validPhone } from './brand/forms/validate'
 
 const FIELDS = ['naam', 'email', 'telefoon'] as const
+const FREE_MAIL = /^(gmail|googlemail|hotmail|outlook|live|msn|yahoo|icloud|me|telenet|skynet|proximus|scarlet|proton|protonmail|gmx|web)\./i
+
+/** The company behind a work address, for the preview card. Free mail providers say nothing about a company. */
+function companyFrom(email: string) {
+  const domain = email.split('@')[1]?.trim().toLowerCase() ?? ''
+  return domain.includes('.') && !FREE_MAIL.test(domain) ? domain : ''
+}
 
 export default function HeroRequestForm({ kind, onSuccess }: { kind: 'plan' | 'lesson'; onSuccess?: (name: string) => void }) {
   const { lang } = useLang()
@@ -23,6 +32,8 @@ export default function HeroRequestForm({ kind, onSuccess }: { kind: 'plan' | 'l
   const [error, setError] = useState('')
   const [attempted, setAttempted] = useState(false)
   const [valid, setValid] = useState<Record<string, boolean>>({})
+  const [values, setValues] = useState({ naam: '', email: '', telefoon: '' })
+  const setValue = (name: keyof typeof values) => (value: string) => setValues((prev) => ({ ...prev, [name]: value }))
   const submissionId = useRef('')
   const pending = useRef(false)
   const started = useRef(false)
@@ -74,7 +85,9 @@ export default function HeroRequestForm({ kind, onSuccess }: { kind: 'plan' | 'l
     } finally { pending.current = false }
   }
 
-  return (
+  const first = values.naam.trim().split(/\s+/)[0]
+  const company = companyFrom(values.email)
+  const card = (
     <section className="hero-request" aria-labelledby={`${formId}-title`}>
       <AnimatePresence mode="wait" initial={false}>
         {status === 'success' ? (
@@ -99,16 +112,22 @@ export default function HeroRequestForm({ kind, onSuccess }: { kind: 'plan' | 'l
               <FormProgress done={done} total={FIELDS.length} lang={lang} />
               <Field
                 name="naam" label={nl ? 'Naam' : 'Name'} autoComplete="name" disabled={status === 'pending'}
+                icon="person" hint={nl ? 'Je voornaam is genoeg.' : 'Your first name is enough.'}
+                value={values.naam} onValueChange={setValue('naam')}
                 validate={validName} message={nl ? 'Vul je naam in.' : 'Enter your name.'}
                 showError={attempted} onValidChange={onValidChange}
               />
               <Field
                 name="email" type="email" inputMode="email" label={nl ? 'E-mailadres' : 'Email address'} autoComplete="email" disabled={status === 'pending'}
+                icon="mail" hint={nl ? 'Hier sturen we je groeiplan naartoe.' : 'We send your growth plan here.'}
+                value={values.email} onValueChange={setValue('email')}
                 validate={validEmail} message={nl ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'}
                 showError={attempted} onValidChange={onValidChange}
               />
               <Field
                 name="telefoon" type="tel" inputMode="tel" label={nl ? 'Telefoonnummer' : 'Phone number'} autoComplete="tel" maxLength={60} disabled={status === 'pending'}
+                icon="phone" hint={nl ? 'We bellen kort om je bedrijf te bespreken.' : 'We call briefly to discuss your business.'}
+                value={values.telefoon} onValueChange={setValue('telefoon')}
                 validate={validPhone} format={formatPhone} prefix="BE"
                 message={nl ? 'Vul een telefoonnummer in, bijvoorbeeld 0470 12 34 56.' : 'Enter a phone number, for example 0470 12 34 56.'}
                 showError={attempted} onValidChange={onValidChange}
@@ -126,5 +145,34 @@ export default function HeroRequestForm({ kind, onSuccess }: { kind: 'plan' | 'l
         )}
       </AnimatePresence>
     </section>
+  )
+  if (lesson) return card
+  return (
+    <div className="vs-form-duo">
+      {card}
+      <aside className="vs-form-side" aria-label={nl ? 'Voorbeeld van je groeiplan' : 'Preview of your growth plan'}>
+        <PreviewCard
+          band={nl ? 'Jouw gratis groeiplan' : 'Your free growth plan'}
+          title={first ? (nl ? `Groeiplan voor ${first}` : `Growth plan for ${first}`) : ''}
+          placeholder={nl ? 'Groeiplan voor jou' : 'Growth plan for you'}
+          rows={[
+            { label: nl ? 'Bedrijf' : 'Company', value: company },
+            { label: nl ? 'E-mail' : 'Email', value: valid.email ? values.email.trim() : '' },
+            { label: nl ? 'Telefoon' : 'Phone', value: valid.telefoon ? values.telefoon.trim() : '' },
+          ]}
+          done={done}
+          total={FIELDS.length}
+          ringLabel={nl ? 'Ingevulde velden' : 'Fields filled in'}
+          showBack={ready && status !== 'success'}
+          settled={status === 'success'}
+          backTitle={nl ? 'Wat je krijgt' : 'What you get'}
+          backItems={nl
+            ? ['We bespreken jouw bedrijf', 'We werken je groeiplan uit', 'Je hoort binnen 24 uur van ons', 'Helemaal gratis']
+            : ['We discuss your business', 'We work out your growth plan', 'You hear from us within 24 hours', 'Completely free']}
+          flipLabels={nl ? { toBack: 'Wat je krijgt', toFront: 'Terug naar je plan' } : { toBack: 'What you get', toFront: 'Back to your plan' }}
+        />
+        <FormTrail happy={status === 'success'} thinking={status === 'pending'} />
+      </aside>
+    </div>
   )
 }

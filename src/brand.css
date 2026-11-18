@@ -374,7 +374,8 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-video-zoom { width: 100%; height: 100%; }
 .vs-video-frame .hero-video { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
 .vs-plan-form { display: flex; justify-content: center; padding-block: clamp(80px, 10vw, 140px) clamp(40px, 6vw, 80px); }
-.vs-plan-form .vs-hero-form { width: min(100%, 560px); margin: 0; }
+.vs-plan-form .vs-hero-form { width: min(100%, 1040px); margin: 0; }
+.vs-plan-form .vs-hero-form > .vs-form-duo { width: 100%; }
 @media (max-width: 760px) {
   .vs-video-stage { height: auto; }
   .vs-video-sticky { position: static; height: auto; padding-block: 0; }
