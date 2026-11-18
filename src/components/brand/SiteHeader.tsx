@@ -1,31 +1,16 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ArrowUpRight, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
+import NavMenu, { DrawerMenu } from './NavMenu'
 import ScrollProgress from './ScrollProgress'
 import { persistentCtaHref } from '../../data/nav'
 import type { Bi } from '../../data/types'
 import { trackEvent } from '../../lib/analytics'
 import { useLang } from '../../i18n/LanguageContext'
 import Cta from './Cta'
-import { EASE } from './motion'
-
-const links: { label: Bi<string>; href: string }[] = [
-  { label: { nl: 'Cases', en: 'Work' }, href: '/cases' },
-  { label: { nl: 'Diensten', en: 'Services' }, href: '/#expertise' },
-  { label: { nl: 'Software', en: 'Software' }, href: '/#software' },
-  { label: { nl: 'Prijzen', en: 'Pricing' }, href: '/#groeipakketten' },
-  { label: { nl: 'Agency', en: 'Agency' }, href: '/agency' },
-  { label: { nl: 'Contact', en: 'Contact' }, href: '/contact' },
-]
 
 const cta: Bi<string> = { nl: 'Plan een gesprek', en: 'Plan a call' }
-
-function isActive(href: string, pathname: string, hash: string) {
-  const [path, anchor] = href.split('#')
-  if (anchor) return pathname === '/' && hash === `#${anchor}`
-  return pathname === path || pathname.startsWith(`${path}/`)
-}
 
 export function Logo() {
   return (
@@ -55,23 +40,12 @@ function LangSwitch() {
   )
 }
 
-/** Label that rolls up on hover while a copy rolls in from below. */
-function Roll({ children }: { children: string }) {
-  return (
-    <span className="vs-roll">
-      <span>{children}</span>
-      <span aria-hidden="true">{children}</span>
-    </span>
-  )
-}
-
 export default function SiteHeader() {
   const { lang } = useLang()
   const { pathname, hash } = useLocation()
   const reduce = useReducedMotion()
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const [hovered, setHovered] = useState<string | null>(null)
   const menuButton = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
@@ -106,24 +80,7 @@ export default function SiteHeader() {
       >
         <div className="vs-header-bar">
           <Logo />
-          <nav className="vs-nav" aria-label={lang === 'nl' ? 'Hoofdmenu' : 'Main'} onMouseLeave={() => setHovered(null)}>
-            {links.map((link) => {
-              const active = isActive(link.href, pathname, hash)
-              return (
-                <Link
-                  key={link.href}
-                  to={link.href}
-                  aria-current={active ? 'page' : undefined}
-                  onMouseEnter={() => setHovered(link.href)}
-                  style={{ isolation: 'isolate' }}
-                >
-                  {active && <motion.span layoutId="vsNavActive" className="vs-nav-pill vs-nav-pill--active" transition={{ type: 'spring', bounce: 0.2, duration: 0.5 }} />}
-                  {hovered === link.href && !active && <motion.span layoutId="vsNavHover" className="vs-nav-pill vs-nav-pill--hover" transition={{ type: 'spring', bounce: 0.15, duration: 0.3 }} />}
-                  <Roll>{link.label[lang]}</Roll>
-                </Link>
-              )
-            })}
-          </nav>
+          <NavMenu compact={scrolled} />
           <div className="vs-header-end">
             <LangSwitch />
             <Cta to={persistentCtaHref} onClick={onCta('nav')}>{cta[lang]}</Cta>
@@ -169,19 +126,7 @@ export default function SiteHeader() {
                   <X size={20} />
                 </button>
               </div>
-              {links.map((link, i) => (
-                <motion.div
-                  key={link.href}
-                  initial={{ opacity: 0, x: 24 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.06 + i * 0.05, duration: 0.45, ease: EASE }}
-                >
-                  <Link className="vs-drawer-link" to={link.href}>
-                    {link.label[lang]}
-                    <ArrowUpRight size={20} aria-hidden="true" />
-                  </Link>
-                </motion.div>
-              ))}
+              <DrawerMenu onNavigate={() => setOpen(false)} />
               <div className="vs-drawer-foot">
                 <LangSwitch />
                 <Cta to={persistentCtaHref} onClick={onCta('nav_mobile')}>{cta[lang]}</Cta>
