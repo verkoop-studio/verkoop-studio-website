@@ -81,14 +81,11 @@
 
 /* Meta hero: a phone with one sample ad and a sale arriving. */
 .sv-phone-stage { display: grid; place-items: center; min-height: 540px; }
+.sv-feed-next { height: 92px; margin-top: 12px; overflow: hidden; border-radius: 14px; -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
 .sv-phone { position: relative; width: min(300px, 78%); padding: 46px 12px 18px; border: 9px solid #151514; border-radius: 44px; background: #f6f5f1; box-shadow: 0 50px 90px -40px rgb(17 17 16 / 0.55); }
 .sv-phone-notch { position: absolute; left: 50%; top: 10px; width: 84px; height: 22px; margin-left: -42px; border-radius: 99px; background: #151514; }
 .sv-phone-chip { position: absolute; right: 14px; top: 13px; padding: 2px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-size: 10.5px; }
-.sv-feed-ghost { display: grid; gap: 8px; margin-top: 14px; padding: 12px; border-radius: 14px; background: #fff; }
-.sv-feed-ghost i { height: 9px; border-radius: 5px; background: #ece9e1; }
-.sv-feed-ghost i:nth-child(2) { width: 72%; }
-.sv-feed-ghost i:nth-child(3) { width: 48%; }
-.sv-toast { position: absolute; left: 0; bottom: 18%; display: flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border-radius: 16px; background: #fff; box-shadow: 0 24px 50px -24px rgb(17 17 16 / 0.5); font-size: 14px; }
+.sv-toast { position: absolute; left: -2%; top: 14%; display: flex; align-items: center; gap: 10px; padding: 10px 16px 10px 10px; border-radius: 16px; background: #fff; box-shadow: 0 24px 50px -24px rgb(17 17 16 / 0.5); font-size: 14px; }
 .sv-toast b { display: grid; font-weight: 600; }
 .sv-toast em { color: var(--vs-mute); font-style: normal; font-weight: 400; font-size: 12.5px; }
 .sv-toast-dot { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; background: #28c840; color: #fff; }
@@ -99,15 +96,14 @@
 .sv-ad-head p { display: grid; margin: 0; line-height: 1.25; }
 .sv-ad-head p span { color: var(--vs-mute); font-size: 11px; }
 .sv-stage { margin-left: auto; padding: 2px 8px; border-radius: 99px; background: rgb(43 75 242 / 0.1); color: var(--vs-blue); font-size: 10.5px; font-weight: 600; }
-.sv-ad-img { position: relative; display: grid; place-items: center; aspect-ratio: 1; }
-.sv-ad-img--video { background: linear-gradient(150deg, #2b4bf2, #7d93ff 60%, #ffd23f); }
-.sv-ad-img--steps { background: #ffd23f; }
-.sv-ad-img--cart { background: #ff9fd0; }
+.sv-ad-img { position: relative; display: grid; place-items: center; aspect-ratio: 1; overflow: hidden; background: var(--vs-stone); }
+.sv-ad-img > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sv-ad-img > :not(img) { position: relative; z-index: 1; }
+.sv-ad-cart-badge { position: absolute; right: 12px; top: 12px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--vs-blue); color: #fff; font-size: 13px; font-weight: 700; box-shadow: 0 6px 14px -6px rgb(43 75 242 / 0.7); }
+.sv-ad-img--steps::after { content: ''; position: absolute; inset: 0; background: rgb(17 17 16 / 0.28); }
 .sv-play { display: grid; place-items: center; width: 54px; height: 54px; padding-left: 3px; border-radius: 50%; background: #fff; color: var(--vs-ink); box-shadow: 0 10px 24px -10px rgb(0 0 0 / 0.4); }
 .sv-ad-steps { display: flex; gap: 10px; }
 .sv-ad-steps i { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #fff; font: 600 16px/1 var(--font-display); font-style: normal; }
-.sv-ad-cart { position: relative; width: 46%; aspect-ratio: 1.2; border: 5px solid #151514; border-top-width: 14px; border-radius: 6px 6px 12px 12px; }
-.sv-ad-cart b { position: absolute; right: -16px; top: -24px; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--vs-blue); color: #fff; font-size: 13px; }
 .sv-ad-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px; background: #f6f5f1; }
 .sv-ad-foot p { margin: 0; font-weight: 600; line-height: 1.3; }
 .sv-btn { flex: none; padding: 6px 10px; border-radius: 8px; background: var(--vs-ink); color: #fff; font-size: 11.5px; font-weight: 600; }
@@ -221,11 +217,7 @@
   .sv-hero-object .sv-toast { zoom: 1.15; }
   .sv-how-slot > .sv-win { width: calc(100% / 1.2); zoom: 1.2; }
 }
-.sv-hero-object .sv-toast { left: -4%; bottom: 4%; }
-.sv-lines { display: grid; gap: 6px; }
-.sv-lines i { height: 7px; border-radius: 4px; background: #e8e4da; }
-.sv-lines i:nth-child(2) { width: 72%; }
-.sv-lines i:nth-child(3) { width: 48%; }
+.sv-hero-object .sv-toast { left: -4%; top: auto; bottom: 4%; }
 .sv-win li { transition: background-color 0.2s ease; }
 .sv-win li:hover { background-color: rgb(43 75 242 / 0.05); }
 .sv-tag { flex: none; padding: 3px 9px; border-radius: 99px; font-size: 11.5px; font-weight: 600; }
@@ -249,6 +241,8 @@
 .sv-result-site { margin: 0; color: var(--vs-mute); font-size: 12px; }
 .sv-result-site b { color: var(--vs-ink); }
 .sv-result-title { margin: 0; color: #1a0dab; font-size: 16px; font-weight: 500; }
+.sv-result-title--plain { font-size: 14px; }
+.sv-copy { display: block; color: var(--vs-ink-2); font-size: 12.5px; line-height: 1.5; }
 .sv-sitelinks { display: flex; gap: 8px; margin: 4px 0 0; }
 .sv-sitelinks span { padding: 4px 10px; border-radius: 99px; background: #fff; color: #1a0dab; font-size: 12px; box-shadow: inset 0 0 0 1px var(--vs-line); }
 
@@ -263,7 +257,6 @@
 .sv-page-chip { padding: 3px 10px; border-radius: 99px; background: rgb(43 75 242 / 0.1); color: var(--vs-blue); font-size: 11.5px; font-weight: 600; }
 .sv-page-h { margin: 0; font: 500 22px/1.15 var(--font-display); letter-spacing: -0.02em; }
 .sv-page-h--sm { font-size: 15px; }
-.sv-page-mock .sv-lines { width: 100%; }
 .sv-page-cta { display: inline-block; padding: 9px 16px; border-radius: 99px; background: var(--vs-ink); color: #fff; font-weight: 600; font-size: 13px; animation: sv-cta-pulse 2.4s ease-in-out infinite; }
 .sv-page-cta--wide { display: block; margin-top: 12px; text-align: center; background: var(--vs-blue); }
 @keyframes sv-cta-pulse { 50% { box-shadow: 0 0 0 7px rgb(43 75 242 / 0.14); } }
@@ -300,7 +293,8 @@
 
 .sv-product { display: flex; gap: 12px; align-items: center; }
 .sv-product > div { flex: 1; }
-.sv-product-img { flex: none; width: 72px; height: 72px; border-radius: 12px; background: linear-gradient(150deg, #ffd23f, #ff9fd0); }
+.sv-product-img { flex: none; width: 72px; height: 72px; border-radius: 12px; background: var(--vs-stone); object-fit: cover; object-position: top; }
+.sv-product-name { margin: 0 0 2px; font-weight: 600; }
 .sv-product-img--sm { width: 48px; height: 48px; }
 .sv-price { margin: 8px 0 0; font-weight: 700; font-variant-numeric: tabular-nums; }
 .sv-bundles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 14px; }
@@ -345,7 +339,8 @@
 .sv-node--goal { border-color: var(--vs-blue); background: rgb(43 75 242 / 0.08); color: var(--vs-blue); animation: sv-cta-pulse 2.4s ease-in-out infinite; }
 .sv-node-row { display: flex; gap: 8px; }
 .sv-devices { display: flex; align-items: flex-end; gap: 12px; }
-.sv-device { display: grid; gap: 8px; align-content: start; padding: 12px; border: 6px solid #151514; border-radius: 12px; background: #fff; }
+.sv-device { display: block; overflow: hidden; border: 6px solid #151514; border-radius: 12px; background: #fff; }
+.sv-device img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
 .sv-device--desk { flex: 1; min-height: 120px; }
 .sv-device--phone { width: 74px; min-height: 140px; border-radius: 16px; }
 .sv-people { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }

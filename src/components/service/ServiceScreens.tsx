@@ -1,4 +1,6 @@
 import { Check } from 'lucide-react'
+import noomsShop from '../../assets/cases/nooms-640.webp'
+import pinacelloShop from '../../assets/cases/pinacello-640.webp'
 import type { CSSProperties, ReactNode } from 'react'
 import type { ServiceScreen } from '../../data/serviceSteps'
 import type { Lang } from '../../data/types'
@@ -23,7 +25,8 @@ export function Win({ title, lang, children, className = '' }: { title: string; 
 }
 
 const Tick = () => <span className="sv-tick"><Check size={13} strokeWidth={2.6} /></span>
-const Lines = ({ n = 2 }: { n?: number }) => <span className="sv-lines">{Array.from({ length: n }, (_, i) => <i key={i} />)}</span>
+/** A short line of sample text, where a screen would show body copy. */
+const Copy = ({ children }: { children: ReactNode }) => <span className="sv-copy">{children}</span>
 
 /* ---------- Meta Ads ---------- */
 
@@ -32,15 +35,19 @@ const ADS = {
   en: [{ stage: 'Cold', text: 'Meet us in 20 seconds.', cta: 'Learn more', tone: 'video' }, { stage: 'Warm', text: 'How it works, step by step.', cta: 'Watch', tone: 'steps' }, { stage: 'Retargeting', text: 'Your cart is still waiting.', cta: 'Check out', tone: 'cart' }],
 }
 
+/** Real material from the cases: the two published ad videos' stills and a client's shop. */
+const AD_IMAGES = ['/images/ads/pinacello-personal.jpg', '/images/ads/healthfactor-personal.jpg', noomsShop]
+
 export function AdCard({ index, lang }: { index: number; lang: Lang }) {
   const ad = ADS[lang][index]
   return (
     <div className="sv-ad">
       <div className="sv-ad-head"><span className="sv-ava">v.</span><p><b>{lang === 'nl' ? 'Jouw merk' : 'Your brand'}</b><span>{lang === 'nl' ? 'Gesponsord' : 'Sponsored'}</span></p><span className="sv-stage">{ad.stage}</span></div>
       <div className={`sv-ad-img sv-ad-img--${ad.tone}`} aria-hidden="true">
+        <img src={AD_IMAGES[index]} alt="" width={360} height={360} loading="lazy" decoding="async" />
         {ad.tone === 'video' && <span className="sv-play"><svg width="16" height="16" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>}
         {ad.tone === 'steps' && <span className="sv-ad-steps"><i>1</i><i>2</i><i>3</i></span>}
-        {ad.tone === 'cart' && <span className="sv-ad-cart"><b>1</b></span>}
+        {ad.tone === 'cart' && <span className="sv-ad-cart-badge">1</span>}
       </div>
       <div className="sv-ad-foot"><p>{ad.text}</p><span className="sv-btn">{ad.cta}</span></div>
     </div>
@@ -92,10 +99,10 @@ function Search({ lang }: ScreenProps) {
       <div className="sv-result sv-result--ad">
         <p className="sv-result-site"><b>{nl ? 'Gesponsord' : 'Sponsored'}</b> · jouwbedrijf.be</p>
         <p className="sv-result-title">{nl ? 'Loodgieter in Gent · Vandaag nog langs' : 'Plumber in Ghent · Out today'}</p>
-        <Lines n={2} />
+        <Copy>{nl ? 'Snel ter plaatse in Gent en omgeving. Bel of plan je afspraak online.' : 'Fast on site in Ghent and nearby. Call or book online.'}</Copy>
         <p className="sv-sitelinks"><span>{nl ? 'Prijzen' : 'Prices'}</span><span>{nl ? 'Afspraak' : 'Book'}</span><span>{nl ? 'Reviews' : 'Reviews'}</span></p>
       </div>
-      <div className="sv-result"><p className="sv-result-site">concurrent.be</p><Lines n={2} /></div>
+      <div className="sv-result"><p className="sv-result-site">concurrent.be</p><p className="sv-result-title sv-result-title--plain">{nl ? 'Loodgieters · Gent' : 'Plumbers · Ghent'}</p><Copy>{nl ? 'Alle loodgieters in de regio op een rij.' : 'Every plumber in the region in one list.'}</Copy></div>
     </Win>
   )
 }
@@ -121,7 +128,7 @@ function Page({ lang }: ScreenProps) {
       <div className="sv-page-mock">
         <span className="sv-page-chip">{nl ? '1 boodschap · 1 actie' : '1 message · 1 action'}</span>
         <p className="sv-page-h">{nl ? 'Meer klanten uit je advertenties' : 'More customers from your ads'}</p>
-        <Lines n={2} />
+        <Copy>{nl ? 'Gratis plan op maat · Antwoord binnen 1 werkdag · Geen contract' : 'A free plan for you · An answer within 1 working day · No contract'}</Copy>
         <span className="sv-page-cta">{nl ? 'Vraag je plan aan' : 'Ask for your plan'} →</span>
         <span className="sv-cursor" aria-hidden="true" />
       </div>
@@ -181,7 +188,7 @@ function Product({ lang }: ScreenProps) {
   const nl = lang === 'nl'
   return (
     <Win title={nl ? 'Productpagina' : 'Product page'} lang={lang}>
-      <div className="sv-product"><span className="sv-product-img" /><div><Lines n={2} /><p className="sv-price">€ 24,90</p></div></div>
+      <div className="sv-product"><img className="sv-product-img" src={noomsShop} alt="" width={72} height={72} loading="lazy" decoding="async" /><div><p className="sv-product-name">{nl ? 'Jouw product' : 'Your product'}</p><Copy>{nl ? 'Op voorraad · vandaag besteld, morgen in huis' : 'In stock · order today, here tomorrow'}</Copy><p className="sv-price">€ 24,90</p></div></div>
       <div className="sv-bundles"><span>1×</span><span className="is-on">2× <em>{nl ? 'Populair' : 'Popular'}</em></span><span>3×</span></div>
       <span className="sv-page-cta sv-page-cta--wide">{nl ? 'In mijn mandje' : 'Add to cart'}</span>
     </Win>
@@ -194,7 +201,7 @@ function Checkout({ lang }: ScreenProps) {
   return (
     <Win title="Checkout" lang={lang}>
       <ol className="sv-checkout">{steps.map((s, i) => <li key={s} className={i < 2 ? 'is-done' : 'is-now'}>{i < 2 ? <Tick /> : <span className="sv-step-no">3</span>}{s}</li>)}</ol>
-      <div className="sv-upsell"><span className="sv-product-img sv-product-img--sm" /><p><b>{nl ? 'Vaak samen gekocht' : 'Often bought together'}</b><span>+ € 6,90</span></p><span className="sv-btn">{nl ? 'Voeg toe' : 'Add'}</span></div>
+      <div className="sv-upsell"><img className="sv-product-img sv-product-img--sm" src={pinacelloShop} alt="" width={44} height={44} loading="lazy" decoding="async" /><p><b>{nl ? 'Vaak samen gekocht' : 'Often bought together'}</b><span>+ € 6,90</span></p><span className="sv-btn">{nl ? 'Voeg toe' : 'Add'}</span></div>
     </Win>
   )
 }
@@ -204,7 +211,7 @@ function Cart({ lang }: ScreenProps) {
   return (
     <Win title={nl ? 'E-mail' : 'Email'} lang={lang}>
       <p className="sv-mail-subject">{nl ? 'Je mandje wacht nog op je' : 'Your cart is still waiting'}</p>
-      <div className="sv-product"><span className="sv-product-img sv-product-img--sm" /><div><Lines n={2} /></div></div>
+      <div className="sv-product"><img className="sv-product-img sv-product-img--sm" src={noomsShop} alt="" width={44} height={44} loading="lazy" decoding="async" /><div><p className="sv-product-name">{nl ? 'Jouw product' : 'Your product'}</p><Copy>{nl ? '1 stuk · € 24,90' : '1 item · € 24.90'}</Copy></div></div>
       <span className="sv-page-cta sv-page-cta--wide">{nl ? 'Rond je bestelling af' : 'Finish your order'}</span>
       <p className="sv-mail-meta"><span>{nl ? 'Verstuurd na 1 uur' : 'Sent after 1 hour'}</span><span className="sv-live">{nl ? 'geopend' : 'opened'}</span></p>
     </Win>
@@ -245,7 +252,7 @@ function Review({ lang }: ScreenProps) {
   return (
     <Win title={nl ? 'Ter goedkeuring' : 'For approval'} lang={lang}>
       <div className="sv-person"><BotAvatar shape="brain" size={34} color="#7d93ff" /><p><b>{nl ? 'Concept van de AI' : 'Draft by the AI'}</b><span>{nl ? 'Antwoord op een offerteaanvraag' : 'Reply to a quote request'}</span></p></div>
-      <div className="sv-draft"><Lines n={3} /></div>
+      <div className="sv-draft"><Copy>{nl ? 'Bedankt voor je aanvraag. Ik plan graag een kort gesprek in om je vraag en je budget te bespreken. Past dinsdag of donderdag?' : 'Thanks for your request. I would like to plan a short call about your question and budget. Does Tuesday or Thursday suit you?'}</Copy></div>
       <p className="sv-approve"><span className="sv-btn sv-btn--ghost">{nl ? 'Aanpassen' : 'Edit'}</span><span className="sv-btn sv-btn--blue">{nl ? 'Goedkeuren' : 'Approve'}</span></p>
     </Win>
   )
@@ -295,7 +302,7 @@ function Mail({ lang }: ScreenProps) {
   return (
     <Win title={nl ? 'Inbox' : 'Inbox'} lang={lang}>
       <div className="sv-person"><BotAvatar shape="verkoop" size={34} /><p><b>{nl ? 'Jouw merk' : 'Your brand'}</b><span>{nl ? 'Fijn dat je er bent' : 'Good to have you here'}</span></p></div>
-      <div className="sv-draft"><Lines n={3} /></div>
+      <div className="sv-draft"><Copy>{nl ? 'Welkom! Elke week krijg je één korte tip om meer uit je advertenties te halen. Hier is de eerste.' : 'Welcome! Every week you get one short tip to get more from your ads. Here is the first.'}</Copy></div>
       <span className="sv-page-cta">{nl ? 'Ontdek je eerste tip' : 'See your first tip'} →</span>
     </Win>
   )
@@ -338,8 +345,8 @@ function Devices({ lang }: ScreenProps) {
   return (
     <Win title={nl ? 'Getest op elk scherm' : 'Tested on every screen'} lang={lang}>
       <div className="sv-devices">
-        <div className="sv-device sv-device--desk"><span className="sv-page-h sv-page-h--sm">{nl ? 'Jouw nieuwe site' : 'Your new site'}</span><Lines n={2} /><span className="sv-page-cta">{nl ? 'Contact' : 'Contact'}</span></div>
-        <div className="sv-device sv-device--phone"><Lines n={3} /><span className="sv-page-cta">→</span></div>
+        <div className="sv-device sv-device--desk"><img src={pinacelloShop} alt="" width={640} height={400} loading="lazy" decoding="async" /></div>
+        <div className="sv-device sv-device--phone"><img src={noomsShop} alt="" width={640} height={400} loading="lazy" decoding="async" /></div>
       </div>
       <p className="sv-mail-meta"><span>Chrome · Safari · {nl ? 'telefoon' : 'phone'}</span><span className="sv-live">ok</span></p>
     </Win>

@@ -116,7 +116,7 @@ function MetaHero({ lang, toast }: { lang: Lang; toast: [string, string] }) {
         <span className="sv-phone-notch" />
         <span className="sv-phone-chip">{COPY[lang].sample}</span>
         <AdCard index={0} lang={lang} />
-        <div className="sv-feed-ghost"><i /><i /><i /></div>
+        <div className="sv-feed-next"><AdCard index={2} lang={lang} /></div>
       </motion.div>
       <HeroToast toast={toast} />
     </div>
