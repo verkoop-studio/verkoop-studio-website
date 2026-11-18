@@ -128,17 +128,6 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
 .pp-truth.is-on .pp-row strong { opacity: 1; translate: 0 0; }
 .pp-row--total { border-bottom: 0; font-weight: 600; }
 .pp-row--total strong { font-size: 17px; white-space: nowrap; }
-.pp-chart { position: absolute; left: 0; bottom: 12px; width: min(300px, 62%); padding: 14px 16px 12px; border-radius: 14px; background: #fff; border: 1px solid var(--vs-line); box-shadow: 0 20px 36px -20px rgb(17 17 16 / 0.5); rotate: -3deg; }
-.pp-chart p { margin: 0 0 10px; font-weight: 600; font-size: 13.5px; }
-.pp-chart-bars { display: flex; align-items: flex-end; gap: 9px; height: 74px; }
-.pp-chart-bars span { position: relative; flex: 1; height: 100%; }
-.pp-chart-bars i, .pp-chart-bars b { position: absolute; bottom: 0; left: 0; right: 0; border-radius: 4px 4px 0 0; transform-origin: bottom; scale: 1 0; transition: scale 0.7s var(--vs-ease) var(--d); }
-.pp-chart-bars i { background: color-mix(in srgb, var(--vs-blue) 28%, #fff); }
-.pp-chart-bars b { background: var(--vs-blue); left: 22%; right: 22%; }
-.pp-truth.is-on .pp-chart-bars i, .pp-truth.is-on .pp-chart-bars b { scale: 1 1; }
-.pp-legend { display: flex; align-items: center; gap: 6px; margin: 10px 0 0 !important; font-weight: 400 !important; font-size: 12px !important; color: var(--vs-mute); }
-.pp-legend i, .pp-legend b { width: 9px; height: 9px; border-radius: 2px; background: color-mix(in srgb, var(--vs-blue) 28%, #fff); }
-.pp-legend b { background: var(--vs-blue); margin-left: 10px; }
 .pp-problem .pp-pain:nth-child(1) { background: #1877f2; }
 .pp-problem .pp-pain:nth-child(2) { background: #f4b400; color: var(--vs-ink); margin-left: 9%; }
 .pp-problem .pp-pain:nth-child(3) { background: var(--vs-paper); color: var(--vs-ink); margin-left: 3%; }
@@ -154,7 +143,7 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
 .pp-terms li { padding: 12px 0; border-top: 1px solid var(--vs-line-dark); }
 .pp-form-box { margin-top: 36px; max-width: 1100px; }
 @media (max-width: 900px) { .pp-row { grid-template-columns: 0.9fr 1fr 1fr; font-size: 14px; } .pp-problem .pp-pain:nth-child(n) { margin-left: 0; } }
-@media (prefers-reduced-motion: reduce) { .pp-claim path { stroke-dashoffset: 0; } .pp-row strong { opacity: 1; translate: none; } .pp-chart-bars i, .pp-chart-bars b { scale: 1 1; } }
+@media (prefers-reduced-motion: reduce) { .pp-claim path { stroke-dashoffset: 0; } .pp-row strong { opacity: 1; translate: none; } }
 
 .pp-chart-stb { position: absolute; left: 0; bottom: 6px; z-index: 2; rotate: -3deg; filter: drop-shadow(0 22px 30px rgb(17 17 16 / 0.32)); transition: rotate 0.5s var(--vs-ease); }
 .pp-chart-stb:hover { rotate: 0deg; }

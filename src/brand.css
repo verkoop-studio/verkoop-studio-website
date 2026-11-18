@@ -44,8 +44,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
   color: var(--vs-mute);
 }
 
-.vs-serif { font-family: var(--font-serif); font-style: italic; font-weight: 400; letter-spacing: -0.01em; padding-right: 0.04em; }
-
 .vs-h1 {
   margin: 0;
   font-size: clamp(42px, 6.4vw, 92px);
@@ -203,14 +201,9 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 .vs-page .studio-hero.vs-hero { display: block; min-height: 0; margin: 0; gap: 0; background: none; border: 0; border-radius: 0; box-shadow: none; overflow: visible; padding: clamp(140px, 18vw, 200px) 0 clamp(56px, 8vw, 96px); }
 .vs-hero .vs-label { display: block; margin-bottom: 28px; }
-.vs-hero-sub { color: var(--vs-mute); }
 .vs-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; margin-top: 44px; }
 .vs-hero-note { font-size: 14px; color: var(--vs-mute); margin-left: 6px; }
-.vs-hero-media { margin-top: clamp(48px, 7vw, 88px); display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(300px, 1fr); gap: 20px; align-items: stretch; }
-.vs-hero-video { min-width: 0; }
-.vs-hero-video .hero-video { border-radius: 22px; overflow: hidden; box-shadow: 0 40px 80px -40px rgb(17 17 16 / 0.35); }
 .vs-hero-form { min-width: 0; display: flex; }
-@media (max-width: 960px) { .vs-hero-media { grid-template-columns: minmax(0, 1fr); } }
 
 /* Letter-slide headline: words in clipped masks, letters counter-slide */
 .vs-split-word { display: inline-flex; overflow-x: clip; overflow-y: visible; padding-bottom: 0.08em; margin-bottom: -0.08em; }
@@ -301,10 +294,10 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 /* ---------- Display type ---------- */
 
-.vs-h1, .vs-h2, .vs-closing-title, .vs-service-title, .vs-product-name, .vs-plan-price, .vs-result-figure, .vs-hero-form .hero-request h2, .vs-page .studio-faq h2 { font-family: var(--font-display); }
+.vs-h1, .vs-h2, .vs-service-title, .vs-product-name, .vs-plan-price, .vs-result-figure, .vs-hero-form .hero-request h2, .vs-page .studio-faq h2 { font-family: var(--font-display); }
 .vs-h1 { letter-spacing: -0.035em; font-weight: 500; }
 .vs-h2, .vs-page .studio-faq h2 { letter-spacing: -0.03em; }
-.vs-closing-title, .vs-result-figure { letter-spacing: -0.045em; }
+.vs-result-figure { letter-spacing: -0.045em; }
 
 /* ---------- Hero video: no sound toggle on the homepage ---------- */
 
@@ -319,17 +312,11 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-mark-bg { position: absolute; inset: 0; z-index: -1; border-radius: 0.16em; background: var(--vs-blue); transform-origin: 0 50%; }
 .vs-h1 { line-height: 1.1; }
 .vs-h2 { line-height: 1.12; }
-.vs-closing-title { line-height: 1; }
 
 /* ---------- Client pills under the hero ---------- */
 
 .vs-proof { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: clamp(32px, 4vw, 48px); }
 .vs-proof ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.vs-pill { display: inline-flex; align-items: center; min-height: 38px; padding: 0 16px; border-radius: 10px; background: var(--vs-card); box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); font-size: 14px; font-weight: 500; text-decoration: none; transition: transform var(--vs-dur-fast) var(--vs-ease), box-shadow var(--vs-dur-fast) ease, background var(--vs-dur-fast) ease, color var(--vs-dur-fast) ease; }
-.vs-pill:hover { transform: translateY(-2px); box-shadow: inset 0 0 0 1px var(--vs-ink); }
-.vs-pill:active { transform: scale(0.96); }
-.vs-pill--accent { color: var(--vs-blue); }
-.vs-pill--accent:hover { background: var(--vs-blue); color: #fff; box-shadow: none; }
 
 /* ---------- Hero video: still frame until the first frame plays ---------- */
 
@@ -337,17 +324,15 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 /* ---------- Touch: every control at least 44px ---------- */
 
 @media (pointer: coarse) {
-  .vs-pill, .vs-tab, .vs-lang button, .vs-dock-actions a, .faq-more { min-height: 44px; }
+  .vs-tab, .vs-lang button, .vs-dock-actions a, .faq-more { min-height: 44px; }
   .vs-lang button { min-width: 44px; }
   .vs-textlink { display: inline-flex; align-items: center; min-height: 44px; }
   .vs-round-btn, .vs-menu-btn, .vs-drawer-close { min-width: 44px; min-height: 44px; }
   .site-shell footer a, .site-shell footer button { display: inline-flex; align-items: center; min-height: 44px; }
-  .site-shell footer ul.space-y-2 > * + * { margin-top: 0; }
 }
 
 /* Larger hit areas for mouse users on the small text links. */
 .site-shell footer a, .site-shell footer button { display: inline-flex; align-items: center; min-height: 36px; }
-.site-shell footer ul.space-y-2 > * + * { margin-top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .vs-ticker-live, .vs-ticker-head, .vs-glow-breathe, .vs-glow-ghosts { animation: none; }
@@ -381,8 +366,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 }
 
 /* Contact page: the plan a visitor picked on the homepage. */
-.selected-package { margin-top: 26px; padding: 18px 22px; border: 1px solid var(--vs-line); background: var(--vs-card); border-radius: 14px; font-size: 14px; color: var(--vs-ink-2); }
-.selected-package a { display: inline-block; margin-left: 12px; text-decoration: underline; font-size: 13px; }
 
 /* ---------- Card anatomy: tinted stage, app window, step, title, body ---------- */
 /* Shared by the homepage system cards (below the fold) and the product pages (first screen). */
@@ -432,7 +415,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-proof-bars i { flex: 1; border-radius: 4px 4px 0 0; background: var(--vs-blue); transform-origin: bottom; animation: vs-proof-grow 0.7s var(--vs-ease) both; }
 .vs-proof-bars i:last-child { background: var(--vs-ink); }
 @keyframes vs-proof-grow { from { transform: scaleY(0); } }
-.vs-proof-row { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--vs-stone); font-size: 14px; font-weight: 500; }
 .vs-marks { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding: 0; list-style: none; }
 .vs-mark-link { display: inline-flex; flex-direction: column; gap: 2px; min-height: 44px; justify-content: center; color: var(--vs-ink); text-decoration: none; transition: transform var(--vs-dur-fast) var(--vs-ease); }
 .vs-mark-link strong { font: 600 19px/1 var(--font-display); letter-spacing: -0.02em; }

@@ -1,33 +1,7 @@
 /* Separate translate from existing entrance transforms so they compose cleanly. */
 @media (prefers-reduced-motion: no-preference) {
-  .hero-art.hero-graphic > img {
-    translate: var(--motion-x, 0px) var(--motion-y, 0px);
-    transition: translate .65s cubic-bezier(.22,1,.36,1);
-  }
-  .hero-art .floating-strategy {
-    translate: calc(var(--motion-x, 0px) * -.6) calc(var(--motion-y, 0px) * -.6);
-    transition: translate .8s cubic-bezier(.22,1,.36,1), transform .35s;
-  }
-  .project-arrow, .service-more > span {
-    transition: transform .4s cubic-bezier(.22,1,.36,1), background .3s, color .3s;
-  }
   .growth-goal h3::after {
     transition: width .5s cubic-bezier(.22,1,.36,1), background-color .3s ease;
-  }
-  .goal-link > span {
-    transition: transform .45s cubic-bezier(.34,1.56,.64,1);
-  }
-  .growth-goal:is(:hover, :focus-visible) .goal-link > span {
-    transform: translate(4px, -4px);
-  }
-  .strategy-go {
-    transition: transform .45s cubic-bezier(.34,1.56,.64,1);
-  }
-  .floating-strategy:is(:hover, :focus-visible) .strategy-go {
-    transform: translate(3px, -3px);
-  }
-  :is(.project-tile, .marketing-card):is(:hover, :focus-visible) :is(.project-arrow, .service-more > span) {
-    transform: rotate(45deg);
   }
   :is(.button-dark, .button-light) {
     transition: transform .3s cubic-bezier(.22,1,.36,1), box-shadow .3s, background .3s;
@@ -46,15 +20,10 @@
     transform: translateY(1px) scale(.96);
     transition: transform .09s ease, box-shadow .09s ease;
   }
-  .creative-front, .creative-back, .concept-search-result, .concept-mail, .dashboard-metrics > span {
+  .concept-search-result, .concept-mail {
     transition: transform .6s cubic-bezier(.22,1,.36,1), box-shadow .6s;
   }
-  .marketing-card:is(:hover, :focus-visible) .creative-front { transform: translate(-5px,-5px) rotate(-11deg); }
-  .marketing-card:is(:hover, :focus-visible) .creative-back { transform: translate(8px,-3px) rotate(14deg); }
   .marketing-card:is(:hover, :focus-visible) :is(.concept-search-result, .concept-mail) { transform: translateY(-5px); box-shadow: 0 16px 28px #21328c18; }
-  .marketing-card:is(:hover, :focus-visible) .dashboard-metrics > span { transform: translateY(-5px); }
-  .dashboard-metrics > span:nth-child(2) { transition-delay: 60ms; }
-  .dashboard-metrics > span:nth-child(3) { transition-delay: 120ms; }
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .project-tile {
@@ -64,16 +33,6 @@
   .project-tile:is(:hover, :focus-visible) {
     box-shadow: 0 18px 40px #10131c22;
   }
-  .project-image::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(circle at var(--light-x, 50%) var(--light-y, 50%), #ffffff35, transparent 65%);
-    opacity: 0;
-    transition: opacity .4s;
-  }
-  .project-tile:hover .project-image::after { opacity: 1; }
   .button-dark:hover { transform: translateY(-3px); }
   .button-dark:active {
     transform: translateY(1px) scale(.96);
@@ -107,12 +66,6 @@
 @keyframes hero-drift {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   50% { transform: translateY(-10px) rotate(1deg); }
-}
-@media (prefers-reduced-motion: no-preference) {
-  .hero-art.hero-graphic > img {
-    animation: glass-arrive 1.3s cubic-bezier(.16,1,.3,1) backwards,
-      hero-drift 9s 1.3s ease-in-out infinite;
-  }
 }
 .verkoop-wordmark {
   display: inline-flex;
