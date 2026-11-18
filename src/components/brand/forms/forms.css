@@ -113,3 +113,6 @@
 .email-capture-eyebrow { text-transform: none; letter-spacing: 0; font-size: 12px; color: var(--vs-mute); }
 .email-capture-description, .email-capture-consent { color: var(--vs-ink-2); }
 .email-capture-consent { font-size: 12px; }
+.vs-goals-options--tight { grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); }
+.vs-goals-options--tight .vs-goal { padding: 12px 14px; }
+.vs-check-row { display: flex; align-items: flex-start; gap: 10px; color: var(--vs-ink-2); font-size: 14px; line-height: 1.45; }
