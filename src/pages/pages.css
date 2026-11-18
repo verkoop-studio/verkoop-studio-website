@@ -1,0 +1,36 @@
+/* Shared styles for the rebuilt inner pages (cases, services, agency, legal…).
+   Linked normally on those routes only, so it never counts against the inlined budget. */
+
+/* Posters need their frame and layering at first paint; their motion lives in below.css. */
+.vs-poster { position: absolute; inset: 0; overflow: hidden; container-type: inline-size; user-select: none; }
+.vs-poster-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.vs-sticker { position: absolute; display: block; translate: -50% -50%; pointer-events: none; }
+.vs-sticker svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+/* ---------- Cases index ---------- */
+
+.vs-cases-hero { min-height: 92svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 64px); padding-top: clamp(120px, 14vw, 170px); padding-bottom: clamp(48px, 6vw, 80px); }
+.vs-cases-hero .vs-lead { margin-top: 24px; max-width: 32ch; }
+.vs-cases-fan { position: relative; height: clamp(300px, 34vw, 460px); }
+.vs-cases-fan-card { position: absolute; left: 50%; top: 50%; width: min(70%, 360px); aspect-ratio: 960 / 680; margin: calc(min(70%, 360px) * -0.354) 0 0 calc(min(70%, 360px) * -0.5); border-radius: 14px; overflow: hidden; background: var(--vs-stone); box-shadow: 0 30px 60px -30px rgb(17 17 16 / 0.45), 0 0 0 1px rgb(17 17 16 / 0.06); }
+.vs-cases-grid-wrap { position: relative; padding-top: 0; }
+.vs-cases-note { position: absolute; right: var(--vs-gutter); top: -42px; }
+.vs-cases-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); margin: 0; padding: 0; list-style: none; }
+.vs-cases-grid > li:nth-child(even) { margin-top: clamp(0px, 6vw, 96px); }
+.vs-case-card { display: flex; flex-direction: column; gap: 14px; color: var(--vs-ink); text-decoration: none; }
+.vs-case-card-frame { position: relative; aspect-ratio: 960 / 680; border-radius: 18px; overflow: hidden; background: var(--vs-stone); outline: 2px solid transparent; outline-offset: 6px; transition: transform 0.55s var(--vs-ease), outline-color 0.3s ease, box-shadow 0.55s var(--vs-ease); box-shadow: 0 1px 2px rgb(17 17 16 / 0.05); }
+.vs-case-card:hover .vs-case-card-frame, .vs-case-card:focus-visible .vs-case-card-frame { transform: translateY(-8px) rotate(-0.8deg); outline-color: var(--vs-blue); box-shadow: 0 40px 70px -40px rgb(17 17 16 / 0.45); }
+.vs-case-card:focus-visible { outline: none; }
+.vs-case-card-meta { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.vs-case-card-name { margin: 0; font: 500 clamp(28px, 2.6vw, 40px)/1 var(--font-display); letter-spacing: -0.035em; }
+.vs-case-card-result { margin: 6px 0 0; color: var(--vs-blue); font-size: 16px; font-weight: 600; }
+.vs-case-card-chip { flex: none; padding: 5px 10px; border-radius: 999px; background: var(--vs-stone); color: var(--vs-ink-2); font-size: 12.5px; font-weight: 500; }
+.vs-case-card-summary { margin: 0; max-width: 54ch; color: var(--vs-ink-2); font-size: 16px; line-height: 1.5; }
+.vs-case-card-link { align-self: flex-start; }
+@media (max-width: 860px) {
+  .vs-cases-hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+  .vs-cases-fan { height: 260px; scale: 0.82; }
+  .vs-cases-grid { grid-template-columns: minmax(0, 1fr); }
+  .vs-cases-grid > li:nth-child(even) { margin-top: 0; }
+  .vs-cases-note { display: none; }
+}

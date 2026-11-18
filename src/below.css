@@ -24,14 +24,14 @@
 .vs-slide-tag { display: inline-flex; align-items: center; min-height: 24px; margin-top: 14px; padding: 0 9px; border-radius: 5px; background: var(--vs-blue); color: #fff; font-size: 13px; font-weight: 600; letter-spacing: -0.01em; transition: opacity 0.35s, transform 0.35s var(--vs-ease); }
 
 /* Default state when scroll-driven animation is unavailable: JS marks the centred slide. */
-.vs-slide.is-active .vs-slide-frame { outline-color: var(--vs-blue); }
+:is(.vs-slide.is-active, .vs-case-live) .vs-slide-frame { outline-color: var(--vs-blue); }
 .vs-slide:not(.is-active) .vs-slide-tag { opacity: 0; transform: translateY(6px); }
 
 @supports (animation-timeline: view()) {
   .vs-slide .vs-slide-frame { animation: vs-ring linear both; animation-timeline: --vs-slide; }
   .vs-slide .vs-slide-tag { animation: vs-tag linear both; animation-timeline: --vs-slide; }
   .vs-slide:not(.is-active) .vs-slide-tag { opacity: unset; transform: unset; }
-  .vs-slide.is-active .vs-slide-frame { outline-color: unset; }
+  :is(.vs-slide.is-active, .vs-case-live) .vs-slide-frame { outline-color: unset; }
 }
 @keyframes vs-ring { 0%, 30% { outline-color: transparent; } 45%, 55% { outline-color: #2b4bf2; } 70%, 100% { outline-color: transparent; } }
 @keyframes vs-tag { 0%, 38% { opacity: 0; transform: translateY(6px); } 47%, 53% { opacity: 1; transform: none; } 62%, 100% { opacity: 0; transform: translateY(6px); } }
@@ -191,15 +191,15 @@
 
 .vs-poster-brush { transform-box: fill-box; transform-origin: 0 50%; transform: scaleX(0); transition: transform 0.7s var(--vs-ease-wipe) 0.3s; }
 .vs-poster-caption { opacity: 0; transition: opacity 0.35s ease 0.75s; }
-.vs-slide.is-active .vs-poster-brush { transform: scaleX(1); }
-.vs-slide.is-active .vs-poster-caption { opacity: 1; }
+:is(.vs-slide.is-active, .vs-case-live) .vs-poster-brush { transform: scaleX(1); }
+:is(.vs-slide.is-active, .vs-case-live) .vs-poster-caption { opacity: 1; }
 
 .vs-sticker { position: absolute; display: block; translate: -50% -50%; pointer-events: none; }
 .vs-sticker-drop { display: block; opacity: 0; transform: translateY(-46%) scale(0.6) rotate(-24deg); transition: transform 0.3s ease, opacity 0.2s ease; }
-.vs-slide.is-active .vs-sticker-drop { opacity: 1; transform: none; transition: transform 0.75s var(--vs-ease-bounce) calc(0.15s + var(--i) * 0.08s), opacity 0.2s ease calc(0.15s + var(--i) * 0.08s); }
+:is(.vs-slide.is-active, .vs-case-live) .vs-sticker-drop { opacity: 1; transform: none; transition: transform 0.75s var(--vs-ease-bounce) calc(0.15s + var(--i) * 0.08s), opacity 0.2s ease calc(0.15s + var(--i) * 0.08s); }
 .vs-sticker svg { display: block; width: 100%; height: auto; overflow: visible; filter: drop-shadow(0 5px 7px rgb(17 17 16 / 0.2)); }
 @media (hover: hover) {
-  .vs-slide.is-active a:hover .vs-sticker svg { animation: vs-sticker-wobble 0.9s var(--vs-ease) calc(var(--i) * 0.05s); }
+  :is(.vs-slide.is-active, .vs-case-live) a:hover .vs-sticker svg { animation: vs-sticker-wobble 0.9s var(--vs-ease) calc(var(--i) * 0.05s); }
 }
 @keyframes vs-sticker-wobble { 0%, 100% { transform: none; } 30% { transform: rotate(-7deg) scale(1.06); } 65% { transform: rotate(5deg) scale(1.02); } }
 
@@ -214,7 +214,7 @@
   .vs-poster-caption { opacity: 1; transition: none; }
   .vs-sticker { animation: none; }
   .vs-sticker-drop { opacity: 1; transform: none; transition: none; }
-  .vs-slide.is-active a:hover .vs-sticker svg { animation: none; }
+  :is(.vs-slide.is-active, .vs-case-live) a:hover .vs-sticker svg { animation: none; }
 }
 
 /* Unfocused posters stay paper with a readable name, only quieter. */
@@ -262,7 +262,7 @@
 
 /* Stipple: the dots settle into the object row by row when the poster is centred. */
 .vs-stipple-dot { opacity: 0; transition: opacity 0.2s ease; }
-.vs-slide.is-active .vs-stipple-dot { opacity: 1; transition: opacity 0.5s ease calc(0.1s + var(--r) * 0.07s); }
+:is(.vs-slide.is-active, .vs-case-live) .vs-stipple-dot { opacity: 1; transition: opacity 0.5s ease calc(0.1s + var(--r) * 0.07s); }
 
 
 /* ---------- The system, part by part: Arc-style cards on a light ground ---------- */
@@ -316,7 +316,7 @@
    which Chrome can paint in tiles when the poster is half outside the scroller. */
 .vs-slide .vs-poster, .vs-slide:not(.is-active) .vs-poster { opacity: 1; filter: none; animation: none; }
 .vs-slide-frame::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #ebe8e0; opacity: 0.74; transition: opacity 0.4s ease; }
-.vs-slide.is-active .vs-slide-frame::after { opacity: 0; }
+:is(.vs-slide.is-active, .vs-case-live) .vs-slide-frame::after { opacity: 0; }
 @supports (animation-timeline: view()) {
   .vs-slide .vs-slide-frame::after { opacity: unset; animation: vs-veil linear both; animation-timeline: --vs-slide; }
 }

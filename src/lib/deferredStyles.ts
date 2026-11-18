@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import belowFold from '../below.css?url'
 import productStyles from '../pages/product.css?url'
+import pagesStyles from '../pages/pages.css?url'
 import { crmLanding } from '../data/crmLanding'
 import { performance } from '../data/performance'
 
@@ -13,10 +14,14 @@ export const DEFERRED_STYLES = belowFold
 /** The product landing pages' own styles. Needed at first paint, so linked normally, on those routes only. */
 export const PRODUCT_STYLES = productStyles
 
+/** The rebuilt inner pages (cases, services, agency, legal…): one shared stylesheet, linked on those routes. */
+export const PAGES_STYLES = pagesStyles
+
 /** Route → stylesheet the prerendered page links in its head. Keeps page styles out of the inlined budget. */
 export const PAGE_STYLES: Record<string, string> = {
   [crmLanding.path]: PRODUCT_STYLES,
   [performance.path]: PRODUCT_STYLES,
+  '/cases': PAGES_STYLES,
 }
 
 function ensureLink(href: string, marker: 'deferredStyles' | 'pageStyles') {
