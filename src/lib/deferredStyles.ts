@@ -27,6 +27,7 @@ export const PAGE_STYLES: Record<string, string> = {
   '/cases': PAGES_STYLES,
   '/agency': PAGES_STYLES,
   '/contact': PAGES_STYLES,
+  '/prijzen': PAGES_STYLES,
   '/blog': PAGES_STYLES,
   '/funnel-audit': PAGES_STYLES,
   '/gratis-website': PAGES_STYLES,

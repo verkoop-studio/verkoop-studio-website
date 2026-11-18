@@ -9,6 +9,7 @@ import CaseStudyPage from './pages/CaseStudyPage'
 import FunnelAudit from './pages/FunnelAudit'
 import OverStef from './pages/OverStef'
 import Contact from './pages/Contact'
+import Pricing from './pages/Pricing'
 import LegalPage from './pages/LegalPage'
 import Academy from './pages/Academy'
 import GratisWebsite from './pages/GratisWebsite'
@@ -51,6 +52,7 @@ export default function App({ location }: { location?: string }) {
           <Route path="software" element={<ServicePage slug="software" />} />
           <Route path="over-stef" element={<OverStef />} />
           <Route path="contact" element={<Contact />} />
+          <Route path="prijzen" element={<Pricing />} />
           <Route path="privacy" element={<LegalPage slug="privacy" />} />
           <Route path="voorwaarden" element={<LegalPage slug="terms" />} />
 

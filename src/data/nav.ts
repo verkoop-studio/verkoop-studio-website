@@ -135,7 +135,7 @@ export const menuTabs: MenuTab[] = [
       },
     ],
   },
-  { id: 'prijzen', label: { nl: 'Prijzen', en: 'Pricing' }, href: '/#groeipakketten' },
+  { id: 'prijzen', label: { nl: 'Prijzen', en: 'Pricing' }, href: '/prijzen' },
   {
     id: 'agency',
     label: { nl: 'Agency', en: 'Agency' },

@@ -1,18 +1,20 @@
 import { Check, Minus } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import { featureRows, pricingTiers } from '../../data/pricing'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import Cta from '../brand/Cta'
 import Reveal from '../brand/Reveal'
 import SplitHeadline from '../brand/SplitHeadline'
+import TextLink from '../brand/TextLink'
 import { EASE_WIPE } from '../brand/motion'
 import { trackSpotlight } from '../brand/spotlight'
 
 const COPY = {
-  nl: { title: [{ text: 'Drie pakketten.' }, { text: 'Eén volledige aanpak.', tone: 'accent' as const }], label: 'Per maand, excl. btw', start: 'Start met' },
-  en: { title: [{ text: 'Three plans.' }, { text: 'One full approach.', tone: 'accent' as const }], label: 'Per month, excl. VAT', start: 'Start with' },
+  nl: { title: [{ text: 'Drie pakketten.' }, { text: 'Eén volledige aanpak.', tone: 'accent' as const }], label: 'Per maand, excl. btw', start: 'Start met', more: 'Alles over de prijzen' },
+  en: { title: [{ text: 'Three plans.' }, { text: 'One full approach.', tone: 'accent' as const }], label: 'Per month, excl. VAT', start: 'Start with', more: 'Everything about pricing' },
 }
 
 function Plan({ index }: { index: number }) {
@@ -71,6 +73,7 @@ function Plan({ index }: { index: number }) {
 
 export default function PlansSection() {
   const { lang } = useLang()
+  const { pathname } = useLocation()
   const t = COPY[lang]
   return (
     <section id="groeipakketten" className="vs-section vs-wrap" aria-labelledby="pricing-title">
@@ -85,6 +88,7 @@ export default function PlansSection() {
           </Reveal>
         ))}
       </div>
+      {pathname !== '/prijzen' && <p className="vs-plans-more"><TextLink to="/prijzen">{t.more}</TextLink></p>}
     </section>
   )
 }
