@@ -8,7 +8,8 @@
 .hero-video .vs-vc-button { position: absolute; inset: 0; display: block; width: 100%; height: 100%; padding: 0; border: 0; overflow: hidden; background: #10131c; color: #fff; font: inherit; text-align: left; cursor: pointer; container-type: inline-size; }
 .hero-video .vs-vc-button:focus-visible { outline: 3px solid #fff; outline-offset: -6px; }
 .vs-vc-media { position: absolute; inset: 0; transition: transform 0.9s cubic-bezier(.22,1,.36,1); }
-.vs-vc-media img { display: block; width: 100%; height: 100%; object-fit: cover; transform-origin: 60% 40%; animation: vs-vc-drift 22s ease-in-out infinite alternate; }
+/* 124% tall and pinned to the top, so the caption strip burned into the bottom of the still stays out of view. */
+.vs-vc-media img { display: block; width: 100%; height: 124%; object-fit: cover; object-position: 50% 0; transform-origin: 60% 30%; animation: vs-vc-drift 22s ease-in-out infinite alternate; }
 @keyframes vs-vc-drift { from { transform: scale(1.04) translate(0, 0); } to { transform: scale(1.13) translate(-2%, -1.5%); } }
 .vs-vc-button:hover .vs-vc-media { transform: scale(1.03); }
 .vs-vc-shade { position: absolute; inset: 0; background: linear-gradient(32deg, rgb(10 12 20 / 0.86) 0%, rgb(10 12 20 / 0.5) 34%, rgb(10 12 20 / 0) 62%); }
