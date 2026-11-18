@@ -14,6 +14,7 @@ import SplitHeadline, { type HeadlinePart } from '../components/brand/SplitHeadl
 import TextLink from '../components/brand/TextLink'
 import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
+import ApprovalCards from '../components/service/ApprovalCards'
 import ServiceScreenView, { AdCard } from '../components/service/ServiceScreens'
 import { serviceStories, type ServiceScreen, type ServiceStep } from '../data/serviceSteps'
 import { caseHeadline, getCase } from '../data/cases'
@@ -279,6 +280,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
       )}
 
       <HowItWorks steps={story.steps} lang={lang} />
+      {(slug === 'meta-ads' || slug === 'distributie') && <ApprovalCards lang={lang} platforms={slug === 'meta-ads' ? 'meta' : 'mix'} />}
 
       {slug !== 'websites' && (
         <section className="vs-wrap vs-section sv-deliver" aria-labelledby="service-deliver">
