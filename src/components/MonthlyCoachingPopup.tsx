@@ -95,7 +95,7 @@ export default function MonthlyCoachingPopup({ source, completed = false, suppre
       const blocked = document.hidden || innerHeight < 440
         || !!document.activeElement?.closest('form, input, textarea, select, iframe')
         || visible('.mobile-navigation, .whatsapp-support-panel, .email-capture, #aanmelden, .ac-footer')
-        || visible('.hero-video:has(.hero-video-sound[aria-pressed="true"])')
+        || visible('.hero-video.is-playing')
       const scrollable = document.documentElement.scrollHeight - innerHeight
       const scrollProgress = scrollable > 0 ? scrollY / scrollable : 1
       if (!canShowAcademyPopup({ now: Date.now(), startedAt, scrollProgress, exitIntent, history: readAcademyPopupHistory(), blocked })) return

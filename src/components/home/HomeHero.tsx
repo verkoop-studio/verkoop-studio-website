@@ -42,6 +42,8 @@ const COPY = {
     proof: 'Groei gebouwd voor',
     proofAll: 'Alle cases',
     scroll: 'Scroll',
+    videoHeading: 'Zo helpen we kmo’s groeien',
+    videoNote: 'kijk even mee :)',
   },
   en: {
     eyebrow: 'Performance marketing studio · Lochristi, Belgium',
@@ -64,6 +66,8 @@ const COPY = {
     proof: 'Growth built for',
     proofAll: 'All cases',
     scroll: 'Scroll',
+    videoHeading: 'How we help small businesses grow',
+    videoNote: 'watch along :)',
   },
 }
 
@@ -82,7 +86,7 @@ function VideoStage({ lang }: { lang: 'nl' | 'en' }) {
       <div className="vs-video-sticky">
         <motion.div className="vs-video-frame" style={reduce ? undefined : { clipPath }}>
           <motion.div className="vs-video-zoom" style={reduce ? undefined : { scale }}>
-            <HeroVideo lang={lang} videoId="VPaGW0vW-X0" title="Verkoop Studio — VSL website" autoPlay />
+            <HeroVideo lang={lang} videoId="VPaGW0vW-X0" title="Verkoop Studio — VSL website" heading={COPY[lang].videoHeading} duration="1:14" frame="maxres3" playY="70%" story note={COPY[lang].videoNote} />
           </motion.div>
         </motion.div>
       </div>
