@@ -54,7 +54,7 @@ export default function SoftwareShowcase() {
             </TiltCard>
             <div className="vs-product-row">
               <span className="vs-product-name">{t.crm}</span>
-              <span className="vs-label vs-textlink--arrow">{t.crmNote}<Arrow size={15} /></span>
+              <span className="vs-textlink vs-textlink--arrow vs-product-note">{t.crmNote}<Arrow size={15} /></span>
             </div>
           </Link>
         </Reveal>
@@ -65,7 +65,7 @@ export default function SoftwareShowcase() {
             </TiltCard>
             <div className="vs-product-row">
               <span className="vs-product-name">{t.perf}</span>
-              <span className="vs-label vs-textlink--arrow">{t.perfNote}<Arrow size={15} /></span>
+              <span className="vs-textlink vs-textlink--arrow vs-product-note">{t.perfNote}<Arrow size={15} /></span>
             </div>
           </Link>
         </Reveal>

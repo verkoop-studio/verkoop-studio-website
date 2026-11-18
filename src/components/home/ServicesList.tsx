@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { menuTabs } from '../../data/nav'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
-import Arrow from '../brand/Arrow'
+import { Go } from '../brand/Arrow'
 import SplitHeadline from '../brand/SplitHeadline'
 import { DoodleField, WaveEdge } from '../brand/Playful'
 import { EASE, VIEWPORT } from '../brand/motion'
@@ -56,7 +56,7 @@ export default function ServicesList() {
                     <li key={link.href}>
                       <Link to={link.href} className="vs-group-link" onClick={() => trackEvent('service_viewed', { service: slug, placement: 'home_list' })}>
                         <span><b>{link.title[lang]}</b><em>{link.note[lang]}</em></span>
-                        <span className="vs-group-go" aria-hidden="true"><Arrow size={15} /></span>
+                        <Go />
                       </Link>
                     </li>
                   )

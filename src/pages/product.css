@@ -92,9 +92,7 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
 .pp-next .vs-label { color: rgb(255 255 255 / 0.75); }
 .pp-next-title { margin: 12px 0 14px; font: 500 clamp(30px, 3.8vw, 56px)/1.04 var(--font-display); letter-spacing: -0.035em; max-width: 16ch; }
 .pp-next p:not(.vs-label) { margin: 0; max-width: 34em; font-size: 17px; line-height: 1.5; color: rgb(255 255 255 / 0.88); }
-.pp-next-go { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 99px; background: #fff; color: var(--vs-ink); font-weight: 600; white-space: nowrap; }
-.pp-next-go i { font-style: normal; transition: translate 0.3s var(--vs-ease); }
-.pp-next:hover .pp-next-go i { translate: 5px 0; }
+.pp-next-go { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 6px 0 22px; border-radius: 99px; background: #fff; color: var(--vs-ink); font-weight: 600; white-space: nowrap; }
 
 .pp-final { padding-block: clamp(80px, 11vw, 150px); border-top: 1px solid var(--vs-line); }
 .pp-final-title { margin: 0 0 6px; font: 500 clamp(34px, 7.4vw, 120px)/1.04 var(--font-display); letter-spacing: -0.045em; }

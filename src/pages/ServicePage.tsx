@@ -6,7 +6,7 @@ import Breadcrumbs from '../components/Breadcrumbs'
 import QualificationForm from '../components/QualificationForm'
 import Seo from '../components/Seo'
 import WebsiteStage from '../components/WebsiteStage'
-import Arrow from '../components/brand/Arrow'
+import Arrow, { Go } from '../components/brand/Arrow'
 import { useArrive } from '../components/brand/useArrive'
 import AudienceRows from '../components/brand/AudienceRows'
 import Cta from '../components/brand/Cta'
@@ -365,7 +365,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
 
       <section className="vs-wrap vs-section sv-next" aria-label={t.nextLabel}>
         <Link to={`/${next.slug}`} className="sv-next-link" onClick={() => trackEvent('service_viewed', { service: next.slug, placement: 'service_next' })}>
-          <span className="sv-next-label">{t.nextLabel}<Arrow size={16} /></span>
+          <span className="sv-next-label">{t.nextLabel}<Go /></span>
           <span className="sv-next-name">{next.title[lang]}</span>
           <span className="sv-next-body">{next.summary[lang]}</span>
         </Link>

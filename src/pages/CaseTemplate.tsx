@@ -4,7 +4,7 @@ import { useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Seo from '../components/Seo'
-import Arrow from '../components/brand/Arrow'
+import Arrow, { Go } from '../components/brand/Arrow'
 import { useArrive } from '../components/brand/useArrive'
 import BotAvatar from '../components/brand/BotAvatar'
 import Cta from '../components/brand/Cta'
@@ -349,7 +349,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
           <Link to={`/cases/${next.slug}`} className="cs-next-link vs-case-live" onClick={() => trackEvent('case_viewed', { case: next.slug, placement: `case_${c.slug}_next` })}>
             <span className="cs-next-copy">
               <HandNote point="down-right" className="cs-next-note">{lang === 'nl' ? 'nog eentje :)' : 'one more :)'}</HandNote>
-              <span className="cs-next-label">{t.next}<Arrow size={18} /></span>
+              <span className="cs-next-label">{t.next}<Go /></span>
               <span className="cs-next-name">{next.name}</span>
               <span className="cs-next-result">{caseHeadline(next, lang)}</span>
             </span>

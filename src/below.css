@@ -68,9 +68,7 @@
 .vs-group-link > span:first-child { display: grid; gap: 2px; }
 .vs-group-link b { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
 .vs-group-link em { color: #9c988f; font-style: normal; font-size: 14px; line-height: 1.4; }
-.vs-group-go { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2); color: #cfcbc3; transition: background-color 0.25s, color 0.25s, box-shadow 0.25s; }
 .vs-group-link:hover, .vs-group-link:focus-visible { padding-left: 12px; background: rgb(255 255 255 / 0.04); }
-.vs-group-link:hover .vs-group-go, .vs-group-link:focus-visible .vs-group-go { background: var(--vs-blue); box-shadow: none; color: #fff; }
 .vs-group-link:focus-visible { outline: 2px solid var(--vs-paper); outline-offset: 2px; }
 .vs-group-link:active { scale: 0.99; }
 @media (max-width: 900px) {
@@ -90,7 +88,11 @@
 .vs-product--dark .vs-product-stage { background: var(--vs-ink); }
 .vs-product-stage img { display: block; width: 100%; height: auto; border-radius: 12px 12px 0 0; box-shadow: 0 30px 60px -30px rgb(17 17 16 / 0.4); transition: transform 1s var(--vs-ease); }
 .vs-product:hover .vs-product-stage img { transform: translateY(-8px); }
-.vs-product-row { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+.vs-product-row { display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: baseline; gap: 16px; padding-top: 14px; border-top: 1px solid var(--vs-line); }
+.vs-product-name { white-space: nowrap; }
+.vs-product-note { white-space: nowrap; }
+.vs-product:focus-visible { outline: 3px solid #839bff; outline-offset: 4px; border-radius: 22px; }
+.vs-product:active .vs-product-stage { scale: 0.995; }
 .vs-product-name { font-size: 24px; font-weight: 500; letter-spacing: -0.02em; }
 
 .vs-marquee-band { overflow: hidden; margin-top: 56px; border-block: 1px solid var(--vs-line); padding-block: 22px; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
@@ -1253,8 +1255,6 @@
 .pb-poster--wide { grid-row: span 2; }
 .pb-poster-frame { position: relative; display: block; width: 100%; aspect-ratio: 960 / 680; }
 .pb-poster--wide .pb-poster-frame { height: 100%; aspect-ratio: auto; min-height: 340px; }
-.pb-go { position: absolute; right: 14px; top: 14px; z-index: 2; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--vs-blue); color: #fff; rotate: -45deg; transition: rotate 0.35s var(--vs-ease), scale 0.35s var(--vs-ease); }
-.pb-tile:hover .pb-go, .pb-tile:focus-visible .pb-go { rotate: 0deg; scale: 1.08; }
 .pb-stat { align-content: space-between; gap: 18px; padding: 22px; background: var(--vs-blue); color: var(--vs-paper); }
 .pb-stat b { font: 500 clamp(44px, 4.6vw, 72px)/0.95 var(--font-display); letter-spacing: -0.04em; }
 .pb-stat span { max-width: 22ch; font-size: 14.5px; line-height: 1.4; opacity: 0.85; }
@@ -1417,3 +1417,9 @@ a:hover .pm-scan, a:focus-visible .pm-scan { animation: pm-scan 1.6s ease-in-out
   .vs-mega-product, .vs-mega-count { transition: none; }
   .vs-mega-product:hover { translate: none; }
 }
+
+/* Text links inside a card react to the whole card: the underline draws, the text inks, the arrow swaps and turns. */
+a:hover .vs-textlink, a:focus-visible .vs-textlink { color: var(--vs-ink); background-size: 100% 1px; }
+a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate: -45deg; transition: rotate 0.25s var(--vs-ease) 0.22s; }
+.pb-go { position: absolute; right: 14px; top: 14px; z-index: 2; background: #fff; }
+@media (prefers-reduced-motion: reduce) { a:hover .vs-textlink .vs-arrow { rotate: none; } }

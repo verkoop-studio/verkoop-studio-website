@@ -145,3 +145,7 @@
   .vs-field-glyph, .vs-field-glyph path, .vs-field-done path { transition: none; }
   .vs-field[data-focus] .vs-field-glyph { animation: none; }
 }
+.vs-submit:not([data-state='locked']):not(:disabled):hover { background: #2a2a28; }
+.vs-submit:not([data-state='locked']):not(:disabled):hover svg { translate: 3px 0; }
+.vs-submit svg { transition: translate 0.3s var(--vs-ease); }
+.vs-submit:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }

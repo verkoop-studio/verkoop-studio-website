@@ -487,3 +487,9 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
   :is(a, button):hover .vs-go .vs-arrow, :is(a, button):focus-visible .vs-go .vs-arrow, .vs-textlink:hover .vs-arrow, .vs-textlink:focus-visible .vs-arrow { rotate: none; }
   .vs-textlink:active { scale: none; }
 }
+
+/* Every control answers a press, even without its own rule; specific rules win over this. */
+:where(a[class]:not(.vs-cta), button:not(:disabled)):active { scale: 0.98; }
+.vs-lang button[aria-pressed='false']:hover { color: var(--vs-ink); background: rgb(17 17 16 / 0.06); }
+.vs-dock-trigger:hover { box-shadow: 0 18px 34px -12px rgb(17 17 16 / 0.55), 0 0 0 4px rgb(43 75 242 / 0.18); }
+@media (prefers-reduced-motion: reduce) { :where(a[class]:not(.vs-cta), button:not(:disabled)):active { scale: none; } }

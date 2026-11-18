@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
 import { useFooterInView } from '../lib/useFooterInView'
 import ResponsiveImage from '../components/ResponsiveImage'
+import { Go } from '../components/brand/Arrow'
 import Cta from '../components/brand/Cta'
 import FaqList from '../components/brand/FaqList'
 import { faqItems } from '../data/faq'
@@ -218,7 +219,7 @@ export default function SalesCrm() {
               <h2 className="pp-next-title">{t.nextTitle}</h2>
               <p>{t.nextBody}</p>
             </div>
-            <span className="pp-next-go">{t.nextCta} <i aria-hidden="true">→</i></span>
+            <span className="pp-next-go">{t.nextCta}<Go /></span>
           </Link>
         </Reveal>
       </section>

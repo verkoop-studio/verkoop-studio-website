@@ -5,7 +5,7 @@ import { caseHeadline, getCase } from '../../data/cases'
 import type { CaseSlug, Lang } from '../../data/types'
 import { trackEvent } from '../../lib/analytics'
 import ResponsiveImage from '../ResponsiveImage'
-import Arrow from '../brand/Arrow'
+import { Go } from '../brand/Arrow'
 import Reveal from '../brand/Reveal'
 import RollingNumber from '../brand/RollingNumber'
 import CasePoster from '../home/CasePoster'
@@ -36,7 +36,7 @@ function PosterTile({ slug, lang, wide = false, placement }: { slug: CaseSlug; l
   return (
     <Link to={`/cases/${slug}`} className={`pb-tile pb-poster vs-case-live${wide ? ' pb-poster--wide' : ''}`} aria-label={`${item.name}: ${caption}`} onClick={() => trackEvent('case_viewed', { case: slug, placement })}>
       <span className="pb-poster-frame"><CasePoster slug={slug} name={item.name} caption={caption} lang={lang} /></span>
-      <span className="pb-go" aria-hidden="true"><Arrow size={16} /></span>
+      <Go className="pb-go" />
     </Link>
   )
 }
