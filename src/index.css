@@ -11,7 +11,6 @@
   --font-display: 'Funnel Display Variable', 'Geist Variable', system-ui, sans-serif;
   --font-hand: 'Caveat Variable', 'Segoe Print', cursive;
   --font-condensed: 'Bebas Neue', 'Arial Narrow', sans-serif;
-  --font-dots: 'Doto Variable', ui-monospace, monospace;
   --font-serif: 'Instrument Serif', Georgia, serif;
 
   --color-ink: #f5f3ee;
@@ -1104,14 +1103,6 @@ button:focus-visible {
   transition: transform 0.2s;
 }
 .faq-item[open] summary > span:last-child { transform: rotate(45deg); }
-.faq-item[open] {
-  margin: 12px 0;
-  padding: 6px 22px 18px;
-  background: #fff;
-  border: 1px solid #e1e4ef;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px #10131c14;
-}
 .faq-item[open] p { padding-bottom: 8px; }
 .page-hero h1 {
   font-size: clamp(38px, 4.2vw, 60px);
