@@ -7,6 +7,9 @@ import ResultBand from '../components/home/ResultBand'
 import ServicesList from '../components/home/ServicesList'
 import SoftwareShowcase from '../components/home/SoftwareShowcase'
 import RunItSplit from '../components/home/RunItSplit'
+import PainsBlock from '../components/home/PainsBlock'
+import StartSteps from '../components/home/StartSteps'
+import WorksWith from '../components/brand/WorksWith'
 import { NoteCard, Ribbon } from '../components/brand/Playful'
 
 /** The original line from the contact page, in Stef's hand. */
@@ -35,14 +38,18 @@ export default function Home() {
         path="/"
       />
       <HomeHero />
+      <PainsBlock />
       <SystemTeardown />
       <WorkScroller />
+      {/* Reviews go here once real client quotes are available; none are published yet. */}
       <Ribbon />
       <ResultBand />
       <ServicesList />
       <SoftwareShowcase />
       <RunItSplit />
+      <WorksWith lang={lang} platforms={['meta', 'google', 'ga4', 'gtm', 'looker', 'tiktok', 'shopify', 'klaviyo', 'mailchimp', 'navigator']} />
       <PlansSection />
+      <StartSteps />
       <section className="vs-wrap vs-section vs-note-wrap" aria-label={lang === 'nl' ? 'Een woordje van Stef' : 'A note from Stef'}>
         <NoteCard lines={NOTE[lang]} sign="Stef" />
       </section>

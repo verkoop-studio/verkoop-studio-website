@@ -2,6 +2,7 @@ import { motion, useInView, useReducedMotion, useScroll, useTransform } from 'mo
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Seo from '../components/Seo'
 import { useFooterInView } from '../lib/useFooterInView'
+import WorksWith from '../components/brand/WorksWith'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
@@ -241,6 +242,8 @@ export default function Performance() {
           <ul className="pp-terms">{p.pricing.terms[lang].map((term) => <li key={term}>{term}</li>)}</ul>
         </div>
       </section>
+
+      <WorksWith lang={lang} platforms={['meta', 'google', 'tiktok', 'chatgpt', 'shopify', 'wix', 'klaviyo', 'mailchimp', 'resend', 'perplexity']} />
 
       <section ref={final} id="starten" className="pp-final pp-form" aria-labelledby="starten-titel">
         <div className="vs-wrap">
