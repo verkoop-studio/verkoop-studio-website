@@ -11,7 +11,7 @@
 
 /* ---------- Cases index ---------- */
 
-.vs-cases-hero { min-height: 92svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 64px); padding-top: clamp(120px, 14vw, 170px); padding-bottom: clamp(48px, 6vw, 80px); }
+.vs-cases-hero { overflow-x: clip; min-height: 92svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 64px); padding-top: clamp(120px, 14vw, 170px); padding-bottom: clamp(48px, 6vw, 80px); }
 .vs-cases-hero .vs-lead { margin-top: 24px; max-width: 32ch; }
 .vs-cases-fan { position: relative; height: clamp(300px, 34vw, 460px); }
 .vs-cases-fan-card { position: absolute; left: 50%; top: 50%; width: min(70%, 360px); aspect-ratio: 960 / 680; margin: calc(min(70%, 360px) * -0.354) 0 0 calc(min(70%, 360px) * -0.5); border-radius: 14px; overflow: hidden; background: var(--vs-stone); box-shadow: 0 30px 60px -30px rgb(17 17 16 / 0.45), 0 0 0 1px rgb(17 17 16 / 0.06); }
@@ -215,6 +215,12 @@
 .sv-how-lead { margin: 10px 0 0; color: var(--vs-ink-2); font-size: 17px; }
 .sv-hero-object { position: relative; display: grid; justify-items: center; padding: 20px 0 40px; }
 .sv-hero-object > div:first-child { width: min(100%, 460px); }
+/* On wide screens the hero window and the pinned window are drawn larger: they are the product moment of the page. */
+@media (min-width: 1100px) {
+  .sv-hero-object > div:first-child { width: min(calc(100% / 1.45), 440px); zoom: 1.45; }
+  .sv-hero-object .sv-toast { zoom: 1.15; }
+  .sv-how-slot > .sv-win { width: calc(100% / 1.2); zoom: 1.2; }
+}
 .sv-hero-object .sv-toast { left: -4%; bottom: 4%; }
 .sv-lines { display: grid; gap: 6px; }
 .sv-lines i { height: 7px; border-radius: 4px; background: #e8e4da; }

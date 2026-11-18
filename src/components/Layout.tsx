@@ -1,18 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import SiteHeader from './brand/SiteHeader'
 import ContactDock from './brand/ContactDock'
 import Footer from './Footer'
 import StickyMobileCTA from './StickyMobileCTA'
 import BackToTop from './BackToTop'
-import EmailCapture from './EmailCapture'
 import { usePageMotion } from '../lib/usePageMotion'
 import { usePrimaryButtonMotion } from '../lib/usePrimaryButtonMotion'
 import { captureAttribution } from '../lib/analytics'
 
 export default function Layout() {
   const location = useLocation()
-  const [newsletterRequest, setNewsletterRequest] = useState(0)
   const motionRef = usePageMotion(location.pathname)
   usePrimaryButtonMotion()
 
@@ -38,11 +36,10 @@ export default function Layout() {
       <main>
         <Outlet />
       </main>
-      <Footer onNewsletterOpen={() => setNewsletterRequest(value => value + 1)} />
+      <Footer />
       {location.pathname !== '/' && <BackToTop />}
       <ContactDock />
       {location.pathname !== '/' && <StickyMobileCTA />}
-      <EmailCapture openRequest={newsletterRequest} automatic={false} />
     </div>
   )
 }

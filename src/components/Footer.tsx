@@ -1,106 +1,117 @@
-import BrandMark from './BrandMark'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { footerNavItems, persistentCta, persistentCtaHref } from '../data/nav'
+import { persistentCta, persistentCtaHref } from '../data/nav'
 import { services } from '../data/services'
 import { useLang } from '../i18n/LanguageContext'
+import Arrow from './brand/Arrow'
+import Watcher from './brand/Watcher'
+import NewsletterInline from './brand/forms/NewsletterInline'
 
 const COPY = {
   nl: {
-    tagline: 'We bouwen de complete digitale route van eerste klik tot conversie.',
-    nav: 'Navigatie',
+    newsTitle: 'Advertentietips in je inbox.',
+    newsBody: 'Praktische tips over Meta Ads, Google Ads en opschalen, van Verkoop Studio.',
     services: 'Diensten',
+    software: 'Software',
+    agency: 'Agency',
     contact: 'Contact',
-    disclaimer: 'Growth, design & development.',
+    agencyLinks: [['De agency', '/agency'], ['Cases', '/cases'], ['Academy', '/academy'], ['Blog', '/blog'], ['Groeianalyse', '/funnel-audit']],
+    software1: 'Sales CRM',
+    software2: 'Performance',
+    where: 'Lochristi, België',
     legal: 'Juridisch',
     privacy: 'Privacy',
     terms: 'Voorwaarden',
+    hand: 'gebouwd in Lochristi, met veel koffie :)',
+    entity: 'TanguyDeBee BV · BE 1002.613.972',
+    home: 'Verkoop Studio, naar de homepage',
+    lang: 'Taal',
   },
   en: {
-    tagline: 'We build the complete digital route from first click to conversion.',
-    nav: 'Navigation',
+    newsTitle: 'Ad tips in your inbox.',
+    newsBody: 'Practical tips on Meta Ads, Google Ads and scaling, from Verkoop Studio.',
     services: 'Services',
+    software: 'Software',
+    agency: 'Agency',
     contact: 'Contact',
-    disclaimer: 'Growth, design & development.',
+    agencyLinks: [['The agency', '/agency'], ['Cases', '/cases'], ['Academy', '/academy'], ['Blog', '/blog'], ['Growth analysis', '/funnel-audit']],
+    software1: 'Sales CRM',
+    software2: 'Performance',
+    where: 'Lochristi, Belgium',
     legal: 'Legal',
     privacy: 'Privacy',
     terms: 'Terms',
+    hand: 'built in Lochristi, with lots of coffee :)',
+    entity: 'TanguyDeBee BV · BE 1002.613.972',
+    home: 'Verkoop Studio, to the homepage',
+    lang: 'Language',
   },
 }
 
-export default function Footer({ onNewsletterOpen }: { onNewsletterOpen: () => void }) {
-  const { lang, toggleLang } = useLang()
+/**
+ * The closing frame of every page: the newsletter, four columns of links, and a giant
+ * "verkoop" wordmark that rises out of its mask as the visitor reaches the end, with
+ * the blue dot as the live Watcher looking at the pointer.
+ */
+export default function Footer() {
+  const { lang, setLang } = useLang()
   const t = COPY[lang]
+  const reduce = useReducedMotion()
+  const ref = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] })
+  const rise = useTransform(scrollYProgress, [0.25, 1], ['62%', '0%'])
 
   return (
-    <footer className="border-t border-line">
-      <div className="mx-auto max-w-6xl px-5 py-14 sm:px-8">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          <div>
-            <Link to="/" className="studio-brand" aria-label="Verkoop Studio, home"><BrandMark /></Link>
-            <p className="mt-3 max-w-xs text-sm text-mute">{t.tagline}</p>
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold text-paper">{t.nav}</p>
-            <ul className="mt-3 space-y-2 footer-link-grid">
-              <li><Link to="/blog" className="text-sm text-mute transition hover:text-paper">Blog · Gent & omgeving</Link></li>
-              {footerNavItems.map((item) => (
-                <li key={item.href}>
-                  <Link to={item.href} className="text-sm text-mute transition hover:text-paper">
-                    {item.label[lang]}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold text-paper">{t.services}</p>
-            <ul className="mt-3 space-y-2 footer-link-grid">
-              {services.map((service) => (
-                <li key={service.slug}>
-                  <Link to={`/${service.slug}`} className="text-sm text-mute transition hover:text-paper">
-                    {service.title[lang]}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-sm font-semibold text-paper">{t.contact}</p>
-            <ul className="mt-3 space-y-2 text-sm text-mute">
-              <li>
-                <a href="mailto:stef@verkoop.studio" className="transition hover:text-paper">
-                  stef@verkoop.studio
-                </a>
-              </li>
-              <li>
-                <Link to={persistentCtaHref} className="transition hover:text-paper">
-                  {persistentCta[lang]}
-                </Link>
-              </li>
-              <li>
-                <button type="button" onClick={onNewsletterOpen} className="min-h-11 cursor-pointer text-left transition hover:text-paper">
-                  {lang === 'nl' ? 'Nieuwsbrief openen ↗' : 'Open newsletter signup ↗'}
-                </button>
-              </li>
-            </ul>
-          </div>
+    <footer ref={ref} className="vs-footer" data-watch-area>
+      <div className="vs-wrap vs-footer-top">
+        <div className="vs-footer-news">
+          <h2 className="vs-footer-title">{t.newsTitle}</h2>
+          <p>{t.newsBody}</p>
+          <NewsletterInline id="footer-newsletter" />
         </div>
+        <nav className="vs-footer-cols" aria-label={lang === 'nl' ? 'Footer' : 'Footer'}>
+          <div>
+            <h3>{t.services}</h3>
+            <ul>{services.map((service) => <li key={service.slug}><Link to={`/${service.slug}`}>{service.title[lang]}</Link></li>)}</ul>
+          </div>
+          <div>
+            <h3>{t.software}</h3>
+            <ul>
+              <li><Link to="/crm">{t.software1}</Link></li>
+              <li><Link to="/performance">{t.software2}</Link></li>
+            </ul>
+            <h3 className="vs-footer-sub">{t.agency}</h3>
+            <ul>{t.agencyLinks.map(([label, href]) => <li key={href}><Link to={href}>{label}</Link></li>)}</ul>
+          </div>
+          <div>
+            <h3>{t.contact}</h3>
+            <ul>
+              <li><a href="mailto:stef@verkoop.studio">stef@verkoop.studio</a></li>
+              <li><Link to={persistentCtaHref} className="vs-footer-cta">{persistentCta[lang]}<Arrow size={14} /></Link></li>
+              <li className="vs-footer-where">{t.where}</li>
+            </ul>
+          </div>
+        </nav>
+      </div>
 
-        <div className="mt-12 flex flex-col gap-4 border-t border-line pt-6 text-xs text-mute sm:flex-row sm:items-center sm:justify-between">
-          <p>© {new Date().getFullYear()} Verkoop Studio</p>
-          <nav aria-label={t.legal} className="flex flex-wrap gap-x-4 gap-y-2">
-            <Link to="/privacy" className="py-1 underline-offset-4 transition hover:text-paper hover:underline">{t.privacy}</Link>
-            <Link to="/voorwaarden" className="py-1 underline-offset-4 transition hover:text-paper hover:underline">{t.terms}</Link>
-          </nav>
-          <button type="button" className="lang-switch" onClick={toggleLang} aria-label="Switch language">
-            <span className={lang === 'nl' ? 'is-active' : undefined}>NL</span>
-            <span aria-hidden="true">/</span>
-            <span className={lang === 'en' ? 'is-active' : undefined}>EN</span>
-          </button>
-          <p>{t.disclaimer}</p>
+      <div className="vs-footer-mark" aria-hidden="true">
+        <motion.span className="vs-footer-word" style={reduce ? undefined : { y: rise }}>
+          verkoop<span className="vs-footer-dot"><Watcher shape="Circle" size={200} poke={false} within=".vs-footer" /></span>
+        </motion.span>
+      </div>
+
+      <div className="vs-wrap vs-footer-base">
+        <Link to="/" className="vs-footer-home" aria-label={t.home}>© {new Date().getFullYear()} Verkoop Studio</Link>
+        <p className="vs-footer-hand">{t.hand}</p>
+        <nav aria-label={t.legal} className="vs-footer-legal">
+          <Link to="/privacy">{t.privacy}</Link>
+          <Link to="/voorwaarden">{t.terms}</Link>
+          <span>{t.entity}</span>
+        </nav>
+        <div className="vs-footer-lang" role="group" aria-label={t.lang}>
+          <button type="button" aria-pressed={lang === 'nl'} onClick={() => setLang('nl')}>NL</button>
+          <button type="button" aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
         </div>
       </div>
     </footer>

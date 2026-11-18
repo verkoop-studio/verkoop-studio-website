@@ -663,3 +663,56 @@
   .vs-pv-flipper[data-settled], .vs-pv-row[data-filled] dd, .vs-pv-back .vs-pv-list li, .vs-step-panel, .vs-trail-bot { animation: none; }
   .vs-trail-line path { animation: none; stroke-dashoffset: 0; }
 }
+
+/* Footer: newsletter, four link columns, the masked giant wordmark with the watching dot. */
+.vs-footer { position: relative; overflow: hidden; margin-top: clamp(40px, 6vw, 80px); background: var(--vs-ink); color: #e9e6df; }
+.vs-footer a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
+.vs-footer a:hover { color: #fff; }
+.vs-footer-top { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.4fr); gap: clamp(32px, 5vw, 80px); padding-top: clamp(56px, 7vw, 96px); }
+.vs-footer-title { margin: 0; color: #fff; font: 500 clamp(26px, 2.6vw, 38px)/1.1 var(--font-display); letter-spacing: -0.03em; }
+.vs-footer-news > p { margin: 12px 0 20px; max-width: 40ch; color: #b9b5ac; line-height: 1.5; }
+.vs-footer-cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px; }
+.vs-footer-cols h3 { margin: 0 0 14px; color: #fff; font: 600 14px/1.2 var(--font-sans); }
+.vs-footer-cols .vs-footer-sub { margin-top: 28px; }
+.vs-footer-cols ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; color: #b9b5ac; font-size: 14.5px; }
+.vs-footer .vs-footer-cta { display: inline-flex; align-items: center; gap: 6px; color: #fff; font-weight: 600; }
+.vs-footer-where { color: #8f8b82; }
+
+/* The newsletter row on the dark ground. */
+.vs-news { display: grid; gap: 12px; }
+.vs-news-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: start; }
+.vs-news .vs-field-box { background: rgb(255 255 255 / 0.06); }
+.vs-news .vs-field input { border-color: rgb(255 255 255 / 0.16); color: #fff; }
+.vs-news .vs-field label, .vs-news .vs-field-icon { color: #9c988f; }
+.vs-news .vs-field[data-focus] label, .vs-news .vs-field[data-filled] label { color: #cfcbc3; }
+.vs-news-submit { min-height: 58px; padding: 0 22px; border: 0; border-radius: 14px; background: var(--vs-blue); color: #fff; font: 600 15px/1 var(--font-sans); cursor: pointer; transition: background 0.2s ease, transform 0.2s var(--vs-ease); }
+.vs-news-submit:hover { background: #3c5bff; }
+.vs-news-submit:active { transform: scale(0.97); }
+.vs-news-submit:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
+.vs-news .vs-check-row { color: #b9b5ac; font-size: 13px; }
+.vs-news .vs-check-box rect { fill: transparent; stroke: rgb(255 255 255 / 0.3); }
+.vs-news-done { margin: 0; padding: 14px 16px; border-radius: 14px; background: rgb(40 200 72 / 0.14); color: #c8f2cf; }
+
+/* The wordmark rises out of its mask as the page ends. */
+.vs-footer-mark { position: relative; display: flex; justify-content: center; height: clamp(110px, 19vw, 300px); margin-top: clamp(40px, 6vw, 80px); overflow: hidden; }
+.vs-footer-word { display: inline-flex; align-items: flex-end; color: #fff; font: 600 clamp(110px, 22vw, 340px)/0.8 var(--font-display); letter-spacing: -0.06em; white-space: nowrap; }
+.vs-footer-dot { display: inline-flex; align-self: flex-end; margin: 0 0 0.04em 0.04em; }
+/* The Watcher writes its size inline in px; here the dot must scale with the wordmark, so the em size wins. */
+.vs-footer-dot .eyt { --eyt-size: 0.26em !important; }
+
+.vs-footer-base { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px 28px; padding-top: 22px; padding-bottom: 28px; border-top: 1px solid rgb(255 255 255 / 0.1); color: #8f8b82; font-size: 13px; }
+.vs-footer-hand { margin: 0; color: #e9e6df; font: 500 22px/1 var(--font-hand); rotate: -2deg; }
+.vs-footer-legal { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+.vs-footer-lang { display: inline-flex; padding: 3px; border-radius: 99px; background: rgb(255 255 255 / 0.08); }
+.vs-footer-lang button { min-width: 44px; min-height: 34px; padding: 0 12px; border: 0; border-radius: 99px; background: none; color: #b9b5ac; font: 600 13px/1 var(--font-sans); cursor: pointer; }
+.vs-footer-lang button[aria-pressed='true'] { background: #fff; color: var(--vs-ink); }
+.vs-footer-lang button:focus-visible { outline: 2px solid #839bff; outline-offset: 2px; }
+
+@media (max-width: 900px) {
+  .vs-footer-top { grid-template-columns: minmax(0, 1fr); }
+  .vs-footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 520px) {
+  .vs-news-row { grid-template-columns: minmax(0, 1fr); }
+  .vs-footer-cols { grid-template-columns: minmax(0, 1fr); }
+}

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import AcademySignup from '../components/AcademySignup'
 import AcademyCapturePopup from '../components/AcademyCapturePopup'
@@ -12,7 +11,6 @@ import HeroRequestForm from '../components/HeroRequestForm'
 import { academyFaq as sourceFaq, academyModules as sourceModules, academyTests as sourceTests } from '../data/academy'
 import { cases } from '../data/cases'
 import { useAcademyTranslation } from '../i18n/academy'
-import { trackNewsletterConversion } from '../lib/analytics'
 import studentUpdate from '../assets/academy-student-update.png'
 import pinacelloResults from '../assets/cases/pinacello-results.png'
 // Loaded only on this page, so the homepage's inlined stylesheet stays within its size budget.
@@ -147,47 +145,6 @@ function TestChart({ selected }: { selected: string }) {
     })}
     <text x="24" y="186" className="ac-chart-axis">{t("dag 1")}</text><text x="580" y="186" textAnchor="end" className="ac-chart-axis">{t("dag 14")}</text>
   </svg>
-}
-
-function NewsletterForm() {
-  const { lang, t } = useAcademyTranslation()
-  const [status, setStatus] = useState<'idle' | 'pending' | 'success'>('idle')
-  const [error, setError] = useState('')
-  const submissionId = useRef('')
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (status === 'pending') return
-    setStatus('pending')
-    setError('')
-    const data = new FormData(event.currentTarget)
-    try {
-      submissionId.current ||= crypto.randomUUID()
-      const response = await fetch('/api/newsletter', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(20_000),
-        body: JSON.stringify({ email: data.get('email'), company_website: data.get('company_website'), consent: data.get('consent') === 'on', consent_version: 'website-newsletter-v1', lang }),
-      })
-      const result = await response.json()
-      if (!response.ok || result.ok !== true) {
-        setError(result.error === 'subscription_preferences' ? "Je hebt je eerder uitgeschreven. Mail ons als je weer berichten wilt ontvangen." : response.status === 429 ? "Even te veel pogingen. Probeer het over enkele minuten opnieuw." : "Inschrijven lukte niet. Probeer het later opnieuw.")
-        setStatus('idle')
-        return
-      }
-      trackNewsletterConversion(result, submissionId.current)
-      setStatus('success')
-    } catch {
-      setError("Inschrijven lukte niet. Probeer het later opnieuw.")
-      setStatus('idle')
-    }
-  }
-  if (status === 'success') return <p className="ac-newsletter-done" role="status">{" " + t("Je bent ingeschreven. Nieuwe tips komen in je inbox.")}</p>
-  return <form className="ac-newsletter" onSubmit={submit} data-clarity-mask="true">
-    <label htmlFor="academy-newsletter-email">{t("Advertentietips in je inbox")}</label>
-    <p>{t("Praktische tips over Meta Ads, Google Ads en opschalen van Verkoop Studio.")}</p>
-    <div className="ac-newsletter-row"><input id="academy-newsletter-email" name="email" type="email" autoComplete="email" required maxLength={254} placeholder={t("naam@bedrijf.be")} /><button type="submit" className="ac-button" disabled={status === 'pending'}>{status === 'pending' ? t("Bezig…") : t("Inschrijven")}</button></div>
-    <input className="ac-honeypot" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-    <label className="ac-consent"><input type="checkbox" name="consent" required /><span>{t("Ja, ik ontvang graag marketingtips en nieuws van Verkoop Studio per e-mail.")}</span></label>
-    {error && <p className="ac-form-error" role="alert">{t(error)}</p>}
-  </form>
 }
 
 export default function Academy() {
@@ -524,7 +481,6 @@ export default function Academy() {
       <div className="ac-wrap">
         <div className="ac-footer-top">
           <div><div className="ac-identity"><Link to="/" aria-label={t("Verkoop Studio, naar de homepage")}><BrandMark /></Link><span className="ac-identity-line" /><span className="ac-identity-label">academy</span></div><p>{t("Leer je merk schalen met 1-op-1 lessen over Meta Ads, Google Ads en je volledige funnel. Van Verkoop Studio.")}</p></div>
-          <NewsletterForm />
         </div>
         <p className="ac-footer-note">{t("Niet verbonden aan of gecertificeerd door Meta of Google.")}{" "}{t("Resultaten hangen af van je product, marge en budget.")}</p>
       </div>
