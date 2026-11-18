@@ -132,11 +132,6 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
 .pp-problem .pp-pain:nth-child(2) { background: #f4b400; color: var(--vs-ink); margin-left: 9%; }
 .pp-problem .pp-pain:nth-child(3) { background: var(--vs-paper); color: var(--vs-ink); margin-left: 3%; }
 .pp-problem .pp-pain span { opacity: 1; font-size: 30px; }
-.pp-three { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 20px; margin-top: clamp(32px, 4vw, 52px); }
-.pp-for-card { padding: 30px; border-radius: 22px; background: var(--vs-card); border: 1px solid var(--vs-line); box-shadow: 0 26px 44px -30px rgb(17 17 16 / 0.4); }
-.pp-for-card span { font: 400 22px/1 var(--font-condensed); color: var(--vs-blue); }
-.pp-for-card h3 { margin: 14px 0 10px; font: 500 clamp(24px, 2.4vw, 32px)/1.1 var(--font-display); letter-spacing: -0.03em; }
-.pp-for-card p { margin: 0; color: var(--vs-ink-2); font-size: 16px; line-height: 1.5; }
 .pp-tiers--five { grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr)); }
 .pp-tiers--five strong { font-size: clamp(32px, 3.2vw, 46px); }
 .pp-terms { list-style: none; margin: 34px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 380px), 1fr)); gap: 0 48px; color: #b9b6af; font-size: 15px; }

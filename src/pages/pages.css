@@ -823,16 +823,11 @@
 @media (max-width: 900px) { .pr-builder, .pr-software-grid { grid-template-columns: minmax(0, 1fr); } .pr-result { position: static; } .pr-note { display: none; } }
 
 /* Service pages: who it is for, and the next service. */
-.sv-who-list { display: grid; margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--vs-line); }
-.sv-who-list li { display: grid; grid-template-columns: 44px minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: center; gap: 18px; padding: 16px 0; border-bottom: 1px solid var(--vs-line); }
-.sv-who-list b { font: 500 20px/1.25 var(--font-display); letter-spacing: -0.02em; }
-.sv-who-list span:last-child { color: var(--vs-ink-2); line-height: 1.5; }
 .sv-next-link { display: grid; gap: 8px; padding: clamp(24px, 3vw, 40px); border-radius: 26px; background: var(--vs-ink); color: var(--vs-paper); text-decoration: none; transition: transform 0.5s var(--vs-ease); }
 .sv-next-link:hover { transform: translateY(-6px); }
 .sv-next-label { display: inline-flex; align-items: center; gap: 8px; color: #b9b5ac; }
 .sv-next-name { font: 500 clamp(36px, 5vw, 72px)/1 var(--font-display); letter-spacing: -0.045em; }
 .sv-next-body { max-width: 52ch; color: #cfcbc3; line-height: 1.5; }
-@media (max-width: 700px) { .sv-who-list li { grid-template-columns: 44px minmax(0, 1fr); } .sv-who-list span:last-child { grid-column: 2; } }
 @media (prefers-reduced-motion: reduce) { .sv-next-link { transition: none; } }
 .ct-routes { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 .ct-routes li, .ct-routes a { display: inline-flex; align-items: center; gap: 8px; }

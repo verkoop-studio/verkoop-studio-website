@@ -1303,3 +1303,22 @@
   .vs-marks-row[aria-hidden] { display: none; }
   .vs-mark { transition: none; }
 }
+
+/* ---------- Who it is for: hairline rows with a character, the audience and what it gets ---------- */
+
+.vs-who { display: grid; margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid var(--vs-line); }
+.vs-who > li { border-bottom: 1px solid var(--vs-line); }
+.vs-who-row { position: relative; display: grid; grid-template-columns: 44px minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: center; gap: 18px; padding: 16px 12px; border-radius: 14px; transition: background-color 0.35s ease; }
+.vs-who-row:hover { background: color-mix(in srgb, var(--tint) 16%, transparent); }
+.vs-who-ava { display: block; width: 44px; height: 44px; transition: translate 0.45s var(--vs-ease), rotate 0.45s var(--vs-ease); }
+.vs-who-row:hover .vs-who-ava { translate: 8px 0; rotate: -8deg; }
+.vs-who-row b { font: 500 20px/1.25 var(--font-display); letter-spacing: -0.02em; }
+.vs-who-row > span:last-child { color: var(--vs-ink-2); line-height: 1.5; }
+@media (max-width: 700px) {
+  .vs-who-row { grid-template-columns: 44px minmax(0, 1fr); padding-inline: 4px; }
+  .vs-who-row > span:last-child { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vs-who-ava, .vs-who-row { transition: none; }
+  .vs-who-row:hover .vs-who-ava { translate: none; rotate: none; }
+}

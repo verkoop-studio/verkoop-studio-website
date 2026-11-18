@@ -5,6 +5,7 @@ import { useFooterInView } from '../lib/useFooterInView'
 import WorksWith from '../components/brand/WorksWith'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
 import ResponsiveImage from '../components/ResponsiveImage'
+import AudienceRows from '../components/brand/AudienceRows'
 import Cta from '../components/brand/Cta'
 import FaqList from '../components/brand/FaqList'
 import { faqItems } from '../data/faq'
@@ -224,15 +225,7 @@ export default function Performance() {
       <section className="pp-screens pp-for" aria-labelledby="voorwie-titel">
         <div className="vs-wrap">
           <SplitHeadline id="voorwie-titel" className="vs-h2" parts={[{ text: p.audience.title[lang] }]} />
-          <div className="pp-three">
-            {p.audience.items[lang].map((item, i) => (
-              <Tilted key={item.title} lean={[-2, 1.4, -1][i]} className="pp-for-card">
-                <span>{String(i + 1).padStart(2, '0')}</span>
-                <h3>{item.title}</h3>
-                <p>{item.body}</p>
-              </Tilted>
-            ))}
-          </div>
+          <AudienceRows rows={p.audience.items[lang].map((item) => [item.title, item.body] as [string, string])} />
         </div>
       </section>
 
