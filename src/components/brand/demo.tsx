@@ -55,13 +55,15 @@ export function Typed({ text, on, speed = 55, caret = true }: { text: string; on
   return <span className="dm-typed">{shown}{caret && on && <i className="dm-caret" aria-hidden="true" />}</span>
 }
 
-/** Counts from 0 to `to` over `ms` while `on`; formats with `format`. Reduced motion shows the end value. */
+/** Counts from 0 to `to` over `ms` while `on`; formats with `format`. Reduced motion, and the prerendered page, show the end value. */
 export function Ticker({ to, on, ms = 1400, format = (v: number) => String(Math.round(v)) }: { to: number; on: boolean; ms?: number; format?: (v: number) => string }) {
   const reduce = useReducedMotion()
-  const [v, setV] = useState(0)
+  // Starts at the end value, so the prerendered page shows the real figure; the count runs after mount.
+  const [v, setV] = useState(to)
   useEffect(() => {
     if (!on) { setV(0); return }
-    if (reduce) return
+    if (reduce) { setV(to); return }
+    setV(0)
     const start = performance.now()
     const id = window.setInterval(() => {
       const t = Math.min(1, (performance.now() - start) / ms)

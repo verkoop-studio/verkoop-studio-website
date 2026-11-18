@@ -111,7 +111,7 @@ function PlanSlider({ lang }: { lang: 'nl' | 'en' }) {
     <div className="pp-price">
       <label className="pp-slider">
         <span>{t.slider}</span>
-        <strong>€ {step >= 100 ? (lang === 'nl' ? '200.000+' : '200,000+') : money}</strong>
+        <strong><span>€ <span key={step} className="pp-tick">{step >= 100 ? (lang === 'nl' ? '200.000+' : '200,000+') : money}</span></span><small>{lang === 'nl' ? 'jouw schatting' : 'your estimate'}</small></strong>
         <input type="range" min={0} max={100} value={step} onChange={(e) => setStep(Number(e.target.value))} style={{ '--p': `${step}%` } as CSSProperties} />
       </label>
       <ul className="pp-tiers pp-tiers--five">
