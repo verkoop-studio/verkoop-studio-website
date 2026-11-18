@@ -2,7 +2,7 @@ import { motion, useReducedMotion } from 'motion/react'
 import type { ReactNode } from 'react'
 import { EASE, VIEWPORT } from './motion'
 
-type Tag = 'div' | 'section' | 'li' | 'article' | 'p' | 'span'
+type Tag = 'div' | 'section' | 'li' | 'article' | 'p' | 'span' | 'h2' | 'h3'
 
 /** Fades content up out of a soft blur as it enters the viewport. */
 export default function Reveal({
