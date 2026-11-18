@@ -1,152 +1,254 @@
-import type { MouseEvent } from 'react'
+import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
+import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
 import ResponsiveImage from '../components/ResponsiveImage'
-import CheckList from '../components/CheckList'
+import Cta from '../components/brand/Cta'
+import HandNote from '../components/brand/HandNote'
+import Reveal from '../components/brand/Reveal'
+import SplitHeadline from '../components/brand/SplitHeadline'
 import { crmLanding, signupHref, type CrmScreenKey } from '../data/crmLanding'
 import { trackCrmSignupClick } from '../lib/analytics'
 import { useLang } from '../i18n/LanguageContext'
 import crmDashboard from '../assets/crm/crm-dashboard.webp'
 import crmProspectflow from '../assets/crm/crm-prospectflow.webp'
 import crmLeads from '../assets/crm/crm-leads.webp'
-import crmHero from '../assets/crm/crm-hero.webp'
+import './product.css'
 
-/** The same rail as the giveaway page, the width the rest of the site uses. */
-const RAIL = 'mx-auto w-full max-w-6xl px-5 sm:px-8'
+const SCREENS: Record<CrmScreenKey, string> = { dashboard: crmDashboard, prospectflow: crmProspectflow, leads: crmLeads }
+const TINTS = ['#2b4bf2', '#c9f26a', '#ff9fd0']
 
-const SCREENS: Record<CrmScreenKey, string> = {
-  dashboard: crmDashboard,
-  prospectflow: crmProspectflow,
-  leads: crmLeads,
+/** Words that are not in crmLanding: the sample screen, the slider and the step to Performance. */
+const T = {
+  nl: {
+    eyebrow: 'Sales CRM van Verkoop Studio', how: 'Bekijk hoe het werkt', note: 'gratis tot 500 leads :)', sample: 'Voorbeeld',
+    stages: ['Nieuw', 'Gecontacteerd', 'Afspraak', 'Voorstel'], toast: 'Nieuwe lead via je website', meter: 'van 500 gratis leads',
+    today: 'Vandaag opvolgen', todayRows: ['Bel Sarah terug', 'Stuur offerte naar Tom', 'Plan afspraak met Lien'],
+    slider: 'Hoeveel leads heb je?', leads: 'leads', youPay: 'Jij betaalt',
+    nextLabel: 'Volgende stap', nextTitle: 'Zie welke advertentie je klanten bracht.', nextBody: 'Performance legt je advertentiekosten naast je echte verkopen. Een gewonnen deal in het CRM telt daar meteen mee.', nextCta: 'Bekijk Performance',
+    pill: 'Gratis tot 500 leads',
+  },
+  en: {
+    eyebrow: 'The Verkoop Studio sales CRM', how: 'See how it works', note: 'free up to 500 leads :)', sample: 'Sample',
+    stages: ['New', 'Contacted', 'Meeting', 'Proposal'], toast: 'New lead from your website', meter: 'of 500 free leads',
+    today: 'Follow up today', todayRows: ['Call Sarah back', 'Send Tom the quote', 'Book a meeting with Lien'],
+    slider: 'How many leads do you have?', leads: 'leads', youPay: 'You pay',
+    nextLabel: 'Next step', nextTitle: 'See which ad brought your customers.', nextBody: 'Performance puts your ad spend next to your real sales. A deal you win in the CRM counts there straight away.', nextCta: 'See Performance',
+    pill: 'Free up to 500 leads',
+  },
 }
 
-/** The page's one action. The ad parameters are added at click time, so the
- *  prerendered HTML and the hydrated page carry the same href. */
-function SignupButton({ placement, label }: { placement: string; label: string }) {
+/** The page's one action. Ad parameters are added at click time, so the prerendered and hydrated href match. */
+function Signup({ placement, label, variant = 'ink' }: { placement: string; label: string; variant?: 'ink' | 'paper' }) {
   const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
     event.currentTarget.href = signupHref(window.location.search)
     trackCrmSignupClick(placement)
   }
+  return <Cta href={crmLanding.signupUrl} variant={variant} onClick={onClick}>{label}</Cta>
+}
+
+/** The pipeline, working: a lead arrives, moves through the stages and the free meter counts up. Sample data. */
+function LivePipeline({ lang }: { lang: 'nl' | 'en' }) {
+  const t = T[lang]
+  const reduce = useReducedMotion()
+  const [tick, setTick] = useState(0)
+  useEffect(() => {
+    if (reduce) return
+    const id = window.setInterval(() => setTick((n) => n + 1), 1500)
+    return () => window.clearInterval(id)
+  }, [reduce])
+  const stage = tick % 5
+  const leads = 38 + Math.floor(tick / 5)
   return (
-    <a href={crmLanding.signupUrl} className="button-dark crm-signup" onClick={onClick}>
-      {label} <span aria-hidden="true">↗</span>
-    </a>
+    <div className="pp-live" aria-hidden="true">
+      <div className="tx-win pp-win">
+        <div className="tx-win-bar"><i /><i /><i /><b>Sales CRM</b><em>{t.sample}</em></div>
+        <div className="pp-board">
+          {t.stages.map((name, col) => (
+            <div key={name} className="pp-col">
+              <p className="tx-dim">{name}</p>
+              {Array.from({ length: [2, 2, 1, 1][col] }, (_, i) => <i key={i} />)}
+              {stage === col + 1 && <motion.b layoutId="pp-lead" className="pp-lead" transition={{ type: 'spring', stiffness: 260, damping: 24 }}>Sarah · € 2.400</motion.b>}
+            </div>
+          ))}
+          <div className="pp-meter"><b style={{ width: `${(leads / 500) * 100 + 4}%` }} /><span><strong>{leads}</strong> {t.meter}</span></div>
+        </div>
+      </div>
+      <motion.p className="pp-toast" animate={stage === 0 ? { opacity: 1, y: 0, rotate: -3 } : { opacity: 0, y: -12, rotate: -3 }} transition={{ duration: 0.4 }}>
+        <span />{t.toast}
+      </motion.p>
+      <div className="pp-today">
+        <p>{t.today}</p>
+        <ul>{t.todayRows.map((row, i) => <li key={row} className={stage > i ? 'is-done' : ''}><i />{row}</li>)}</ul>
+      </div>
+    </div>
+  )
+}
+
+/** A card that rests at a small tilt, sways a little and straightens under the pointer. */
+function Tilted({ children, lean, className = '', style }: { children: React.ReactNode; lean: number; className?: string; style?: CSSProperties }) {
+  const reduce = useReducedMotion()
+  return (
+    <motion.div
+      className={`pp-tilt ${className}`.trim()}
+      style={style}
+      initial={reduce ? false : { opacity: 0, y: 70, rotate: lean * 4 }}
+      whileInView={{ opacity: 1, y: 0, rotate: lean }}
+      whileHover={reduce ? undefined : { rotate: 0, y: -8, scale: 1.02 }}
+      viewport={{ once: false, margin: '-80px' }}
+      transition={{ type: 'spring', stiffness: 170, damping: 16, mass: 0.9 }}
+    >
+      {children}
+    </motion.div>
+  )
+}
+
+function PriceSlider({ lang }: { lang: 'nl' | 'en' }) {
+  const t = T[lang]
+  const tiers = crmLanding.pricing.tiers[lang]
+  const [leads, setLeads] = useState(300)
+  const index = leads <= 500 ? 0 : leads <= 5000 ? 1 : 2
+  return (
+    <div className="pp-price">
+      <label className="pp-slider">
+        <span>{t.slider}</span>
+        <strong>{leads >= 10000 ? '10.000+' : leads.toLocaleString(lang === 'nl' ? 'nl-BE' : 'en-GB')} {t.leads}</strong>
+        <input type="range" min={0} max={10000} step={100} value={leads} onChange={(e) => setLeads(Number(e.target.value))} style={{ '--p': `${leads / 100}%` } as CSSProperties} />
+      </label>
+      <ul className="pp-tiers">
+        {tiers.map((tier, i) => (
+          <li key={tier.leads} className={i === index ? 'is-on' : ''}>
+            <p>{tier.leads}</p>
+            <strong>{tier.price}</strong>
+            <span>{tier.note}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
 export default function SalesCrm() {
   const { lang } = useLang()
   const c = crmLanding
+  const t = T[lang]
+  const hero = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: hero, offset: ['end 60%', 'end 20%'] })
+  const pill = useTransform(scrollYProgress, [0, 1], [90, 0])
+  const [first, ...rest] = c.hero.title[lang].split(' ')
+  const words = [first, ...rest]
+  const accent = lang === 'nl' ? 'vandaag' : 'today.'
 
   return (
-    <div>
+    <div className="vs-page pp">
       <Seo title={c.seo.title[lang]} description={c.seo.description[lang]} path={c.path} />
 
-      {/* On a phone the product sits between the lead and the facts, so the
-          screen is visible before the first scroll. */}
-      <section className="bg-surface/40">
-        <div className={`${RAIL} reveal grid items-center gap-x-14 gap-y-8 py-12 sm:py-20 lg:grid-cols-[1fr_1.05fr]`}>
-          <div className="order-1 lg:col-start-1 lg:row-start-1">
-            <h1 className="font-display text-4xl text-paper text-balance sm:text-5xl">{c.hero.title[lang]}</h1>
-            <p className="mt-4 max-w-xl text-lg text-bone">{c.hero.lead[lang]}</p>
-          </div>
-
-          <figure className="order-2 m-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center">
-            <ResponsiveImage
-              src={crmHero}
-              alt={c.hero.figureAlt[lang]}
-              sizes="(max-width: 1024px) 100vw, 640px"
-              loading="eager"
-              fetchPriority="high"
-              className="w-full rounded-2xl border border-line object-cover object-left-top shadow-sm"
-            />
-            <figcaption className="mt-3 text-sm text-mute">{c.demoNote[lang]}</figcaption>
-          </figure>
-
-          <div className="order-3 lg:col-start-1 lg:row-start-2">
-            <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-3">
-              {c.hero.facts[lang].map(fact => (
-                <div key={fact.label} className="border-t border-line pt-3">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-mute">{fact.label}</dt>
-                  <dd className="mt-1 text-sm font-medium text-paper">{fact.value}</dd>
-                </div>
-              ))}
+      <section ref={hero} className="pp-hero">
+        <div className="vs-wrap pp-hero-grid">
+          <div>
+            <p className="vs-label">{t.eyebrow}</p>
+            <SplitHeadline as="h1" className="vs-h1 pp-h1" onMount parts={words.map((word) => ({ text: word, tone: word === accent ? 'accent' as const : undefined }))} />
+            <p className="vs-lead pp-lead-text">{c.hero.lead[lang]}</p>
+            <div className="vs-hero-actions">
+              <Signup placement="crm_hero" label={c.cta[lang]} />
+              <Cta to="/crm#schermen" variant="line">{t.how}</Cta>
+            </div>
+            <dl className="pp-facts">
+              {c.hero.facts[lang].map((fact) => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
             </dl>
-            <p className="mt-8">
-              <SignupButton placement="crm_hero" label={c.cta[lang]} />
-            </p>
+          </div>
+          <div className="pp-hero-stage">
+            <LivePipeline lang={lang} />
+            <HandNote point="up-left" className="pp-hero-note">{t.note}</HandNote>
           </div>
         </div>
       </section>
 
-      {/* Three screens, each with the one thing it is for. */}
-      <section className="border-t border-line" aria-labelledby="schermen-titel">
-        <div className={`${RAIL} py-16 sm:py-20`}>
-          <h2 id="schermen-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{c.screens.title[lang]}</h2>
-          <div className="mt-12 grid gap-16 sm:gap-20">
-            {c.screens.items[lang].map((screen, index) => (
-              <div key={screen.key} className={`reveal grid items-center gap-8 lg:gap-14 ${index % 2 === 1 ? 'lg:grid-cols-[1.25fr_0.75fr]' : 'lg:grid-cols-[0.75fr_1.25fr]'}`}>
-                <div className={index % 2 === 1 ? 'lg:order-2' : undefined}>
-                  <h3 className="text-xl font-semibold text-paper text-balance">{screen.title}</h3>
-                  <p className="mt-3 text-bone">{screen.body}</p>
+      <section className="vs-wrap vs-section pp-who" aria-labelledby="voor-wie-titel">
+        <div className="pp-who-copy">
+          <SplitHeadline id="voor-wie-titel" className="vs-h2" parts={[{ text: c.audience.title[lang] }]} />
+          <p className="vs-lead">{c.audience.body[lang]}</p>
+        </div>
+        <div className="pp-pains">
+          {c.audience.items[lang].map((item, i) => (
+            <Tilted key={item} lean={[-3, 2.2, -1.6][i]} className="pp-pain" style={{ zIndex: 3 - i }}>
+              <span>{String(i + 1).padStart(2, '0')}</span>
+              <p>{item}</p>
+            </Tilted>
+          ))}
+        </div>
+      </section>
+
+      <section id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
+        <div className="vs-wrap">
+          <SplitHeadline id="schermen-titel" className="vs-h2" parts={[{ text: c.screens.title[lang] }]} />
+          <div className="pp-cards">
+            {c.screens.items[lang].map((screen, i) => (
+              <Tilted key={screen.key} lean={i % 2 ? 0.8 : -0.8} className="tx-card pp-card is-on" style={{ '--t': TINTS[i] } as CSSProperties}>
+                <div className="tx-stage pp-card-stage">
+                  <div className="tx-win">
+                    <div className="tx-win-bar"><i /><i /><i /><b>Sales CRM</b></div>
+                    <ResponsiveImage src={SCREENS[screen.key]} alt={screen.alt} sizes="(max-width: 1024px) 100vw, 900px" loading="lazy" className="pp-shot" />
+                  </div>
                 </div>
-                <figure className={`m-0 ${index % 2 === 1 ? 'lg:order-1' : ''}`}>
-                  <ResponsiveImage
-                    src={SCREENS[screen.key]}
-                    alt={screen.alt}
-                    sizes="(max-width: 1024px) 100vw, 700px"
-                    loading="lazy"
-                    className="w-full rounded-2xl border border-line object-cover object-left-top"
-                  />
-                </figure>
-              </div>
+                <div className="tx-info">
+                  <p className="tx-step">{String(i + 1).padStart(2, '0')} / 03</p>
+                  <h3 className="tx-title">{screen.title}</h3>
+                  <p className="tx-body">{screen.body}</p>
+                </div>
+              </Tilted>
             ))}
           </div>
-          <p className="mt-10 text-sm text-mute">{c.demoNote[lang]}</p>
+          <p className="pp-fine">{c.demoNote[lang]}</p>
         </div>
       </section>
 
-      <section className="border-t border-line bg-surface/40" aria-labelledby="meer-titel">
-        <div className={`${RAIL} reveal grid gap-10 py-16 sm:py-20 lg:grid-cols-2 lg:gap-14`}>
-          <div>
-            <h2 id="voor-wie-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{c.audience.title[lang]}</h2>
-            <p className="mt-4 text-bone">{c.audience.body[lang]}</p>
-            <CheckList items={[...c.audience.items[lang]]} columns={1} className="mt-6" />
-          </div>
-          <div>
-            <h2 id="meer-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{c.more.title[lang]}</h2>
-            <CheckList items={[...c.more.items[lang]]} columns={1} className="mt-6" />
-          </div>
+      <section className="vs-wrap vs-section" aria-labelledby="meer-titel">
+        <SplitHeadline id="meer-titel" className="vs-h2" parts={[{ text: c.more.title[lang] }]} />
+        <ul className="pp-more">
+          {c.more.items[lang].map((item, i) => (
+            <motion.li key={item} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false, margin: '-60px' }} transition={{ duration: 0.5, delay: i * 0.06 }}>
+              <svg width="18" height="18" viewBox="0 0 14 14" fill="none" aria-hidden="true"><motion.path d="M2 7.5 5.5 11 12 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: false }} transition={{ duration: 0.4, delay: 0.2 + i * 0.06 }} /></svg>
+              {item}
+            </motion.li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="pp-pricing" aria-labelledby="prijs-titel">
+        <div className="vs-wrap">
+          <SplitHeadline id="prijs-titel" className="vs-h2" parts={[{ text: c.pricing.title[lang] }]} />
+          <p className="vs-lead pp-narrow">{c.pricing.body[lang]}</p>
+          <PriceSlider lang={lang} />
+          <p className="pp-fine">{c.pricing.clients[lang]}</p>
         </div>
       </section>
 
-      {/* Three tiers are peers, so this is the page's one card treatment. */}
-      <section className="border-t border-line" aria-labelledby="prijs-titel">
-        <div className={`${RAIL} reveal py-16 sm:py-20`}>
-          <h2 id="prijs-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{c.pricing.title[lang]}</h2>
-          <p className="mt-4 max-w-2xl text-bone">{c.pricing.body[lang]}</p>
-          <ul className="mt-10 grid gap-5 sm:grid-cols-3">
-            {c.pricing.tiers[lang].map((tier, index) => (
-              <li key={tier.leads} className={`rounded-2xl border bg-surface-2 p-6 ${index === 0 ? 'border-accent' : 'border-line'}`}>
-                <p className="text-sm font-medium text-bone">{tier.leads}</p>
-                <p className="mt-3 font-display text-3xl text-paper">{tier.price}</p>
-                <p className="mt-1 text-sm text-mute">{tier.note}</p>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 text-sm text-mute">{c.pricing.clients[lang]}</p>
+      <section className="vs-wrap vs-section">
+        <Reveal>
+          <Link to="/performance" className="pp-next">
+            <div>
+              <p className="vs-label">{t.nextLabel}</p>
+              <h2 className="pp-next-title">{t.nextTitle}</h2>
+              <p>{t.nextBody}</p>
+            </div>
+            <span className="pp-next-go">{t.nextCta} <i aria-hidden="true">→</i></span>
+          </Link>
+        </Reveal>
+      </section>
+
+      <section className="pp-final" aria-labelledby="start-titel">
+        <div className="vs-wrap">
+          <SplitHeadline id="start-titel" className="pp-final-title" parts={[{ text: c.final.title[lang], tone: 'accent' }]} />
+          <p className="vs-lead pp-narrow">{c.final.body[lang]}</p>
+          <Signup placement="crm_final" label={c.cta[lang]} variant="paper" />
         </div>
       </section>
 
-      {/* The page ends on the action. */}
-      <section className="border-t border-line bg-surface/40" aria-labelledby="start-titel">
-        <div className={`${RAIL} py-16 sm:py-20`}>
-          <h2 id="start-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{c.final.title[lang]}</h2>
-          <p className="mt-3 max-w-2xl text-bone">{c.final.body[lang]}</p>
-          <p className="mt-8">
-            <SignupButton placement="crm_final" label={c.cta[lang]} />
-          </p>
-        </div>
-      </section>
+      <motion.div className="pp-pill" style={{ y: pill }}>
+        <span>{t.pill}</span>
+        <Signup placement="crm_pill" label={c.cta[lang]} />
+      </motion.div>
     </div>
   )
 }
