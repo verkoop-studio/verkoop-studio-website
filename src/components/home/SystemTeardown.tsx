@@ -71,78 +71,162 @@ const COPY = {
   en: { label: 'The system, taken apart', intro: 'Seven parts. One path from click to customer.', end: 'All back together.', endBody: 'We build it for you. Every part measures what the next one does.', cta: 'Plan a call', cases: 'See the results', sample: 'Sample' },
 }
 
-/** The words inside each sample screen. Every figure here is invented and labelled as a sample. */
-const UI: Record<Lang, Record<LayerKey, { win: string; note: string; rows: string[] }>> = {
+/** The words inside each sample screen. Every name and figure here is invented and the window says "Voorbeeld". */
+const UI = {
   nl: {
-    ad: { win: 'Facebook', note: 'Budget volgt wat verkoopt', rows: ['Verkoop Studio · Gesponsord', 'Gratis groeiplan voor je webshop', 'Meer info'] },
-    page: { win: 'jouwsite.be/actie', note: 'Eén pagina, één actie', rows: ['Meer klanten uit je advertenties', 'Vraag je gratis plan aan'] },
-    form: { win: 'Aanvraag', note: 'Lead ontvangen', rows: ['Naam', 'Sarah', 'E-mail', 'sarah@bedrijf.be', 'Verstuur'] },
-    crm: { win: 'Sales CRM', note: '38 van 500 gratis leads', rows: ['Nieuw', 'Gecontacteerd', 'Afspraak', 'Voorstel'] },
-    pixel: { win: 'Metingen', note: 'Cookiekeuze gerespecteerd', rows: ['Pagina bekeken', 'Formulier verstuurd', 'Aankoop € 84'] },
-    dashboard: { win: 'Performance', note: 'Beste advertentie: video 2', rows: ['Uitgaven', '€ 1.240', 'Omzet', '€ 5.890', 'Per euro', '4,7×'] },
-    report: { win: 'Maandrapport', note: 'Elke maand in je mailbox', rows: ['Meeste omzet via Google', 'Facebook: duurdere leads', 'Advies: meer budget naar Google'] },
+    ad: { win: 'Facebook', note: 'Budget volgt wat verkoopt', page: 'Verkoop Studio', meta: 'Gesponsord · 2 min', text: 'Meer klanten uit je advertenties? Vraag je gratis groeiplan aan.', head: 'Gratis groeiplan voor je webshop', site: 'verkoop.studio', cta: 'Meer info', reacts: '128', comments: '14 reacties', stats: [['Bereik', '', '12.480', ''], ['Kliks', '', '342', ''], ['Per klik', '€ ', '0,41', '']] },
+    page: { win: 'jouwsite.be/actie', note: 'Eén pagina, één actie', h: 'Meer klanten uit je advertenties', ticks: ['Gratis plan op maat', 'Antwoord binnen 1 werkdag', 'Geen contract'], cta: 'Vraag je gratis plan aan', live: '3 mensen bekijken dit nu', rate: ['Conversie', '', '6,2', '%'] },
+    form: { win: 'Aanvraag', note: 'Lead ontvangen', fields: [['Naam', 'Sarah Peeters'], ['E-mail', 'sarah@bakkerijpeeters.be'], ['Budget per maand', '€ 1.000 – € 5.000']], consent: 'Ik ga akkoord met de privacyverklaring', send: 'Verstuur', toast: 'Nieuwe lead in je CRM', src: 'via Facebook-advertentie' },
+    crm: { win: 'Sales CRM', note: '38 van 500 gratis leads', cols: [['Nieuw', '€ 4.800'], ['Gecontacteerd', '€ 7.200'], ['Afspraak', '€ 3.100'], ['Voorstel', '€ 9.600']], cards: [['SP', 'Sarah Peeters', '€ 2.400', 'Facebook', 'vandaag'], ['TD', 'Tom De Wit', '€ 1.800', 'Google', 'morgen'], ['LV', 'Lien Vos', '€ 3.100', 'Website', 'do'], ['JM', 'Jonas Maes', '€ 4.500', 'Facebook', 'vr'], ['EC', 'Eva Claes', '€ 5.100', 'Google', 'ma']], meter: 'gratis leads' },
+    pixel: { win: 'Metingen · live', note: 'Cookiekeuze gerespecteerd', events: [['Pagina bekeken', '/actie', 'Meta', '14:02'], ['Knop geklikt', 'Plan aanvragen', 'Meta', '14:03'], ['Formulier verstuurd', 'Sarah P.', 'Meta', '14:04'], ['Pagina bekeken', '/prijzen', 'Google', '14:06'], ['Aankoop', '€ 84', 'Google', '14:09']], consent: 'Toestemming: ja' },
+    dashboard: { win: 'Performance', note: 'Beste advertentie: video 2', kpis: [['Uitgaven', '€ ', '1.240', '', '+4%'], ['Omzet', '€ ', '5.890', '', '+18%'], ['Per euro', '', '4,7', '×', '+0,6']], channels: [['Meta', 62, '5,1×'], ['Google', 48, '4,4×'], ['TikTok', 21, '2,3×'], ['E-mail', 14, '8,0×']] },
+    report: { win: 'Maandrapport · oktober', note: 'Elke maand in je mailbox', from: 'Verkoop Studio', to: 'aan jou', rows: [['up', 'Omzet uit advertenties', '+18%'], ['up', 'Meeste omzet via Google', '€ 2.910'], ['down', 'Facebook: duurdere leads', '+€ 3,20']], advice: 'Advies: zet € 300 meer op Google', open: 'Bekijk het rapport' },
   },
   en: {
-    ad: { win: 'Facebook', note: 'Budget follows what sells', rows: ['Verkoop Studio · Sponsored', 'A free growth plan for your shop', 'Learn more'] },
-    page: { win: 'yoursite.com/offer', note: 'One page, one action', rows: ['More customers from your ads', 'Ask for your free plan'] },
-    form: { win: 'Enquiry', note: 'Lead received', rows: ['Name', 'Sarah', 'Email', 'sarah@company.com', 'Send'] },
-    crm: { win: 'Sales CRM', note: '38 of 500 free leads', rows: ['New', 'Contacted', 'Meeting', 'Proposal'] },
-    pixel: { win: 'Events', note: 'Cookie choice respected', rows: ['Page viewed', 'Form sent', 'Purchase € 84'] },
-    dashboard: { win: 'Performance', note: 'Best ad: video 2', rows: ['Spend', '€ 1,240', 'Revenue', '€ 5,890', 'Per euro', '4.7×'] },
-    report: { win: 'Monthly report', note: 'In your inbox every month', rows: ['Most revenue through Google', 'Facebook: dearer leads', 'Advice: more budget to Google'] },
+    ad: { win: 'Facebook', note: 'Budget follows what sells', page: 'Verkoop Studio', meta: 'Sponsored · 2 min', text: 'More customers from your ads? Ask for your free growth plan.', head: 'A free growth plan for your shop', site: 'verkoop.studio', cta: 'Learn more', reacts: '128', comments: '14 comments', stats: [['Reach', '', '12,480', ''], ['Clicks', '', '342', ''], ['Per click', '€ ', '0.41', '']] },
+    page: { win: 'yoursite.com/offer', note: 'One page, one action', h: 'More customers from your ads', ticks: ['A free plan for you', 'An answer within 1 working day', 'No contract'], cta: 'Ask for your free plan', live: '3 people are looking now', rate: ['Conversion', '', '6.2', '%'] },
+    form: { win: 'Enquiry', note: 'Lead received', fields: [['Name', 'Sarah Peeters'], ['Email', 'sarah@peetersbakery.com'], ['Budget per month', '€ 1,000 – € 5,000']], consent: 'I agree to the privacy policy', send: 'Send', toast: 'New lead in your CRM', src: 'from a Facebook ad' },
+    crm: { win: 'Sales CRM', note: '38 of 500 free leads', cols: [['New', '€ 4,800'], ['Contacted', '€ 7,200'], ['Meeting', '€ 3,100'], ['Proposal', '€ 9,600']], cards: [['SP', 'Sarah Peeters', '€ 2,400', 'Facebook', 'today'], ['TD', 'Tom De Wit', '€ 1,800', 'Google', 'tomorrow'], ['LV', 'Lien Vos', '€ 3,100', 'Website', 'Thu'], ['JM', 'Jonas Maes', '€ 4,500', 'Facebook', 'Fri'], ['EC', 'Eva Claes', '€ 5,100', 'Google', 'Mon']], meter: 'free leads' },
+    pixel: { win: 'Events · live', note: 'Cookie choice respected', events: [['Page viewed', '/offer', 'Meta', '14:02'], ['Button clicked', 'Ask for plan', 'Meta', '14:03'], ['Form sent', 'Sarah P.', 'Meta', '14:04'], ['Page viewed', '/pricing', 'Google', '14:06'], ['Purchase', '€ 84', 'Google', '14:09']], consent: 'Consent: yes' },
+    dashboard: { win: 'Performance', note: 'Best ad: video 2', kpis: [['Spend', '€ ', '1,240', '', '+4%'], ['Revenue', '€ ', '5,890', '', '+18%'], ['Per euro', '', '4.7', '×', '+0.6']], channels: [['Meta', 62, '5.1×'], ['Google', 48, '4.4×'], ['TikTok', 21, '2.3×'], ['Email', 14, '8.0×']] },
+    report: { win: 'Monthly report · October', note: 'In your inbox every month', from: 'Verkoop Studio', to: 'to you', rows: [['up', 'Revenue from ads', '+18%'], ['up', 'Most revenue through Google', '€ 2,910'], ['down', 'Facebook: dearer leads', '+€ 3.20']], advice: 'Advice: put € 300 more on Google', open: 'Open the report' },
   },
 }
 
-/** What sits inside the app window for one layer. Flat HTML, so every word stays readable. */
-function Screen({ k, rows }: { k: LayerKey; rows: string[] }) {
-  if (k === 'ad') return (
-    <div className="tx-ad">
-      <p className="tx-dim">{rows[0]}</p>
-      <div className="tx-ad-img" />
-      <p className="tx-strong">{rows[1]}</p>
-      <span className="tx-btn">{rows[2]}</span>
-    </div>
-  )
-  if (k === 'page') return (
-    <div className="tx-page">
-      <p className="tx-page-h">{rows[0]}</p>
-      <i /><i style={{ width: '62%' }} />
-      <span className="tx-btn tx-btn--ink">{rows[1]}</span>
-    </div>
-  )
-  if (k === 'form') return (
-    <div className="tx-form">
-      <label><span>{rows[0]}</span><b className="tx-type">{rows[1]}</b></label>
-      <label><span>{rows[2]}</span><b className="tx-type tx-type--2">{rows[3]}</b></label>
-      <span className="tx-btn tx-btn--ink">{rows[4]}</span>
-    </div>
-  )
-  if (k === 'crm') return (
-    <div className="tx-crm">
-      {rows.map((name, col) => (
-        <div key={name}>
-          <p className="tx-dim">{name}</p>
-          {Array.from({ length: col === 0 ? 2 : col === 3 ? 1 : 2 }, (_, i) => <i key={i} />)}
+/** Counts up while the card is the one in front; a number with its own prefix and suffix. */
+function Num({ pre = '', v, suf = '' }: { pre?: string; v: string; suf?: string }) {
+  return <span className="tx-num">{pre && <small>{pre}</small>}{v}{suf && <small>{suf}</small>}</span>
+}
+
+/** A small, steady beat while the card is in front, for the screens that play out on a loop. */
+function useBeat(on: boolean, ms: number) {
+  const [n, setN] = useState(0)
+  useEffect(() => {
+    if (!on || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = window.setInterval(() => setN((x) => x + 1), ms)
+    return () => window.clearInterval(id)
+  }, [on, ms])
+  return n
+}
+
+const SOURCE: Record<string, string> = { Meta: '#1877f2', Facebook: '#1877f2', Google: '#ea4335', Website: '#111110', TikTok: '#111110' }
+
+/** What sits inside the app window for one layer. Flat HTML, so every word stays readable, with hover life inside. */
+function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
+  const u = UI[lang]
+  const beat = useBeat(on, k === 'pixel' ? 1400 : 1700)
+  const [liked, setLiked] = useState(false)
+
+  if (k === 'ad') {
+    const a = u.ad
+    return (
+      <div className="tx-ad">
+        <div className="tx-post-head"><span className="tx-ava tx-ava--brand">v.</span><p><b>{a.page}</b><span>{a.meta}</span></p><i>···</i></div>
+        <p className="tx-post-text">{a.text}</p>
+        <div className="tx-ad-img"><span className="tx-ad-mock"><i /><i /><i /></span></div>
+        <div className="tx-ad-cta"><p><span>{a.site}</span><b>{a.head}</b></p><span className="tx-btn">{a.cta}</span></div>
+        <div className="tx-ad-foot">
+          <span className={`tx-like${liked ? ' is-on' : ''}`} onClick={() => setLiked((x) => !x)}>♥ <b>{liked ? '129' : a.reacts}</b></span>
+          <span>{a.comments}</span>
+          <span className="tx-ad-stats">{a.stats.map(([label, pre, v, suf]) => <em key={label}>{label} <Num pre={pre} v={v} suf={suf} /></em>)}</span>
         </div>
-      ))}
-      <b className="tx-crm-live" />
-    </div>
-  )
-  if (k === 'pixel') return (
-    <ul className="tx-feed">
-      {rows.map((row, i) => <li key={row} style={{ animationDelay: `${0.3 + i * 0.5}s` }}><span />{row}</li>)}
-    </ul>
-  )
-  if (k === 'dashboard') return (
-    <div className="tx-dash">
-      <dl>{[0, 2, 4].map((i) => <div key={i}><dt>{rows[i]}</dt><dd>{rows[i + 1]}</dd></div>)}</dl>
-      <div className="tx-bars">{[42, 64, 38, 80, 56, 96].map((h, i) => <i key={i} style={{ height: `${h}%`, animationDelay: `${0.2 + i * 0.07}s` }} />)}</div>
-    </div>
-  )
+      </div>
+    )
+  }
+  if (k === 'page') {
+    const pg = u.page
+    return (
+      <div className="tx-page">
+        <div className="tx-page-main">
+          <p className="tx-live"><i />{pg.live}</p>
+          <p className="tx-page-h">{pg.h}</p>
+          <ul>{pg.ticks.map((t, i) => <li key={t}><Tick delay={0.3 + i * 0.15} />{t}</li>)}</ul>
+          <span className="tx-btn tx-btn--ink tx-magnet">{pg.cta} →</span>
+        </div>
+        <div className="tx-page-side">
+          <p className="tx-stars">★★★★★ <span>4,9</span></p>
+          <p className="tx-rate">{pg.rate[0]}<Num pre={pg.rate[1]} v={pg.rate[2]} suf={pg.rate[3]} /></p>
+          <span className="tx-spark"><svg viewBox="0 0 100 34" preserveAspectRatio="none"><path pathLength={1} d="M0 30 18 24 34 26 52 15 70 18 86 8 100 4" /></svg></span>
+        </div>
+      </div>
+    )
+  }
+  if (k === 'form') {
+    const f = u.form
+    const sent = on && beat % 4 >= 2
+    return (
+      <div className="tx-form">
+        {f.fields.map(([label, value], i) => (
+          <label key={label} className={i === 2 ? 'tx-select' : ''}><span>{label}</span><b className={`tx-type tx-type--${i + 1}`}>{value}</b>{i < 2 && <Tick delay={1 + i * 0.9} />}</label>
+        ))}
+        <p className="tx-consent"><span className="tx-box"><Tick delay={2.4} /></span>{f.consent}</p>
+        <span className={`tx-btn tx-btn--ink tx-send${sent ? ' is-sent' : ''}`}>{sent ? '✓' : f.send}</span>
+        <p className={`tx-toast${sent ? ' is-on' : ''}`}><span className="tx-ava">SP</span><b>{f.toast}<em>{f.src}</em></b></p>
+      </div>
+    )
+  }
+  if (k === 'crm') {
+    const c = u.crm
+    const move = on ? beat % 4 : 0
+    return (
+      <div className="tx-crm">
+        {c.cols.map(([name, total], col) => (
+          <div key={name} className="tx-col">
+            <p className="tx-col-head" title={total}><b>{name}</b><span>{c.cards.filter((_, i) => i % 4 === col && i !== 0).length + (move === col ? 1 : 0)}</span></p>
+            {c.cards.filter((_, i) => i % 4 === col && i !== 0).map(([ini, who, value, src, due]) => (
+              <span key={who} className="tx-deal"><span className="tx-ava">{ini}</span><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></span>
+            ))}
+            {move === col && (() => { const [ini, who, value, src, due] = c.cards[0]; return <motion.span layoutId={`deal-${lang}`} className="tx-deal tx-deal--hot" transition={{ type: 'spring', stiffness: 240, damping: 24 }}><span className="tx-ava">{ini}</span><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></motion.span> })()}
+          </div>
+        ))}
+        <p className="tx-meter"><span><b style={{ width: `${((38 + move) / 500) * 100 + 3}%` }} /></span><Num v={String(38 + move)} suf=" / 500" /> {c.meter}</p>
+      </div>
+    )
+  }
+  if (k === 'pixel') {
+    const p = u.pixel
+    const shown = on ? 2 + (beat % 4) : 3
+    return (
+      <div className="tx-pixel">
+        <p className="tx-pixel-top"><span className="tx-pulse" /><b>{lang === 'nl' ? 'Vandaag' : 'Today'} · <Num v="5" /> {lang === 'nl' ? 'meetpunten' : 'events'}</b><em>✓ {p.consent}</em></p>
+        <ul className="tx-feed">
+          {p.events.slice(0, shown).reverse().map(([what, detail, src, time], i) => (
+            <motion.li key={what + time} layout initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className={what.startsWith('Aankoop') || what.startsWith('Purchase') ? 'is-sale' : ''}>
+              <span className="tx-ev" style={{ background: SOURCE[src] }} /><b>{what}</b><em>{detail}</em><i>{src}</i><small>{time}</small>
+              {i === 0 && <span className="tx-new">{lang === 'nl' ? 'nieuw' : 'new'}</span>}
+            </motion.li>
+          ))}
+        </ul>
+      </div>
+    )
+  }
+  if (k === 'dashboard') {
+    const d = u.dashboard
+    return (
+      <div className="tx-dash">
+        <dl>{d.kpis.map(([label, pre, v, suf, delta]) => <div key={label}><dt>{label}<span className="tx-delta">{delta}</span></dt><dd><Num pre={pre} v={v} suf={suf} /></dd></div>)}</dl>
+        <div className="tx-channels">
+          {d.channels.map(([name, share, roas], i) => (
+            <p key={name} className="tx-ch" style={{ '--w': `${share}%`, '--d': `${0.2 + i * 0.1}s` } as CSSProperties}>
+              <span>{name}</span><i><b /></i><em>{roas}</em>
+            </p>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  const r = u.report
   return (
-    <ul className="tx-report">
-      {rows.map((row, i) => <li key={row} className={i === 2 ? 'tx-strong' : ''}><Tick delay={0.3 + i * 0.25} />{row}</li>)}
-    </ul>
+    <div className="tx-mail">
+      <div className="tx-post-head"><span className="tx-ava tx-ava--brand">v.</span><p><b>{r.from}</b><span>{r.to}</span></p><i>09:00</i></div>
+      <ul className="tx-report">
+        {r.rows.map(([dir, label, value], i) => (
+          <li key={label} style={{ animationDelay: `${0.3 + i * 0.2}s` }}><span className={`tx-dir tx-dir--${dir}`}>{dir === 'up' ? '↑' : '↓'}</span>{label}<b>{value}</b></li>
+        ))}
+      </ul>
+      <p className="tx-advice"><span>★</span>{r.advice}</p>
+      <span className="tx-btn">{r.open} →</span>
+    </div>
   )
 }
 
@@ -158,7 +242,7 @@ function Card({ layer, index, lang, active }: { layer: Layer; index: number; lan
       <div className="tx-stage" aria-hidden="true">
         <div className="tx-win">
           <div className="tx-win-bar"><i /><i /><i /><b>{ui.win}</b><em>{COPY[lang].sample}</em></div>
-          <Screen k={layer.key} rows={ui.rows} />
+          <Screen k={layer.key} lang={lang} on={active} />
         </div>
         <p className="tx-note"><Tick delay={0.9} />{ui.note}</p>
       </div>
