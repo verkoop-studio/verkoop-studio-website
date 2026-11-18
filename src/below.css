@@ -1317,16 +1317,16 @@
 @keyframes vs-wordmarks-run { to { transform: translateX(-50%); } }
 .vs-wordmarks:hover .vs-wordmarks-track, .vs-wordmarks:focus-within .vs-wordmarks-track { animation-play-state: paused; }
 .vs-wordmarks-row { display: flex; align-items: center; gap: clamp(40px, 6vw, 96px); margin: 0; padding: 0 clamp(20px, 3vw, 48px); list-style: none; }
-.vs-mark { display: inline-block; color: #b4b0a6; font: 600 clamp(26px, 3vw, 42px)/1 var(--font-display); letter-spacing: -0.03em; text-decoration: none; white-space: nowrap; transition: color 0.3s, translate 0.3s var(--vs-ease); }
-.vs-mark:hover, .vs-mark:focus-visible { color: var(--vs-ink); translate: 0 -2px; }
-.vs-mark:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 6px; border-radius: 6px; }
-.vs-mark--e-kart { font-style: italic; letter-spacing: -0.01em; }
-.vs-mark--nooms { text-transform: lowercase; letter-spacing: -0.05em; }
-.vs-mark--healthfactor { font-weight: 700; letter-spacing: 0.02em; }
+.vs-wordmark { display: inline-block; color: #b4b0a6; font: 600 clamp(26px, 3vw, 42px)/1 var(--font-display); letter-spacing: -0.03em; text-decoration: none; white-space: nowrap; transition: color 0.3s, translate 0.3s var(--vs-ease); }
+.vs-wordmark:hover, .vs-wordmark:focus-visible { color: var(--vs-ink); translate: 0 -2px; }
+.vs-wordmark:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 6px; border-radius: 6px; }
+.vs-wordmark--e-kart { font-style: italic; letter-spacing: -0.01em; }
+.vs-wordmark--nooms { text-transform: lowercase; letter-spacing: -0.05em; }
+.vs-wordmark--healthfactor { font-weight: 700; letter-spacing: 0.02em; }
 @media (prefers-reduced-motion: reduce) {
   .vs-wordmarks-track { animation: none; width: auto; justify-content: center; }
   .vs-wordmarks-row[aria-hidden] { display: none; }
-  .vs-mark { transition: none; }
+  .vs-wordmark { transition: none; }
 }
 
 /* ---------- Who it is for: hairline rows with a character, the audience and what it gets ---------- */

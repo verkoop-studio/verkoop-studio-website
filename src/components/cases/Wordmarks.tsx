@@ -17,7 +17,7 @@ export default function Wordmarks({ lang }: { lang: Lang }) {
           <ul key={String(copy)} className="vs-wordmarks-row" aria-hidden={copy || undefined}>
             {row.map((item, i) => (
               <li key={`${item.slug}-${i}`}>
-                <Link to={`/cases/${item.slug}`} tabIndex={copy || i >= names.length ? -1 : undefined} className={`vs-mark vs-mark--${item.slug}`}>{item.name}</Link>
+                <Link to={`/cases/${item.slug}`} tabIndex={copy || i >= names.length ? -1 : undefined} className={`vs-wordmark vs-wordmark--${item.slug}`}>{item.name}</Link>
               </li>
             ))}
           </ul>
