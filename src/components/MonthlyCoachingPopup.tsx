@@ -2,6 +2,9 @@ import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { useLang } from '../i18n/LanguageContext'
 import { canShowAcademyPopup, readAcademyPopupHistory, recordAcademyPopup } from '../lib/academy-popup'
+import Field from './brand/forms/Field'
+import SubmitButton from './brand/forms/SubmitButton'
+import { validEmail } from './brand/forms/validate'
 import './MonthlyCoachingPopup.css'
 
 const COPY = {
@@ -62,6 +65,8 @@ export default function MonthlyCoachingPopup({ source, completed = false, suppre
   const t = { ...COPY[lang], ...OFFERS[source][lang] }
   const [stage, setStage] = useState<'form' | 'success' | null>(null)
   const [pending, setPending] = useState(false)
+  const [emailOk, setEmailOk] = useState(false)
+  const [consent, setConsent] = useState(false)
   const [error, setError] = useState('')
   const panel = useRef<HTMLElement>(null)
   const previousFocus = useRef<HTMLElement | null>(null)
@@ -139,12 +144,12 @@ export default function MonthlyCoachingPopup({ source, completed = false, suppre
     <h2 id="coaching-popup-title">{stage === 'success' ? t.success : t.title}</h2>
     <p id="coaching-popup-description" role={stage === 'success' ? 'status' : undefined}>{stage === 'success' ? t.successText : t.description}</p>
     {stage === 'form' && <form onSubmit={submit} aria-busy={pending} data-clarity-mask="true">
-      <label htmlFor="coaching-email">{t.email}</label>
-      <input id="coaching-email" name="email" type="email" autoComplete="email" required maxLength={200} placeholder={t.placeholder} disabled={pending} />
+      <Field name="email" type="email" inputMode="email" label={t.email} autoComplete="email" disabled={pending}
+        validate={validEmail} message={lang === 'nl' ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'} onValidChange={(_, ok) => setEmailOk(ok)} />
       <div className="coaching-popup-trap" aria-hidden="true"><label>Website<input name="company_website" tabIndex={-1} autoComplete="off" /></label></div>
-      <label className="coaching-popup-consent"><input type="checkbox" name="consent" required disabled={pending} /><span>{t.consent}</span></label>
+      <label className="coaching-popup-consent vs-check-box" data-checked={consent || undefined}><input type="checkbox" name="consent" required disabled={pending} checked={consent} onChange={(event) => setConsent(event.target.checked)} /><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="5" /><path d="M5.5 10.5 8.5 13.5 14.5 6.5" pathLength={1} /></svg><span>{t.consent}</span></label>
       {error && <p className="coaching-popup-error" role="alert">{error}</p>}
-      <button className="coaching-popup-submit" disabled={pending}>{pending ? t.busy : t.submit} <span aria-hidden="true">↗</span></button>
+      <SubmitButton state={pending ? 'pending' : emailOk && consent ? 'ready' : 'locked'} label={t.submit} pendingLabel={t.busy} />
       <p className="coaching-popup-note">{t.note} <Link to="/privacy">{t.privacy}</Link></p>
     </form>}
     {stage === 'success' && <button className="coaching-popup-later" onClick={close}>{t.close}</button>}
