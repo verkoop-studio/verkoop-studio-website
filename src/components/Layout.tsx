@@ -39,7 +39,8 @@ export default function Layout() {
       <Footer />
       {location.pathname !== '/' && <BackToTop />}
       <ContactDock />
-      {location.pathname !== '/' && <StickyMobileCTA />}
+      {/* The product pages carry their own pinned pill, so they get no second bar. */}
+      {!['/', '/crm', '/performance'].includes(location.pathname) && <StickyMobileCTA />}
     </div>
   )
 }

@@ -138,7 +138,12 @@ export default function Performance() {
   const final = useRef<HTMLElement>(null)
   const finalInView = useInView(final, { margin: '0px 0px -25% 0px' })
   const footerInView = useFooterInView()
-  const pillHidden = finalInView || footerInView
+  // It also steps aside over the screenshots and the FAQ, so it never covers a caption or an answer.
+  const screens = useRef<HTMLElement>(null)
+  const screensInView = useInView(screens, { margin: '-30% 0px -30% 0px' })
+  const faq = useRef<HTMLDivElement>(null)
+  const faqInView = useInView(faq, { margin: '0px 0px -10% 0px' })
+  const pillHidden = finalInView || footerInView || screensInView || faqInView
   const accent = lang === 'nl' ? 'echt' : 'actually'
 
   useEffect(() => { trackLandingView('Verkoop Studio Performance') }, [])
@@ -186,7 +191,7 @@ export default function Performance() {
         </div>
       </section>
 
-      <section id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
+      <section ref={screens} id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
         <div className="vs-wrap">
           <SplitHeadline id="schermen-titel" className="vs-h2" parts={[{ text: p.screens.title[lang] }]} />
           <div className="pp-cards">
@@ -240,7 +245,7 @@ export default function Performance() {
 
       <WorksWith lang={lang} platforms={['meta', 'google', 'tiktok', 'chatgpt', 'shopify', 'wix', 'klaviyo', 'mailchimp', 'resend', 'perplexity']} />
 
-      <FaqList id="performance-faq" title={lang === 'nl' ? 'Veelgestelde vragen' : 'Frequently asked questions'} items={[faqItems[12], faqItems[15], faqItems[4]]} lang={lang} />
+      <div ref={faq}><FaqList id="performance-faq" title={lang === 'nl' ? 'Veelgestelde vragen' : 'Frequently asked questions'} items={[faqItems[12], faqItems[15], faqItems[4]]} lang={lang} /></div>
 
       <section ref={final} id="starten" className="pp-final pp-form" aria-labelledby="starten-titel">
         <div className="vs-wrap">

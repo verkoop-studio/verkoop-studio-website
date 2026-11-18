@@ -111,7 +111,7 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
   .pp-col { min-height: 96px; }
   .pp-pain:nth-child(n) { margin-left: 0; }
   .pp-card-stage { padding-left: 18px; }
-  .pp-pill span { display: none; }
+  .pp-pill > span { display: none; }
   .pp-pill { padding-left: 7px; }
 }
 @media (prefers-reduced-motion: reduce) { .pp-live, .pp-next, .pp-tiers li.is-on { rotate: none; translate: none; } .pp-tick { animation: none; } }

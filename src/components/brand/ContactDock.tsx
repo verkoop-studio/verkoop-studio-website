@@ -35,6 +35,13 @@ const COPY = {
   },
 }
 
+/** True while a form, a pinned call to action or a pop-up is on screen; the nudge stays away then. */
+function busyScreen() {
+  const onScreen = (el: Element) => { const box = el.getBoundingClientRect(); return box.width > 0 && box.bottom > 0 && box.top < window.innerHeight }
+  if ([...document.querySelectorAll('form')].some(onScreen)) return true
+  return [...document.querySelectorAll('.pp-pill:not([aria-hidden]), .mobile-contact-bar:not(.is-suppressed), .coaching-popup, [role="dialog"]:not(#vs-dock-card)')].some((el) => onScreen(el) && getComputedStyle(el).display !== 'none')
+}
+
 /** Pulls a button up to 6px toward the pointer; it springs back when the pointer leaves. */
 function useMagnet(reduce: boolean | null) {
   const x = useSpring(0, { stiffness: 300, damping: 20 })
@@ -127,18 +134,24 @@ export default function ContactDock() {
     let seen = false
     try { seen = sessionStorage.getItem('vs-dock-greet') === '1' } catch { /* storage blocked */ }
     if (seen) return
-    const show = window.setTimeout(() => {
+    // It waits until nothing else is asking for attention: no form, pinned pill, bottom bar or pop-up on screen.
+    let timer = 0
+    const tryShow = () => {
+      if (busyScreen()) { timer = window.setTimeout(tryShow, 3000); return }
       setGreet(true)
       try { sessionStorage.setItem('vs-dock-greet', '1') } catch { /* storage blocked */ }
-    }, 2500)
-    return () => window.clearTimeout(show)
+    }
+    timer = window.setTimeout(tryShow, 2500)
+    return () => window.clearTimeout(timer)
   }, [past])
 
-  // The line leaves on its own after seven seconds.
+  // The line leaves on its own after six seconds, or at once when something else takes the screen.
   useEffect(() => {
     if (!greet) return
-    const hide = window.setTimeout(() => setGreet(false), 7000)
-    return () => window.clearTimeout(hide)
+    const hide = window.setTimeout(() => setGreet(false), 6000)
+    const onScroll = () => { if (busyScreen()) setGreet(false) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => { window.clearTimeout(hide); window.removeEventListener('scroll', onScroll) }
   }, [greet])
 
   const toggle = () => { setGreet(false); setOpen((value) => !value) }

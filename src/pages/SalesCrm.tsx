@@ -130,7 +130,9 @@ export default function SalesCrm() {
   // It also steps aside while the stepper's sticky window is on screen, so it never covers it.
   const screens = useRef<HTMLElement>(null)
   const screensInView = useInView(screens, { margin: '-30% 0px -30% 0px' })
-  const pillHidden = finalInView || footerInView || screensInView
+  const faq = useRef<HTMLDivElement>(null)
+  const faqInView = useInView(faq, { margin: '0px 0px -10% 0px' })
+  const pillHidden = finalInView || footerInView || screensInView || faqInView
   const [first, ...rest] = c.hero.title[lang].split(' ')
   const words = [first, ...rest]
   const accent = lang === 'nl' ? 'vandaag' : 'today.'
@@ -224,7 +226,7 @@ export default function SalesCrm() {
         </Reveal>
       </section>
 
-      <FaqList id="crm-faq" title={lang === 'nl' ? 'Veelgestelde vragen' : 'Frequently asked questions'} items={[faqItems[15], faqItems[14], faqItems[12]]} lang={lang} />
+      <div ref={faq}><FaqList id="crm-faq" title={lang === 'nl' ? 'Veelgestelde vragen' : 'Frequently asked questions'} items={[faqItems[15], faqItems[14], faqItems[12]]} lang={lang} /></div>
 
       <section ref={final} className="pp-final" aria-labelledby="start-titel">
         <div className="vs-wrap">

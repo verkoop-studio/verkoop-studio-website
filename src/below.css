@@ -1449,3 +1449,7 @@ a:hover .vs-textlink, a:focus-visible .vs-textlink { color: var(--vs-ink); backg
 a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate: -45deg; transition: rotate 0.25s var(--vs-ease) 0.22s; }
 .pb-go { position: absolute; right: 14px; top: 14px; z-index: 2; background: #fff; }
 @media (prefers-reduced-motion: reduce) { a:hover .vs-textlink .vs-arrow { rotate: none; } }
+
+/* One floating element per screen: on phones the dock and the footer language switch keep clear of the bottom pills. */
+@media (max-width: 1023px) { body:has(.pp-pill:not([aria-hidden])) .vs-dock { bottom: calc(84px + env(safe-area-inset-bottom)); } }
+@media (max-width: 767px) { .vs-footer-base { padding-right: 76px; } }
