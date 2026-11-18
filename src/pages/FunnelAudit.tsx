@@ -2,6 +2,8 @@ import { motion, useReducedMotion } from 'motion/react'
 import { Check } from 'lucide-react'
 import Seo from '../components/Seo'
 import QualificationForm from '../components/QualificationForm'
+import { Link } from 'react-router-dom'
+import { Go } from '../components/brand/Arrow'
 import Cta from '../components/brand/Cta'
 import { useArrive } from '../components/brand/useArrive'
 import HandNote from '../components/brand/HandNote'
@@ -11,6 +13,7 @@ import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
 import { Win } from '../components/service/ServiceScreens'
 import { AUDIT_SCOPE } from '../data/audit'
+import { getCase } from '../data/cases'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
@@ -61,6 +64,8 @@ const COPY = {
 }
 
 /** Sample priorities for the report mock; the window says Voorbeeld. */
+const pinacello = getCase('pinacello')
+
 const REPORT_LEVELS = ['pink', 'blue', 'grey', 'blue', 'pink', 'grey'] as const
 
 export default function FunnelAudit() {
@@ -84,32 +89,27 @@ export default function FunnelAudit() {
             <TextLink to="/#groeipakketten">{t.packagesLink}</TextLink>
           </motion.div>
         </div>
-        {/* The real scope of the analysis, checked off one by one. */}
+        {/* The hero object: a sample report built from the analysis' own scope. */}
         <motion.div className="sv-hero-visual sv-hero-object" aria-hidden="true" initial={reduce ? false : { opacity: 0, x: 50, rotate: 5 }} animate={{ opacity: 1, x: 0, rotate: 1.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
           <div>
-            <Win title={t.win} lang={lang}>
-              <ul className="fa-scan">
-                {t.scope.slice(0, 7).map((item, i) => (
-                  <li key={item} style={{ animationDelay: `${0.9 + i * 0.35}s` }}><span className="fa-scan-tick"><Check size={12} strokeWidth={3} /></span>{item}</li>
-                ))}
+            <Win title={t.report} lang={lang}>
+              <ul className="fa-report">
+                {t.scope.map((item, i) => {
+                  const level = REPORT_LEVELS[i % REPORT_LEVELS.length]
+                  return <li key={item} style={{ animationDelay: `${0.7 + i * 0.12}s` }}><span className="sv-tick"><Check size={12} strokeWidth={2.6} /></span><b>{item}</b><span className={`sv-tag sv-tag--${level}`}>{t.levels[level]}</span></li>
+                })}
               </ul>
             </Win>
           </div>
         </motion.div>
       </section>
 
-      <section className="vs-wrap vs-section fa-scope" aria-labelledby="audit-scope">
-        <div>
-          <Reveal as="h2" className="vs-h2" id="audit-scope">{t.scopeLabel}</Reveal>
-          <Reveal y={30}><Win title={t.report} lang={lang}>
-            <ul className="fa-report">
-              {t.scope.map((item, i) => {
-                const level = REPORT_LEVELS[i % REPORT_LEVELS.length]
-                return <li key={item}><span className="sv-tick"><Check size={12} strokeWidth={2.6} /></span><b>{item}</b><span className={`sv-tag sv-tag--${level}`}>{t.levels[level]}</span></li>
-              })}
-            </ul>
-          </Win></Reveal>
-        </div>
+      <section className="vs-wrap vs-section fa-scope" aria-label={t.deliverablesLabel}>
+        <Link to="/cases/pinacello" className="fa-proof" onClick={() => trackEvent('case_viewed', { case: 'pinacello', placement: 'audit_proof' })}>
+          <span className="fa-proof-figure">{pinacello?.result?.[lang]}</span>
+          <span className="fa-proof-text"><b>Pinacello</b>{pinacello?.summary[lang]}</span>
+          <Go />
+        </Link>
         <div>
           <Reveal as="h2" className="vs-h2">{t.deliverablesLabel}</Reveal>
           <ul className="sv-deliver-list fa-deliver">{t.deliverables.map((item) => <li key={item}><span className="sv-tick"><Check size={13} strokeWidth={2.6} /></span>{item}</li>)}</ul>
