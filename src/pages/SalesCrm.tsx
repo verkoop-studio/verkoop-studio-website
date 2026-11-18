@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
 import { useFooterInView } from '../lib/useFooterInView'
 import { usePhoneScrollingDown } from '../lib/usePhoneScrollingDown'
-import ResponsiveImage from '../components/ResponsiveImage'
 import { Go } from '../components/brand/Arrow'
 import Cta from '../components/brand/Cta'
 import FaqList from '../components/brand/FaqList'
@@ -13,6 +12,7 @@ import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import CrmStepper from '../components/product/CrmStepper'
+import ShotViewer from '../components/product/ShotViewer'
 import { SamplePipeline } from '../components/brand/samples'
 import Tilted from '../components/product/Tilted'
 import { crmLanding, signupHref, type CrmScreenKey } from '../data/crmLanding'
@@ -176,13 +176,7 @@ export default function SalesCrm() {
         <div className="vs-wrap">
           <SplitHeadline id="schermen-titel" className="vs-h2" parts={[{ text: c.screens.title[lang] }]} />
           <CrmStepper lang={lang} />
-          <ul className="pp-shots">
-            {c.screens.items[lang].map((screen) => (
-              <li key={screen.key}>
-                <div className="tx-win"><div className="tx-win-bar"><i /><i /><i /><b>Sales CRM</b></div><ResponsiveImage src={SCREENS[screen.key]} alt={screen.alt} sizes="(max-width: 1024px) 100vw, 360px" loading="lazy" className="pp-shot" /></div>
-              </li>
-            ))}
-          </ul>
+          <ShotViewer product="Sales CRM" label={c.demoNote[lang]} shots={c.screens.items[lang].map((item) => ({ ...item, src: SCREENS[item.key] }))} />
           <p className="pp-fine">{c.demoNote[lang]}</p>
         </div>
       </section>

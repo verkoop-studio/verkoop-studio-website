@@ -5,9 +5,9 @@ import { useFooterInView } from '../lib/useFooterInView'
 import { usePhoneScrollingDown } from '../lib/usePhoneScrollingDown'
 import WorksWith from '../components/brand/WorksWith'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
-import ResponsiveImage from '../components/ResponsiveImage'
 import AudienceRows from '../components/brand/AudienceRows'
 import Cta from '../components/brand/Cta'
+import ShotViewer from '../components/product/ShotViewer'
 import FaqList from '../components/brand/FaqList'
 import { faqItems } from '../data/faq'
 import HandNote from '../components/brand/HandNote'
@@ -123,38 +123,6 @@ function PlanSlider({ lang }: { lang: 'nl' | 'en' }) {
   )
 }
 
-/** The three dashboard screens, one large at a time: tabs pick the screen, the pointer zooms in where it rests. */
-function ShotViewer({ lang }: { lang: 'nl' | 'en' }) {
-  const t = T[lang]
-  const items = p.screens.items[lang]
-  const [active, setActive] = useState(0)
-  const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null)
-  const reduce = useReducedMotion()
-  const screen = items[active]
-  const onMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (reduce || event.pointerType !== 'mouse') return
-    const box = event.currentTarget.getBoundingClientRect()
-    setZoom({ x: ((event.clientX - box.left) / box.width) * 100, y: ((event.clientY - box.top) / box.height) * 100 })
-  }
-  return (
-    <div className="pp-viewer">
-      <div className="pp-viewer-tabs" role="tablist" aria-label={p.screens.title[lang]}>
-        {items.map((item, i) => (
-          <button key={item.key} type="button" role="tab" aria-selected={active === i} className={active === i ? 'is-on' : ''} onClick={() => setActive(i)}>
-            <span>{String(i + 1).padStart(2, '0')}</span>{item.title}
-          </button>
-        ))}
-      </div>
-      <div className="tx-win pp-viewer-win">
-        <div className="tx-win-bar"><i /><i /><i /><b>Performance</b><em>{t.sample}</em></div>
-        <div className={`pp-viewer-stage${zoom ? ' is-zoom' : ''}`} onPointerMove={onMove} onPointerLeave={() => setZoom(null)}>
-          <ResponsiveImage key={screen.key} src={SHOTS[screen.key]} alt={screen.alt} sizes="(max-width: 1024px) 100vw, 1200px" loading="lazy" className="pp-viewer-shot" style={zoom ? { transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined} />
-        </div>
-      </div>
-      <p className="pp-viewer-body">{screen.body}</p>
-    </div>
-  )
-}
 
 export default function Performance() {
   usePageStyles(PRODUCT_STYLES)
@@ -222,7 +190,7 @@ export default function Performance() {
       <section ref={screens} id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
         <div className="vs-wrap">
           <SplitHeadline id="schermen-titel" className="vs-h2" parts={[{ text: p.screens.title[lang] }]} />
-          <ShotViewer lang={lang} />
+          <ShotViewer product="Performance" chip={t.sample} label={p.screens.title[lang]} shots={p.screens.items[lang].map((item) => ({ ...item, src: SHOTS[item.key] }))} />
           <p className="pp-fine">{p.sampleNote[lang]}</p>
         </div>
       </section>
