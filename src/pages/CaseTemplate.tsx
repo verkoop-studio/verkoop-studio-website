@@ -1,5 +1,5 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { Check } from 'lucide-react'
+import { Check, MapPin, Users } from 'lucide-react'
 import { useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '../components/Breadcrumbs'
@@ -35,6 +35,9 @@ const RESULT: Record<string, { nl: string; en: string }> = {
 
 function StatIcon({ icon }: { icon: CaseStat['icon'] }) {
   if (icon === 'play') return <span className="cs-stat-icon cs-stat-icon--play"><svg width="12" height="12" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>
+  if (icon === 'people') return <span className="cs-stat-icon cs-stat-icon--soft"><Users size={16} /></span>
+  if (icon === 'pin') return <span className="cs-stat-icon cs-stat-icon--soft"><MapPin size={16} /></span>
+  if (icon === 'check') return <span className="cs-stat-icon cs-stat-icon--ok"><Check size={16} strokeWidth={3} /></span>
   if (icon === 'pulse') return <span className="cs-stat-icon cs-stat-icon--pulse"><i /></span>
   return (
     <svg className="cs-spark" viewBox="0 0 80 28" aria-hidden="true">
@@ -44,12 +47,14 @@ function StatIcon({ icon }: { icon: CaseStat['icon'] }) {
 }
 
 /* Sample screens: skeleton content and real labels only, each marked as a sample. */
-function Screen({ kind, lang, tags }: { kind: CaseScreen; lang: Lang; tags: string[] }) {
+function Screen({ kind, lang, tags, name }: { kind: CaseScreen; lang: Lang; tags: string[]; name: string }) {
   const nl = lang === 'nl'
+  const extra = ExtraScreen({ kind, nl })
+  if (extra) return extra
   if (kind === 'ad') {
     return (
       <div className="cs-mock cs-mock--ad">
-        <div className="cs-mock-head"><span className="cs-ava">P</span><p><b>Pinacello</b><span>{nl ? 'Gesponsord' : 'Sponsored'}</span></p></div>
+        <div className="cs-mock-head"><span className="cs-ava">{name.charAt(0)}</span><p><b>{name}</b><span>{nl ? 'Gesponsord' : 'Sponsored'}</span></p></div>
         <div className="cs-mock-media"><span className="cs-play-s"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span></div>
         <div className="cs-mock-foot"><span className="cs-lines"><i /><i /></span><span className="cs-mock-btn">{nl ? 'Shop nu' : 'Shop now'}</span></div>
       </div>
@@ -79,6 +84,103 @@ function Screen({ kind, lang, tags }: { kind: CaseScreen; lang: Lang; tags: stri
       ))}
     </ol>
   )
+}
+
+/** The screens the other cases need. Same rules: skeleton content, real labels, marked as a sample. */
+function ExtraScreen({ kind, nl }: { kind: CaseScreen; nl: boolean }) {
+  if (kind === 'booking') {
+    const slots = ['14:00', '15:30', '17:00', '19:30']
+    return (
+      <div className="cs-mock cs-mock--card">
+        <p className="cs-mock-title">{nl ? 'Kies je tijdslot' : 'Pick a time slot'}</p>
+        <div className="cs-slots">{slots.map((slot, i) => <span key={slot} className={i === 3 ? 'is-on' : ''}>{slot}</span>)}</div>
+        <span className="cs-mock-btn cs-mock-btn--wide">{nl ? 'Boek nu' : 'Book now'}</span>
+      </div>
+    )
+  }
+  if (kind === 'group') {
+    return (
+      <div className="cs-mock cs-mock--card">
+        <p className="cs-mock-title">{nl ? 'Groepsaanvraag' : 'Group request'}</p>
+        <div className="cs-fields">
+          <span><b>{nl ? 'Aantal personen' : 'Group size'}</b><i /></span>
+          <span><b>{nl ? 'Datum' : 'Date'}</b><i /></span>
+          <span><b>{nl ? 'Soort uitje' : 'Kind of outing'}</b><i /></span>
+        </div>
+        <span className="cs-mock-btn cs-mock-btn--wide">{nl ? 'Vraag een offerte' : 'Ask for a quote'}</span>
+      </div>
+    )
+  }
+  if (kind === 'goal') {
+    return (
+      <div className="cs-mock cs-mock--card">
+        <p className="cs-mock-title">{nl ? 'Doel' : 'Goal'}</p>
+        <div className="cs-goal-rows">
+          <span><b>B2C</b>{nl ? 'Boekingen van rijders' : 'Bookings from drivers'}<i className="cs-goal-bar" /></span>
+          <span><b>B2B</b>{nl ? 'Aanvragen van groepen' : 'Requests from groups'}<i className="cs-goal-bar cs-goal-bar--b" /></span>
+        </div>
+      </div>
+    )
+  }
+  if (kind === 'creator') {
+    return (
+      <div className="cs-mock cs-mock--story">
+        <div className="cs-story-bars"><i /><i /><i /></div>
+        <div className="cs-mock-head"><span className="cs-ava cs-ava--ring" /><p><b>{nl ? 'creator' : 'creator'}</b><span>{nl ? 'Verhaal' : 'Story'}</span></p></div>
+        <span className="cs-story-product" />
+        <span className="cs-mock-btn cs-mock-btn--wide">{nl ? 'Bekijk het product' : 'See the product'}</span>
+      </div>
+    )
+  }
+  if (kind === 'presale') {
+    return (
+      <div className="cs-mock cs-mock--card">
+        <div className="cs-mock-product"><span className="cs-mock-img cs-mock-img--pink" /><span className="cs-lines"><i /><i /><i /></span></div>
+        <p className="cs-presale"><span className="cs-presale-bar"><i /></span>{nl ? 'Pre-sale uitverkocht' : 'Pre-sale sold out'}</p>
+        <span className="cs-mock-btn cs-mock-btn--wide cs-mock-btn--off">{nl ? 'Uitverkocht' : 'Sold out'}</span>
+      </div>
+    )
+  }
+  if (kind === 'repeat') {
+    const rows = nl ? ['Welkom', 'Hoe gaat het?', 'Tijd om bij te vullen'] : ['Welcome', 'How is it going?', 'Time to restock']
+    return (
+      <ol className="cs-mock cs-mock--route">
+        {rows.map((row, i) => (
+          <li key={row} className={i === 2 ? 'is-done' : ''}>
+            <span className="cs-route-dot">{i === 2 ? <Check size={12} strokeWidth={3} /> : '✉'}</span>{row}
+          </li>
+        ))}
+      </ol>
+    )
+  }
+  if (kind === 'subtitle') {
+    return (
+      <div className="cs-mock cs-mock--vertical">
+        <span className="cs-vert-face" />
+        <span className="cs-vert-sub">{nl ? 'Welkom in onze gym' : 'Welcome to our gym'}</span>
+      </div>
+    )
+  }
+  if (kind === 'tiles') {
+    return (
+      <div className="cs-mock cs-mock--tiles">
+        {[0, 1, 2, 3].map((i) => <span key={i} className={`cs-tile cs-tile--${i}`} />)}
+      </div>
+    )
+  }
+  if (kind === 'metrics') {
+    const rows = nl ? ['Weergaven', 'Kliks', 'Aanvragen', 'Kennismakingen'] : ['Views', 'Clicks', 'Enquiries', 'Intro calls']
+    return (
+      <ul className="cs-mock cs-mock--route">
+        {rows.map((row, i) => (
+          <li key={row} className={i > 1 ? 'is-done' : ''}>
+            <span className="cs-route-dot">{i > 1 ? <Check size={12} strokeWidth={3} /> : i + 1}</span>{row}
+          </li>
+        ))}
+      </ul>
+    )
+  }
+  return null
 }
 
 /** A local video in a phone frame. Our own cover shows until the visitor presses play. */
@@ -185,7 +287,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
         <ol className="cs-step-grid">
           {k.steps.map((step, i) => (
             <motion.li
-              key={step.link}
+              key={step.title.en}
               className="cs-step"
               initial={reduce ? false : { opacity: 0, y: 90, rotate: (i - 1) * 6 }}
               whileInView={{ opacity: 1, y: 0, rotate: (i - 1) * 1.2 }}
@@ -194,7 +296,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
             >
               <div className="cs-step-screen" aria-hidden="true">
                 <span className="cs-step-chip">{t.sample}</span>
-                <Screen kind={step.screen} lang={lang} tags={step.tags[lang]} />
+                <Screen kind={step.screen} lang={lang} tags={step.tags[lang]} name={c.name} />
               </div>
               <p className="cs-step-num">0{i + 1}</p>
               <h3 className="cs-step-title">{step.title[lang]}</h3>
@@ -206,7 +308,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
         </ol>
       </section>
 
-      {k.proof && c.video && (
+      {k.proof && (k.proof.media === 'stamp' || c.video) && (
         <section className="vs-wrap vs-section cs-proof" aria-labelledby="case-proof">
           <div className="cs-proof-copy">
             <Reveal as="h2" className="cs-proof-title" id="case-proof">
@@ -222,7 +324,22 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
               viewport={{ once: true, margin: '-80px' }}
               transition={{ type: 'spring', stiffness: 80, damping: 14 }}
             >
-              <PhoneVideo c={c} lang={lang} />
+              {k.proof.media === 'stamp' ? (
+                <div className="cs-stamp-card vs-case-live" aria-hidden="true">
+                  <CasePoster slug={c.slug} name={c.name} caption={RESULT[c.slug]?.[lang] ?? c.sector[lang]} lang={lang} />
+                  <motion.span
+                    className="cs-stamp"
+                    initial={reduce ? false : { scale: 2.2, opacity: 0, rotate: -24 }}
+                    whileInView={{ scale: 1, opacity: 1, rotate: -12 }}
+                    viewport={{ once: true }}
+                    transition={{ type: 'spring', stiffness: 260, damping: 16, delay: 0.5 }}
+                  >
+                    {k.proof.figure[lang].replace(/\.$/, '')}
+                  </motion.span>
+                </div>
+              ) : (
+                <PhoneVideo c={c} lang={lang} />
+              )}
             </motion.div>
           </div>
         </section>

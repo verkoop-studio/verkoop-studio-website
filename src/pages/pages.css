@@ -222,11 +222,11 @@
 /* ---------- Case pages ---------- */
 
 .cs-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(28px, 4vw, 64px) clamp(28px, 5vw, 80px); padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(48px, 6vw, 90px); }
-.cs-h1 { margin-top: 18px; }
+.cs-h1 { margin-top: 18px; font-size: clamp(40px, 5vw, 76px); }
 .cs-hero-copy .vs-lead { margin: 22px 0 26px; max-width: 38ch; }
 .cs-hero-poster { position: relative; aspect-ratio: 960 / 680; border-radius: 22px; overflow: hidden; background: var(--vs-stone); box-shadow: 0 50px 90px -50px rgb(17 17 16 / 0.55), 0 0 0 1px rgb(17 17 16 / 0.05); }
 .cs-stats { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2vw, 24px); margin: 0; padding: 0; list-style: none; }
-.cs-stat { position: relative; display: grid; align-content: start; gap: 6px; min-height: 132px; padding: 20px 22px; border: 1px solid var(--vs-line); border-radius: 18px; background: #fff; box-shadow: 0 30px 60px -48px rgb(17 17 16 / 0.5); overflow: hidden; }
+.cs-stat { position: relative; display: grid; align-content: start; gap: 6px; min-height: 132px; padding: 20px 64px 20px 22px; border: 1px solid var(--vs-line); border-radius: 18px; background: #fff; box-shadow: 0 30px 60px -48px rgb(17 17 16 / 0.5); overflow: hidden; }
 .cs-stat-value { font: 600 clamp(36px, 4vw, 56px)/1 var(--font-display); letter-spacing: -0.04em; font-variant-numeric: tabular-nums; }
 .cs-stat-label { max-width: 22ch; color: var(--vs-ink-2); font-size: 15px; line-height: 1.4; }
 .cs-spark { position: absolute; right: 18px; top: 22px; width: 84px; height: 30px; }
@@ -308,6 +308,8 @@
 .cs-proof-title { margin: 0 0 18px; font: 500 clamp(36px, 5vw, 76px)/1.02 var(--font-display); letter-spacing: -0.045em; }
 .cs-proof-copy .vs-lead { max-width: 40ch; }
 .cs-proof-phone { position: relative; display: grid; justify-items: center; }
+.cs-proof-phone > div:not(.vs-note) { display: grid; justify-items: center; width: 100%; }
+.cs-proof-phone:has(.cs-stamp-card) .cs-proof-note { right: auto; left: 6%; top: -52px; }
 .cs-proof-note { position: absolute; right: calc(50% + 170px); top: 26%; z-index: 2; white-space: nowrap; }
 .cs-phone { position: relative; width: min(300px, 80vw); aspect-ratio: 9 / 18.5; overflow: hidden; border: 10px solid #151514; border-radius: 46px; background: #151514; box-shadow: 0 60px 100px -50px rgb(17 17 16 / 0.6); }
 .cs-phone-notch { position: absolute; left: 50%; top: 8px; z-index: 2; width: 84px; height: 22px; margin-left: -42px; border-radius: 99px; background: #151514; }
@@ -346,3 +348,51 @@
   .cs-stat-icon--pulse i, .cs-phone-play span { animation: none; }
   .cs-step, .cs-phone-cover img, .cs-next-poster { transition: none; }
 }
+
+/* Case screens for E-Kart, Nooms and Healthfactor. */
+.cs-stat-icon--soft { background: var(--vs-stone); color: var(--vs-ink-2); }
+.cs-stat-icon--ok { background: #28c840; color: #fff; }
+.cs-mock--card { overflow: hidden; padding: 12px; border-radius: 12px; background: #fff; box-shadow: 0 16px 30px -20px rgb(17 17 16 / 0.4); }
+.cs-mock--card .cs-mock-btn--wide { margin: 12px 0 0; }
+.cs-mock-title { margin: 0 0 10px; font-weight: 600; font-size: 13px; }
+.cs-slots { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; }
+.cs-slots span { padding: 8px 0; border: 1.5px solid var(--vs-line); border-radius: 8px; text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+.cs-slots .is-on { border-color: var(--vs-blue); background: rgb(43 75 242 / 0.08); color: var(--vs-blue); }
+.cs-fields { display: grid; gap: 8px; }
+.cs-fields span { display: grid; gap: 4px; }
+.cs-fields b { color: var(--vs-mute); font-size: 10.5px; font-weight: 500; }
+.cs-fields i { height: 26px; border: 1.5px solid var(--vs-line); border-radius: 7px; }
+.cs-goal-rows { display: grid; gap: 10px; }
+.cs-goal-rows span { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 4px 8px; font-size: 11.5px; color: var(--vs-ink-2); }
+.cs-goal-rows b { display: grid; place-items: center; height: 22px; border-radius: 6px; background: rgb(43 75 242 / 0.1); color: var(--vs-blue); font-size: 10.5px; }
+.cs-goal-bar { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: repeating-linear-gradient(90deg, rgb(43 75 242 / 0.35) 0 6px, transparent 6px 10px); }
+.cs-goal-bar--b { background: repeating-linear-gradient(90deg, rgb(255 95 162 / 0.45) 0 6px, transparent 6px 10px); }
+.cs-mock--story { position: relative; overflow: hidden; aspect-ratio: 9 / 14; max-width: 170px; padding: 10px; border-radius: 16px; background: linear-gradient(170deg, #ff9fd0, #7d93ff); color: #fff; }
+.cs-mock--story .cs-mock-head { padding: 6px 0; }
+.cs-mock--story .cs-mock-head span { color: rgb(255 255 255 / 0.8); }
+.cs-story-bars { display: flex; gap: 4px; }
+.cs-story-bars i { flex: 1; height: 3px; border-radius: 2px; background: rgb(255 255 255 / 0.5); }
+.cs-story-bars i:first-child { background: #fff; }
+.cs-ava--ring { background: #fff; box-shadow: 0 0 0 2px #ffd23f; }
+.cs-story-product { display: block; width: 56%; aspect-ratio: 3 / 4; margin: 10px auto 12px; border-radius: 12px; background: rgb(255 255 255 / 0.9); box-shadow: 0 14px 24px -14px rgb(0 0 0 / 0.4); }
+.cs-mock--story .cs-mock-btn--wide { margin: 0; background: #fff; color: var(--vs-ink); }
+.cs-mock-img--pink { background: linear-gradient(150deg, #ff9fd0, #ff5fa2); }
+.cs-presale { display: grid; gap: 6px; margin: 4px 0 0; color: #17702a; font-size: 11.5px; font-weight: 600; }
+.cs-presale-bar { height: 6px; border-radius: 3px; background: #ece9e1; overflow: hidden; }
+.cs-presale-bar i { display: block; width: 100%; height: 100%; background: #28c840; transform-origin: 0 50%; animation: sv-grow 1.4s var(--vs-ease) 0.4s both; }
+.cs-mock-btn--off { background: var(--vs-stone); color: var(--vs-mute); }
+.cs-mock--vertical { position: relative; overflow: hidden; aspect-ratio: 9 / 15; max-width: 150px; border-radius: 16px; background: linear-gradient(180deg, #a9b29c, #5f6a55); }
+.cs-vert-face { position: absolute; left: 50%; top: 22%; width: 42%; aspect-ratio: 1; margin-left: -21%; border-radius: 50%; background: #e9d7c3; box-shadow: 0 60px 0 18px #20261d; }
+.cs-vert-sub { position: absolute; left: 8px; right: 8px; bottom: 14px; padding: 5px 6px; border-radius: 6px; background: #ffd23f; color: #151514; font-weight: 700; font-size: 11px; text-align: center; }
+.cs-mock--tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-width: 220px; }
+.cs-tile { aspect-ratio: 1; border-radius: 10px; }
+.cs-tile--0 { background: linear-gradient(150deg, #a9b29c, #20261d); }
+.cs-tile--1 { background: linear-gradient(150deg, #ece9e1, #a9b29c); }
+.cs-tile--2 { background: linear-gradient(150deg, #20261d, #5f6a55); }
+.cs-tile--3 { background: linear-gradient(150deg, #c9f26a, #a9b29c); }
+
+/* A result shown as a stamp on the case poster. */
+.cs-stamp-card { position: relative; width: min(460px, 100%); aspect-ratio: 960 / 680; overflow: visible; border-radius: 20px; }
+.cs-stamp-card > .vs-poster { border-radius: 20px; box-shadow: 0 50px 90px -50px rgb(17 17 16 / 0.6); }
+.cs-stamp { position: absolute; right: -6%; bottom: -10%; padding: 10px 22px; border: 4px solid #28c840; border-radius: 14px; background: rgb(255 255 255 / 0.92); color: #17702a; font: 700 clamp(24px, 3vw, 38px)/1 var(--font-display); letter-spacing: -0.02em; text-transform: none; box-shadow: 0 18px 40px -18px rgb(17 17 16 / 0.45); }
+@media (prefers-reduced-motion: reduce) { .cs-presale-bar i { animation: none; } }

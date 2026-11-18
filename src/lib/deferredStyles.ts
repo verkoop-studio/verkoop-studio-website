@@ -5,6 +5,7 @@ import pagesStyles from '../pages/pages.css?url'
 import { crmLanding } from '../data/crmLanding'
 import { performance } from '../data/performance'
 import { services } from '../data/services'
+import { cases } from '../data/cases'
 
 /**
  * URL of the below-the-fold stylesheet. Prerendered pages link it without blocking
@@ -23,7 +24,7 @@ export const PAGE_STYLES: Record<string, string> = {
   [crmLanding.path]: PRODUCT_STYLES,
   [performance.path]: PRODUCT_STYLES,
   '/cases': PAGES_STYLES,
-  '/cases/pinacello': PAGES_STYLES,
+  ...Object.fromEntries(cases.map((item) => [`/cases/${item.slug}`, PAGES_STYLES])),
   ...Object.fromEntries(services.map((service) => [`/${service.slug}`, PAGES_STYLES])),
 }
 
