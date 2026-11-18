@@ -6,6 +6,7 @@ import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import BotAvatar from '../brand/BotAvatar'
 import { StackedBars } from '../brand/blocks/StackedBars'
+import { DEALS, Num, Odds, PEOPLE, SOURCE, Spark, useBeat } from '../brand/samples'
 import Cta from '../brand/Cta'
 import { EASE } from '../brand/motion'
 import { useWide } from '../../lib/useWide'
@@ -80,7 +81,7 @@ const UI = {
     ad: { win: 'Facebook', note: 'Budget volgt wat verkoopt', page: 'Verkoop Studio', meta: 'Gesponsord · 2 min', text: 'Meer klanten uit je advertenties? Vraag je gratis groeiplan aan.', head: 'Gratis groeiplan voor je webshop', site: 'verkoop.studio', cta: 'Meer info', reacts: '128', comments: '14 reacties', stats: [['Bereik', '', '12.480', ''], ['Kliks', '', '342', ''], ['Per klik', '€ ', '0,41', '']] },
     page: { win: 'jouwsite.be/actie', note: 'Eén pagina, één actie', h: 'Meer klanten uit je advertenties', ticks: ['Gratis plan op maat', 'Antwoord binnen 1 werkdag', 'Geen contract'], cta: 'Vraag je gratis plan aan', live: '3 mensen bekijken dit nu', rate: ['Conversie', '', '6,2', '%'] },
     form: { win: 'Aanvraag', note: 'Lead ontvangen', fields: [['Naam', 'Sarah Peeters'], ['E-mail', 'sarah@bakkerijpeeters.be'], ['Budget per maand', '€ 1.000 – € 5.000']], consent: 'Ik ga akkoord met de privacyverklaring', send: 'Verstuur', toast: 'Nieuwe lead in je CRM', src: 'via Facebook-advertentie' },
-    crm: { win: 'Sales CRM', note: '38 van 500 gratis leads', cols: [['Nieuw', '€ 4.800'], ['Gecontacteerd', '€ 7.200'], ['Afspraak', '€ 3.100'], ['Voorstel', '€ 9.600']], cards: [['SP', 'Sarah Peeters', '€ 2.400', 'Facebook', 'vandaag'], ['TD', 'Tom De Wit', '€ 1.800', 'Google', 'morgen'], ['LV', 'Lien Vos', '€ 3.100', 'Website', 'do'], ['JM', 'Jonas Maes', '€ 4.500', 'Facebook', 'vr'], ['EC', 'Eva Claes', '€ 5.100', 'Google', 'ma']], meter: 'gratis leads' },
+    crm: { win: 'Sales CRM', note: '38 van 500 gratis leads', cols: [['Nieuw', '€ 4.800'], ['Gecontacteerd', '€ 7.200'], ['Afspraak', '€ 3.100'], ['Voorstel', '€ 9.600']], cards: DEALS.nl, meter: 'gratis leads' },
     pixel: { win: 'Metingen · live', note: 'Cookiekeuze gerespecteerd', events: [['Pagina bekeken', '/actie', 'Meta', '14:02'], ['Knop geklikt', 'Plan aanvragen', 'Meta', '14:03'], ['Formulier verstuurd', 'Sarah P.', 'Meta', '14:04'], ['Pagina bekeken', '/prijzen', 'Google', '14:06'], ['Aankoop', '€ 84', 'Google', '14:09']], consent: 'Toestemming: ja' },
     dashboard: { win: 'Performance', note: 'Beste advertentie: video 2', kpis: [['Uitgaven', '€ ', '1.240', '', '+4%'], ['Omzet', '€ ', '5.890', '', '+18%'], ['Per euro', '', '4,7', '×', '+0,6']], channels: [['Meta', 62, '5,1×'], ['Google', 48, '4,4×'], ['TikTok', 21, '2,3×'], ['E-mail', 14, '8,0×']] },
     report: { win: 'Maandrapport · oktober', note: 'Elke maand in je mailbox', from: 'Verkoop Studio', to: 'aan jou', rows: [['up', 'Omzet uit advertenties', '+18%'], ['up', 'Meeste omzet via Google', '€ 2.910'], ['down', 'Facebook: duurdere leads', '+€ 3,20']], advice: 'Advies: zet € 300 meer op Google', open: 'Bekijk het rapport' },
@@ -89,36 +90,15 @@ const UI = {
     ad: { win: 'Facebook', note: 'Budget follows what sells', page: 'Verkoop Studio', meta: 'Sponsored · 2 min', text: 'More customers from your ads? Ask for your free growth plan.', head: 'A free growth plan for your shop', site: 'verkoop.studio', cta: 'Learn more', reacts: '128', comments: '14 comments', stats: [['Reach', '', '12,480', ''], ['Clicks', '', '342', ''], ['Per click', '€ ', '0.41', '']] },
     page: { win: 'yoursite.com/offer', note: 'One page, one action', h: 'More customers from your ads', ticks: ['A free plan for you', 'An answer within 1 working day', 'No contract'], cta: 'Ask for your free plan', live: '3 people are looking now', rate: ['Conversion', '', '6.2', '%'] },
     form: { win: 'Enquiry', note: 'Lead received', fields: [['Name', 'Sarah Peeters'], ['Email', 'sarah@peetersbakery.com'], ['Budget per month', '€ 1,000 – € 5,000']], consent: 'I agree to the privacy policy', send: 'Send', toast: 'New lead in your CRM', src: 'from a Facebook ad' },
-    crm: { win: 'Sales CRM', note: '38 of 500 free leads', cols: [['New', '€ 4,800'], ['Contacted', '€ 7,200'], ['Meeting', '€ 3,100'], ['Proposal', '€ 9,600']], cards: [['SP', 'Sarah Peeters', '€ 2,400', 'Facebook', 'today'], ['TD', 'Tom De Wit', '€ 1,800', 'Google', 'tomorrow'], ['LV', 'Lien Vos', '€ 3,100', 'Website', 'Thu'], ['JM', 'Jonas Maes', '€ 4,500', 'Facebook', 'Fri'], ['EC', 'Eva Claes', '€ 5,100', 'Google', 'Mon']], meter: 'free leads' },
+    crm: { win: 'Sales CRM', note: '38 of 500 free leads', cols: [['New', '€ 4,800'], ['Contacted', '€ 7,200'], ['Meeting', '€ 3,100'], ['Proposal', '€ 9,600']], cards: DEALS.en, meter: 'free leads' },
     pixel: { win: 'Events · live', note: 'Cookie choice respected', events: [['Page viewed', '/offer', 'Meta', '14:02'], ['Button clicked', 'Ask for plan', 'Meta', '14:03'], ['Form sent', 'Sarah P.', 'Meta', '14:04'], ['Page viewed', '/pricing', 'Google', '14:06'], ['Purchase', '€ 84', 'Google', '14:09']], consent: 'Consent: yes' },
     dashboard: { win: 'Performance', note: 'Best ad: video 2', kpis: [['Spend', '€ ', '1,240', '', '+4%'], ['Revenue', '€ ', '5,890', '', '+18%'], ['Per euro', '', '4.7', '×', '+0.6']], channels: [['Meta', 62, '5.1×'], ['Google', 48, '4.4×'], ['TikTok', 21, '2.3×'], ['Email', 14, '8.0×']] },
     report: { win: 'Monthly report · October', note: 'In your inbox every month', from: 'Verkoop Studio', to: 'to you', rows: [['up', 'Revenue from ads', '+18%'], ['up', 'Most revenue through Google', '€ 2,910'], ['down', 'Facebook: dearer leads', '+€ 3.20']], advice: 'Advice: put € 300 more on Google', open: 'Open the report' },
   },
 }
 
-/** Counts up while the card is the one in front; a number with its own prefix and suffix. */
-function Num({ pre = '', v, suf = '' }: { pre?: string; v: string; suf?: string }) {
-  return <span className="tx-num">{pre && <small>{pre}</small>}{v}{suf && <small>{suf}</small>}</span>
-}
-
-/** A small, steady beat while the card is in front, for the screens that play out on a loop. */
-function useBeat(on: boolean, ms: number) {
-  const [n, setN] = useState(0)
-  useEffect(() => {
-    if (!on || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const id = window.setInterval(() => setN((x) => x + 1), ms)
-    return () => window.clearInterval(id)
-  }, [on, ms])
-  return n
-}
-
-/** Each sample person is a small character: shape and colour. */
-const PEOPLE: Record<string, [string, string]> = { SP: ['mug', '#ff9fd0'], TD: ['controller', '#7d93ff'], LV: ['sprout', '#c9f26a'], JM: ['lightbulb', '#ffd23f'], EC: ['chat', '#ff7a59'] }
-
 /** The character that runs each part of the system. */
 const BUDDY: Record<LayerKey, [string, string]> = { ad: ['rocket', '#2b4bf2'], page: ['magnifier', '#ffd23f'], form: ['book', '#ff9fd0'], crm: ['brain', '#9be15d'], pixel: ['camera', '#7d93ff'], dashboard: ['bull', '#ff7a59'], report: ['cat', '#111110'] }
-
-const SOURCE: Record<string, string> = { Meta: '#1877f2', Facebook: '#1877f2', Google: '#ea4335', Website: '#111110', TikTok: '#111110' }
 
 /** What sits inside the app window for one layer. Flat HTML, so every word stays readable, with hover life inside. */
 function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
@@ -342,16 +322,6 @@ const TABLES: Record<Lang, Record<LayerKey, Table>> = {
       [text('Make the pricing page faster'), who('cat', '#111110', 'You'), pill('Done', 'green'), date('✓')],
     ] },
   },
-}
-
-/** Ten small blocks, red to green, the share that is lit is the odds. */
-function Odds({ v }: { v: number }) {
-  return <span className="tx-odds" aria-hidden="true">{Array.from({ length: 10 }, (_, i) => <i key={i} className={i < v ? `is-${v >= 7 ? 'hi' : v >= 4 ? 'mid' : 'lo'}` : ''} style={{ animationDelay: `${i * 30}ms` }} />)}<b>{v * 10}%</b></span>
-}
-
-function Spark({ v }: { v: number[] }) {
-  const max = Math.max(...v)
-  return <span className="tx-spk" aria-hidden="true">{v.map((h, i) => <i key={i} style={{ height: `${(h / max) * 100}%`, animationDelay: `${i * 40}ms` }} />)}</span>
 }
 
 function CellView({ c }: { c: Cell }) {
