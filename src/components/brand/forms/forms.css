@@ -120,3 +120,4 @@
 .vs-goals-options--tight .vs-goal { padding: 12px 14px; }
 .vs-check-row { display: flex; align-items: flex-start; gap: 10px; color: var(--vs-ink-2); font-size: 14px; line-height: 1.45; }
 .vs-field-message--on { max-height: none; padding-top: 8px; }
+.vs-field-hint { margin: 6px 4px 0; color: var(--vs-mute); font-size: 13px; line-height: 1.4; }

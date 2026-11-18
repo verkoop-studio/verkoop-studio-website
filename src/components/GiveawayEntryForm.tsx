@@ -1,4 +1,12 @@
+import { motion, useReducedMotion } from 'motion/react'
 import { useRef, useState, type FormEvent } from 'react'
+import SuccessCheck from './brand/SuccessCheck'
+import Burst from './brand/forms/Burst'
+import Field from './brand/forms/Field'
+import FieldError from './brand/forms/FieldError'
+import FormProgress from './brand/forms/FormProgress'
+import SubmitButton from './brand/forms/SubmitButton'
+import { formatPhone, validEmail, validName, validPhone } from './brand/forms/validate'
 import { Link } from 'react-router-dom'
 import { captureAttribution, getGa4Context, trackEvent, trackLeadConversion } from '../lib/analytics'
 import { useInView } from '../lib/useInView'
@@ -74,6 +82,7 @@ const initialState: FormState = { naam: '', bedrijf: '', email: '', telefoon: ''
 export default function GiveawayEntryForm({ id = giveaway.formId }: { id?: string }) {
   const { lang } = useLang()
   const t = COPY[lang]
+  const reduce = useReducedMotion()
   const [values, setValues] = useState<FormState>(initialState)
   const [consent, setConsent] = useState(false)
   const [errors, setErrors] = useState<Partial<Record<keyof FormState | 'consent', string>>>({})
@@ -149,93 +158,83 @@ export default function GiveawayEntryForm({ id = giveaway.formId }: { id?: strin
     }
   }
 
+  const required = {
+    naam: validName(values.naam),
+    bedrijf: values.bedrijf.trim().length > 0,
+    email: validEmail(values.email),
+    telefoon: validPhone(values.telefoon),
+    motivatie: values.motivatie.trim().length > 0,
+    consent,
+  }
+  const done = Object.values(required).filter(Boolean).length
+  const total = Object.keys(required).length
+  const attempted = Object.keys(errors).length > 0
+
   if (status === 'done') {
     return (
-      <div ref={ref} className="rounded-2xl border border-line bg-surface p-8 text-center reveal sm:p-12">
-        <p className="font-display text-2xl text-paper text-balance">{t.doneTitle}</p>
-        <p className="mx-auto mt-3 max-w-md text-bone" role="status">{t.doneBody}</p>
-      </div>
+      <motion.div
+        ref={ref}
+        className="hero-request vs-form-success vs-qform-done"
+        initial={reduce ? false : { rotateX: -70, opacity: 0, y: 10 }}
+        animate={{ rotateX: 0, opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 160, damping: 18 }}
+      >
+        <Burst />
+        <SuccessCheck />
+        <h2>{t.doneTitle}</h2>
+        <p role="status">{t.doneBody}</p>
+      </motion.div>
     )
   }
 
   const busy = status === 'submitting'
 
   return (
-    <div ref={ref} id={id} className="rounded-2xl border border-line bg-surface p-6 reveal sm:p-10">
-      <form onSubmit={handleSubmit} noValidate aria-busy={busy} data-clarity-mask="true" className="grid gap-5 sm:grid-cols-2">
-        <Field label={t.naam} htmlFor={`${id}-naam`} error={errors.naam}>
-          <input id={`${id}-naam`} className="input" autoComplete="name" maxLength={200} disabled={busy}
-            value={values.naam} onChange={e => update('naam', e.target.value)} aria-invalid={Boolean(errors.naam)} />
-        </Field>
-        <Field label={t.bedrijf} htmlFor={`${id}-bedrijf`} error={errors.bedrijf}>
-          <input id={`${id}-bedrijf`} className="input" autoComplete="organization" maxLength={200} disabled={busy}
-            value={values.bedrijf} onChange={e => update('bedrijf', e.target.value)} aria-invalid={Boolean(errors.bedrijf)} />
-        </Field>
-        <Field label={t.email} htmlFor={`${id}-email`} error={errors.email}>
-          <input id={`${id}-email`} className="input" type="email" autoComplete="email" autoCapitalize="none" spellCheck={false}
-            maxLength={200} disabled={busy} placeholder={lang === 'nl' ? 'jij@bedrijf.be' : 'you@company.com'}
-            value={values.email} onChange={e => update('email', e.target.value)} aria-invalid={Boolean(errors.email)} />
-        </Field>
-        <Field label={t.telefoon} htmlFor={`${id}-telefoon`} error={errors.telefoon}>
-          <input id={`${id}-telefoon`} className="input" type="tel" autoComplete="tel" maxLength={60} disabled={busy}
-            placeholder="+32 …" value={values.telefoon} onChange={e => update('telefoon', e.target.value)} aria-invalid={Boolean(errors.telefoon)} />
-        </Field>
-        <Field label={t.website} htmlFor={`${id}-website`} hint={t.websiteHint} full>
-          <input id={`${id}-website`} className="input" inputMode="url" autoCapitalize="none" spellCheck={false}
-            maxLength={300} disabled={busy} placeholder="https://"
-            value={values.website} onChange={e => update('website', e.target.value)} />
-        </Field>
-        <Field label={t.motivatie} htmlFor={`${id}-motivatie`} hint={t.motivatieHint} error={errors.motivatie} full>
-          <textarea id={`${id}-motivatie`} className="input" rows={4} maxLength={2000} disabled={busy}
-            value={values.motivatie} onChange={e => update('motivatie', e.target.value)} aria-invalid={Boolean(errors.motivatie)} />
-        </Field>
+    <div ref={ref} id={id} className="hero-request vs-qform">
+      <form onSubmit={handleSubmit} noValidate aria-busy={busy} data-clarity-mask="true">
+        <FormProgress done={done} total={total} lang={lang} />
+        <div className="vs-qform-grid">
+          <Field name="naam" label={t.naam} autoComplete="name" disabled={busy} value={values.naam} onValueChange={(v) => update('naam', v)}
+            validate={validName} message={t.errors.naam} showError={attempted} />
+          <Field name="bedrijf" label={t.bedrijf} autoComplete="organization" disabled={busy} value={values.bedrijf} onValueChange={(v) => update('bedrijf', v)}
+            message={t.errors.bedrijf} showError={attempted} />
+          <Field name="email" type="email" inputMode="email" label={t.email} autoComplete="email" disabled={busy} value={values.email} onValueChange={(v) => update('email', v)}
+            validate={validEmail} message={lang === 'nl' ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'} showError={attempted} />
+          <Field name="telefoon" type="tel" inputMode="tel" label={t.telefoon} autoComplete="tel" maxLength={60} prefix="BE" format={formatPhone} disabled={busy}
+            value={values.telefoon} onValueChange={(v) => update('telefoon', v)} validate={validPhone}
+            message={lang === 'nl' ? 'Vul een telefoonnummer in, bijvoorbeeld 0470 12 34 56.' : 'Enter a phone number, for example 0470 12 34 56.'} showError={attempted} />
+          <div className="vs-qform-wide">
+            <Field name="website" inputMode="url" label={t.website} maxLength={300} required={false} disabled={busy}
+              value={values.website} onValueChange={(v) => update('website', v)} />
+            <p className="vs-field-hint">{t.websiteHint}</p>
+          </div>
+        </div>
+        <div>
+          <Field name="motivatie" multiline rows={4} label={t.motivatie} maxLength={2000} disabled={busy}
+            value={values.motivatie} onValueChange={(v) => update('motivatie', v)} message={t.errors.motivatie} showError={attempted} />
+          <p className="vs-field-hint">{t.motivatieHint}</p>
+        </div>
 
-        <div className="sm:col-span-2">
-          <label className="flex items-start gap-3 text-sm text-bone">
-            <input type="checkbox" className="mt-1 size-4 shrink-0 accent-accent" checked={consent} disabled={busy}
-              onChange={e => setConsent(e.target.checked)} aria-invalid={Boolean(errors.consent)} />
+        <div>
+          <label className="vs-check-box vs-check-row" data-checked={consent || undefined}>
+            <input type="checkbox" checked={consent} disabled={busy} onChange={e => setConsent(e.target.checked)} aria-invalid={Boolean(errors.consent)} />
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="5" /><path d="M5.5 10.5 8.5 13.5 14.5 6.5" pathLength={1} /></svg>
             <span>{t.consent}</span>
           </label>
-          {errors.consent && <p className="mt-2 text-sm text-accent-2" role="alert">{errors.consent}</p>}
-          <p className="mt-3 text-xs text-mute">
-            <a href="#voorwaarden">{t.rulesLink}</a>
-            {' · '}
-            <Link to="/privacy">{t.privacy}</Link>
-          </p>
+          {errors.consent && <FieldError>{errors.consent}</FieldError>}
+          <p className="hero-request-note"><a href="#voorwaarden">{t.rulesLink}</a>{' · '}<Link to="/privacy">{t.privacy}</Link></p>
         </div>
 
         {/* Honeypot: hidden from users, visible to bots. */}
-        <div aria-hidden className="hidden">
+        <div aria-hidden className="hero-request-trap">
           <label htmlFor={`${id}-company_website`}>Company website</label>
           <input id={`${id}-company_website`} type="text" tabIndex={-1} autoComplete="off"
             onChange={e => { honeypotRef.current = e.target.value }} />
         </div>
 
-        <div className="sm:col-span-2 pt-2">
-          <button type="submit" className="button-dark" disabled={busy}>
-            {busy ? t.submitting : <>{t.submit} <span aria-hidden="true">↗</span></>}
-          </button>
-          {sendError && <p className="mt-3 text-sm text-rose-400" role="alert">{t.sendError}</p>}
-        </div>
+        {sendError && <p className="hero-request-error" role="alert">{t.sendError}</p>}
+        <SubmitButton state={busy ? 'pending' : done === total ? 'ready' : 'locked'} label={t.submit} pendingLabel={t.submitting} />
       </form>
-    </div>
-  )
-}
-
-function Field({ label, htmlFor, hint, error, full, children }: {
-  label: string
-  htmlFor: string
-  hint?: string
-  error?: string
-  full?: boolean
-  children: React.ReactNode
-}) {
-  return (
-    <div className={full ? 'sm:col-span-2' : undefined}>
-      <label htmlFor={htmlFor} className="mb-1.5 block text-sm text-bone">{label}</label>
-      {hint && <p className="mb-1.5 text-xs text-mute">{hint}</p>}
-      {children}
-      {error && <p className="mt-1 text-sm text-accent-2" role="alert">{error}</p>}
     </div>
   )
 }
