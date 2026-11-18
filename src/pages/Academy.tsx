@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import FaqFolder from '../components/brand/FaqFolder'
 import AcademySignup from '../components/AcademySignup'
-import AcademyCapturePopup from '../components/AcademyCapturePopup'
 import { recordAcademyPopup } from '../lib/academy-popup'
 import BrandMark from '../components/BrandMark'
 import ResponsiveImage from '../components/ResponsiveImage'
@@ -50,11 +49,12 @@ function useReveal(lang: string) {
           seen.current.add(element)
           if (typeof element.animate !== 'function') return
           const siblings = Array.from(element.parentElement?.children ?? []).filter(child => targets.includes(child as HTMLElement))
-          const delay = Math.min(Math.max(siblings.indexOf(element), 0), 4) * 55
+          const delay = Math.min(Math.max(siblings.indexOf(element), 0), 4) * 40
+          // Starts readable, so a frame caught mid-reveal still reads.
           const animation = element.animate([
-            { opacity: 0, transform: 'translateY(20px)' },
+            { opacity: 0.35, transform: 'translateY(12px)' },
             { opacity: 1, transform: 'translateY(0)' },
-          ], { duration: 650, delay, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' })
+          ], { duration: 420, delay, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' })
           animations.add(animation)
           animation.onfinish = () => { animations.delete(animation) }
         })
@@ -194,8 +194,6 @@ export default function Academy() {
   const [slide, setSlide] = useState(0)
   const [testId, setTestId] = useState(academyTests[0].id)
   const [signedUp, setSignedUp] = useState<{ naam: string; via: string } | null>(null)
-  const [popupVisible, setPopupVisible] = useState(false)
-  const [popupSuppressed, setPopupSuppressed] = useState(false)
   const [sticky, setSticky] = useState(false)
   const [stickyArmed, setStickyArmed] = useState(false)
   const topic = academyModules[slide]
@@ -239,8 +237,6 @@ export default function Academy() {
   }
 
   function goToSignup() {
-    recordAcademyPopup()
-    setPopupSuppressed(true)
     scrollToId('academy-hero-signup', signedUp ? undefined : '#academy-hero-signup input[name="naam"]')
   }
 
@@ -475,9 +471,9 @@ export default function Academy() {
       </section>
     </main>
 
-    <AcademyCapturePopup completed={!!signedUp} suppressed={popupSuppressed} onVisibilityChange={setPopupVisible} />
+    {/* No newsletter pop-up here: this page is the sign-up itself. */}
 
-    {!signedUp && !popupVisible && stickyArmed && <div className={`ac-sticky ${sticky ? 'is-visible' : ''}`} aria-hidden={!sticky}>
+    {!signedUp && stickyArmed && <div className={`ac-sticky ${sticky ? 'is-visible' : ''}`} aria-hidden={!sticky}>
       <button className="ac-button" tabIndex={sticky ? 0 : -1} onClick={goToSignup}>{t('Vraag je gratis les aan')}</button>
     </div>}
 
