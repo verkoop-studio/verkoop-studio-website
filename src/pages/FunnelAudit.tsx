@@ -10,6 +10,7 @@ import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
 import { Win } from '../components/service/ServiceScreens'
+import { AUDIT_SCOPE } from '../data/audit'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
@@ -24,7 +25,7 @@ const COPY = {
     cta: 'Bespreek je project',
     win: 'Groeianalyse',
     scopeLabel: 'De analyse bekijkt',
-    scope: ['Website structuur', 'Campagne-landingspagina’s', 'Meta Ads', 'Google Ads', 'Ecommerce-klantreis', 'Checkout-flow', 'Leadflow', 'Boekingsflow', 'E-mailopvolging', 'Tracking', 'Kansen voor AI-automatisering'],
+    scope: AUDIT_SCOPE.nl,
     deliverablesLabel: 'Mogelijke opleverpunten',
     deliverables: ['Belangrijkste conversieproblemen', 'Screenshots en observaties', 'Geprioriteerde aanbevelingen', 'Voorgestelde nieuwe funnel', 'Voorgestelde landingspagina’s', 'Trackinghiaten', 'Automatiseringskansen', 'Aanbevolen vervolgstappen'],
     packagesNote: 'De opstart die hieruit volgt zit altijd inbegrepen in een groeipakket.',
@@ -43,7 +44,7 @@ const COPY = {
     cta: 'Discuss your project',
     win: 'Growth analysis',
     scopeLabel: 'The analysis reviews',
-    scope: ['Website structure', 'Campaign landing pages', 'Meta Ads', 'Google Ads', 'Ecommerce journey', 'Checkout flow', 'Lead flow', 'Booking flow', 'Email follow-up', 'Tracking', 'Opportunities for AI automation'],
+    scope: AUDIT_SCOPE.en,
     deliverablesLabel: 'Possible deliverables',
     deliverables: ['Key conversion problems', 'Screenshots and observations', 'Prioritised recommendations', 'Proposed new funnel', 'Suggested landing pages', 'Tracking gaps', 'Automation opportunities', 'Recommended next steps'],
     packagesNote: 'The setup that follows from this is always included in a growth package.',

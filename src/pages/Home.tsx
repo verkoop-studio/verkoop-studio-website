@@ -8,7 +8,7 @@ import ServicesList from '../components/home/ServicesList'
 import SoftwareShowcase from '../components/home/SoftwareShowcase'
 import RunItSplit from '../components/home/RunItSplit'
 import PainsBlock from '../components/home/PainsBlock'
-import StartSteps from '../components/home/StartSteps'
+import StartTour from '../components/home/StartTour'
 import WorksWith from '../components/brand/WorksWith'
 import { NoteCard, Ribbon } from '../components/brand/Playful'
 
@@ -49,7 +49,7 @@ export default function Home() {
       <RunItSplit />
       <WorksWith lang={lang} platforms={['meta', 'google', 'ga4', 'gtm', 'looker', 'tiktok', 'shopify', 'klaviyo', 'mailchimp', 'navigator']} />
       <PlansSection />
-      <StartSteps />
+      <StartTour />
       <section className="vs-wrap vs-section vs-note-wrap" aria-label={lang === 'nl' ? 'Een woordje van Stef' : 'A note from Stef'}>
         <NoteCard lines={NOTE[lang]} sign="Stef" />
       </section>
