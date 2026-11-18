@@ -41,7 +41,11 @@ export default function HeroRequestForm({ kind, onSuccess }: { kind: 'plan' | 'l
     const telefoon = String(data.get('telefoon') || '').trim()
     if (!naam || !telefoon || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setAttempted(true)
-      setError(nl ? 'Vul je naam, een geldig e-mailadres en je telefoonnummer in.' : 'Enter your name, a valid email address and your phone number.'); return
+      // Each field shows what to fix; the summary stays one line and focus goes to the first field to fix.
+      setError(nl ? 'Vul de drie velden in om verder te gaan.' : 'Fill in the three fields to continue.')
+      const first = FIELDS.find((name) => !valid[name])
+      if (first) event.currentTarget.querySelector<HTMLInputElement>(`input[name="${first}"]`)?.focus()
+      return
     }
     pending.current = true; setStatus('pending'); setError('')
     try {

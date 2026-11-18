@@ -113,26 +113,35 @@ export default function Field({
       animate={shake && invalid && !reduce ? { x: [0, -8, 8, -6, 6, -2, 0] } : undefined}
       transition={{ duration: 0.42 }}
     >
-      <svg className="vs-field-ring" aria-hidden="true" preserveAspectRatio="none">
-        <rect x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="13" pathLength={1} />
-      </svg>
-      {prefix && <span className="vs-field-prefix" aria-hidden="true">{prefix}</span>}
-      {multiline
-        ? <textarea {...shared} rows={rows} />
-        : <input
-            {...shared}
-            type={type}
-            autoComplete={autoComplete}
-            autoCapitalize={type === 'email' || inputMode === 'url' ? 'none' : undefined}
-            spellCheck={type === 'email' || inputMode === 'url' ? false : undefined}
-            inputMode={inputMode}
-            onKeyDown={onKeyDown}
-          />}
-      <label htmlFor={id}>{label}</label>
-      <svg className="vs-field-tick" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-        <path d="M3.5 9.5 7.5 13.5 14.5 5" pathLength={1} />
-      </svg>
-      <p id={messageId} className="vs-field-message" aria-live="polite">{invalid ? message : ''}</p>
+      <div className="vs-field-box">
+        <svg className="vs-field-ring" aria-hidden="true" preserveAspectRatio="none">
+          <rect x="1" y="1" width="calc(100% - 2px)" height="calc(100% - 2px)" rx="13" pathLength={1} />
+        </svg>
+        {prefix && <span className="vs-field-prefix" aria-hidden="true">{prefix}</span>}
+        {multiline
+          ? <textarea {...shared} rows={rows} />
+          : <input
+              {...shared}
+              type={type}
+              autoComplete={autoComplete}
+              autoCapitalize={type === 'email' || inputMode === 'url' ? 'none' : undefined}
+              spellCheck={type === 'email' || inputMode === 'url' ? false : undefined}
+              inputMode={inputMode}
+              onKeyDown={onKeyDown}
+            />}
+        <label htmlFor={id}>{label}</label>
+        <svg className="vs-field-tick" width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+          <path d="M3.5 9.5 7.5 13.5 14.5 5" pathLength={1} />
+        </svg>
+      </div>
+      <p id={messageId} className="vs-field-message" aria-live="polite">
+        {invalid && message && (
+          <>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="6.25" stroke="currentColor" strokeWidth="1.5" /><path d="M7 3.8v3.6M7 9.6v.1" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" /></svg>
+            {message}
+          </>
+        )}
+      </p>
     </motion.div>
   )
 }

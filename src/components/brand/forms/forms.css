@@ -9,9 +9,10 @@
 .hero-request-error { margin: 0; padding: 10px 12px; border-radius: 10px; background: #fff1ec; color: #8a2a12; font-size: 14px; animation: vs-drop 0.3s var(--vs-ease) both; }
 
 /* Field: floating label, border drawn from the corner, tick, message. */
-.vs-field { position: relative; isolation: isolate; border-radius: 14px; background: var(--vs-paper); }
-.vs-field::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; background: radial-gradient(180px circle at var(--mx, 50%) var(--my, 50%), rgb(43 75 242 / 0.12), transparent 70%); }
-.vs-field[data-focus]::before { opacity: 1; }
+.vs-field { position: relative; }
+.vs-field-box { position: relative; isolation: isolate; border-radius: 14px; background: var(--vs-paper); }
+.vs-field-box::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity 0.3s ease; background: radial-gradient(180px circle at var(--mx, 50%) var(--my, 50%), rgb(43 75 242 / 0.12), transparent 70%); }
+.vs-field[data-focus] .vs-field-box::before { opacity: 1; }
 .vs-field input { display: block; width: 100%; box-sizing: border-box; min-height: 58px; padding: 24px 44px 8px 16px; border: 1px solid var(--vs-line); border-radius: 14px; background: transparent; color: var(--vs-ink); font: 500 16px/1.2 var(--font-sans); outline: none; transition: border-color 0.25s ease; }
 .vs-field[data-prefix] input { padding-left: 64px; }
 .vs-field input:disabled { opacity: 0.6; }
@@ -23,12 +24,13 @@
 .vs-field[data-focus] .vs-field-ring rect { stroke-dashoffset: 0; }
 .vs-field[data-focus] input { border-color: transparent; }
 .vs-field[data-invalid] .vs-field-ring rect { stroke: #d2421c; stroke-dashoffset: 0; }
-.vs-field-prefix { position: absolute; left: 10px; top: 50%; translate: 0 -50%; padding: 5px 8px; border-radius: 8px; background: var(--vs-stone); color: var(--vs-ink-2); font-size: 13px; font-weight: 600; }
+.vs-field-prefix { position: absolute; left: 10px; top: 50%; translate: 0 -50%; line-height: 1; padding: 5px 8px; border-radius: 8px; background: var(--vs-stone); color: var(--vs-ink-2); font-size: 13px; font-weight: 600; }
 .vs-field-tick { position: absolute; right: 16px; top: 20px; color: #1f9d55; }
 .vs-field-tick path { stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.4s var(--vs-ease); }
 .vs-field[data-valid] .vs-field-tick path { stroke-dashoffset: 0; }
-.vs-field-message { margin: 0; padding: 0 4px; max-height: 0; overflow: hidden; color: #a33414; font-size: 13px; line-height: 1.4; transition: max-height 0.3s var(--vs-ease), padding 0.3s var(--vs-ease); }
-.vs-field[data-invalid] .vs-field-message { max-height: 3em; padding-top: 6px; }
+.vs-field-message { display: flex; align-items: flex-start; gap: 6px; margin: 0; padding: 0 4px; max-height: 0; overflow: hidden; color: #a33414; font-size: 13px; line-height: 1.4; transition: max-height 0.3s var(--vs-ease), padding 0.3s var(--vs-ease); }
+.vs-field-message svg { flex: none; margin-top: 2px; }
+.vs-field[data-invalid] .vs-field-message { max-height: 4em; padding-top: 8px; }
 
 /* Progress */
 .vs-form-progress { display: flex; align-items: center; gap: 10px; color: var(--vs-mute); font-size: 13px; }
@@ -37,7 +39,8 @@
 
 /* Submit */
 .vs-submit { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 54px; margin-top: 4px; padding: 6px 6px 6px 22px; border: 0; border-radius: 999px; background: var(--vs-ink); color: var(--vs-paper); font: 600 15px/1 var(--font-sans); cursor: pointer; transition: background 0.3s ease, opacity 0.3s ease, max-width 0.45s var(--vs-ease), padding 0.45s var(--vs-ease); max-width: 100%; }
-.vs-submit[data-state='locked'] { opacity: 0.45; cursor: not-allowed; }
+.vs-submit[data-state='locked'] { background: var(--vs-paper); color: var(--vs-mute); box-shadow: inset 0 0 0 1px var(--vs-line); cursor: not-allowed; }
+.vs-submit[data-state='locked'] .vs-submit-icon { background: var(--vs-stone); color: var(--vs-mute); }
 .vs-submit[data-state='ready']:hover { background: var(--vs-blue); }
 .vs-submit[data-state='pending'] { max-width: 54px; padding: 6px; margin-inline: auto; }
 .vs-submit[data-state='pending'] .vs-submit-label { display: none; }
