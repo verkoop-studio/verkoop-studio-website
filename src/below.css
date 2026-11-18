@@ -643,11 +643,19 @@
 .vs-band-wave-fill { fill: var(--vs-blue); }
 .vs-band-wave-line { fill: none; stroke: #ffd23f; stroke-width: 3; stroke-linecap: round; vector-effect: non-scaling-stroke; }
 .vs-band-inner { display: grid; gap: 28px; }
-.vs-band-title { margin: 0; font: 600 clamp(56px, 11vw, 176px)/0.9 var(--font-display); letter-spacing: -0.055em; color: var(--vs-paper); }
+.vs-band-title { margin: 0; padding-bottom: 0.06em; font: 600 clamp(56px, 11vw, 176px)/0.9 var(--font-display); letter-spacing: -0.055em; background: linear-gradient(100deg, var(--vs-paper) 30%, #ffd23f 75%, #ff9fd0); -webkit-background-clip: text; background-clip: text; color: transparent; }
 .vs-band-actions { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; }
 .vs-band-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; color: var(--vs-paper); font-weight: 600; text-decoration: none; border-bottom: 1.5px solid rgb(245 243 238 / 0.4); transition: border-color 0.2s ease; }
 .vs-band-link:hover { border-color: var(--vs-paper); }
 .vs-band .vs-band-note { color: var(--vs-paper); }
+.vs-band-ask { margin: -10px 0 0; color: rgb(245 243 238 / 0.82); font: 500 clamp(20px, 2vw, 28px)/1.2 var(--font-display); letter-spacing: -0.02em; }
+.vs-band-cross { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; max-width: 620px; margin-top: 8px; padding: 16px 18px 16px 22px; border-radius: 20px; background: rgb(255 255 255 / 0.1); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); color: var(--vs-paper); text-decoration: none; transition: background-color 0.3s, translate 0.35s var(--vs-ease); }
+.vs-band-cross b { font-weight: 700; }
+.vs-band-cross-go { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 99px; background: var(--vs-paper); color: var(--vs-blue); font-weight: 600; font-size: 14.5px; }
+.vs-band-cross:hover, .vs-band-cross:focus-visible { background: rgb(255 255 255 / 0.16); translate: 0 -2px; }
+.vs-band-cross:active { scale: 0.99; }
+.vs-band-cross:focus-visible { outline: 2px solid var(--vs-paper); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { .vs-band-cross { transition: none; } .vs-band-cross:hover { translate: none; } }
 
 /* Footer: a bento of cards on the dark ground, quiet link columns, the wordmark and one base row. */
 .vs-footer { position: relative; overflow: hidden; background: var(--vs-ink); color: #e9e6df; }

@@ -20,7 +20,7 @@ import { EASE } from './brand/motion'
 
 const COPY = {
   nl: {
-    band: 'Laten we groeien.', bandCta: 'Plan een gesprek', bandNote: 'we antwoorden snel :)',
+    band: 'Laten we groeien.', bandCta: 'Plan een gesprek', bandNote: 'we antwoorden snel :)', bandAsk: 'Vraag over je groei?', crossLead: 'Liever zelf doen?', crossFact: 'Gratis tot 500 leads', crossCta: 'Start je CRM',
     newsTitle: 'Advertentietips in je inbox.', newsBody: 'Praktische tips over Meta Ads, Google Ads en opschalen.', newsNote: 'Uitschrijven kan altijd, met één klik.',
     software: 'Software', crm: 'Gratis tot 500 leads', perf: 'Vanaf €49 per maand',
     contact: 'Contact', reply: 'Antwoord binnen 24 uur', where: 'Lochristi, België',
@@ -30,7 +30,7 @@ const COPY = {
     hand: 'gebouwd in Lochristi, met veel koffie :)', entity: 'TanguyDeBee BV · BE 1002.613.972', lang: 'Taal',
   },
   en: {
-    band: 'Let’s grow.', bandCta: 'Plan a call', bandNote: 'we reply fast :)',
+    band: 'Let’s grow.', bandCta: 'Plan a call', bandNote: 'we reply fast :)', bandAsk: 'A question about growth?', crossLead: 'Rather run it yourself?', crossFact: 'Free up to 500 leads', crossCta: 'Start your CRM',
     newsTitle: 'Ad tips in your inbox.', newsBody: 'Practical tips on Meta Ads, Google Ads and scaling.', newsNote: 'Unsubscribe any time, in one click.',
     software: 'Software', crm: 'Free up to 500 leads', perf: 'From €49 a month',
     contact: 'Contact', reply: 'Reply within 24 hours', where: 'Lochristi, Belgium',
@@ -98,11 +98,16 @@ function CtaBand({ home }: { home: boolean }) {
       <Ribbon className="vs-band-ribbon" />
       <div className="vs-wrap vs-band-inner">
         <h2 id="band-title" className="vs-band-title">{t.band}</h2>
+        <p className="vs-band-ask">{t.bandAsk}</p>
         <div className="vs-band-actions">
           <Cta to="/contact" variant="paper" onClick={() => trackEvent('audit_cta_clicked', { placement })}>{t.bandCta}</Cta>
           <a className="vs-band-link" href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement })}><MessageCircle size={17} aria-hidden="true" />WhatsApp</a>
           <HandNote point="up-left" className="vs-band-note">{t.bandNote}</HandNote>
         </div>
+        <Link to="/crm" className="vs-band-cross">
+          <span><b>{t.crossLead}</b> {t.crossFact}</span>
+          <span className="vs-band-cross-go">{t.crossCta}<Arrow size={15} /></span>
+        </Link>
       </div>
     </section>
   )

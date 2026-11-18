@@ -1,5 +1,5 @@
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { useRef } from 'react'
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { caseHeadline, cases } from '../../data/cases'
 import { useLang } from '../../i18n/LanguageContext'
@@ -13,6 +13,33 @@ import RollingNumber from '../brand/RollingNumber'
 import TextLink from '../brand/TextLink'
 import SplitHeadline, { type HeadlinePart } from '../brand/SplitHeadline'
 import { EASE } from '../brand/motion'
+
+/** Sample notices from the teardown's screens, swapping every few seconds beside the real figure. */
+const NOTICES = {
+  nl: { sample: 'Voorbeeld', now: 'zojuist', items: [['Nieuwe lead in je CRM', 'via Facebook-advertentie'], ['Formulier verstuurd', 'Sarah P. · via Meta'], ['Aankoop · € 84', 'via Google']] },
+  en: { sample: 'Sample', now: 'just now', items: [['New lead in your CRM', 'from a Facebook ad'], ['Form sent', 'Sarah P. · via Meta'], ['Purchase · € 84', 'via Google']] },
+}
+
+function HeroNotice({ lang }: { lang: 'nl' | 'en' }) {
+  const reduce = useReducedMotion()
+  const [n, setN] = useState(0)
+  useEffect(() => {
+    if (reduce) return
+    const id = window.setInterval(() => setN((x) => x + 1), 5000)
+    return () => window.clearInterval(id)
+  }, [reduce])
+  const t = NOTICES[lang]
+  const [title, sub] = t.items[n % t.items.length]
+  return (
+    <div className="vs-hero-notice" aria-hidden="true">
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.p key={n} initial={{ opacity: 0, y: -14, scale: 0.94 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 10, scale: 0.96 }} transition={{ type: 'spring', stiffness: 260, damping: 22 }}>
+          <span className="vs-hero-notice-dot" /><b>{title}<em>{sub} · {t.now}</em></b><small>{t.sample}</small>
+        </motion.p>
+      </AnimatePresence>
+    </div>
+  )
+}
 
 const COPY = {
   nl: {
@@ -136,6 +163,7 @@ export default function HomeHero() {
           >
             <HandNote point="down-left" className="vs-hero-proof-note">{t.proofNote}</HandNote>
             <span className="vs-hero-watcher"><Watcher shape="Ball" size={64} within=".vs-hero" /></span>
+            <HeroNotice lang={lang} />
             <div className="tx-win vs-proof-win">
               <div className="tx-win-bar"><i /><i /><i /><b>{t.proofTitle}</b><em>{t.proofChip}</em></div>
               <div className="vs-proof-body">
