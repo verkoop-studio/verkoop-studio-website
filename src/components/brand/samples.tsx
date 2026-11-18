@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
-import { useEffect, useState } from 'react'
 import type { Lang } from '../../data/types'
+import { COMPANY, DEALS, PEOPLE, SOURCE, type Deal } from '../../data/samples'
+import { useBeat } from '../../lib/useBeat'
 import BotAvatar from './BotAvatar'
 
 /*
@@ -12,35 +13,6 @@ import BotAvatar from './BotAvatar'
 /** A number with its own prefix and suffix, in tabular figures. */
 export function Num({ pre = '', v, suf = '' }: { pre?: string; v: string; suf?: string }) {
   return <span className="tx-num">{pre && <small>{pre}</small>}{v}{suf && <small>{suf}</small>}</span>
-}
-
-/** A small, steady beat while `on`, for the screens that play out on a loop. Stands still with reduced motion. */
-export function useBeat(on: boolean, ms: number) {
-  const [n, setN] = useState(0)
-  useEffect(() => {
-    if (!on || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
-    const id = window.setInterval(() => setN((x) => x + 1), ms)
-    return () => window.clearInterval(id)
-  }, [on, ms])
-  return n
-}
-
-/** Each sample person is a small character: shape and colour. */
-export const PEOPLE: Record<string, [string, string]> = { SP: ['mug', '#ff9fd0'], TD: ['controller', '#7d93ff'], LV: ['sprout', '#c9f26a'], JM: ['lightbulb', '#ffd23f'], EC: ['chat', '#ff7a59'] }
-
-export const SOURCE: Record<string, string> = { Meta: '#1877f2', Facebook: '#1877f2', Google: '#ea4335', Website: '#111110', TikTok: '#111110' }
-
-/** The sample deals: initials, name, value, source, when to call. */
-export type Deal = [string, string, string, string, string]
-export const DEALS: Record<Lang, Deal[]> = {
-  nl: [['SP', 'Sarah Peeters', '€ 2.400', 'Facebook', 'vandaag'], ['TD', 'Tom De Wit', '€ 1.800', 'Google', 'morgen'], ['LV', 'Lien Vos', '€ 3.100', 'Website', 'do'], ['JM', 'Jonas Maes', '€ 4.500', 'Facebook', 'vr'], ['EC', 'Eva Claes', '€ 5.100', 'Google', 'ma']],
-  en: [['SP', 'Sarah Peeters', '€ 2,400', 'Facebook', 'today'], ['TD', 'Tom De Wit', '€ 1,800', 'Google', 'tomorrow'], ['LV', 'Lien Vos', '€ 3,100', 'Website', 'Thu'], ['JM', 'Jonas Maes', '€ 4,500', 'Facebook', 'Fri'], ['EC', 'Eva Claes', '€ 5,100', 'Google', 'Mon']],
-}
-
-/** The company behind each sample lead, as in the teardown's lead table. */
-export const COMPANY: Record<Lang, Record<string, string>> = {
-  nl: { SP: 'Bakkerij', TD: 'Garage', LV: 'Tuinen', JM: 'Bouw', EC: 'Kliniek' },
-  en: { SP: 'Bakery', TD: 'Garage', LV: 'Gardens', JM: 'Building', EC: 'Clinic' },
 }
 
 /** Ten small blocks, red to green; the share that is lit is the odds. */

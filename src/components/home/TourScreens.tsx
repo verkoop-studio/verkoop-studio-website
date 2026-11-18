@@ -4,7 +4,8 @@ import pinacelloPage from '../../assets/cases/pinacello-640.webp'
 import { AUDIT_SCOPE } from '../../data/audit'
 import { PAINS } from '../../data/pains'
 import type { Lang } from '../../data/types'
-import { Pointer, Ticker, Typed, useHoverPause, usePhase } from '../brand/demo'
+import { useHoverPause, usePhase } from '../../lib/demo'
+import { Pointer, Ticker, Typed } from '../brand/demo'
 
 /** Words inside the sample screens, taken from the teardown and the service pages. */
 const UI = {
@@ -179,4 +180,3 @@ export function GrowScreen({ lang, on }: ScreenProps) {
   )
 }
 
-export const SCREENS = [AuditScreen, PrioScreen, FunnelScreen, LaunchScreen, GrowScreen]

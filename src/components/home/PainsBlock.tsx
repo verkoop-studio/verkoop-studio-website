@@ -3,9 +3,9 @@ import { useRef, type CSSProperties } from 'react'
 import { PAINS } from '../../data/pains'
 import type { Lang } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
+import { useBeat } from '../../lib/useBeat'
 import { Pointer, Ticker } from '../brand/demo'
 import Reveal from '../brand/Reveal'
-import { useBeat } from '../brand/samples'
 import Tilted from '../product/Tilted'
 
 /** Words inside the small scenes; the names come from the teardown's sample tables. */

@@ -2,8 +2,10 @@ import { AnimatePresence, motion, useInView, useReducedMotion } from 'motion/rea
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { crmLanding } from '../../data/crmLanding'
 import type { Lang } from '../../data/types'
-import { Pointer, Ticker, useHoverPause, usePhase } from '../brand/demo'
-import { COMPANY, DEALS, Num, Person, SamplePipeline, SOURCE } from '../brand/samples'
+import { COMPANY, DEALS, SOURCE } from '../../data/samples'
+import { useHoverPause, usePhase } from '../../lib/demo'
+import { Pointer, Ticker } from '../brand/demo'
+import { Num, Person, SamplePipeline } from '../brand/samples'
 
 /** Screen words that are not in crmLanding; the people and amounts are the shared sample deals. */
 const UI = {

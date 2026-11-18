@@ -6,7 +6,9 @@ import { trackEvent } from '../../lib/analytics'
 import { useWide } from '../../lib/useWide'
 import Cta from '../brand/Cta'
 import Reveal from '../brand/Reveal'
-import { SCREENS } from './TourScreens'
+import { AuditScreen, FunnelScreen, GrowScreen, LaunchScreen, PrioScreen } from './TourScreens'
+
+const SCREENS = [AuditScreen, PrioScreen, FunnelScreen, LaunchScreen, GrowScreen]
 
 const UI = {
   nl: { title: 'Zo starten we.', cta: 'Plan een gesprek' },
