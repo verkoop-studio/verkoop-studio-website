@@ -155,3 +155,8 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
 .pp-form-box { margin-top: 36px; max-width: 760px; }
 @media (max-width: 900px) { .pp-row { grid-template-columns: 0.9fr 1fr 1fr; font-size: 14px; } .pp-problem .pp-pain:nth-child(n) { margin-left: 0; } }
 @media (prefers-reduced-motion: reduce) { .pp-claim path { stroke-dashoffset: 0; } .pp-row strong { opacity: 1; translate: none; } .pp-chart-bars i, .pp-chart-bars b { scale: 1 1; } }
+
+.pp-chart-stb { position: absolute; left: 0; bottom: 6px; z-index: 2; rotate: -3deg; filter: drop-shadow(0 22px 30px rgb(17 17 16 / 0.32)); transition: rotate 0.5s var(--vs-ease); }
+.pp-chart-stb:hover { rotate: 0deg; }
+.pp-truth { padding-bottom: 210px; }
+@media (max-width: 900px) { .pp-chart-stb { position: relative; left: auto; bottom: auto; margin: -30px 0 0 8px; } .pp-truth { padding-bottom: 20px; } }

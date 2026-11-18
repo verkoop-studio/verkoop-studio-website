@@ -7,6 +7,7 @@ import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import Tilted from '../components/product/Tilted'
+import { StackedBars } from '../components/brand/blocks/StackedBars'
 import { performance as p } from '../data/performance'
 import { trackEvent, trackLandingView } from '../lib/analytics'
 import { useLang } from '../i18n/LanguageContext'
@@ -41,7 +42,6 @@ const ROWS = [
   { name: 'Google', says: 47, sold: 31 },
   { name: 'TikTok', says: 23, sold: 15 },
 ]
-const WEEKS = [[38, 62], [44, 78], [41, 70], [52, 96], [48, 88], [56, 100]]
 
 /** Shows `to` at rest (so the page never reads 0), and counts up from 0 each time it comes into view. */
 function Count({ to, on }: { to: number; on: boolean }) {
@@ -87,10 +87,8 @@ function TruthTable({ lang }: { lang: 'nl' | 'en' }) {
           </div>
         </div>
       </div>
-      <div className="pp-chart">
-        <p>{t.spendTitle}</p>
-        <div className="pp-chart-bars">{WEEKS.map(([spend, revenue], i) => <span key={i} style={{ '--d': `${0.3 + i * 0.09}s` } as CSSProperties}><i style={{ height: `${revenue}%` }} /><b style={{ height: `${spend}%` }} /></span>)}</div>
-        <p className="pp-legend"><i />{t.revenue}<b />{t.spend}</p>
+      <div className="pp-chart-stb">
+        <StackedBars lang={lang} title={lang === 'nl' ? 'Omzet per kanaal' : 'Revenue by channel'} unit={lang === 'nl' ? 'omzet' : 'revenue'} prefix="€ " cats={['Meta', 'Google', 'TikTok', lang === 'nl' ? 'E-mail' : 'Email']} escLabel={lang === 'nl' ? 'Retouren' : 'Returns'} width={300} plotHeight={64} belowHeight={12} bars={18} />
       </div>
     </div>
   )

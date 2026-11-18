@@ -454,3 +454,64 @@
 .vs-plan li.vs-plan-off { color: var(--vs-mute); opacity: 0.6; }
 .vs-plan li.vs-plan-off svg { color: var(--vs-mute); }
 .vs-plan--dark li.vs-plan-off { color: #8f8c86; }
+
+/* Bot avatars (open-bot-avatar) */
+.vs-bot { display: inline-block; flex: none; }
+.tx-ava-bot { flex: none; }
+.tx-deal .tx-ava-bot { grid-row: span 2; }
+.tx-buddy { position: absolute; top: 34px; left: clamp(-4px, 1.2%, 10px); z-index: 3; filter: drop-shadow(0 10px 14px rgb(17 17 16 / 0.28)); rotate: 8deg; transition: rotate 0.5s var(--vs-ease), translate 0.5s var(--vs-ease); }
+.tx-card.is-on .tx-buddy { animation: tx-peek 0.7s var(--vs-ease) both; }
+.tx-card:hover .tx-buddy { rotate: -4deg; translate: 0 -6px; }
+@keyframes tx-peek { from { translate: 0 30px; rotate: 24deg; opacity: 0; } }
+.tx-card--tall .tx-stage { height: clamp(300px, 42svh, 380px); }
+.tx-dash-stb { padding: 10px 12px 52px !important; }
+.tx-dash-stb .stb { width: 100% !important; padding: 0; border-radius: 0; background: transparent; }
+
+/* Stacked bars block */
+.stb {
+  --stb-ink: var(--vs-ink); --stb-slab: #ffffff;
+  --stb-c1: #2b4bf2; --stb-c2: #7d93ff; --stb-c3: #c9f26a; --stb-c4: #ffb36b; --stb-alert: #e5484d;
+  --stb-soft: color-mix(in srgb, var(--stb-ink) 72%, var(--stb-slab)); --stb-mute: color-mix(in srgb, var(--stb-ink) 52%, var(--stb-slab)); --stb-faint: color-mix(in srgb, var(--stb-ink) 32%, var(--stb-slab));
+  --stb-w6: color-mix(in srgb, var(--stb-ink) 6%, transparent); --stb-w12: color-mix(in srgb, var(--stb-ink) 12%, transparent);
+  position: relative; display: flex; flex-direction: column; gap: 14px; padding: 16px; box-sizing: border-box; border-radius: 20px; background: var(--stb-slab); color: var(--stb-ink); font-family: var(--font-sans); font-size: 13px; user-select: none; -webkit-user-select: none;
+}
+.stb[data-colour="off"] { --stb-c1: var(--stb-ink); --stb-c2: color-mix(in srgb, var(--stb-ink) 70%, var(--stb-slab)); --stb-c3: color-mix(in srgb, var(--stb-ink) 48%, var(--stb-slab)); --stb-c4: color-mix(in srgb, var(--stb-ink) 30%, var(--stb-slab)); }
+.stb-head { display: flex; align-items: center; gap: 12px; }
+.stb-titles { flex: 1; min-width: 0; }
+.stb-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; line-height: 18px; }
+.stb-sub { font-size: 12px; color: var(--stb-mute); line-height: 16px; }
+.stb-seg-ctl { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: 2px; border-radius: 10px; background: var(--stb-w6); }
+.stb-thumb { position: absolute; top: 2px; bottom: 2px; left: 2px; width: calc(50% - 2px); border-radius: 8px; background: var(--stb-slab); box-shadow: 0 1px 2px rgb(17 17 16 / 0.12); transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1); }
+.stb-seg-ctl[data-mode="Week"] .stb-thumb { transform: translateX(100%); }
+.stb-tab { position: relative; appearance: none; border: 0; background: none; padding: 0 10px; height: 26px; font: inherit; font-size: 12px; font-weight: 500; color: var(--stb-mute); cursor: pointer; border-radius: 8px; transition: color 160ms ease, scale 160ms cubic-bezier(0.22, 1, 0.36, 1); }
+.stb-tab[data-on] { color: var(--stb-ink); }
+.stb-tab:hover:not([data-on]) { color: var(--stb-soft); }
+.stb-tab:active { scale: 0.96; }
+.stb-tab:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 0; }
+.stb-figure { display: flex; align-items: baseline; gap: 8px; margin-bottom: -4px; }
+.stb-num { font: 700 26px/30px var(--font-dots); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.stb-unit { font-size: 13px; color: var(--stb-mute); }
+.stb-digit { display: inline-block; }
+.stb-digit[data-pop] { animation: stb-pop 500ms cubic-bezier(0.34, 1.45, 0.64, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+.stb-plot { position: relative; width: 100%; touch-action: none; cursor: crosshair; }
+.stb-base { position: absolute; left: 0; right: 0; height: 1px; background: var(--stb-w12); }
+.stb-col { position: absolute; top: 0; bottom: 0; }
+.stb-bar, .stb-esc { position: absolute; left: 0; right: 0; border-radius: var(--stb-r); transition: height 600ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 14ms), bottom 600ms cubic-bezier(0.22, 1, 0.36, 1) calc(var(--i) * 14ms), background-color 160ms ease; }
+.stb-bar { background-color: var(--c); }
+.stb-esc { background-color: var(--stb-alert); }
+.stb[data-scrub] .stb-col:not([data-on]) .stb-bar { background-color: color-mix(in srgb, var(--c) 38%, var(--stb-slab)); }
+.stb[data-scrub] .stb-col:not([data-on]) .stb-esc { background-color: color-mix(in srgb, var(--stb-alert) 38%, var(--stb-slab)); }
+.stb-ring { position: absolute; top: 0; left: 0; box-sizing: border-box; border: 1.5px solid var(--stb-mute); border-radius: var(--stb-rr); pointer-events: none; opacity: 0; transition: opacity 160ms ease; }
+.stb[data-scrub] .stb-ring { opacity: 1; }
+.stb-tip { position: absolute; top: 0; left: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; border-radius: 10px; background: var(--stb-slab); border: 1px solid color-mix(in srgb, var(--stb-ink) 10%, var(--stb-slab)); box-shadow: 0 10px 20px -12px rgb(17 17 16 / 0.4); font-size: 12px; line-height: 16px; pointer-events: none; opacity: 0; transition: opacity 160ms ease; }
+.stb[data-scrub] .stb-tip { opacity: 1; }
+.stb-tip-head, .stb-tip-row { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
+.stb-tip-head { justify-content: space-between; color: var(--stb-mute); margin-bottom: 2px; }
+.stb-tip b { font-weight: 600; font-variant-numeric: tabular-nums; color: var(--stb-ink); }
+.stb-tip-row span { flex: 1; color: var(--stb-soft); }
+.stb-tip-row b { font-weight: 400; }
+.stb-tip-row i { flex: none; width: 8px; height: 8px; border-radius: 2px; background-color: var(--c); }
+.stb-tip-row[data-esc] i { background-color: var(--stb-alert); }
+.stb-axis { display: flex; justify-content: space-between; margin-top: -8px; font-size: 11px; line-height: 14px; color: var(--stb-faint); font-variant-numeric: tabular-nums; }
+@keyframes stb-pop { from { transform: translateY(0.18em); opacity: 0; filter: blur(2px); } to { transform: none; opacity: 1; filter: blur(0); } }
+@media (prefers-reduced-motion: reduce) { .stb-digit[data-pop] { animation: none; } .tx-card.is-on .tx-buddy { animation: none; } }

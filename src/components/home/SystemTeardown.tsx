@@ -4,6 +4,8 @@ import TextLink from '../brand/TextLink'
 import type { Bi, Lang } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
+import BotAvatar from '../brand/BotAvatar'
+import { StackedBars } from '../brand/blocks/StackedBars'
 import Cta from '../brand/Cta'
 import { EASE } from '../brand/motion'
 
@@ -109,6 +111,12 @@ function useBeat(on: boolean, ms: number) {
   return n
 }
 
+/** Each sample person is a small character: shape and colour. */
+const PEOPLE: Record<string, [string, string]> = { SP: ['mug', '#ff9fd0'], TD: ['controller', '#7d93ff'], LV: ['sprout', '#c9f26a'], JM: ['lightbulb', '#ffd23f'], EC: ['chat', '#ff7a59'] }
+
+/** The character that runs each part of the system. */
+const BUDDY: Record<LayerKey, [string, string]> = { ad: ['rocket', '#2b4bf2'], page: ['magnifier', '#ffd23f'], form: ['book', '#ff9fd0'], crm: ['brain', '#9be15d'], pixel: ['camera', '#7d93ff'], dashboard: ['bull', '#ff7a59'], report: ['cat', '#111110'] }
+
 const SOURCE: Record<string, string> = { Meta: '#1877f2', Facebook: '#1877f2', Google: '#ea4335', Website: '#111110', TikTok: '#111110' }
 
 /** What sits inside the app window for one layer. Flat HTML, so every word stays readable, with hover life inside. */
@@ -121,7 +129,7 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
     const a = u.ad
     return (
       <div className="tx-ad">
-        <div className="tx-post-head"><span className="tx-ava tx-ava--brand">v.</span><p><b>{a.page}</b><span>{a.meta}</span></p><i>···</i></div>
+        <div className="tx-post-head"><BotAvatar shape="verkoop" size={26} eyeColor="#ffffff" className="tx-ava-bot" /><p><b>{a.page}</b><span>{a.meta}</span></p><i>···</i></div>
         <p className="tx-post-text">{a.text}</p>
         <div className="tx-ad-img"><span className="tx-ad-mock"><i /><i /><i /></span></div>
         <div className="tx-ad-cta"><p><span>{a.site}</span><b>{a.head}</b></p><span className="tx-btn">{a.cta}</span></div>
@@ -161,7 +169,7 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
         ))}
         <p className="tx-consent"><span className="tx-box"><Tick delay={2.4} /></span>{f.consent}</p>
         <span className={`tx-btn tx-btn--ink tx-send${sent ? ' is-sent' : ''}`}>{sent ? '✓' : f.send}</span>
-        <p className={`tx-toast${sent ? ' is-on' : ''}`}><span className="tx-ava">SP</span><b>{f.toast}<em>{f.src}</em></b></p>
+        <p className={`tx-toast${sent ? ' is-on' : ''}`}><BotAvatar shape="mug" size={24} color="#ff9fd0" className="tx-ava-bot" /><b>{f.toast}<em>{f.src}</em></b></p>
       </div>
     )
   }
@@ -174,9 +182,9 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
           <div key={name} className="tx-col">
             <p className="tx-col-head" title={total}><b>{name}</b><span>{c.cards.filter((_, i) => i % 4 === col && i !== 0).length + (move === col ? 1 : 0)}</span></p>
             {c.cards.filter((_, i) => i % 4 === col && i !== 0).map(([ini, who, value, src, due]) => (
-              <span key={who} className="tx-deal"><span className="tx-ava">{ini}</span><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></span>
+              <span key={who} className="tx-deal"><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></span>
             ))}
-            {move === col && (() => { const [ini, who, value, src, due] = c.cards[0]; return <motion.span layoutId={`deal-${lang}`} className="tx-deal tx-deal--hot" transition={{ type: 'spring', stiffness: 240, damping: 24 }}><span className="tx-ava">{ini}</span><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></motion.span> })()}
+            {move === col && (() => { const [ini, who, value, src, due] = c.cards[0]; return <motion.span layoutId={`deal-${lang}`} className="tx-deal tx-deal--hot" transition={{ type: 'spring', stiffness: 240, damping: 24 }}><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></motion.span> })()}
           </div>
         ))}
         <p className="tx-meter"><span><b style={{ width: `${((38 + move) / 500) * 100 + 3}%` }} /></span><Num v={String(38 + move)} suf=" / 500" /> {c.meter}</p>
@@ -201,24 +209,17 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
     )
   }
   if (k === 'dashboard') {
-    const d = u.dashboard
+    const nl = lang === 'nl'
     return (
-      <div className="tx-dash">
-        <dl>{d.kpis.map(([label, pre, v, suf, delta]) => <div key={label}><dt>{label}<span className="tx-delta">{delta}</span></dt><dd><Num pre={pre} v={v} suf={suf} /></dd></div>)}</dl>
-        <div className="tx-channels">
-          {d.channels.map(([name, share, roas], i) => (
-            <p key={name} className="tx-ch" style={{ '--w': `${share}%`, '--d': `${0.2 + i * 0.1}s` } as CSSProperties}>
-              <span>{name}</span><i><b /></i><em>{roas}</em>
-            </p>
-          ))}
-        </div>
+      <div className="tx-dash-stb">
+        <StackedBars lang={lang} title={nl ? 'Omzet per kanaal' : 'Revenue by channel'} unit={nl ? 'omzet' : 'revenue'} prefix="€ " cats={['Meta', 'Google', 'TikTok', nl ? 'E-mail' : 'Email']} escLabel={nl ? 'Retouren' : 'Returns'} width={520} plotHeight={82} belowHeight={14} bars={24} />
       </div>
     )
   }
   const r = u.report
   return (
     <div className="tx-mail">
-      <div className="tx-post-head"><span className="tx-ava tx-ava--brand">v.</span><p><b>{r.from}</b><span>{r.to}</span></p><i>09:00</i></div>
+      <div className="tx-post-head"><BotAvatar shape="verkoop" size={26} eyeColor="#ffffff" className="tx-ava-bot" /><p><b>{r.from}</b><span>{r.to}</span></p><i>09:00</i></div>
       <ul className="tx-report">
         {r.rows.map(([dir, label, value], i) => (
           <li key={label} style={{ animationDelay: `${0.3 + i * 0.2}s` }}><span className={`tx-dir tx-dir--${dir}`}>{dir === 'up' ? '↑' : '↓'}</span>{label}<b>{value}</b></li>
@@ -238,13 +239,14 @@ function Tick({ delay = 0 }: { delay?: number }) {
 function Card({ layer, index, lang, active }: { layer: Layer; index: number; lang: Lang; active: boolean }) {
   const ui = UI[lang][layer.key]
   return (
-    <article className={`tx-card${active ? ' is-on' : ''}`} style={{ '--t': layer.tint } as CSSProperties}>
+    <article className={`tx-card${active ? ' is-on' : ''}${layer.key === 'dashboard' ? ' tx-card--tall' : ''}`} style={{ '--t': layer.tint } as CSSProperties}>
       <div className="tx-stage" aria-hidden="true">
         <div className="tx-win">
           <div className="tx-win-bar"><i /><i /><i /><b>{ui.win}</b><em>{COPY[lang].sample}</em></div>
           <Screen k={layer.key} lang={lang} on={active} />
         </div>
         <p className="tx-note"><Tick delay={0.9} />{ui.note}</p>
+        <span className="tx-buddy"><BotAvatar shape={BUDDY[layer.key][0]} color={BUDDY[layer.key][1]} eyeColor={layer.key === 'report' ? '#ffffff' : undefined} size={60} live={active} mood={active ? 'happy' : 'idle'} /></span>
       </div>
       <div className="tx-info">
         <p className="tx-step">{String(index + 1).padStart(2, '0')} / {String(LAYERS.length).padStart(2, '0')}</p>
