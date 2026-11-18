@@ -65,16 +65,6 @@ body {
   color: var(--color-accent-ink);
 }
 
-.font-display {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: -0.045em;
-}
-
-.text-balance {
-  text-wrap: balance;
-}
-
 .reveal {
   animation: var(--animate-fade-up);
 }
@@ -446,44 +436,6 @@ button:focus-visible {
   line-height: 1.6;
 }
 .closing-cta .hero-actions { justify-content: center; }
-.studio-faq-inner {
-  max-width: none;
-  padding: 72px 42px;
-}
-.studio-faq h2 {
-  max-width: 16em;
-  font-size: clamp(32px, 4vw, 48px);
-  letter-spacing: -0.045em;
-  line-height: 1.1;
-}
-.faq-item p {
-  font-size: 15px;
-  line-height: 1.6;
-  color: #4e5364;
-}
-.faq-list { margin-top: 28px; }
-.faq-item { border-bottom: 1px solid #e1e4ef; }
-.faq-item summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding: 20px 0;
-  cursor: pointer;
-  list-style: none;
-  font-size: 16px;
-  font-weight: 600;
-  color: #10131c;
-}
-.faq-item summary::-webkit-details-marker { display: none; }
-.faq-item summary > span:last-child {
-  color: #254bfa;
-  font-size: 24px;
-  font-weight: 400;
-  transition: transform 0.2s;
-}
-.faq-item[open] summary > span:last-child { transform: rotate(45deg); }
-.faq-item[open] p { padding-bottom: 8px; }
 .case-proof {
   background: #10131c;
   color: #fff;
@@ -608,13 +560,9 @@ button:focus-visible {
     gap: 18px;
   }
 }
-@media (max-width: 800px) {
-  .studio-faq-inner { padding: 48px 22px; }
-}
 @media (prefers-reduced-motion: reduce) {
   .growth-goal,
   .marketing-card,
-  .faq-item summary > span:last-child,
   .button-dark,
   .button-light { transition: none; }
 }

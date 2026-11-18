@@ -229,7 +229,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 @media (prefers-reduced-motion: reduce) {
   .vs-marquee { animation: none; }
   .vs-slide .vs-slide-frame, .vs-slide .vs-slide-frame img, .vs-slide .vs-slide-tag { animation: none !important; }
-  .vs-cta-bed, .vs-cta-circle, .vs-service, .vs-plan, .vs-product-stage img, .vs-slide-frame img { transition: none; }
+  .vs-cta-bed, .vs-cta-circle, .vs-plan, .vs-product-stage img, .vs-slide-frame img { transition: none; }
 }
 
 /* ---------- Motion tokens ---------- */
@@ -259,7 +259,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-round-btn:active, .vs-menu-btn:active, .vs-drawer-close:active, .vs-dock-trigger:active { transform: scale(0.9); }
 .vs-round-btn:disabled { opacity: 0.35; cursor: default; }
 .vs-round-btn:disabled:hover { background: transparent; color: var(--vs-ink); box-shadow: inset 0 0 0 1px var(--vs-line); }
-.vs-service:active { transform: scale(0.995); }
 
 /* ---------- Rolling label (nav links) ---------- */
 
@@ -294,9 +293,9 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 /* ---------- Display type ---------- */
 
-.vs-h1, .vs-h2, .vs-service-title, .vs-product-name, .vs-plan-price, .vs-result-figure, .vs-hero-form .hero-request h2, .vs-page .studio-faq h2 { font-family: var(--font-display); }
+.vs-h1, .vs-h2, .vs-product-name, .vs-plan-price, .vs-result-figure, .vs-hero-form .hero-request h2 { font-family: var(--font-display); }
 .vs-h1 { letter-spacing: -0.035em; font-weight: 500; }
-.vs-h2, .vs-page .studio-faq h2 { letter-spacing: -0.03em; }
+.vs-h2 { letter-spacing: -0.03em; }
 .vs-result-figure { letter-spacing: -0.045em; }
 
 /* ---------- Hero video: no sound toggle on the homepage ---------- */
@@ -324,7 +323,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 /* ---------- Touch: every control at least 44px ---------- */
 
 @media (pointer: coarse) {
-  .vs-tab, .vs-lang button, .vs-dock-actions a, .faq-more { min-height: 44px; }
+  .vs-tab, .vs-lang button, .vs-dock-actions a { min-height: 44px; }
   .vs-lang button { min-width: 44px; }
   .vs-textlink { display: inline-flex; align-items: center; min-height: 44px; }
   .vs-round-btn, .vs-menu-btn, .vs-drawer-close { min-width: 44px; min-height: 44px; }

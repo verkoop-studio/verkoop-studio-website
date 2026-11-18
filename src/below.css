@@ -48,22 +48,38 @@
 .vs-result p { max-width: 400px; }
 @media (max-width: 760px) { .vs-result { flex-direction: column; align-items: flex-start; } }
 
-/* ---------- Services list ---------- */
+/* ---------- What we do: a tile per group, the services listed below it ---------- */
 
-.vs-services { border-bottom: 1px solid var(--vs-line); }
-.vs-service {
-  display: grid; grid-template-columns: 72px minmax(0, 1fr) minmax(0, 1.15fr) 40px; gap: 24px; align-items: baseline;
-  padding: 26px 0; border-top: 1px solid var(--vs-line); color: var(--vs-ink); text-decoration: none;
-  transition: padding 0.4s var(--vs-ease), background 0.4s var(--vs-ease);
+.vs-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin-top: clamp(28px, 4vw, 48px); }
+.vs-group-tile { --tone: var(--vs-blue); --on: var(--vs-paper); position: relative; display: grid; align-content: space-between; min-height: 220px; padding: 22px; overflow: hidden; border-radius: 24px; background: var(--tone); color: var(--on); isolation: isolate; }
+.vs-group--1 .vs-group-tile { --tone: #ffd23f; --on: var(--vs-ink); }
+.vs-group--2 .vs-group-tile { --tone: #ff9fd0; --on: var(--vs-ink); }
+.vs-group-tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 80% at 90% 0%, rgb(255 255 255 / 0.28), transparent 65%); }
+.vs-group-tile h3 { margin: 0; font: 500 clamp(26px, 2.4vw, 34px)/1.05 var(--font-display); letter-spacing: -0.03em; }
+.vs-group-art svg { display: block; width: min(100%, 220px); height: auto; overflow: visible; }
+.vs-group-dots { fill: none; stroke: currentColor; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 0.01 8; opacity: 0.85; }
+.vs-group-dots--run { transition: stroke-dashoffset 1.4s linear; }
+.vs-group:hover .vs-group-dots--run, .vs-group:focus-within .vs-group-dots--run { stroke-dashoffset: -64; }
+.vs-group-art { transition: translate 0.5s var(--vs-ease), rotate 0.5s var(--vs-ease); }
+.vs-group:hover .vs-group-art { translate: 4px -4px; rotate: -2deg; }
+.vs-group-list { margin: 14px 0 0; padding: 0; list-style: none; border-top: 1px solid rgb(255 255 255 / 0.12); }
+.vs-group-list li { border-bottom: 1px solid rgb(255 255 255 / 0.12); }
+.vs-group-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 14px 4px; color: var(--vs-paper); text-decoration: none; transition: padding 0.35s var(--vs-ease), background-color 0.3s; border-radius: 10px; }
+.vs-group-link > span:first-child { display: grid; gap: 2px; }
+.vs-group-link b { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+.vs-group-link em { color: #9c988f; font-style: normal; font-size: 14px; line-height: 1.4; }
+.vs-group-go { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.2); color: #cfcbc3; transition: background-color 0.25s, color 0.25s, box-shadow 0.25s; }
+.vs-group-link:hover, .vs-group-link:focus-visible { padding-left: 12px; background: rgb(255 255 255 / 0.04); }
+.vs-group-link:hover .vs-group-go, .vs-group-link:focus-visible .vs-group-go { background: var(--vs-blue); box-shadow: none; color: #fff; }
+.vs-group-link:focus-visible { outline: 2px solid var(--vs-paper); outline-offset: 2px; }
+.vs-group-link:active { scale: 0.99; }
+@media (max-width: 900px) {
+  .vs-groups { grid-template-columns: minmax(0, 1fr); }
+  .vs-group-tile { min-height: 170px; }
 }
-.vs-service:hover { padding-left: 14px; }
-.vs-service-title { font-size: clamp(22px, 2.3vw, 30px); font-weight: 500; letter-spacing: -0.025em; }
-.vs-service-copy { font-size: 15px; line-height: 1.5; color: var(--vs-mute); }
-.vs-service-arrow { justify-self: end; color: var(--vs-ink-2); transition: transform 0.4s var(--vs-ease), color 0.2s; }
-.vs-service:hover .vs-service-arrow { transform: translateX(6px); color: var(--vs-blue); }
-@media (max-width: 760px) {
-  .vs-service { grid-template-columns: 40px minmax(0, 1fr) 24px; }
-  .vs-service-copy { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .vs-group-dots--run, .vs-group-art, .vs-group-link { transition: none; }
+  .vs-group:hover .vs-group-art { translate: none; rotate: none; }
 }
 
 /* ---------- Software ---------- */
@@ -908,11 +924,6 @@
 .vs-dark > .vs-wave:first-child { margin-top: -1px; background: var(--vs-paper); }
 .vs-dark > .vs-wave:last-child { margin-bottom: -1px; background: var(--vs-paper); }
 .vs-dark .vs-h2 { color: var(--vs-paper); }
-.vs-dark .vs-services { border-color: rgb(255 255 255 / 0.12); }
-.vs-dark .vs-service { border-color: rgb(255 255 255 / 0.12); color: var(--vs-paper); }
-.vs-dark .vs-service .vs-label, .vs-dark .vs-service-copy { color: #9c988f; }
-.vs-dark .vs-service-arrow { color: #cfcbc3; }
-.vs-dark .vs-service:hover .vs-service-arrow { color: #9fb0ff; }
 .vs-dark > section { position: relative; z-index: 1; }
 .vs-doodles { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .vs-doodles path { fill: none; stroke: #fff; stroke-opacity: 0.07; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
