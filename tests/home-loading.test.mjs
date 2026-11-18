@@ -39,7 +39,22 @@ test('every page embeds the shared CSS and deprioritizes hydration download', as
       assert(html.indexOf(tag) < html.indexOf('</head>'))
       assert(!html.includes(`href="${href}"`), `${route} still requests ${href} separately`)
     }
-    if (route === '/') assert(!/<link\b(?=[^>]*rel="stylesheet")(?=[^>]*href="\/assets\/)/.test(html))
+    // Below-the-fold CSS is the one stylesheet requested separately, and it never blocks the first paint.
+    const head = html.split('</head>')[0]
+    const deferred = [...head.matchAll(/<link\b[^>]*data-deferred-styles[^>]*>/g)].map(m => m[0])
+    assert.equal(deferred.length, 1, `${route}: one deferred stylesheet`)
+    const href = deferred[0].match(/href="(\/assets\/[^"]+\.css)"/)?.[1]
+    assert(href, route)
+    assert.match(deferred[0], /media="print"/, `${route}: deferred stylesheet does not block rendering`)
+    assert.match(deferred[0], /onload="this\.onload=null;this\.media='all'"/, route)
+    assert(head.includes(`<noscript><link rel="stylesheet" href="${href}"></noscript>`), `${route}: deferred stylesheet applies without JavaScript`)
+    await readFile(`dist${href}`, 'utf8')
+    if (route === '/') {
+      const scripted = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, '')
+      const blocking = [...scripted.matchAll(/<link\b(?=[^>]*rel="stylesheet")(?=[^>]*href="\/assets\/)[^>]*>/g)].map(m => m[0])
+        .filter(tag => !tag.includes('data-deferred-styles'))
+      assert.equal(blocking.length, 0, 'homepage has no render-blocking stylesheet request')
+    }
   }
 })
 

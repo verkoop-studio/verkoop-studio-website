@@ -8,6 +8,9 @@ import './mobile.css'
 import './brand.css'
 import App from './App.tsx'
 import { LanguageProvider } from './i18n/LanguageContext.tsx'
+import { loadDeferredStyles } from './lib/deferredStyles'
+
+loadDeferredStyles()
 
 const root = document.getElementById('root')!
 const app = (
