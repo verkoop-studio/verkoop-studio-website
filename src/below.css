@@ -271,10 +271,12 @@
 .tx-grid { display: grid; grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr); gap: clamp(32px, 5vw, 88px); align-items: center; padding-top: 72px; }
 .tx-head { margin: 14px 0 28px; font: 500 clamp(34px, 3.6vw, 56px)/1.04 var(--font-display); letter-spacing: -0.035em; max-width: 13ch; }
 .tx-index { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--vs-line); max-width: 360px; }
-.tx-index button { display: flex; align-items: baseline; gap: 16px; width: 100%; min-height: 40px; padding: 8px 0; border: 0; border-bottom: 1px solid var(--vs-line); background: none; color: var(--vs-mute); font: 500 16px/1.2 var(--font-sans); text-align: left; cursor: pointer; transition: color 0.3s, padding 0.4s var(--vs-ease); }
+.tx-index button { display: flex; align-items: baseline; gap: 16px; width: 100%; min-height: 40px; padding: 8px 0; border: 0; border-bottom: 1px solid var(--vs-line); background: none; color: var(--vs-mute); font: 500 16px/1.2 var(--font-sans); text-align: left; cursor: pointer; transition: color 0.3s, box-shadow 0.3s; }
 .tx-index button span { font: 400 19px/1 var(--font-condensed); letter-spacing: 0.02em; min-width: 22px; }
 .tx-index button.is-past { color: var(--vs-ink-2); }
-.tx-index button.is-on { color: var(--vs-ink); padding-left: 14px; box-shadow: inset 3px 0 0 var(--vs-blue); }
+.tx-index button.is-on { color: var(--vs-ink); box-shadow: inset 3px 0 0 var(--vs-blue); }
+.tx-index button span { transition: translate 0.3s var(--vs-ease), color 0.3s; }
+.tx-index button.is-on span { translate: 10px 0; }
 .tx-index button.is-on span { color: var(--vs-blue); }
 .tx-index button:hover { color: var(--vs-ink); }
 .tx-foot { display: flex; align-items: center; gap: 22px; margin-top: 22px; min-height: 180px; }

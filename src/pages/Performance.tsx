@@ -43,13 +43,12 @@ const ROWS = [
 ]
 const WEEKS = [[38, 62], [44, 78], [41, 70], [52, 96], [48, 88], [56, 100]]
 
-/** Counts up to `to` once it is on screen. */
+/** Shows `to` at rest (so the page never reads 0), and counts up from 0 each time it comes into view. */
 function Count({ to, on }: { to: number; on: boolean }) {
-  const [n, setN] = useState(0)
+  const [n, setN] = useState(to)
   const reduce = useReducedMotion()
   useEffect(() => {
-    if (!on) return setN(0)
-    if (reduce) return setN(to)
+    if (!on || reduce) return setN(to)
     let frame = 0
     const start = performance.now()
     const step = (now: number) => {
@@ -104,12 +103,12 @@ function PlanSlider({ lang }: { lang: 'nl' | 'en' }) {
   /* a curved scale: fine steps at the low end, where most businesses are */
   const spend = Math.round(((step / 100) ** 2.4 * 200000) / 500) * 500
   const index = LIMITS.findIndex((limit) => spend <= limit)
-  const money = spend.toLocaleString(lang === 'nl' ? 'nl-BE' : 'en-GB')
+  const money = spend.toString().replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'nl' ? '.' : ',')
   return (
     <div className="pp-price">
       <label className="pp-slider">
         <span>{t.slider}</span>
-        <strong>€ {step >= 100 ? '200.000+' : money}</strong>
+        <strong>€ {step >= 100 ? (lang === 'nl' ? '200.000+' : '200,000+') : money}</strong>
         <input type="range" min={0} max={100} value={step} onChange={(e) => setStep(Number(e.target.value))} style={{ '--p': `${step}%` } as CSSProperties} />
       </label>
       <ul className="pp-tiers pp-tiers--five">

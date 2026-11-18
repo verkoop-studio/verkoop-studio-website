@@ -95,7 +95,7 @@ function PriceSlider({ lang }: { lang: 'nl' | 'en' }) {
     <div className="pp-price">
       <label className="pp-slider">
         <span>{t.slider}</span>
-        <strong>{leads >= 10000 ? '10.000+' : leads.toLocaleString(lang === 'nl' ? 'nl-BE' : 'en-GB')} {t.leads}</strong>
+        <strong>{leads >= 10000 ? (lang === 'nl' ? '10.000+' : '10,000+') : leads.toString().replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'nl' ? '.' : ',')} {t.leads}</strong>
         <input type="range" min={0} max={10000} step={100} value={leads} onChange={(e) => setLeads(Number(e.target.value))} style={{ '--p': `${leads / 100}%` } as CSSProperties} />
       </label>
       <ul className="pp-tiers">
