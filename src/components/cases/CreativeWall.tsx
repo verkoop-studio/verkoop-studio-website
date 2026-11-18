@@ -25,7 +25,7 @@ function VideoTile({ tile, lang, copy }: { tile: Extract<Tile, { kind: 'video' }
   if (playing) return <video className="vs-wall-media" src={tile.src} poster={tile.poster} controls autoPlay playsInline aria-label={tile.label} />
   return (
     <button type="button" className="vs-wall-play" onClick={() => setPlaying(true)} tabIndex={copy ? -1 : undefined} aria-label={`${lang === 'nl' ? 'Speel af' : 'Play'}: ${tile.label}`}>
-      <img className="vs-wall-media" src={tile.poster} alt="" loading="lazy" decoding="async" />
+      <img className="vs-wall-media" src={tile.poster} alt="" width={360} height={640} loading="lazy" decoding="async" />
       <span className="vs-wall-btn" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 14 14"><path d="M4.2 2.4v9.2L11.8 7Z" fill="currentColor" /></svg></span>
     </button>
   )
@@ -48,7 +48,7 @@ export default function CreativeWall({ lang }: { lang: Lang }) {
           <ul key={String(copy)} className="vs-wall-row" aria-hidden={copy || undefined}>
             {tiles.map((tile) => (
               <li key={tile.label} className={`vs-wall-tile vs-wall-tile--${tile.kind}`}>
-                {tile.kind === 'video' ? <VideoTile tile={tile} lang={lang} copy={copy} /> : <img className="vs-wall-media" src={tile.src} alt={copy ? '' : tile.label} loading="lazy" decoding="async" />}
+                {tile.kind === 'video' ? <VideoTile tile={tile} lang={lang} copy={copy} /> : <img className="vs-wall-media" src={tile.src} alt={copy ? '' : tile.label} width={640} height={400} loading="lazy" decoding="async" />}
                 <span className="vs-wall-label">{tile.label}</span>
               </li>
             ))}
