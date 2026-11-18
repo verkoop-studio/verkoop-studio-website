@@ -278,12 +278,16 @@ export default function Academy() {
         <div className="ac-hero-copy">
           <h1 id="academy-title">{t("Leer hoe je je merk schaalt") + " "}<span>{t("in 60 dagen.")}</span></h1>
           <p className="ac-hero-target">{t('Doel: 3× rendement op je advertentiebudget.')}</p>
-          <p className="ac-hero-intro">{t('Van bedrijfsanalyse tot campagnes en opvolging. Van A tot Z, 1-op-1 met Stef.')}</p>
+          <div className="ac-hero-cta"><button className="ac-button" onClick={goToSignup}>{t('Vraag je gratis les aan')}<span aria-hidden="true">↗</span></button></div>
         </div>
         <div className="ac-hero-video">
           <HandNote point="down-left" className="ac-hero-note">{lang === 'nl' ? '1-op-1, met Stef :)' : '1-to-1, with Stef :)'}</HandNote>
           <HeroVideo lang={lang} videoId="pXlZ6lWWg68" title="Verkoop Studio Academy — VSL" heading={t('Zo werkt de Academy')} />
         </div>
+      </section>
+
+      {/* The request form, straight under the hero: the hero itself keeps one promise, one action and the video. */}
+      <section className="ac-wrap ac-hero-request" aria-label={t('Vraag je gratis les aan')}>
         <div className="ac-hero-conversion">
           <div id="academy-hero-signup" className="ac-hero-signup">
             {signedUp ? <div className="ac-welcome-card" role="status">

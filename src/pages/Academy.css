@@ -66,10 +66,12 @@
 .ac-pill-nav a:hover { background: #fff; color: var(--ac-ink); box-shadow: 0 1px 3px #181c3d14; }
 
 /* Hero */
-.ac-hero { display: grid; grid-template-columns: minmax(0,1fr); grid-template-areas: "copy" "video" "action"; justify-items: center; row-gap: 32px; padding-top: 48px; }
+.ac-hero { display: grid; grid-template-columns: minmax(0,1fr); grid-template-areas: "copy" "video"; justify-items: center; row-gap: 32px; padding-top: 48px; }
 .ac-hero-copy { grid-area: copy; width: min(100%,1000px); text-align: center; }
 .ac-hero > .hero-video { grid-area: video; width: min(100%,900px); }
-.ac-hero-conversion { grid-area: action; width: min(100%,760px); }
+.ac-hero-conversion { width: min(100%,760px); margin-inline: auto; }
+.ac-hero-request { padding-top: 32px; }
+.ac-hero-cta { display: flex; justify-content: center; margin-top: 22px; }
 .ac-hero-copy h1 { font-size: clamp(38px, 4.5vw, 64px); line-height: 1.04; font-weight: 700; letter-spacing: -.04em; text-wrap: balance; }
 .ac-hero-intro { max-width: 46rem; margin-inline: auto; margin-top: 22px; color: var(--ac-text); font-size: clamp(16px, 1.7vw, 18px); line-height: 1.65; }
 .ac-hero-signup { width: 100%; margin-top: 28px; padding: 0; scroll-margin-top: 100px; }
@@ -718,7 +720,7 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 @media(max-width: 700px) { .ac-hero-copy h1 { font-size: 34px; line-height: 1.08; } .ac-hero { row-gap: 22px; } }
 .academy-page .hero-request h2 { font-size: clamp(22px,2vw,27px); line-height: 1.15; margin-top: 0; }
 
-@media(max-width: 767px) { .ac-hero { grid-template-areas: "video" "copy" "action"; } }
+@media(max-width: 767px) { .ac-hero { grid-template-areas: "copy" "video"; } }
 
 /* ---------- Verkoop Studio design system, applied to the Academy ---------- */
 /* The Academy now sits inside the shared layout (header, footer, contact button).
@@ -761,3 +763,4 @@ body:has(.academy-page) .mobile-contact-bar { display: none; }
 .ac-hero > .ac-hero-video { position: relative; grid-area: video; align-self: start; width: min(100%, 900px); }
 .ac-hero-video > .hero-video { width: 100%; }
 .ac-hero-note { position: absolute; right: 4%; top: -38px; z-index: 2; }
+@media (max-width: 767px) { .ac-pill-nav { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; max-width: 100%; border-radius: 22px; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); } .ac-pill-nav a { flex: none; } }
