@@ -6,6 +6,7 @@ import { crmLanding } from '../data/crmLanding'
 import { performance } from '../data/performance'
 import { services } from '../data/services'
 import { cases } from '../data/cases'
+import { articles } from '../data/articles'
 
 /**
  * URL of the below-the-fold stylesheet. Prerendered pages link it without blocking
@@ -26,6 +27,8 @@ export const PAGE_STYLES: Record<string, string> = {
   '/cases': PAGES_STYLES,
   '/agency': PAGES_STYLES,
   '/contact': PAGES_STYLES,
+  '/blog': PAGES_STYLES,
+  ...Object.fromEntries(articles.map((item) => [`/blog/${item.slug}`, PAGES_STYLES])),
   ...Object.fromEntries(cases.map((item) => [`/cases/${item.slug}`, PAGES_STYLES])),
   ...Object.fromEntries(services.map((service) => [`/${service.slug}`, PAGES_STYLES])),
 }
