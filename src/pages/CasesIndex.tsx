@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import LyteWork from '../components/LyteWork'
-import ProofBento from '../components/cases/ProofBento'
 import Wordmarks from '../components/cases/Wordmarks'
 import Seo from '../components/Seo'
 import Arrow from '../components/brand/Arrow'
@@ -88,7 +87,6 @@ export default function CasesIndex() {
       </section>
 
       <Wordmarks lang={lang} />
-      <ProofBento lang={lang} placement="cases_bento" />
 
       <LyteWork />
 

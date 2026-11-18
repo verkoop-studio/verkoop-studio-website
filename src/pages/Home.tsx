@@ -42,7 +42,7 @@ export default function Home() {
       <PainsBlock />
       <SystemTeardown />
       <WorkScroller />
-      <ProofBento lang={lang} placement="home_bento" title={false} />
+      <ProofBento lang={lang} placement="home_bento" />
       {/* Reviews go here once real client quotes are available; none are published yet. */}
       <Ribbon />
       <ResultBand />
