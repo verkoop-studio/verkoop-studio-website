@@ -2,7 +2,6 @@ import { AnimatePresence, motion, useInView } from 'motion/react'
 import { useRef, type CSSProperties, type ReactNode } from 'react'
 import pinacelloPage from '../../assets/cases/pinacello-640.webp'
 import { AUDIT_SCOPE } from '../../data/audit'
-import { PAINS } from '../../data/pains'
 import type { Lang } from '../../data/types'
 import { useHoverPause, usePhase } from '../../lib/demo'
 import { Pointer, Ticker, Typed } from '../brand/demo'
@@ -13,7 +12,7 @@ const UI = {
     sample: 'Voorbeeld', now: 'zojuist',
     audit: 'Groeianalyse', site: 'jouwsite.be', run: 'Analyseer', checked: 'bekeken',
     prio: 'Prioriteiten', sort: 'Sorteer', impact: 'Impact',
-    funnel: 'Creative-ronde', flow: ['Advertentie', 'Landingspagina', 'Formulier', 'Sales CRM'], creative: 'Meer klanten uit je advertenties', platform: 'Instagram', waiting: 'Ter goedkeuring', live: 'Live', approve: 'Goedkeuren',
+    funnel: 'Creative-ronde', flow: ['Pagina’s', 'Campagnes', 'Tracking', 'Opvolging'], creative: 'Meer klanten uit je advertenties', platform: 'Instagram', waiting: 'Ter goedkeuring', live: 'Live', approve: 'Goedkeuren',
     url: 'promo.pinacello.com', publish: 'Publiceren', publishing: 'Publiceren…', draft: 'Concept', published: 'Gepubliceerd', order: '+1 bestelling',
     report: 'Maandrapport · oktober', revenue: 'Omzet uit advertenties', budget: 'Budget Google', feed: [['Aankoop', '€ 84', 'Google'], ['Formulier verstuurd', 'Sarah P.', 'Meta']],
   },
@@ -21,7 +20,7 @@ const UI = {
     sample: 'Sample', now: 'just now',
     audit: 'Growth analysis', site: 'yoursite.com', run: 'Analyse', checked: 'reviewed',
     prio: 'Priorities', sort: 'Sort', impact: 'Impact',
-    funnel: 'Creative round', flow: ['Ad', 'Landing page', 'Form', 'Sales CRM'], creative: 'More customers from your ads', platform: 'Instagram', waiting: 'Awaiting approval', live: 'Live', approve: 'Approve',
+    funnel: 'Creative round', flow: ['Pages', 'Campaigns', 'Tracking', 'Follow-up'], creative: 'More customers from your ads', platform: 'Instagram', waiting: 'Awaiting approval', live: 'Live', approve: 'Approve',
     url: 'promo.pinacello.com', publish: 'Publish', publishing: 'Publishing…', draft: 'Draft', published: 'Published', order: '+1 order',
     report: 'Monthly report · October', revenue: 'Revenue from ads', budget: 'Google budget', feed: [['Purchase', '€ 84', 'Google'], ['Form sent', 'Sarah P.', 'Meta']],
   },
@@ -72,12 +71,15 @@ export function AuditScreen({ lang, on }: ScreenProps) {
 
 /* 02 Prioriteiten: the pointer picks "Sort: Impact" and the leaks reorder themselves. Sample weights. */
 const WEIGHT = [3, 5, 2, 4]
+/** Scope items from the growth analysis (audit.ts): Meta Ads, Google Ads, tracking, email follow-up. */
+const PRIO_ITEMS = [2, 3, 9, 8]
 const PRIO_T = [1100, 700, 2800, 1400]
 export function PrioScreen({ lang, on }: ScreenProps) {
   const t = UI[lang]
   const win = useScreen(on, PRIO_T)
   const p = win.phase
-  const rows = PAINS[lang].slice(0, 4).map(([title], i) => ({ title, weight: WEIGHT[i] }))
+  // What the analysis looked at, ranked: the process, not the pains the home page opens with.
+  const rows = PRIO_ITEMS.map((n, i) => ({ title: AUDIT_SCOPE[lang][n], weight: WEIGHT[i] }))
   const sorted = p >= 2
   const order = sorted ? [...rows].sort((a, b) => b.weight - a.weight) : rows
   return (
