@@ -1,6 +1,6 @@
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
 import { Check } from 'lucide-react'
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '../components/Breadcrumbs'
 import QualificationForm from '../components/QualificationForm'
@@ -14,6 +14,8 @@ import SplitHeadline, { type HeadlinePart } from '../components/brand/SplitHeadl
 import TextLink from '../components/brand/TextLink'
 import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
+import ServiceScreenView, { AdCard } from '../components/service/ServiceScreens'
+import { serviceStories, type ServiceScreen, type ServiceStep } from '../data/serviceSteps'
 import { getCase } from '../data/cases'
 import { getService } from '../data/services'
 import type { Bi, CaseSlug, Lang, ServiceSlug } from '../data/types'
@@ -91,171 +93,54 @@ function leadIn(lang: Lang, slug: ServiceSlug) {
     : 'Tell us where you stand. We’ll look at your situation and say which approach fits.'
 }
 
-/* ------------------------------------------------------------------ */
-/* Sample screens. Every name and figure is invented; each says so.   */
-/* ------------------------------------------------------------------ */
-
-function Win({ title, chip, children, className = '' }: { title: string; chip: string; children: ReactNode; className?: string }) {
-  return (
-    <div className={`sv-win ${className}`.trim()}>
-      <div className="sv-win-bar"><i /><i /><i /><b>{title}</b><em>{chip}</em></div>
-      <div className="sv-win-body">{children}</div>
-    </div>
-  )
-}
-
-const META = {
-  nl: {
-    tree: {
-      win: 'Advertentiebeheer', goal: 'Doel: verkopen',
-      rows: [['Koud', 'Nieuwe mensen · 25–55 · Oost-Vlaanderen', '€ 20 / dag', 56], ['Warm', 'Bezocht je site · laatste 30 dagen', '€ 10 / dag', 28], ['Retargeting', 'Mandje niet afgerond', '€ 6 / dag', 16]] as [string, string, string, number][],
-    },
-    ads: [
-      { stage: 'Koud', text: 'Maak kennis in 20 seconden.', cta: 'Meer info', tone: 'video' },
-      { stage: 'Warm', text: 'Zo werkt het, stap voor stap.', cta: 'Bekijk', tone: 'steps' },
-      { stage: 'Retargeting', text: 'Je mandje wacht nog op je.', cta: 'Afrekenen', tone: 'cart' },
-    ],
-    page: 'Jouw merk', sponsored: 'Gesponsord',
-    table: {
-      win: 'Maandrapport', head: ['Campagne', 'Uitgaven', 'Verkopen', 'Per euro'],
-      rows: [['Koud', '€ 600', '14', '3,1×'], ['Warm', '€ 300', '11', '4,6×'], ['Retargeting', '€ 180', '9', '6,2×']],
-      advice: 'Advies: zet € 100 meer op retargeting',
-    },
-    toast: 'Nieuwe verkoop', toastSrc: 'via Instagram',
-    steps: [
-      { title: 'Doelgroep en structuur', body: 'We bouwen je campagnes rond één doel: aanvragen, boekingen of verkopen.' },
-      { title: 'Creatives per fase', body: 'Wie je nog niet kent, krijgt een ander bericht dan wie al twijfelt.' },
-      { title: 'Meten op verkopen', body: 'Elke maand zie je wat een euro advertentie opbracht. Niet alleen kliks.' },
-    ],
-    proof: { lead: 'Eén organische video.', figure: '20 verkopen.', body: 'Voor Pinacello maakten we een video die zonder advertentiebudget twintig verkopen opleverde. Die video werd daarna de basis voor de campagnes.', bodyShort: 'Pinacello, ecommerce' },
-  },
-  en: {
-    tree: {
-      win: 'Ads Manager', goal: 'Goal: sales',
-      rows: [['Cold', 'New people · 25–55 · East Flanders', '€ 20 / day', 56], ['Warm', 'Visited your site · last 30 days', '€ 10 / day', 28], ['Retargeting', 'Cart not finished', '€ 6 / day', 16]] as [string, string, string, number][],
-    },
-    ads: [
-      { stage: 'Cold', text: 'Meet us in 20 seconds.', cta: 'Learn more', tone: 'video' },
-      { stage: 'Warm', text: 'How it works, step by step.', cta: 'Watch', tone: 'steps' },
-      { stage: 'Retargeting', text: 'Your cart is still waiting.', cta: 'Check out', tone: 'cart' },
-    ],
-    page: 'Your brand', sponsored: 'Sponsored',
-    table: {
-      win: 'Monthly report', head: ['Campaign', 'Spend', 'Sales', 'Per euro'],
-      rows: [['Cold', '€ 600', '14', '3.1×'], ['Warm', '€ 300', '11', '4.6×'], ['Retargeting', '€ 180', '9', '6.2×']],
-      advice: 'Advice: put € 100 more on retargeting',
-    },
-    toast: 'New sale', toastSrc: 'from Instagram',
-    steps: [
-      { title: 'Audience and structure', body: 'We build your campaigns around one goal: enquiries, bookings or sales.' },
-      { title: 'Creatives per stage', body: 'People who don’t know you yet get a different message from people who are close to buying.' },
-      { title: 'Measured on sales', body: 'Every month you see what a euro of ads brought in. Not just clicks.' },
-    ],
-    proof: { lead: 'One organic video.', figure: '20 sales.', body: 'For Pinacello we made a video that brought in twenty sales without any ad budget. That video then became the base for the campaigns.', bodyShort: 'Pinacello, ecommerce' },
-  },
-}
-
-function AdCard({ ad, lang }: { ad: (typeof META)['nl']['ads'][number]; lang: Lang }) {
-  const m = META[lang]
-  return (
-    <div className="sv-ad">
-      <div className="sv-ad-head"><span className="sv-ava">v.</span><p><b>{m.page}</b><span>{m.sponsored}</span></p><span className="sv-stage">{ad.stage}</span></div>
-      <div className={`sv-ad-img sv-ad-img--${ad.tone}`} aria-hidden="true">
-        {ad.tone === 'video' && <span className="sv-play"><svg width="16" height="16" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>}
-        {ad.tone === 'steps' && <span className="sv-ad-steps"><i>1</i><i>2</i><i>3</i></span>}
-        {ad.tone === 'cart' && <span className="sv-ad-cart"><i /><i /><b>1</b></span>}
-      </div>
-      <div className="sv-ad-foot"><p>{ad.text}</p><span className="sv-btn">{ad.cta}</span></div>
-    </div>
-  )
-}
-
-function CampaignTree({ lang }: { lang: Lang }) {
-  const t = META[lang].tree
-  return (
-    <Win title={t.win} chip={COPY[lang].sample}>
-      <p className="sv-goal"><span className="sv-pulse" />{t.goal}</p>
-      <ul className="sv-tree">
-        {t.rows.map(([stage, who, budget, share], i) => (
-          <li key={stage} style={{ '--w': `${share}%`, '--d': `${0.2 + i * 0.12}s` } as CSSProperties}>
-            <b>{stage}</b><span>{who}</span><em>{budget}</em><i className="sv-bar" />
-          </li>
-        ))}
-      </ul>
-    </Win>
-  )
-}
-
-function CreativeSet({ lang }: { lang: Lang }) {
-  return (
-    <Win title="Instagram · Facebook" chip={COPY[lang].sample}>
-      <div className="sv-ads">{META[lang].ads.map((ad) => <AdCard key={ad.stage} ad={ad} lang={lang} />)}</div>
-    </Win>
-  )
-}
-
-function ResultTable({ lang }: { lang: Lang }) {
-  const t = META[lang].table
-  return (
-    <Win title={t.win} chip={COPY[lang].sample}>
-      <table className="sv-table">
-        <thead><tr>{t.head.map((h) => <th key={h} scope="col">{h}</th>)}</tr></thead>
-        <tbody>{t.rows.map((row) => <tr key={row[0]}>{row.map((cell, i) => (i === 0 ? <th key={i} scope="row">{cell}</th> : <td key={i}>{cell}</td>))}</tr>)}</tbody>
-      </table>
-      <p className="sv-advice"><span>★</span>{t.advice}</p>
-    </Win>
-  )
+const PROOF = {
+  nl: { lead: 'Eén organische video.', figure: '20 verkopen.', body: 'Voor Pinacello maakten we een video die zonder advertentiebudget twintig verkopen opleverde. Die video werd daarna de basis voor de campagnes.', short: 'Pinacello, ecommerce' },
+  en: { lead: 'One organic video.', figure: '20 sales.', body: 'For Pinacello we made a video that brought in twenty sales without any ad budget. That video then became the base for the campaigns.', short: 'Pinacello, ecommerce' },
 }
 
 /** Meta Ads hero: a phone with one sample ad, and a sale arriving from it. */
-function MetaHero({ lang }: { lang: Lang }) {
-  const m = META[lang]
+function MetaHero({ lang, toast }: { lang: Lang; toast: [string, string] }) {
   const reduce = useReducedMotion()
   return (
     <div className="sv-hero-visual sv-phone-stage" aria-hidden="true">
       <motion.div className="sv-phone" initial={reduce ? false : { opacity: 0, y: 50, rotate: 6 }} animate={{ opacity: 1, y: 0, rotate: 2.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
         <span className="sv-phone-notch" />
         <span className="sv-phone-chip">{COPY[lang].sample}</span>
-        <AdCard ad={m.ads[0]} lang={lang} />
+        <AdCard index={0} lang={lang} />
         <div className="sv-feed-ghost"><i /><i /><i /></div>
       </motion.div>
-      <motion.div className="sv-toast" initial={reduce ? false : { opacity: 0, x: -30, scale: 0.9 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ type: 'spring', stiffness: 160, damping: 16, delay: 1.3 }}>
-        <span className="sv-toast-dot"><Check size={14} strokeWidth={2.6} /></span>
-        <b>{m.toast}<em>{m.toastSrc}</em></b>
-      </motion.div>
+      <HeroToast toast={toast} />
     </div>
   )
 }
 
-/** Every other service: the real list of what you get, ticked off one by one. */
-function PlanCard({ items, lang }: { items: string[]; lang: Lang }) {
+/** A notice that pops in beside the hero object: what the service ends in. */
+function HeroToast({ toast }: { toast: [string, string] }) {
   const reduce = useReducedMotion()
-  const t = COPY[lang]
   return (
-    <motion.div className="sv-hero-visual" initial={reduce ? false : { opacity: 0, x: 50, rotate: 4 }} animate={{ opacity: 1, x: 0, rotate: 1.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
-      <Win title={t.planWin} chip={t.planChip} className="sv-plan">
-        <ul className="sv-plan-list">
-          {items.map((item, i) => (
-            <motion.li key={item} initial={reduce ? false : { opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.9 + i * 0.14, ease: EASE }}>
-              <span className="sv-tick"><Check size={13} strokeWidth={2.6} /></span>{item}
-            </motion.li>
-          ))}
-        </ul>
-      </Win>
+    <motion.div className="sv-toast" initial={reduce ? false : { opacity: 0, x: -30, scale: 0.9 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ type: 'spring', stiffness: 160, damping: 16, delay: 1.3 }}>
+      <span className="sv-toast-dot"><Check size={14} strokeWidth={2.6} /></span>
+      <b>{toast[0]}<em>{toast[1]}</em></b>
     </motion.div>
+  )
+}
+
+/** Every other service: its own sample screen, tilted, with the notice beside it. */
+function HeroObject({ screen, lang, toast }: { screen: ServiceScreen; lang: Lang; toast: [string, string] }) {
+  const reduce = useReducedMotion()
+  return (
+    <div className="sv-hero-visual sv-hero-object" aria-hidden="true">
+      <motion.div initial={reduce ? false : { opacity: 0, x: 50, rotate: 5 }} animate={{ opacity: 1, x: 0, rotate: 1.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
+        <ServiceScreenView screen={screen} lang={lang} />
+      </motion.div>
+      <HeroToast toast={toast} />
+    </div>
   )
 }
 
 /* ------------------------------------------------------------------ */
 /* How it works: pinned on wide screens, a plain list otherwise.      */
 /* ------------------------------------------------------------------ */
-
-const STEP_SCREENS: Partial<Record<ServiceSlug, ((props: { lang: Lang }) => ReactNode)[]>> = {
-  'meta-ads': [CampaignTree, CreativeSet, ResultTable],
-}
-const STEP_COPY: Partial<Record<ServiceSlug, Bi<{ title: string; body: string }[]>>> = {
-  'meta-ads': { nl: META.nl.steps, en: META.en.steps },
-}
 
 function useWide() {
   const [wide, setWide] = useState(true)
@@ -269,9 +154,8 @@ function useWide() {
   return wide
 }
 
-function HowItWorks({ slug, lang }: { slug: ServiceSlug; lang: Lang }) {
-  const screens = STEP_SCREENS[slug]!
-  const steps = STEP_COPY[slug]![lang]
+function HowItWorks({ steps: story, lang }: { steps: ServiceStep[]; lang: Lang }) {
+  const steps = story.map((item) => ({ title: item.title[lang], body: item.body[lang], screen: item.screen }))
   const t = COPY[lang]
   const reduce = useReducedMotion()
   const wide = useWide()
@@ -283,7 +167,8 @@ function HowItWorks({ slug, lang }: { slug: ServiceSlug; lang: Lang }) {
   const head = (
     <>
       <p className="vs-label">{t.howLabel}</p>
-      <h2 className="vs-h2 sv-how-title">{t.howTitle}</h2>
+      <h2 className="vs-h2 sv-how-title" id="service-process">{t.processTitle}</h2>
+      <p className="sv-how-lead">{t.howTitle}</p>
     </>
   )
 
@@ -292,17 +177,14 @@ function HowItWorks({ slug, lang }: { slug: ServiceSlug; lang: Lang }) {
       <section className="vs-wrap vs-section sv-how sv-how--list" aria-label={t.howLabel}>
         {head}
         <ol className="sv-how-list">
-          {steps.map((s, i) => {
-            const Screen = screens[i]
-            return (
-              <Reveal as="li" key={s.title} y={30}>
-                <p className="sv-how-num">{String(i + 1).padStart(2, '0')}</p>
-                <h3 className="sv-how-step">{s.title}</h3>
-                <p className="sv-how-body">{s.body}</p>
-                <div className="sv-how-screen" aria-hidden="true"><Screen lang={lang} /></div>
-              </Reveal>
-            )
-          })}
+          {steps.map((s, i) => (
+            <Reveal as="li" key={s.title} y={30}>
+              <p className="sv-how-num">{String(i + 1).padStart(2, '0')}</p>
+              <h3 className="sv-how-step">{s.title}</h3>
+              <p className="sv-how-body">{s.body}</p>
+              <div className="sv-how-screen" aria-hidden="true"><ServiceScreenView screen={s.screen} lang={lang} /></div>
+            </Reveal>
+          ))}
         </ol>
       </section>
     )
@@ -334,7 +216,7 @@ function HowItWorks({ slug, lang }: { slug: ServiceSlug; lang: Lang }) {
             </ol>
           </div>
           <div className="sv-how-stage" aria-hidden="true">
-            {screens.map((Screen, i) => {
+            {steps.map((s, i) => {
               const depth = step - i
               return (
                 <motion.div
@@ -345,7 +227,7 @@ function HowItWorks({ slug, lang }: { slug: ServiceSlug; lang: Lang }) {
                   transition={{ type: 'spring', stiffness: 140, damping: 20 }}
                   style={{ zIndex: i + 1 }}
                 >
-                  <Screen lang={lang} />
+                  <ServiceScreenView screen={s.screen} lang={lang} />
                 </motion.div>
               )
             })}
@@ -370,7 +252,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
   const relatedCase = service.relatedCase ? getCase(service.relatedCase) : undefined
   const [lead, accent] = HEADLINE[slug][lang]
   const parts: HeadlinePart[] = [{ text: lead }, { text: accent, tone: 'accent' }]
-  const pinned = Boolean(STEP_SCREENS[slug])
+  const story = serviceStories[slug]
   const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
 
   return (
@@ -382,7 +264,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
           <Breadcrumbs items={[{ label: t.servicesCrumb, href: '/#expertise' }, { label: service.title[lang] }]} />
           <SplitHeadline as="h1" id="service-title" className="vs-h1 sv-h1" parts={parts} onMount />
           <motion.p className="vs-lead" {...arrive(0.55)}>{service.summary[lang]}</motion.p>
-          {slug === 'meta-ads' && (
+          {slug !== 'websites' && (
             <motion.ul className="sv-chips" {...arrive(0.7)}>
               {service.includes[lang].map((item) => <li key={item}>{item.charAt(0).toUpperCase() + item.slice(1)}</li>)}
             </motion.ul>
@@ -392,7 +274,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
             <span className="sv-reply">{t.reply}</span>
           </motion.div>
         </div>
-        {slug === 'websites' ? <WebsiteStage lang={lang} /> : slug === 'meta-ads' ? <MetaHero lang={lang} /> : <PlanCard items={service.includes[lang].map((item) => item.charAt(0).toUpperCase() + item.slice(1))} lang={lang} />}
+        {slug === 'websites' ? <WebsiteStage lang={lang} /> : slug === 'meta-ads' ? <MetaHero lang={lang} toast={story.toast[lang]} /> : <HeroObject screen={story.hero} lang={lang} toast={story.toast[lang]} />}
       </section>
 
       {slug !== 'websites' && (
@@ -402,21 +284,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
         </section>
       )}
 
-      {pinned ? (
-        <HowItWorks slug={slug} lang={lang} />
-      ) : (
-        <section className="vs-wrap vs-section sv-process" aria-labelledby="service-process">
-          <h2 id="service-process" className="vs-h2">{t.processTitle}</h2>
-          <ol className="sv-process-list">
-            {service.process[lang].map((step, i) => (
-              <Reveal as="li" key={step} delay={(i % 3) * 0.08} y={26}>
-                <span className="sv-how-num">{String(i + 1).padStart(2, '0')}</span>
-                <p>{step}</p>
-              </Reveal>
-            ))}
-          </ol>
-        </section>
-      )}
+      <HowItWorks steps={story.steps} lang={lang} />
 
       {slug !== 'websites' && (
         <section className="vs-wrap vs-section sv-deliver" aria-labelledby="service-deliver">
@@ -435,9 +303,9 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
               <span className="sv-play" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>
             </span>
             <span className="sv-proof-copy">
-              <span className="vs-label">{t.proofLabel} · {META[lang].proof.bodyShort}</span>
-              <span id="service-proof" className="sv-proof-title">{META[lang].proof.lead} <span className="vs-mark"><span className="vs-mark-bg" aria-hidden="true" />{META[lang].proof.figure}</span></span>
-              <span className="sv-proof-body">{META[lang].proof.body}</span>
+              <span className="vs-label">{t.proofLabel} · {PROOF[lang].short}</span>
+              <span id="service-proof" className="sv-proof-title">{PROOF[lang].lead} <span className="vs-mark"><span className="vs-mark-bg" aria-hidden="true" />{PROOF[lang].figure}</span></span>
+              <span className="sv-proof-body">{PROOF[lang].body}</span>
               <span className="vs-textlink vs-textlink--arrow">{t.view}<Arrow size={15} /></span>
             </span>
           </Link>
