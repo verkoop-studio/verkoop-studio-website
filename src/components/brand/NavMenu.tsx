@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ArrowRight, ArrowUpRight, ChevronDown } from 'lucide-react'
+import { ChevronDown } from 'lucide-react'
+import Arrow from './Arrow'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type RefObject } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { menuTabs, type MenuLink, type MenuTab } from '../../data/nav'
@@ -64,7 +65,7 @@ function Item({ link, lang, onClick, onPreview }: { link: MenuLink; lang: Lang; 
       onFocus={onPreview && (() => onPreview(link.href))}
     >
       <span className="vs-mi-dot" aria-hidden="true" />
-      <span className="vs-mi-t">{link.title[lang]}</span>
+      <span className="vs-mi-t">{link.title[lang]}<Arrow size={13} /></span>
       <span className="vs-mi-n">{link.note[lang]}</span>
     </Link>
   )
@@ -177,7 +178,7 @@ function PanelContent({ tab, width, dir, lang, reduce, onNavigate }: { tab: Menu
         <motion.div variants={item}>
           <Link className="vs-mega-more" to={tab.href} onClick={onNavigate}>
             {tab.more[lang]}
-            <ArrowRight size={15} aria-hidden="true" />
+            <Arrow size={15} />
           </Link>
         </motion.div>
       )}
@@ -487,7 +488,7 @@ export function DrawerMenu({ onNavigate }: { onNavigate: () => void }) {
                     {tab.more && (
                       <Link className="vs-mega-more" to={tab.href} onClick={onNavigate}>
                         {tab.more[lang]}
-                        <ArrowRight size={15} aria-hidden="true" />
+                        <Arrow size={15} />
                       </Link>
                     )}
                   </motion.div>
@@ -497,7 +498,7 @@ export function DrawerMenu({ onNavigate }: { onNavigate: () => void }) {
           ) : (
             <Link className="vs-drawer-link" to={tab.href} onClick={onNavigate}>
               {tab.label[lang]}
-              <ArrowUpRight size={20} aria-hidden="true" />
+              <Arrow direction="up-right" size={20} />
             </Link>
           )}
         </motion.div>
