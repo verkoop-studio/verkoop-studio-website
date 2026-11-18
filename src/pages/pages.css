@@ -425,20 +425,22 @@
 .cs-mock-head p { display: grid; margin: 0; line-height: 1.2; }
 .cs-mock-head span { color: var(--vs-mute); font-size: 10.5px; }
 .cs-ava { flex: none; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #ffd23f; font: 700 12px/1 var(--font-display); }
-.cs-mock-media { display: grid; place-items: center; aspect-ratio: 4 / 3; background: linear-gradient(150deg, #f7f5ee, #ffd23f 70%); }
+.cs-mock-media { position: relative; display: grid; place-items: center; aspect-ratio: 4 / 3; overflow: hidden; background: var(--vs-stone); }
+.cs-mock-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.cs-mock-media .cs-play-s { position: relative; }
+.cs-mock-caption { display: grid; flex: 1; min-width: 0; line-height: 1.3; }
+.cs-mock-caption b { font-size: 12.5px; }
+.cs-mock-caption em { overflow: hidden; color: var(--vs-mute); font-style: normal; font-size: 11px; white-space: nowrap; text-overflow: ellipsis; }
+.cs-mock-site { overflow: hidden; aspect-ratio: 16 / 10; border-radius: 10px; background: var(--vs-stone); }
+.cs-mock-site img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
 .cs-play-s { display: grid; place-items: center; width: 40px; height: 40px; padding-left: 2px; border-radius: 50%; background: #fff; box-shadow: 0 8px 18px -8px rgb(0 0 0 / 0.4); }
 .cs-mock-foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px; background: #f6f5f1; }
-.cs-lines { display: grid; flex: 1; gap: 6px; }
-.cs-lines i { height: 7px; border-radius: 4px; background: #e4e0d6; }
-.cs-lines i:nth-child(2) { width: 70%; }
-.cs-lines i:nth-child(3) { width: 45%; }
 .cs-mock-btn { flex: none; padding: 6px 10px; border-radius: 8px; background: var(--vs-ink); color: #fff; font-weight: 600; font-size: 11px; text-align: center; }
 .cs-mock-btn--wide { display: block; margin: 0 10px 10px; padding: 9px; background: var(--vs-blue); }
 .cs-mock-product { display: flex; gap: 10px; padding: 10px; }
-.cs-mock-img { flex: none; width: 64px; height: 64px; border-radius: 10px; background: linear-gradient(150deg, #ffd23f, #ff9fd0); }
+.cs-mock-img { flex: none; width: 64px; height: 64px; border-radius: 10px; background: var(--vs-stone); object-fit: cover; object-position: top; }
 .cs-bundles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 0 10px 10px; }
 .cs-bundles span { position: relative; display: grid; gap: 5px; padding: 8px 6px; border: 1.5px solid var(--vs-line); border-radius: 8px; text-align: center; }
-.cs-bundles span i { height: 5px; border-radius: 3px; background: #e4e0d6; }
 .cs-bundles .is-on { border-color: var(--vs-blue); background: rgb(43 75 242 / 0.06); }
 .cs-bundles em { position: absolute; left: 50%; top: -9px; translate: -50% 0; padding: 1px 6px; border-radius: 99px; background: var(--vs-blue); color: #fff; font-style: normal; font-size: 9px; white-space: nowrap; }
 .cs-mock--route { display: grid; gap: 8px; list-style: none; }
@@ -519,22 +521,18 @@
 .cs-story-bars i { flex: 1; height: 3px; border-radius: 2px; background: rgb(255 255 255 / 0.5); }
 .cs-story-bars i:first-child { background: #fff; }
 .cs-ava--ring { background: #fff; box-shadow: 0 0 0 2px #ffd23f; }
-.cs-story-product { display: block; width: 56%; aspect-ratio: 3 / 4; margin: 10px auto 12px; border-radius: 12px; background: rgb(255 255 255 / 0.9); box-shadow: 0 14px 24px -14px rgb(0 0 0 / 0.4); }
+.cs-story-product { display: block; width: 56%; aspect-ratio: 3 / 4; margin: 10px auto 12px; border-radius: 12px; overflow: hidden; background: #fff; box-shadow: 0 14px 24px -14px rgb(0 0 0 / 0.4); }
 .cs-mock--story .cs-mock-btn--wide { margin: 0; background: #fff; color: var(--vs-ink); }
-.cs-mock-img--pink { background: linear-gradient(150deg, #ff9fd0, #ff5fa2); }
 .cs-presale { display: grid; gap: 6px; margin: 4px 0 0; color: #17702a; font-size: 11.5px; font-weight: 600; }
 .cs-presale-bar { height: 6px; border-radius: 3px; background: #ece9e1; overflow: hidden; }
 .cs-presale-bar i { display: block; width: 100%; height: 100%; background: #28c840; transform-origin: 0 50%; animation: sv-grow 1.4s var(--vs-ease) 0.4s both; }
 .cs-mock-btn--off { background: var(--vs-stone); color: var(--vs-mute); }
 .cs-mock--vertical { position: relative; overflow: hidden; aspect-ratio: 9 / 15; max-width: 150px; border-radius: 16px; background: linear-gradient(180deg, #a9b29c, #5f6a55); }
-.cs-vert-face { position: absolute; left: 50%; top: 22%; width: 42%; aspect-ratio: 1; margin-left: -21%; border-radius: 50%; background: #e9d7c3; box-shadow: 0 60px 0 18px #20261d; }
+.cs-vert-face { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .cs-vert-sub { position: absolute; left: 8px; right: 8px; bottom: 14px; padding: 5px 6px; border-radius: 6px; background: #ffd23f; color: #151514; font-weight: 700; font-size: 11px; text-align: center; }
 .cs-mock--tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; max-width: 220px; }
-.cs-tile { aspect-ratio: 1; border-radius: 10px; }
-.cs-tile--0 { background: linear-gradient(150deg, #a9b29c, #20261d); }
-.cs-tile--1 { background: linear-gradient(150deg, #ece9e1, #a9b29c); }
-.cs-tile--2 { background: linear-gradient(150deg, #20261d, #5f6a55); }
-.cs-tile--3 { background: linear-gradient(150deg, #c9f26a, #a9b29c); }
+.cs-tile { overflow: hidden; aspect-ratio: 1; border-radius: 10px; background: var(--vs-stone); }
+.cs-tile img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
 /* A result shown as a stamp on the case poster. */
 .cs-stamp-card { position: relative; width: min(460px, 100%); aspect-ratio: 960 / 680; overflow: visible; border-radius: 20px; }
@@ -840,3 +838,4 @@
 .pr-result { isolation: isolate; }
 .pr-result::before { content: ''; position: absolute; inset: -6% -8%; z-index: -1; background: radial-gradient(50% 50% at 50% 45%, rgb(43 75 242 / 0.18), transparent 70%); pointer-events: none; }
 @media (max-width: 900px) { .pr-result::before { inset: -4% 0; } }
+.cs-story-product img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }

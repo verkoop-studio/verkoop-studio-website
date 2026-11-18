@@ -1,4 +1,8 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import ekartSite from '../assets/cases/ekart-640.webp'
+import healthfactorSite from '../assets/cases/healthfactor-website-640.webp'
+import noomsSite from '../assets/cases/nooms-640.webp'
+import pinacelloSite from '../assets/cases/pinacello-640.webp'
 import { Check, MapPin, Users } from 'lucide-react'
 import { useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
@@ -17,7 +21,7 @@ import CasePoster from '../components/home/CasePoster'
 import ResponsiveImage from '../components/ResponsiveImage'
 import type { CaseContent, CaseScreen, CaseStat } from '../data/caseContent'
 import { caseHeadline, cases } from '../data/cases'
-import type { CaseStudy, Lang } from '../data/types'
+import type { CaseSlug, CaseStudy, Lang } from '../data/types'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
@@ -40,28 +44,40 @@ function StatIcon({ icon }: { icon: CaseStat['icon'] }) {
   )
 }
 
-/* Sample screens: skeleton content and real labels only, each marked as a sample. */
-function Screen({ kind, lang, tags, name }: { kind: CaseScreen; lang: Lang; tags: string[]; name: string }) {
+/** Each case's own material: the ad still where one was published, and the live site. */
+const ASSETS: Record<CaseSlug, { still?: string; site: string }> = {
+  pinacello: { still: '/images/ads/pinacello-personal.jpg', site: pinacelloSite },
+  'e-kart': { site: ekartSite },
+  nooms: { site: noomsSite },
+  healthfactor: { still: '/images/ads/healthfactor-personal.jpg', site: healthfactorSite },
+}
+const domain = (url?: string) => (url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : '')
+
+/* The journey's screens, built from the case's own material and real labels, each marked as a sample. */
+function Screen({ kind, lang, tags, c }: { kind: CaseScreen; lang: Lang; tags: string[]; c: CaseStudy }) {
   const nl = lang === 'nl'
-  const extra = ExtraScreen({ kind, nl })
+  const name = c.name
+  const art = ASSETS[c.slug]
+  const site = domain(c.liveUrl)
+  const extra = ExtraScreen({ kind, nl, art, name, site })
   if (extra) return extra
   if (kind === 'ad') {
     return (
       <div className="cs-mock cs-mock--ad">
         <div className="cs-mock-head"><span className="cs-ava">{name.charAt(0)}</span><p><b>{name}</b><span>{nl ? 'Gesponsord' : 'Sponsored'}</span></p></div>
-        <div className="cs-mock-media"><span className="cs-play-s"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span></div>
-        <div className="cs-mock-foot"><span className="cs-lines"><i /><i /></span><span className="cs-mock-btn">{nl ? 'Shop nu' : 'Shop now'}</span></div>
+        <div className="cs-mock-media"><img src={art.still ?? art.site} alt="" width={360} height={270} loading="lazy" decoding="async" /><span className="cs-play-s"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span></div>
+        <div className="cs-mock-foot"><span className="cs-mock-caption"><b>{name}</b>{site && <em>{site}</em>}</span><span className="cs-mock-btn">{nl ? 'Shop nu' : 'Shop now'}</span></div>
       </div>
     )
   }
   if (kind === 'page') {
     return (
       <div className="cs-mock cs-mock--page">
-        <div className="cs-mock-product"><span className="cs-mock-img" /><span className="cs-lines"><i /><i /><i /></span></div>
+        <div className="cs-mock-site"><img src={art.site} alt="" width={640} height={400} loading="lazy" decoding="async" /></div>
         <div className="cs-bundles">
-          <span><b>1×</b><i /></span>
-          <span className="is-on"><b>2×</b><i /><em>{nl ? 'Populair' : 'Popular'}</em></span>
-          <span><b>3×</b><i /></span>
+          <span><b>1×</b></span>
+          <span className="is-on"><b>2×</b><em>{nl ? 'Populair' : 'Popular'}</em></span>
+          <span><b>3×</b></span>
         </div>
         <span className="cs-mock-btn cs-mock-btn--wide">{nl ? 'Bestel nu' : 'Order now'}</span>
       </div>
@@ -81,7 +97,7 @@ function Screen({ kind, lang, tags, name }: { kind: CaseScreen; lang: Lang; tags
 }
 
 /** The screens the other cases need. Same rules: skeleton content, real labels, marked as a sample. */
-function ExtraScreen({ kind, nl }: { kind: CaseScreen; nl: boolean }) {
+function ExtraScreen({ kind, nl, art, name, site }: { kind: CaseScreen; nl: boolean; art: { still?: string; site: string }; name: string; site: string }) {
   if (kind === 'booking') {
     const slots = ['14:00', '15:30', '17:00', '19:30']
     return (
@@ -121,7 +137,7 @@ function ExtraScreen({ kind, nl }: { kind: CaseScreen; nl: boolean }) {
       <div className="cs-mock cs-mock--story">
         <div className="cs-story-bars"><i /><i /><i /></div>
         <div className="cs-mock-head"><span className="cs-ava cs-ava--ring" /><p><b>{nl ? 'creator' : 'creator'}</b><span>{nl ? 'Verhaal' : 'Story'}</span></p></div>
-        <span className="cs-story-product" />
+        <span className="cs-story-product"><img src={art.site} alt="" width={640} height={400} loading="lazy" decoding="async" /></span>
         <span className="cs-mock-btn cs-mock-btn--wide">{nl ? 'Bekijk het product' : 'See the product'}</span>
       </div>
     )
@@ -129,7 +145,7 @@ function ExtraScreen({ kind, nl }: { kind: CaseScreen; nl: boolean }) {
   if (kind === 'presale') {
     return (
       <div className="cs-mock cs-mock--card">
-        <div className="cs-mock-product"><span className="cs-mock-img cs-mock-img--pink" /><span className="cs-lines"><i /><i /><i /></span></div>
+        <div className="cs-mock-product"><img className="cs-mock-img" src={art.site} alt="" width={64} height={64} loading="lazy" decoding="async" /><span className="cs-mock-caption"><b>{name}</b>{site && <em>{site}</em>}</span></div>
         <p className="cs-presale"><span className="cs-presale-bar"><i /></span>{nl ? 'Pre-sale uitverkocht' : 'Pre-sale sold out'}</p>
         <span className="cs-mock-btn cs-mock-btn--wide cs-mock-btn--off">{nl ? 'Uitverkocht' : 'Sold out'}</span>
       </div>
@@ -150,7 +166,7 @@ function ExtraScreen({ kind, nl }: { kind: CaseScreen; nl: boolean }) {
   if (kind === 'subtitle') {
     return (
       <div className="cs-mock cs-mock--vertical">
-        <span className="cs-vert-face" />
+        <img className="cs-vert-face" src={art.still ?? art.site} alt="" width={360} height={640} loading="lazy" decoding="async" />
         <span className="cs-vert-sub">{nl ? 'Welkom in onze gym' : 'Welcome to our gym'}</span>
       </div>
     )
@@ -158,7 +174,7 @@ function ExtraScreen({ kind, nl }: { kind: CaseScreen; nl: boolean }) {
   if (kind === 'tiles') {
     return (
       <div className="cs-mock cs-mock--tiles">
-        {[0, 1, 2, 3].map((i) => <span key={i} className={`cs-tile cs-tile--${i}`} />)}
+        {[0, 1, 2, 3].map((i) => <span key={i} className={`cs-tile cs-tile--${i}`}><img src={i % 2 ? art.site : art.still ?? art.site} alt="" width={180} height={180} loading="lazy" decoding="async" /></span>)}
       </div>
     )
   }
@@ -290,7 +306,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
             >
               <div className="cs-step-screen" aria-hidden="true">
                 <span className="cs-step-chip">{t.sample}</span>
-                <Screen kind={step.screen} lang={lang} tags={step.tags[lang]} name={c.name} />
+                <Screen kind={step.screen} lang={lang} tags={step.tags[lang]} c={c} />
               </div>
               <p className="cs-step-num">0{i + 1}</p>
               <h3 className="cs-step-title">{step.title[lang]}</h3>
