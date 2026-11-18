@@ -1,8 +1,13 @@
 import { motion, useReducedMotion } from 'motion/react'
+import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { caseHeadline, cases } from '../data/cases'
+import { STUDIO_PHONE, whatsappHref } from '../data/contact'
+import { faqItems } from '../data/faq'
 import { pricingTiers } from '../data/pricing'
+import FaqList from '../components/brand/FaqList'
+import { trackEvent } from '../lib/analytics'
 import Seo from '../components/Seo'
 import QualificationForm from '../components/QualificationForm'
 import HandNote from '../components/brand/HandNote'
@@ -27,6 +32,9 @@ const COPY = {
     callTitle: 'Wat er in het gesprek gebeurt',
     call: [['Jij vertelt', 'Je deelt je doel en wat vandaag vastloopt.'], ['We kijken samen', 'We bespreken de kansen en wat eerst moet.'], ['Je krijgt een voorstel', 'Met de scope en het budget, zwart op wit.']],
     proof: 'Werk voor',
+    routes: 'Rechtstreeks contact',
+    where: 'Lochristi, België',
+    faq: 'Vragen vooraf',
     academy: ['Je wilt Meta ads leren met', 'een begeleid leertraject', 'Naar de academy'],
     package: ['Je wilt meer weten over', 'Pakketten bekijken'],
   },
@@ -43,6 +51,9 @@ const COPY = {
     callTitle: 'What happens in the call',
     call: [['You tell us', 'You share your goal and what is stuck today.'], ['We look together', 'We discuss the opportunities and what comes first.'], ['You get a proposal', 'With the scope and the budget, in writing.']],
     proof: 'Work for',
+    routes: 'Direct contact',
+    where: 'Lochristi, Belgium',
+    faq: 'Questions first',
     academy: ['You want to learn Meta ads with', 'a guided learning track', 'Back to the academy'],
     package: ['You’re interested in', 'View packages'],
   },
@@ -86,6 +97,12 @@ export default function Contact() {
               ))}
             </ol>
           </motion.div>
+          <motion.ul className="ct-routes" {...arrive(0.75)} aria-label={t.routes}>
+            <li><a href="mailto:stef@verkoop.studio"><Mail size={16} aria-hidden="true" />stef@verkoop.studio</a></li>
+            <li><a href={`tel:${STUDIO_PHONE}`}><Phone size={16} aria-hidden="true" />0478 73 11 38</a></li>
+            <li><a href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement: 'contact_routes', channel: 'whatsapp' })}><MessageCircle size={16} aria-hidden="true" />WhatsApp</a></li>
+            <li><MapPin size={16} aria-hidden="true" />{t.where}</li>
+          </motion.ul>
           <motion.div className="ct-who" {...arrive(0.8)}>
             <img src={stefSmall} alt="" width={56} height={56} decoding="async" />
             <span>
@@ -105,6 +122,8 @@ export default function Contact() {
           />
         </div>
       </section>
+
+      <FaqList id="contact-faq" title={t.faq} items={[faqItems[14], faqItems[11], faqItems[10]]} lang={lang} />
 
       <section className="vs-wrap ct-proof" aria-label={t.proof}>
         <span className="ct-proof-label">{t.proof}</span>

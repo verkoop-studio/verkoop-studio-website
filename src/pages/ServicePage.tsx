@@ -15,6 +15,12 @@ import TextLink from '../components/brand/TextLink'
 import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import ApprovalCards from '../components/service/ApprovalCards'
+import BotAvatar from '../components/brand/BotAvatar'
+import FaqList from '../components/brand/FaqList'
+import WorksWith from '../components/brand/WorksWith'
+import { faqItems } from '../data/faq'
+import { serviceExtras } from '../data/serviceExtras'
+import { services } from '../data/services'
 import ServiceScreenView, { AdCard } from '../components/service/ServiceScreens'
 import { serviceStories, type ServiceScreen, type ServiceStep } from '../data/serviceSteps'
 import { caseHeadline, getCase } from '../data/cases'
@@ -43,6 +49,9 @@ const COPY = {
     sample: 'Voorbeeld',
     formTitle: 'Vertel ons over je project',
     formNote: 'we lezen alles :)',
+    whoTitle: 'Voor wie',
+    faqTitle: 'Vragen over deze dienst',
+    nextLabel: 'Volgende dienst',
   },
   en: {
     servicesCrumb: 'Services',
@@ -61,8 +70,14 @@ const COPY = {
     sample: 'Sample',
     formTitle: 'Tell us about your project',
     formNote: 'we read everything :)',
+    whoTitle: 'Who it is for',
+    faqTitle: 'Questions about this service',
+    nextLabel: 'Next service',
   },
 }
+
+const WHO_SHAPES = ['cat', 'bunny', 'star']
+const WHO_COLORS = ['#ffd23f', '#ff9fd0', '#7d93ff']
 
 /** Short headlines: what the service does for you, eight words at most. The second part is the blue chip. */
 const HEADLINE: Record<ServiceSlug, Bi<[string, string]>> = {
@@ -248,6 +263,8 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
   const [lead, accent] = HEADLINE[slug][lang]
   const parts: HeadlinePart[] = [{ text: lead }, { text: accent, tone: 'accent' }]
   const story = serviceStories[slug]
+  const extra = serviceExtras[slug]
+  const next = services[(services.findIndex((item) => item.slug === slug) + 1) % services.length]
   const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
 
   return (
@@ -290,6 +307,21 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
           </ul>
         </section>
       )}
+
+      <section className="vs-wrap vs-section sv-who" aria-labelledby="service-who">
+        <Reveal as="h2" className="vs-h2" id="service-who">{t.whoTitle}</Reveal>
+        <ul className="sv-who-list">
+          {extra.audiences.map((row, i) => (
+            <Reveal as="li" key={row.en[0]} delay={i * 0.08} y={20}>
+              <BotAvatar shape={WHO_SHAPES[i % WHO_SHAPES.length]} size={44} color={WHO_COLORS[i % WHO_COLORS.length]} />
+              <b>{row[lang][0]}</b>
+              <span>{row[lang][1]}</span>
+            </Reveal>
+          ))}
+        </ul>
+      </section>
+
+      {extra.platforms.length > 0 && <WorksWith lang={lang} platforms={extra.platforms} />}
 
       {slug === 'meta-ads' ? (
         <section className="vs-wrap vs-section" aria-labelledby="service-proof">
@@ -344,6 +376,21 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
         <div className="sv-close-form">
           <QualificationForm id={`audit-formulier-${service.slug}`} inquiryContext={lang === 'nl' ? `Dienst: ${service.title[lang]}` : `Service: ${service.title[lang]}`} />
         </div>
+      </section>
+
+      <FaqList id={`faq-${service.slug}`} title={t.faqTitle} lang={lang} items={[
+        { question: { nl: 'Wat krijg ik precies?', en: 'What exactly do I get?' }, answer: { nl: service.deliverables.nl.join('. ') + '.', en: service.deliverables.en.join('. ') + '.' } },
+        { question: { nl: 'Hoe pakken jullie het aan?', en: 'How do you go about it?' }, answer: { nl: service.process.nl.join(' '), en: service.process.en.join(' ') } },
+        faqItems[extra.faq],
+        faqItems[14],
+      ]} />
+
+      <section className="vs-wrap vs-section sv-next" aria-label={t.nextLabel}>
+        <Link to={`/${next.slug}`} className="sv-next-link" onClick={() => trackEvent('service_viewed', { service: next.slug, placement: 'service_next' })}>
+          <span className="sv-next-label">{t.nextLabel}<Arrow size={16} /></span>
+          <span className="sv-next-name">{next.title[lang]}</span>
+          <span className="sv-next-body">{next.summary[lang]}</span>
+        </Link>
       </section>
     </div>
   )
