@@ -1,7 +1,7 @@
-import { Check } from 'lucide-react'
+import { Check, Minus } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
-import { pricingTiers } from '../../data/pricing'
+import { featureRows, pricingTiers } from '../../data/pricing'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import Cta from '../brand/Cta'
@@ -46,10 +46,17 @@ function Plan({ index }: { index: number }) {
       <span className="vs-label">{String(index + 1).padStart(2, '0')} · {tier.name[lang]}</span>
       <span className="vs-plan-price">{price}<small>/ {unit}</small></span>
       <p className="vs-plan-audience">{tier.audience[lang]}</p>
+      {/* The full rate card per plan: what is in it, and what only the bigger plans add. */}
       <ul>
-        {tier.highlights[lang].map((item) => (
-          <li key={item}><Check size={15} strokeWidth={2.2} aria-hidden="true" />{item}</li>
-        ))}
+        {featureRows.map((row) => {
+          const included = row.values[index].type === 'check'
+          return (
+            <li key={row.label.nl} className={included ? undefined : 'vs-plan-off'}>
+              {included ? <Check size={15} strokeWidth={2.2} aria-hidden="true" /> : <Minus size={15} strokeWidth={2} aria-hidden="true" />}
+              <span>{row.label[lang]}{!included && <span className="vs-visually-hidden">{lang === 'nl' ? ' (niet inbegrepen)' : ' (not included)'}</span>}</span>
+            </li>
+          )
+        })}
       </ul>
       <Cta
         to={`/contact?pakket=${tier.key}`}

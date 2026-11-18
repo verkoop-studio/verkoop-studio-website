@@ -129,7 +129,12 @@ export default function WorkScroller() {
           const label = RESULT[item.slug]?.[lang] ?? item.sector[lang]
           return (
             <figure key={item.slug} className={`vs-slide${i === active ? ' is-active' : ''}`} aria-roledescription="slide" aria-label={`${i + 1} / ${items.length}`}>
-              <Link to={`/cases/${item.slug}`} draggable={false} aria-label={`${item.name}: ${item.summary[lang]}`} onClick={() => trackEvent('case_viewed', { case: item.slug, placement: 'home_scroller' })}>
+              <Link to={`/cases/${item.slug}`} draggable={false} aria-label={`${item.name}: ${item.summary[lang]}`} onClick={(event) => {
+                // Only the centred poster opens its case; a neighbour slides into focus first.
+                if (i !== active) { event.preventDefault(); go(i); return }
+                trackEvent('case_viewed', { case: item.slug, placement: 'home_scroller' })
+              }}
+              tabIndex={i === active ? 0 : -1}>
                 <div className="vs-slide-frame">
                   <CasePoster slug={item.slug} name={item.name} caption={label} lang={lang} />
                 </div>

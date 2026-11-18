@@ -393,3 +393,27 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 .vs-cta:hover .vs-cta-circle:has(.vs-arrow--up-right) .vs-arrow { rotate: -45deg; }
 .vs-textlink--arrow { display: inline-flex; align-items: center; gap: 6px; }
 @media (prefers-reduced-motion: reduce) { .vs-arrow > span { transition: none; } }
+
+/* ---------- Hero: headline beside a live proof card ---------- */
+
+.vs-hero-split { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
+.vs-hero-split .vs-h1 { font-size: clamp(48px, 6.4vw, 116px); }
+.vs-hero-proof { position: relative; }
+.vs-hero-proof-note { position: absolute; left: 18px; bottom: calc(100% + 4px); }
+.vs-proof-win { border-radius: 16px; border-width: 1px; box-shadow: 0 40px 80px -40px rgb(17 17 16 / 0.35); }
+.vs-proof-body { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px 22px; }
+.vs-proof-figure { font: 500 clamp(56px, 5vw, 84px)/0.9 var(--font-display); letter-spacing: -0.05em; color: var(--vs-ink); }
+.vs-proof-caption { margin: 0; color: var(--vs-mute); font-size: 14px; }
+.vs-proof-bars { display: flex; align-items: flex-end; gap: 6px; height: 72px; padding-top: 6px; }
+.vs-proof-bars i { flex: 1; border-radius: 4px 4px 0 0; background: var(--vs-blue); transform-origin: bottom; animation: vs-proof-grow 0.7s var(--vs-ease) both; }
+.vs-proof-bars i:last-child { background: var(--vs-ink); }
+@keyframes vs-proof-grow { from { transform: scaleY(0); } }
+.vs-proof-row { margin: 0; padding: 10px 12px; border-radius: 10px; background: var(--vs-stone); font-size: 14px; font-weight: 500; }
+.vs-marks { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding: 0; list-style: none; }
+.vs-mark-link { display: inline-flex; flex-direction: column; gap: 2px; min-height: 44px; justify-content: center; color: var(--vs-ink); text-decoration: none; transition: transform var(--vs-dur-fast) var(--vs-ease); }
+.vs-mark-link strong { font: 600 19px/1 var(--font-display); letter-spacing: -0.02em; }
+.vs-mark-link span { color: var(--vs-mute); font-size: 12.5px; }
+.vs-mark-link:hover { transform: translateY(-2px); }
+.vs-mark-link:hover strong { color: var(--vs-blue); }
+@media (max-width: 960px) { .vs-hero-split { grid-template-columns: minmax(0, 1fr); } .vs-hero-proof { max-width: 440px; margin-top: 20px; } }
+@media (prefers-reduced-motion: reduce) { .vs-proof-bars i { animation: none; } }

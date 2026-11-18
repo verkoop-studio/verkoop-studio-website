@@ -445,3 +445,10 @@
 @keyframes tx-typein { from { max-width: 0; } }
 @keyframes tx-draw-in { from { stroke-dashoffset: 1; } }
 
+
+/* Plans: the full rate card, with rows only the bigger plans include greyed out. */
+.vs-plan ul { gap: 8px; }
+.vs-plan li { font-size: 13.5px; }
+.vs-plan li.vs-plan-off { color: var(--vs-mute); opacity: 0.6; }
+.vs-plan li.vs-plan-off svg { color: var(--vs-mute); }
+.vs-plan--dark li.vs-plan-off { color: #8f8c86; }
