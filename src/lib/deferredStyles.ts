@@ -24,6 +24,7 @@ export const PAGE_STYLES: Record<string, string> = {
   [crmLanding.path]: PRODUCT_STYLES,
   [performance.path]: PRODUCT_STYLES,
   '/cases': PAGES_STYLES,
+  '/agency': PAGES_STYLES,
   ...Object.fromEntries(cases.map((item) => [`/cases/${item.slug}`, PAGES_STYLES])),
   ...Object.fromEntries(services.map((service) => [`/${service.slug}`, PAGES_STYLES])),
 }

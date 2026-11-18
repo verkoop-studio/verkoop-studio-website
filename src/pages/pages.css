@@ -396,3 +396,51 @@
 .cs-stamp-card > .vs-poster { border-radius: 20px; box-shadow: 0 50px 90px -50px rgb(17 17 16 / 0.6); }
 .cs-stamp { position: absolute; right: -6%; bottom: -10%; padding: 10px 22px; border: 4px solid #28c840; border-radius: 14px; background: rgb(255 255 255 / 0.92); color: #17702a; font: 700 clamp(24px, 3vw, 38px)/1 var(--font-display); letter-spacing: -0.02em; text-transform: none; box-shadow: 0 18px 40px -18px rgb(17 17 16 / 0.45); }
 @media (prefers-reduced-motion: reduce) { .cs-presale-bar i { animation: none; } }
+
+/* ---------- Agency ---------- */
+
+.ag-hero { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: center; gap: clamp(28px, 5vw, 80px); min-height: 88svh; padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(40px, 6vw, 80px); }
+.ag-h1 { margin-top: 16px; font-size: clamp(40px, 5.2vw, 80px); }
+.ag-hero-copy .vs-lead { margin-top: 22px; max-width: 40ch; }
+.ag-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 30px; }
+.ag-polaroids { position: relative; height: clamp(380px, 38vw, 540px); }
+.ag-polaroid { position: absolute; width: min(62%, 320px); margin: 0; padding: 12px 12px 46px; border-radius: 6px; background: #fff; box-shadow: 0 40px 70px -40px rgb(17 17 16 / 0.55), 0 1px 2px rgb(17 17 16 / 0.08); }
+.ag-polaroid img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 3px; }
+.ag-polaroid figcaption { position: absolute; left: 0; right: 0; bottom: 8px; color: var(--vs-ink); font: 500 30px/1 var(--font-hand); text-align: center; }
+.ag-polaroid--a { left: 2%; top: 4%; z-index: 1; }
+.ag-polaroid--b { right: 2%; top: 18%; z-index: 2; }
+.ag-tape { position: absolute; z-index: 3; width: 96px; height: 28px; background: rgb(255 210 63 / 0.75); mix-blend-mode: multiply; }
+.ag-tape--a { left: calc(2% + 110px); top: calc(4% - 12px); rotate: -8deg; }
+.ag-tape--b { right: calc(2% + 100px); top: calc(18% - 12px); rotate: 6deg; }
+.ag-note { position: absolute; left: 6%; bottom: -4%; z-index: 4; }
+
+.ag-team { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(18px, 3vw, 40px); margin: 32px 0 0; padding: 0; list-style: none; }
+.ag-person { display: grid; gap: 12px; }
+.ag-person-photo { display: block; overflow: hidden; aspect-ratio: 4 / 3; border-radius: 20px; background: var(--vs-stone); }
+.ag-person-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.8s var(--vs-ease); }
+.ag-person:hover .ag-person-photo img { transform: scale(1.04); }
+.ag-person-name { margin: 6px 0 0; font: 500 clamp(24px, 2.2vw, 32px)/1.1 var(--font-display); letter-spacing: -0.025em; }
+.ag-person-role { margin: 0; max-width: 46ch; color: var(--vs-ink-2); line-height: 1.5; }
+
+.ag-process { position: relative; margin-top: 40px; }
+.ag-process-line { position: absolute; left: 0; right: 0; top: 21px; height: 2px; background: var(--vs-blue); transform-origin: 0 50%; }
+.ag-process::before { content: ''; position: absolute; left: 0; right: 0; top: 21px; height: 2px; background: var(--vs-line); }
+.ag-process-list { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(14px, 2vw, 28px); margin: 0; padding: 0; list-style: none; }
+.ag-process-dot { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 18px; border-radius: 50%; background: var(--vs-paper, #f5f3ee); box-shadow: inset 0 0 0 2px var(--vs-blue); color: var(--vs-blue); font: 600 14px/1 var(--font-display); }
+.ag-process-title { margin: 0 0 8px; font: 500 21px/1.2 var(--font-display); letter-spacing: -0.02em; }
+.ag-process-body { margin: 0; color: var(--vs-ink-2); font-size: 15.5px; line-height: 1.5; }
+.ag-modes { display: grid; gap: 12px; margin-top: 48px; }
+.ag-modes-title { margin: 0; font: 500 18px/1.3 var(--font-display); }
+.ag-modes .sv-chips { margin: 0; }
+
+@media (max-width: 900px) {
+  .ag-hero, .ag-team { grid-template-columns: minmax(0, 1fr); }
+  .ag-hero { min-height: 0; }
+  .ag-polaroids { height: 420px; }
+  .ag-process::before, .ag-process-line { left: 21px; right: auto; top: 0; bottom: 0; width: 2px; height: auto; transform-origin: 50% 0; }
+  .ag-process-line { transform: none !important; }
+  .ag-process-list { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .ag-process-list li { padding-left: 64px; position: relative; }
+  .ag-process-dot { position: absolute; left: 0; top: -6px; }
+}
+@media (prefers-reduced-motion: reduce) { .ag-person-photo img { transition: none; } }
