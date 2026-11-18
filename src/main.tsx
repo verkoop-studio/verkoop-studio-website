@@ -12,6 +12,11 @@ import { loadDeferredStyles } from './lib/deferredStyles'
 
 loadDeferredStyles()
 
+// Pages are prerendered at their path without a trailing slash. A static host that serves
+// /contact/ would hand the router a different path than the HTML was built for.
+const { pathname, search, hash } = window.location
+if (pathname.length > 1 && pathname.endsWith('/')) window.history.replaceState(window.history.state, '', pathname.replace(/\/+$/, '') + search + hash)
+
 const root = document.getElementById('root')!
 const app = (
   <StrictMode>
