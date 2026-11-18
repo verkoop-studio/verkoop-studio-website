@@ -10,6 +10,7 @@ import { faqItems } from '../data/faq'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
+import CrmStepper from '../components/product/CrmStepper'
 import Tilted from '../components/product/Tilted'
 import { crmLanding, signupHref, type CrmScreenKey } from '../data/crmLanding'
 import { trackCrmSignupClick } from '../lib/analytics'
@@ -20,7 +21,6 @@ import crmLeads from '../assets/crm/crm-leads.webp'
 import { PRODUCT_STYLES, usePageStyles } from '../lib/deferredStyles'
 
 const SCREENS: Record<CrmScreenKey, string> = { dashboard: crmDashboard, prospectflow: crmProspectflow, leads: crmLeads }
-const TINTS = ['#2b4bf2', '#c9f26a', '#ff9fd0']
 
 /** Words that are not in crmLanding: the sample screen, the slider and the step to Performance. */
 const T = {
@@ -174,23 +174,14 @@ export default function SalesCrm() {
       <section id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
         <div className="vs-wrap">
           <SplitHeadline id="schermen-titel" className="vs-h2" parts={[{ text: c.screens.title[lang] }]} />
-          <div className="pp-cards">
-            {c.screens.items[lang].map((screen, i) => (
-              <Tilted key={screen.key} lean={i % 2 ? 0.8 : -0.8} className="tx-card pp-card is-on" style={{ '--t': TINTS[i] } as CSSProperties}>
-                <div className="tx-stage pp-card-stage">
-                  <div className="tx-win">
-                    <div className="tx-win-bar"><i /><i /><i /><b>Sales CRM</b></div>
-                    <ResponsiveImage src={SCREENS[screen.key]} alt={screen.alt} sizes="(max-width: 1024px) 100vw, 900px" loading="lazy" className="pp-shot" />
-                  </div>
-                </div>
-                <div className="tx-info">
-                  <p className="tx-step">{String(i + 1).padStart(2, '0')} / 03</p>
-                  <h3 className="tx-title">{screen.title}</h3>
-                  <p className="tx-body">{screen.body}</p>
-                </div>
-              </Tilted>
+          <CrmStepper lang={lang} />
+          <ul className="pp-shots">
+            {c.screens.items[lang].map((screen) => (
+              <li key={screen.key}>
+                <div className="tx-win"><div className="tx-win-bar"><i /><i /><i /><b>Sales CRM</b></div><ResponsiveImage src={SCREENS[screen.key]} alt={screen.alt} sizes="(max-width: 1024px) 100vw, 360px" loading="lazy" className="pp-shot" /></div>
+              </li>
             ))}
-          </div>
+          </ul>
           <p className="pp-fine">{c.demoNote[lang]}</p>
         </div>
       </section>
