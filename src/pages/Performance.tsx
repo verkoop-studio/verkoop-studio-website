@@ -1,166 +1,255 @@
-import { useEffect } from 'react'
+import { motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Seo from '../components/Seo'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
 import ResponsiveImage from '../components/ResponsiveImage'
-import CheckList from '../components/CheckList'
+import Cta from '../components/brand/Cta'
+import HandNote from '../components/brand/HandNote'
+import SplitHeadline from '../components/brand/SplitHeadline'
+import Tilted from '../components/product/Tilted'
 import { performance as p } from '../data/performance'
 import { trackEvent, trackLandingView } from '../lib/analytics'
 import { useLang } from '../i18n/LanguageContext'
-import overviewShot from '../assets/performance/overview.webp'
 import adsShot from '../assets/performance/ads.webp'
 import customersShot from '../assets/performance/customers.webp'
 import adviceShot from '../assets/performance/advice.webp'
-
-/** One content rail for the whole page, so every heading starts on the same line. */
-const RAIL = 'mx-auto w-full max-w-6xl px-5 sm:px-8'
+import './product.css'
 
 const SHOTS = { ads: adsShot, customers: customersShot, advice: adviceShot } as const
+const TINTS = ['#2b4bf2', '#ff7a59', '#c9f26a']
+/** Upper bound of monthly ad spend for each plan, in the order of performance.pricing.plans. */
+const LIMITS = [5000, 15000, 50000, 150000, Infinity]
+
+/** Words that are not in data/performance.ts: the sample table, the slider and small labels. Figures are invented samples. */
+const T = {
+  nl: {
+    prices: 'Bekijk de prijzen', note: 'echte cijfers', sample: 'Voorbeeld', channel: 'Kanaal', says: 'Platform meldt', sold: 'Echt verkocht',
+    total: 'Totaal', orders: 'bestellingen', spendTitle: 'Uitgaven en omzet per week', spend: 'Uitgaven', revenue: 'Omzet',
+    claims: ['Meta telt 1 aankoop', 'Google telt dezelfde aankoop', 'Je webshop ziet 1 bestelling'],
+    slider: 'Wat geef je per maand uit aan advertenties?', perMonth: 'per maand', yourPlan: 'Jouw plan', pill: 'Vanaf €49 per maand',
+  },
+  en: {
+    prices: 'See the prices', note: 'real numbers', sample: 'Sample', channel: 'Channel', says: 'Platform reports', sold: 'Really sold',
+    total: 'Total', orders: 'orders', spendTitle: 'Spend and revenue per week', spend: 'Spend', revenue: 'Revenue',
+    claims: ['Meta counts 1 purchase', 'Google counts the same purchase', 'Your shop sees 1 order'],
+    slider: 'What do you spend on ads each month?', perMonth: 'per month', yourPlan: 'Your plan', pill: 'From €49 a month',
+  },
+}
+
+const ROWS = [
+  { name: 'Meta', says: 61, sold: 38 },
+  { name: 'Google', says: 47, sold: 31 },
+  { name: 'TikTok', says: 23, sold: 15 },
+]
+const WEEKS = [[38, 62], [44, 78], [41, 70], [52, 96], [48, 88], [56, 100]]
+
+/** Counts up to `to` once it is on screen. */
+function Count({ to, on }: { to: number; on: boolean }) {
+  const [n, setN] = useState(0)
+  const reduce = useReducedMotion()
+  useEffect(() => {
+    if (!on) return setN(0)
+    if (reduce) return setN(to)
+    let frame = 0
+    const start = performance.now()
+    const step = (now: number) => {
+      const k = Math.min(1, (now - start) / 900)
+      setN(Math.round(to * (1 - (1 - k) ** 3)))
+      if (k < 1) frame = requestAnimationFrame(step)
+    }
+    frame = requestAnimationFrame(step)
+    return () => cancelAnimationFrame(frame)
+  }, [on, to, reduce])
+  return <>{n}</>
+}
+
+/** What each platform reports, struck through by hand, beside what the shop really sold. Sample data. */
+function TruthTable({ lang }: { lang: 'nl' | 'en' }) {
+  const t = T[lang]
+  const ref = useRef<HTMLDivElement>(null)
+  const on = useInView(ref, { margin: '-80px' })
+  return (
+    <div ref={ref} className={`pp-live pp-truth${on ? ' is-on' : ''}`} aria-hidden="true">
+      <div className="tx-win pp-win">
+        <div className="tx-win-bar"><i /><i /><i /><b>Performance</b><em>{t.sample}</em></div>
+        <div className="pp-table">
+          <div className="pp-row pp-row--head"><span>{t.channel}</span><span>{t.says}</span><span>{t.sold}</span></div>
+          {ROWS.map((row, i) => (
+            <div key={row.name} className="pp-row" style={{ '--d': `${0.5 + i * 0.35}s` } as CSSProperties}>
+              <span>{row.name}</span>
+              <span className="pp-claim"><Count to={row.says} on={on} /><svg viewBox="0 0 60 16" preserveAspectRatio="none"><path d="M2 11C16 3 40 14 58 5" pathLength={1} /></svg></span>
+              <strong><Count to={row.sold} on={on} /></strong>
+            </div>
+          ))}
+          <div className="pp-row pp-row--total" style={{ '--d': '1.6s' } as CSSProperties}>
+            <span>{t.total}</span>
+            <span className="pp-claim"><Count to={131} on={on} /><svg viewBox="0 0 60 16" preserveAspectRatio="none"><path d="M2 11C16 3 40 14 58 5" pathLength={1} /></svg></span>
+            <strong><Count to={84} on={on} /> {t.orders}</strong>
+          </div>
+        </div>
+      </div>
+      <div className="pp-chart">
+        <p>{t.spendTitle}</p>
+        <div className="pp-chart-bars">{WEEKS.map(([spend, revenue], i) => <span key={i} style={{ '--d': `${0.3 + i * 0.09}s` } as CSSProperties}><i style={{ height: `${revenue}%` }} /><b style={{ height: `${spend}%` }} /></span>)}</div>
+        <p className="pp-legend"><i />{t.revenue}<b />{t.spend}</p>
+      </div>
+    </div>
+  )
+}
+
+function PlanSlider({ lang }: { lang: 'nl' | 'en' }) {
+  const t = T[lang]
+  const plans = p.pricing.plans
+  const [step, setStep] = useState(12)
+  /* a curved scale: fine steps at the low end, where most businesses are */
+  const spend = Math.round(((step / 100) ** 2.4 * 200000) / 500) * 500
+  const index = LIMITS.findIndex((limit) => spend <= limit)
+  const money = spend.toLocaleString(lang === 'nl' ? 'nl-BE' : 'en-GB')
+  return (
+    <div className="pp-price">
+      <label className="pp-slider">
+        <span>{t.slider}</span>
+        <strong>€ {step >= 100 ? '200.000+' : money}</strong>
+        <input type="range" min={0} max={100} value={step} onChange={(e) => setStep(Number(e.target.value))} style={{ '--p': `${step}%` } as CSSProperties} />
+      </label>
+      <ul className="pp-tiers pp-tiers--five">
+        {plans.map((plan, i) => (
+          <li key={plan.name} className={i === index ? 'is-on' : ''}>
+            <p>{plan.name} · {plan.spend[lang]}</p>
+            <strong>{plan.price[lang]}</strong>
+            <span>{i < 4 ? p.pricing.head[lang].price : ''}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 
 export default function Performance() {
   const { lang } = useLang()
+  const t = T[lang]
+  const hero = useRef<HTMLElement>(null)
+  const { scrollYProgress } = useScroll({ target: hero, offset: ['end 60%', 'end 20%'] })
+  const pill = useTransform(scrollYProgress, [0, 1], [90, 0])
+  const accent = lang === 'nl' ? 'echt' : 'actually'
 
   useEffect(() => { trackLandingView('Verkoop Studio Performance') }, [])
+  const start = (placement: string) => () => trackEvent('audit_cta_clicked', { placement })
 
   return (
-    <div>
+    <div className="vs-page pp">
       <Seo title={p.seo.title[lang]} description={p.seo.description[lang]} path={p.path} />
 
-      {/* The offer, the price and the product on the first screen. On a phone the
-          screenshot sits between the lead and the facts, above the fold. */}
-      <section className="performance-hero bg-surface/40">
-        <div className={`${RAIL} reveal grid items-center gap-x-14 gap-y-8 py-12 sm:py-20 lg:grid-cols-[0.9fr_1.2fr]`}>
-          <div className="order-1 lg:col-start-1 lg:row-start-1">
-            <p className="text-sm font-semibold text-accent">Verkoop Studio Performance</p>
-            <h1 className="mt-3 font-display text-4xl text-paper text-balance sm:text-5xl">{p.hero.title[lang]}</h1>
-            <p className="mt-4 max-w-xl text-lg text-bone">{p.hero.lead[lang]}</p>
-          </div>
-
-          <figure className="order-2 m-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center">
-            <ResponsiveImage
-              src={overviewShot}
-              alt={p.hero.figureAlt[lang]}
-              sizes="(max-width: 1024px) 100vw, 680px"
-              loading="eager"
-              fetchPriority="high"
-              className="w-full rounded-2xl border border-line object-cover object-top shadow-sm"
-            />
-            <figcaption className="mt-3 text-sm text-mute">{p.sampleNote[lang]}</figcaption>
-          </figure>
-
-          <div className="order-3 lg:col-start-1 lg:row-start-2">
-            <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-3">
-              {p.hero.facts[lang].map(fact => (
-                <div key={fact.label} className="border-t border-line pt-3">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-mute">{fact.label}</dt>
-                  <dd className="mt-1 text-sm font-medium text-paper">{fact.value}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-8">
-              <a href="#starten" className="button-dark"
-                onClick={() => trackEvent('audit_cta_clicked', { placement: 'performance_hero' })}>
-                {p.hero.cta[lang]} <span aria-hidden="true">↗</span>
-              </a>
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="border-t border-line" aria-labelledby="probleem-titel">
-        <div className={`${RAIL} reveal py-16 sm:py-20`}>
-          <h2 id="probleem-titel" className="max-w-3xl font-display text-3xl text-paper text-balance sm:text-4xl">{p.problem.title[lang]}</h2>
-          <p className="mt-4 max-w-2xl text-lg text-bone">{p.problem.body[lang]}</p>
-        </div>
-      </section>
-
-      {/* Real screens from the product, each once, text beside the picture. */}
-      <section className="border-t border-line bg-surface/40" aria-labelledby="schermen-titel">
-        <div className={`${RAIL} py-16 sm:py-20`}>
-          <h2 id="schermen-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{p.screens.title[lang]}</h2>
-          <div className="mt-12 grid gap-16 sm:gap-20">
-            {p.screens.items[lang].map((item, index) => (
-              <div key={item.key} className="reveal grid items-center gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-14">
-                <div className={index % 2 ? 'lg:order-2' : undefined}>
-                  <h3 className="font-display text-2xl text-paper text-balance">{item.title}</h3>
-                  <p className="mt-3 text-bone">{item.body}</p>
-                </div>
-                <figure className={`m-0 ${index % 2 ? 'lg:order-1' : ''}`}>
-                  <ResponsiveImage
-                    src={SHOTS[item.key]}
-                    alt={item.alt}
-                    sizes="(max-width: 1024px) 100vw, 680px"
-                    loading="lazy"
-                    className="w-full rounded-2xl border border-line object-cover object-top"
-                  />
-                  <figcaption className="mt-3 text-sm text-mute">{p.sampleNote[lang]}</figcaption>
-                </figure>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="border-t border-line" aria-labelledby="inhoud-titel">
-        <div className={`${RAIL} reveal py-16 sm:py-20`}>
-          <h2 id="inhoud-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{p.features.title[lang]}</h2>
-          <CheckList items={[...p.features.items[lang]]} className="mt-10" />
-        </div>
-      </section>
-
-      <section className="border-t border-line bg-surface/40" aria-labelledby="voorwie-titel">
-        <div className={`${RAIL} reveal py-16 sm:py-20`}>
-          <h2 id="voorwie-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{p.audience.title[lang]}</h2>
-          <ul className="mt-10 grid gap-10 sm:grid-cols-3 sm:gap-8">
-            {p.audience.items[lang].map(item => (
-              <li key={item.title} className="border-t-2 border-accent pt-5">
-                <h3 className="text-base font-semibold text-paper">{item.title}</h3>
-                <p className="mt-2 text-sm text-bone">{item.body}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section id="prijzen" className="border-t border-line" aria-labelledby="prijzen-titel">
-        <div className={`${RAIL} reveal py-16 sm:py-20`}>
-          <h2 id="prijzen-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{p.pricing.title[lang]}</h2>
-          <p className="mt-4 max-w-2xl text-bone">{p.pricing.intro[lang]}</p>
-          <div className="mt-10 grid items-start gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:gap-14">
-            <div className="overflow-x-auto rounded-2xl border border-line">
-              <table className="w-full text-left text-sm">
-                <thead className="bg-surface text-xs uppercase tracking-[0.08em] text-mute">
-                  <tr>
-                    <th scope="col" className="px-5 py-3 font-semibold">{p.pricing.head[lang].plan}</th>
-                    <th scope="col" className="px-5 py-3 font-semibold">{p.pricing.head[lang].spend}</th>
-                    <th scope="col" className="px-5 py-3 text-right font-semibold">{p.pricing.head[lang].price}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {p.pricing.plans.map(plan => (
-                    <tr key={plan.name} className="border-t border-line">
-                      <th scope="row" className="px-5 py-4 font-semibold text-paper">{plan.name}</th>
-                      <td className="px-5 py-4 text-bone">{plan.spend[lang]}</td>
-                      <td className="px-5 py-4 text-right font-display text-lg text-paper tabular-nums">{plan.price[lang]}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      <section ref={hero} className="pp-hero performance-hero">
+        <div className="vs-wrap pp-hero-grid">
+          <div>
+            <p className="vs-label">Verkoop Studio Performance</p>
+            <SplitHeadline as="h1" className="vs-h1 pp-h1" onMount parts={p.hero.title[lang].split(' ').map((word) => ({ text: word, tone: word === accent ? 'accent' as const : undefined }))} />
+            <p className="vs-lead pp-lead-text">{p.hero.lead[lang]}</p>
+            <div className="vs-hero-actions">
+              <Cta to="/performance#starten" onClick={start('performance_hero')}>{p.hero.cta[lang]}</Cta>
+              <Cta to="/performance#prijzen" variant="line">{t.prices}</Cta>
             </div>
-            <CheckList items={[...p.pricing.terms[lang]]} columns={1} />
+            <dl className="pp-facts">
+              {p.hero.facts[lang].map((fact) => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
+            </dl>
+          </div>
+          <div className="pp-hero-stage">
+            <TruthTable lang={lang} />
+            <HandNote point="up-left" className="pp-hero-note">{t.note}</HandNote>
           </div>
         </div>
       </section>
 
-      {/* The page ends on the action. */}
-      <section id="starten" className="border-t border-line bg-surface/40" aria-labelledby="starten-titel">
-        <div className={`${RAIL} py-16 sm:py-20`}>
-          <h2 id="starten-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{p.form.title[lang]}</h2>
-          <p className="mt-3 max-w-2xl text-bone">{p.form.body[lang]}</p>
-          <div className="mt-10">
-            <PerformanceSignupForm />
+      <section className="pp-pricing pp-problem" aria-labelledby="probleem-titel">
+        <div className="vs-wrap pp-who">
+          <div className="pp-who-copy">
+            <SplitHeadline id="probleem-titel" className="vs-h2" parts={[{ text: p.problem.title[lang] }]} />
+            <p className="vs-lead">{p.problem.body[lang]}</p>
+          </div>
+          <div className="pp-pains">
+            {t.claims.map((claim, i) => (
+              <Tilted key={claim} lean={[-3, 2.4, -1.2][i]} className="pp-pain" style={{ zIndex: i + 1 }}>
+                <span>{i < 2 ? '+1' : '=1'}</span>
+                <p>{claim}</p>
+              </Tilted>
+            ))}
           </div>
         </div>
       </section>
+
+      <section id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
+        <div className="vs-wrap">
+          <SplitHeadline id="schermen-titel" className="vs-h2" parts={[{ text: p.screens.title[lang] }]} />
+          <div className="pp-cards">
+            {p.screens.items[lang].map((screen, i) => (
+              <Tilted key={screen.key} lean={i % 2 ? 0.8 : -0.8} className="tx-card pp-card is-on" style={{ '--t': TINTS[i] } as CSSProperties}>
+                <div className="tx-stage pp-card-stage">
+                  <div className="tx-win">
+                    <div className="tx-win-bar"><i /><i /><i /><b>Performance</b><em>{t.sample}</em></div>
+                    <ResponsiveImage src={SHOTS[screen.key]} alt={screen.alt} sizes="(max-width: 1024px) 100vw, 900px" loading="lazy" className="pp-shot" />
+                  </div>
+                </div>
+                <div className="tx-info">
+                  <p className="tx-step">{String(i + 1).padStart(2, '0')} / 03</p>
+                  <h3 className="tx-title">{screen.title}</h3>
+                  <p className="tx-body">{screen.body}</p>
+                </div>
+              </Tilted>
+            ))}
+          </div>
+          <p className="pp-fine">{p.sampleNote[lang]}</p>
+        </div>
+      </section>
+
+      <section className="vs-wrap vs-section" aria-labelledby="inhoud-titel">
+        <SplitHeadline id="inhoud-titel" className="vs-h2" parts={[{ text: p.features.title[lang] }]} />
+        <ul className="pp-more">
+          {p.features.items[lang].map((item, i) => (
+            <motion.li key={item} initial={{ opacity: 0, x: -16 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: false, margin: '-60px' }} transition={{ duration: 0.5, delay: i * 0.05 }}>
+              <svg width="18" height="18" viewBox="0 0 14 14" fill="none" aria-hidden="true"><motion.path d="M2 7.5 5.5 11 12 3.5" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" initial={{ pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: false }} transition={{ duration: 0.4, delay: 0.2 + i * 0.05 }} /></svg>
+              {item}
+            </motion.li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="pp-screens pp-for" aria-labelledby="voorwie-titel">
+        <div className="vs-wrap">
+          <SplitHeadline id="voorwie-titel" className="vs-h2" parts={[{ text: p.audience.title[lang] }]} />
+          <div className="pp-three">
+            {p.audience.items[lang].map((item, i) => (
+              <Tilted key={item.title} lean={[-2, 1.4, -1][i]} className="pp-for-card">
+                <span>{String(i + 1).padStart(2, '0')}</span>
+                <h3>{item.title}</h3>
+                <p>{item.body}</p>
+              </Tilted>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="prijzen" className="pp-pricing" aria-labelledby="prijzen-titel">
+        <div className="vs-wrap">
+          <SplitHeadline id="prijzen-titel" className="vs-h2" parts={[{ text: p.pricing.title[lang] }]} />
+          <p className="vs-lead pp-narrow">{p.pricing.intro[lang]}</p>
+          <PlanSlider lang={lang} />
+          <ul className="pp-terms">{p.pricing.terms[lang].map((term) => <li key={term}>{term}</li>)}</ul>
+        </div>
+      </section>
+
+      <section id="starten" className="pp-final pp-form" aria-labelledby="starten-titel">
+        <div className="vs-wrap">
+          <SplitHeadline id="starten-titel" className="pp-final-title" parts={[{ text: p.form.title[lang], tone: 'accent' }]} />
+          <p className="vs-lead pp-narrow">{p.form.body[lang]}</p>
+          <div className="pp-form-box"><PerformanceSignupForm /></div>
+        </div>
+      </section>
+
+      <motion.div className="pp-pill" style={{ y: pill }}>
+        <span>{t.pill}</span>
+        <Cta to="/performance#starten" onClick={start('performance_pill')}>{p.hero.cta[lang]}</Cta>
+      </motion.div>
     </div>
   )
 }

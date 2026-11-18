@@ -7,6 +7,7 @@ import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
+import Tilted from '../components/product/Tilted'
 import { crmLanding, signupHref, type CrmScreenKey } from '../data/crmLanding'
 import { trackCrmSignupClick } from '../lib/analytics'
 import { useLang } from '../i18n/LanguageContext'
@@ -82,24 +83,6 @@ function LivePipeline({ lang }: { lang: 'nl' | 'en' }) {
         <ul>{t.todayRows.map((row, i) => <li key={row} className={stage > i ? 'is-done' : ''}><i />{row}</li>)}</ul>
       </div>
     </div>
-  )
-}
-
-/** A card that rests at a small tilt, sways a little and straightens under the pointer. */
-function Tilted({ children, lean, className = '', style }: { children: React.ReactNode; lean: number; className?: string; style?: CSSProperties }) {
-  const reduce = useReducedMotion()
-  return (
-    <motion.div
-      className={`pp-tilt ${className}`.trim()}
-      style={style}
-      initial={reduce ? false : { opacity: 0, y: 70, rotate: lean * 4 }}
-      whileInView={{ opacity: 1, y: 0, rotate: lean }}
-      whileHover={reduce ? undefined : { rotate: 0, y: -8, scale: 1.02 }}
-      viewport={{ once: false, margin: '-80px' }}
-      transition={{ type: 'spring', stiffness: 170, damping: 16, mass: 0.9 }}
-    >
-      {children}
-    </motion.div>
   )
 }
 
