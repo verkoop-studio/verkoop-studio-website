@@ -20,8 +20,8 @@ export default function App({ location }: { location?: string }) {
   return (
     <Router location={location ?? "/"}>
       <Routes>
-        <Route path="academy" element={<Academy />} />
         <Route element={<Layout />}>
+          <Route path="academy" element={<Academy />} />
           <Route index element={<Home />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog/:slug" element={<Blog />} />

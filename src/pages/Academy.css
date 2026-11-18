@@ -922,3 +922,41 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 .academy-page .hero-request h2 { font-size: clamp(22px,2vw,27px); line-height: 1.15; margin-top: 0; }
 
 @media(max-width: 767px) { .ac-hero { grid-template-areas: "video" "copy" "action"; } }
+
+/* ---------- Verkoop Studio design system, applied to the Academy ---------- */
+/* The Academy now sits inside the shared layout (header, footer, contact button).
+   Its own variables point at the brand tokens, so every rule above follows the new palette. */
+
+.academy-page {
+  --ac-ink: var(--vs-ink);
+  --ac-text: var(--vs-ink-2);
+  --ac-mute: var(--vs-mute);
+  --ac-blue: var(--vs-blue);
+  --ac-blue-deep: #2240d8;
+  --ac-lavender: #c9d2ff;
+  --ac-tint: var(--vs-stone);
+  --ac-line: var(--vs-line);
+  --ac-mono: var(--font-sans);
+  font-family: var(--font-sans);
+  background: var(--vs-paper);
+}
+.academy-page :is(h1, h2, h3) { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.035em; }
+.ac-hero { padding-top: clamp(120px, 14vw, 168px); }
+.ac-hero-copy h1 { font-size: clamp(44px, 6.2vw, 104px); line-height: 1.02; }
+.ac-hero-copy h1 span { color: #fff; background: var(--vs-blue); border-radius: 0.16em; padding: 0 0.16em 0.06em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.ac-kicker, .ac-offer-heading .ac-offer-eyebrow { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 500; }
+.ac-subnav { display: flex; justify-content: center; padding-top: clamp(104px, 11vw, 132px); margin-bottom: -48px; }
+.ac-subnav + .ac-hero { padding-top: 72px; }
+.ac-pill-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; padding: 4px; border-radius: 999px; box-shadow: inset 0 0 0 1px var(--vs-line); background: var(--vs-card); }
+.ac-pill-nav a { min-height: 40px; display: inline-flex; align-items: center; padding: 0 14px; border-radius: 999px; color: var(--vs-ink-2); font-size: 14px; text-decoration: none; transition: background var(--vs-dur-fast) ease, color var(--vs-dur-fast) ease; }
+.ac-pill-nav a:hover { background: var(--vs-ink); color: var(--vs-paper); }
+.ac-hv, .ac-slide-visual, .ac-promise, .ac-student-proof, .ac-tracking-visual, .ac-offer-coaching, .ac-hv-product, .ac-hv-ad-art { background-image: none; background-color: var(--vs-card); }
+.ac-hv::before, .ac-tracking-visual::before { display: none; }
+.ac-final-inner { background-image: none; background-color: var(--vs-ink); color: var(--vs-paper); }
+.ac-quiet-kicker-light { color: #c9c6bf; }
+.ac-footer { background: var(--vs-stone); }
+.ac-footer-note { margin: 24px 0 0; color: var(--vs-mute); font-size: 13px; line-height: 1.5; }
+@media (pointer: coarse) { .ac-pill-nav a { min-height: 44px; } }
+@media (max-width: 760px) { .ac-subnav { padding-top: 96px; } .ac-pill-nav { border-radius: 18px; } }
+/* One sticky action on phones: the Academy's own, not the site-wide bar. */
+body:has(.academy-page) .mobile-contact-bar { display: none; }

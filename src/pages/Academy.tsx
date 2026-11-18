@@ -191,7 +191,7 @@ function NewsletterForm() {
 }
 
 export default function Academy() {
-  const { lang, setLang, t } = useAcademyTranslation()
+  const { lang, t } = useAcademyTranslation()
   const euro = (value: number) => new Intl.NumberFormat(lang === 'nl' ? 'nl-BE' : 'en-GB', { style: 'currency', currency: 'EUR', minimumFractionDigits: Number.isInteger(value) ? 0 : 2, maximumFractionDigits: 2 }).format(value)
   const ratio = (value: number) => value.toFixed(2).replace('.', lang === 'nl' ? ',' : '.')
   const academyModules = sourceModules.map(item => ({ ...item, tag: t(item.tag), shortTitle: t(item.shortTitle), title: t(item.title), summary: t(item.summary), points: item.points.map(t), outcome: t(item.outcome) }))
@@ -309,22 +309,16 @@ export default function Academy() {
     if (Math.abs(distance) > 50) step(distance < 0 ? 1 : -1)
   }
 
-  return <div className="academy-page" lang={lang} ref={pageRef}>
+  return <div className="academy-page vs-page" lang={lang} ref={pageRef}>
     <link rel="stylesheet" href={academyStylesheet} precedence="academy" />
     <Seo title={t("Ads Academy: 1-op-1 Meta Ads en Google Ads lessen")} description={t("Leer je merk schalen met 1-op-1 begeleiding in Meta Ads, Google Ads, landingspagina’s en tracking. Samen met Stef van Verkoop Studio.")} path="/academy" language={lang} />
     <a className="ac-skip" href="#academy-main">{t("Naar de inhoud")}</a>
 
-    <header className="ac-header">
-      <div className="ac-wrap ac-header-inner">
-        <div className="ac-identity"><Link to="/" aria-label={t("Verkoop Studio, naar de homepage")}><BrandMark /></Link><span className="ac-identity-line" /><a href="#academy-main" className="ac-identity-label">academy</a></div>
-        <nav className="ac-pill-nav" aria-label={t("Academy navigatie")}><a href="#aanbod">{t("Aanbod")}</a><a href="#resultaten">{t("Resultaten")}</a><a href="#aanpak">{t("Aanpak")}</a><a href="#programma">{t("Programma")}</a><a href="#testlog" onClick={openExample}>{t("Voorbeeld")}</a><a href="#faq">FAQ</a></nav>
-        <div className="ac-header-actions">
-          <button className="ac-header-cta" onClick={goToSignup}>{t("Vraag je gratis les aan")}</button>
-        </div>
-      </div>
-    </header>
 
     <main id="academy-main">
+      <div className="ac-wrap ac-subnav">
+        <nav className="ac-pill-nav" aria-label={t("Academy navigatie")}><a href="#aanbod">{t("Aanbod")}</a><a href="#resultaten">{t("Resultaten")}</a><a href="#aanpak">{t("Aanpak")}</a><a href="#programma">{t("Programma")}</a><a href="#testlog" onClick={openExample}>{t("Voorbeeld")}</a><a href="#faq">FAQ</a></nav>
+      </div>
       <section className="ac-hero ac-wrap" aria-labelledby="academy-title">
         <div className="ac-hero-copy">
           <h1 id="academy-title">{t("Leer hoe je je merk schaalt") + " "}<span>{t("in 60 dagen.")}</span></h1>
@@ -526,28 +520,14 @@ export default function Academy() {
       <button className="ac-button" tabIndex={sticky ? 0 : -1} onClick={goToSignup}>{t('Vraag je gratis les aan')}</button>
     </div>}
 
-    <footer className="ac-footer">
+    <section className="ac-footer" aria-label="Academy">
       <div className="ac-wrap">
         <div className="ac-footer-top">
           <div><div className="ac-identity"><Link to="/" aria-label={t("Verkoop Studio, naar de homepage")}><BrandMark /></Link><span className="ac-identity-line" /><span className="ac-identity-label">academy</span></div><p>{t("Leer je merk schalen met 1-op-1 lessen over Meta Ads, Google Ads en je volledige funnel. Van Verkoop Studio.")}</p></div>
           <NewsletterForm />
         </div>
-        <div className="ac-footer-columns">
-          <div><h3>Academy</h3><a href="#aanbod">{t("Aanbod")}</a><a href="#programma">{t("Programma")}</a><a href="#testlog" onClick={openExample}>{t("Voorbeeld")}</a><a href="#aanmelden">{t("Kennismaking")}</a></div>
-          <div><h3>Verkoop Studio</h3><Link to="/">Home</Link><Link to="/meta-ads">Meta Ads</Link><Link to="/cases">Cases</Link><Link to="/agency">Agency</Link></div>
-          <div><h3>Contact</h3><a href="mailto:stef@verkoop.studio">stef@verkoop.studio</a><a href="#aanmelden">{t("Vraag je gratis les aan")}</a></div>
-          <div><h3>{t("Goed om te weten")}</h3><span>{t("Niet verbonden aan of gecertificeerd door Meta of Google.")}</span><span>{t("Resultaten hangen af van je product, marge en budget.")}</span></div>
-        </div>
-        <div className="ac-footer-bottom">
-          <p className="ac-copyright">© {new Date().getFullYear()}{" " + t("Verkoop Studio. Alle rechten voorbehouden.")}</p>
-          <p className="ac-legal"><Link to="/privacy">{t("Privacybeleid")}</Link><Link to="/voorwaarden">{t("Algemene voorwaarden")}</Link></p>
-          <div className="ac-lang-switch" role="group" aria-label={t('Taal kiezen')}>
-            <button type="button" lang="nl" aria-label="Nederlands" className={lang === 'nl' ? 'is-active' : undefined} aria-pressed={lang === 'nl'} onClick={() => setLang('nl')}>NL</button>
-            <i aria-hidden="true" />
-            <button type="button" lang="en" aria-label="English" className={lang === 'en' ? 'is-active' : undefined} aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
-          </div>
-        </div>
+        <p className="ac-footer-note">{t("Niet verbonden aan of gecertificeerd door Meta of Google.")}{" "}{t("Resultaten hangen af van je product, marge en budget.")}</p>
       </div>
-    </footer>
+    </section>
   </div>
 }

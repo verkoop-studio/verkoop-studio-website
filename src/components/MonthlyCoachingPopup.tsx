@@ -85,6 +85,7 @@ export default function MonthlyCoachingPopup({ source, completed = false, suppre
     const startedAt = Date.now()
     let shown = false
     let interacting = false
+    let exitIntent = false
     const visible = (selector: string) => [...document.querySelectorAll(selector)].some(el => {
       const box = el.getBoundingClientRect()
       return box.width > 0 && box.top < innerHeight && box.bottom > 0
@@ -95,7 +96,9 @@ export default function MonthlyCoachingPopup({ source, completed = false, suppre
         || !!document.activeElement?.closest('form, input, textarea, select, iframe')
         || visible('.mobile-navigation, .whatsapp-support-panel, .email-capture, #aanmelden, .ac-footer')
         || visible('.hero-video:has(.hero-video-sound[aria-pressed="true"])')
-      if (!canShowAcademyPopup({ now: Date.now(), startedAt, scrollProgress: 0, history: readAcademyPopupHistory(), blocked })) return
+      const scrollable = document.documentElement.scrollHeight - innerHeight
+      const scrollProgress = scrollable > 0 ? scrollY / scrollable : 1
+      if (!canShowAcademyPopup({ now: Date.now(), startedAt, scrollProgress, exitIntent, history: readAcademyPopupHistory(), blocked })) return
       shown = true
       previousFocus.current = document.activeElement instanceof HTMLElement ? document.activeElement : null
       recordAcademyPopup()
@@ -106,9 +109,12 @@ export default function MonthlyCoachingPopup({ source, completed = false, suppre
       interacting = true
       setStage(null)
     }
+    // Exit intent: on a mouse, the pointer leaving through the top of the window.
+    const leave = (event: MouseEvent) => { if (!event.relatedTarget && event.clientY <= 0) { exitIntent = true; check() } }
     const timer = setInterval(check, 1000)
     document.addEventListener('input', input)
-    return () => { clearInterval(timer); document.removeEventListener('input', input) }
+    document.addEventListener('mouseout', leave)
+    return () => { clearInterval(timer); document.removeEventListener('input', input); document.removeEventListener('mouseout', leave) }
   }, [completed, suppressed])
   useEffect(() => {
     if (!stage) return
