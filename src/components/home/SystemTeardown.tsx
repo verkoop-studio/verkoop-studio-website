@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import type { Bi, Lang } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
@@ -71,137 +71,170 @@ const COPY = {
   en: { label: 'The system, taken apart', intro: 'Seven parts. One path from click to customer.', end: 'All back together.', endBody: 'We build it for you. Every part measures what the next one does.', cta: 'Plan a call', cases: 'See the results', sample: 'Sample' },
 }
 
-/** One layer drawn as a flat panel; the stage tilts it into isometric space. */
-function Panel({ layer }: { layer: Layer }) {
-  const ink = '#111110'
-  return (
-    <svg viewBox="0 0 320 200" className="vs-td-panel-art" aria-hidden="true" focusable="false">
-      <rect x="1" y="1" width="318" height="198" rx="16" fill={layer.tint} stroke={ink} strokeOpacity="0.18" />
-      <rect x="1" y="1" width="318" height="34" rx="16" fill={ink} fillOpacity="0.08" />
-      <circle cx="20" cy="18" r="4" fill={ink} opacity="0.4" />
-      <circle cx="34" cy="18" r="4" fill={ink} opacity="0.4" />
-      {layer.key === 'ad' && <><rect x="22" y="52" width="130" height="122" rx="10" fill="#fff" opacity="0.92" /><rect x="34" y="64" width="106" height="62" rx="6" fill={ink} opacity="0.12" /><rect x="168" y="62" width="130" height="10" rx="5" fill="#fff" opacity="0.7" /><rect x="168" y="136" width="98" height="28" rx="14" fill="#fff" /></>}
-      {layer.key === 'page' && <><rect x="22" y="52" width="200" height="16" rx="6" fill={ink} opacity="0.75" /><rect x="22" y="76" width="160" height="10" rx="5" fill={ink} opacity="0.35" /><rect x="22" y="124" width="112" height="32" rx="16" fill={ink} /><rect x="232" y="52" width="66" height="104" rx="10" fill="#fff" opacity="0.8" /></>}
-      {layer.key === 'form' && <><rect x="40" y="52" width="240" height="26" rx="8" fill="#fff" /><rect x="40" y="86" width="240" height="26" rx="8" fill="#fff" /><rect x="40" y="120" width="240" height="26" rx="8" fill="#fff" /><rect x="40" y="156" width="240" height="28" rx="14" fill={ink} /></>}
-      {layer.key === 'crm' && [0, 1, 2, 3].map((col) => (
-        <g key={col}>
-          <rect x={18 + col * 74} y="48" width="66" height="138" rx="9" fill="#fff" opacity="0.55" />
-          {Array.from({ length: 3 - (col % 2) }, (_, row) => <rect key={row} x={24 + col * 74} y={58 + row * 40} width="54" height="32" rx="6" fill="#fff" />)}
-        </g>
-      ))}
-      {layer.key === 'pixel' && <><circle cx="160" cy="114" r="52" fill="#fff" opacity="0.35" /><circle cx="160" cy="114" r="30" fill="#fff" opacity="0.6" /><circle cx="160" cy="114" r="10" fill={ink} /></>}
-      {layer.key === 'dashboard' && <>{[64, 96, 52, 120, 84, 140].map((h, i) => <rect key={i} x={30 + i * 44} y={186 - h} width="26" height={h} rx="5" fill="#fff" opacity={0.55 + i * 0.07} />)}</>}
-      {layer.key === 'report' && <><rect x="24" y="52" width="170" height="14" rx="6" fill={ink} opacity="0.75" />{[78, 96, 114, 132].map((y, i) => <rect key={y} x="24" y={y} width={150 - i * 18} height="8" rx="4" fill={ink} opacity="0.3" />)}<circle cx="248" cy="112" r="44" fill="#2b4bf2" /></>}
-    </svg>
-  )
-}
-
-/** A small, readable app window for the active layer. All figures are sample data. */
-function Window({ title, sample, children }: { title: string; sample: string; children: ReactNode }) {
-  return (
-    <div className="vs-win">
-      <div className="vs-win-bar">
-        <span className="vs-win-dots" aria-hidden="true"><i /><i /><i /></span>
-        <span className="vs-win-title">{title}</span>
-        <span className="vs-win-sample">{sample}</span>
-      </div>
-      <div className="vs-win-body">{children}</div>
-    </div>
-  )
-}
-
-const UI_COPY = {
+/** The words inside each sample screen. Every figure here is invented and labelled as a sample. */
+const UI: Record<Lang, Record<LayerKey, { win: string; note: string; rows: string[] }>> = {
   nl: {
-    ad: { title: 'Advertentie', sponsored: 'Gesponsord', head: 'Gratis groeiplan voor je webshop', button: 'Meer info' },
-    page: { title: 'verkoop.studio/groeiplan', head: 'Meer klanten uit je advertenties', button: 'Vraag je plan aan' },
-    form: { title: 'Formulier', name: 'Naam', email: 'E-mail', button: 'Verstuur', toast: 'Lead ontvangen' },
-    crm: { title: 'Sales CRM', stages: ['Nieuw', 'Gecontacteerd', 'Afspraak', 'Voorstel'], leads: 'leads' },
-    pixel: { title: 'Pixel', events: [['Pagina bekeken', '14:02'], ['Formulier verstuurd', '14:04'], ['Aankoop € 84', '14:09']] },
-    dashboard: { title: 'Performance', spend: 'Uitgaven', revenue: 'Omzet', roas: 'Opbrengst per €' },
-    report: { title: 'Maandrapport', lines: ['Meeste omzet via Google', 'Facebook: duurdere leads', 'Advies: meer budget naar Google'] },
+    ad: { win: 'Facebook', note: 'Budget volgt wat verkoopt', rows: ['Verkoop Studio · Gesponsord', 'Gratis groeiplan voor je webshop', 'Meer info'] },
+    page: { win: 'jouwsite.be/actie', note: 'Eén pagina, één actie', rows: ['Meer klanten uit je advertenties', 'Vraag je gratis plan aan'] },
+    form: { win: 'Aanvraag', note: 'Lead ontvangen', rows: ['Naam', 'Sarah', 'E-mail', 'sarah@bedrijf.be', 'Verstuur'] },
+    crm: { win: 'Sales CRM', note: '38 van 500 gratis leads', rows: ['Nieuw', 'Gecontacteerd', 'Afspraak', 'Voorstel'] },
+    pixel: { win: 'Metingen', note: 'Cookiekeuze gerespecteerd', rows: ['Pagina bekeken', 'Formulier verstuurd', 'Aankoop € 84'] },
+    dashboard: { win: 'Performance', note: 'Beste advertentie: video 2', rows: ['Uitgaven', '€ 1.240', 'Omzet', '€ 5.890', 'Per euro', '4,7×'] },
+    report: { win: 'Maandrapport', note: 'Elke maand in je mailbox', rows: ['Meeste omzet via Google', 'Facebook: duurdere leads', 'Advies: meer budget naar Google'] },
   },
   en: {
-    ad: { title: 'Ad', sponsored: 'Sponsored', head: 'A free growth plan for your shop', button: 'Learn more' },
-    page: { title: 'verkoop.studio/growth-plan', head: 'More customers from your ads', button: 'Get your plan' },
-    form: { title: 'Form', name: 'Name', email: 'Email', button: 'Send', toast: 'Lead received' },
-    crm: { title: 'Sales CRM', stages: ['New', 'Contacted', 'Meeting', 'Closing'], leads: 'leads' },
-    pixel: { title: 'Pixel', events: [['Page viewed', '14:02'], ['Form sent', '14:04'], ['Purchase € 84', '14:09']] },
-    dashboard: { title: 'Performance', spend: 'Spend', revenue: 'Revenue', roas: 'Return per €' },
-    report: { title: 'Monthly report', lines: ['Most revenue via Google', 'Facebook: pricier leads', 'Advice: more budget to Google'] },
+    ad: { win: 'Facebook', note: 'Budget follows what sells', rows: ['Verkoop Studio · Sponsored', 'A free growth plan for your shop', 'Learn more'] },
+    page: { win: 'yoursite.com/offer', note: 'One page, one action', rows: ['More customers from your ads', 'Ask for your free plan'] },
+    form: { win: 'Enquiry', note: 'Lead received', rows: ['Name', 'Sarah', 'Email', 'sarah@company.com', 'Send'] },
+    crm: { win: 'Sales CRM', note: '38 of 500 free leads', rows: ['New', 'Contacted', 'Meeting', 'Proposal'] },
+    pixel: { win: 'Events', note: 'Cookie choice respected', rows: ['Page viewed', 'Form sent', 'Purchase € 84'] },
+    dashboard: { win: 'Performance', note: 'Best ad: video 2', rows: ['Spend', '€ 1,240', 'Revenue', '€ 5,890', 'Per euro', '4.7×'] },
+    report: { win: 'Monthly report', note: 'In your inbox every month', rows: ['Most revenue through Google', 'Facebook: dearer leads', 'Advice: more budget to Google'] },
   },
 }
 
-function LayerUI({ layer, lang }: { layer: LayerKey; lang: Lang }) {
-  const u = UI_COPY[lang]
-  const sample = COPY[lang].sample
-  switch (layer) {
-    case 'ad':
-      return (
-        <Window title={u.ad.title} sample={sample}>
-          <span className="vs-win-muted">Verkoop Studio · {u.ad.sponsored}</span>
-          <div className="vs-win-image" />
-          <strong className="vs-win-head">{u.ad.head}</strong>
-          <span className="vs-win-button">{u.ad.button}</span>
-        </Window>
-      )
-    case 'page':
-      return (
-        <Window title={u.page.title} sample={sample}>
-          <strong className="vs-win-head vs-win-head--big">{u.page.head}</strong>
-          <span className="vs-win-line" /><span className="vs-win-line vs-win-line--short" />
-          <span className="vs-win-button vs-win-button--ink">{u.page.button}</span>
-        </Window>
-      )
-    case 'form':
-      return (
-        <Window title={u.form.title} sample={sample}>
-          <span className="vs-win-field"><em>{u.form.name}</em>Sarah</span>
-          <span className="vs-win-field"><em>{u.form.email}</em>sarah@bedrijf.be</span>
-          <span className="vs-win-button vs-win-button--ink">{u.form.button}</span>
-          <span className="vs-win-toast">✓ {u.form.toast}</span>
-        </Window>
-      )
-    case 'crm':
-      return (
-        <Window title={u.crm.title} sample={sample}>
-          <div className="vs-win-kanban">
-            {u.crm.stages.map((stage, i) => (
-              <div key={stage}><em>{stage}</em>{Array.from({ length: 3 - (i % 2) - (i > 2 ? 1 : 0) }, (_, j) => <span key={j} />)}</div>
-            ))}
-          </div>
-          <span className="vs-win-meter"><b className="vs-dots">38</b> / 500 {u.crm.leads}<i style={{ '--fill': '7.6%' } as CSSProperties} /></span>
-        </Window>
-      )
-    case 'pixel':
-      return (
-        <Window title={u.pixel.title} sample={sample}>
-          <ul className="vs-win-feed">
-            {u.pixel.events.map(([event, time]) => <li key={event}><span>{event}</span><b className="vs-dots">{time}</b></li>)}
-          </ul>
-        </Window>
-      )
-    case 'dashboard':
-      return (
-        <Window title={u.dashboard.title} sample={sample}>
-          <div className="vs-win-stats">
-            <span><em>{u.dashboard.spend}</em><b className="vs-dots">€1.240</b></span>
-            <span><em>{u.dashboard.revenue}</em><b className="vs-dots">€5.890</b></span>
-            <span><em>{u.dashboard.roas}</em><b className="vs-dots">4,7</b></span>
-          </div>
-          <div className="vs-win-bars">{[38, 62, 46, 80, 58, 92].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}</div>
-        </Window>
-      )
-    case 'report':
-      return (
-        <Window title={u.report.title} sample={sample}>
-          <ul className="vs-win-report">{u.report.lines.map((line) => <li key={line}>{line}</li>)}</ul>
-        </Window>
-      )
-  }
+/** What sits inside the app window for one layer. Flat HTML, so every word stays readable. */
+function Screen({ k, rows }: { k: LayerKey; rows: string[] }) {
+  if (k === 'ad') return (
+    <div className="tx-ad">
+      <p className="tx-dim">{rows[0]}</p>
+      <div className="tx-ad-img" />
+      <p className="tx-strong">{rows[1]}</p>
+      <span className="tx-btn">{rows[2]}</span>
+    </div>
+  )
+  if (k === 'page') return (
+    <div className="tx-page">
+      <p className="tx-page-h">{rows[0]}</p>
+      <i /><i style={{ width: '62%' }} />
+      <span className="tx-btn tx-btn--ink">{rows[1]}</span>
+    </div>
+  )
+  if (k === 'form') return (
+    <div className="tx-form">
+      <label><span>{rows[0]}</span><b className="tx-type">{rows[1]}</b></label>
+      <label><span>{rows[2]}</span><b className="tx-type tx-type--2">{rows[3]}</b></label>
+      <span className="tx-btn tx-btn--ink">{rows[4]}</span>
+    </div>
+  )
+  if (k === 'crm') return (
+    <div className="tx-crm">
+      {rows.map((name, col) => (
+        <div key={name}>
+          <p className="tx-dim">{name}</p>
+          {Array.from({ length: col === 0 ? 2 : col === 3 ? 1 : 2 }, (_, i) => <i key={i} />)}
+        </div>
+      ))}
+      <b className="tx-crm-live" />
+    </div>
+  )
+  if (k === 'pixel') return (
+    <ul className="tx-feed">
+      {rows.map((row, i) => <li key={row} style={{ animationDelay: `${0.3 + i * 0.5}s` }}><span />{row}</li>)}
+    </ul>
+  )
+  if (k === 'dashboard') return (
+    <div className="tx-dash">
+      <dl>{[0, 2, 4].map((i) => <div key={i}><dt>{rows[i]}</dt><dd>{rows[i + 1]}</dd></div>)}</dl>
+      <div className="tx-bars">{[42, 64, 38, 80, 56, 96].map((h, i) => <i key={i} style={{ height: `${h}%`, animationDelay: `${0.2 + i * 0.07}s` }} />)}</div>
+    </div>
+  )
+  return (
+    <ul className="tx-report">
+      {rows.map((row, i) => <li key={row} className={i === 2 ? 'tx-strong' : ''}><Tick delay={0.3 + i * 0.25} />{row}</li>)}
+    </ul>
+  )
 }
 
-const PHASE_START = 0.08
-const PHASE_END = 0.88
+function Tick({ delay = 0 }: { delay?: number }) {
+  return <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path className="tx-tick" style={{ animationDelay: `${delay}s` }} d="M2 7.5 5.5 11 12 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" pathLength={1} /></svg>
+}
+
+/** One part of the system as a card: its screen on top, what it does for you underneath. */
+function Card({ layer, index, lang, active }: { layer: Layer; index: number; lang: Lang; active: boolean }) {
+  const ui = UI[lang][layer.key]
+  return (
+    <article className={`tx-card${active ? ' is-on' : ''}`} style={{ '--t': layer.tint } as CSSProperties}>
+      <div className="tx-stage" aria-hidden="true">
+        <div className="tx-win">
+          <div className="tx-win-bar"><i /><i /><i /><b>{ui.win}</b><em>{COPY[lang].sample}</em></div>
+          <Screen k={layer.key} rows={ui.rows} />
+        </div>
+        <p className="tx-note"><Tick delay={0.9} />{ui.note}</p>
+      </div>
+      <div className="tx-info">
+        <p className="tx-step">{String(index + 1).padStart(2, '0')} / {String(LAYERS.length).padStart(2, '0')}</p>
+        <h3 className="tx-title">{layer.title[lang]}</h3>
+        <p className="tx-body">{layer.body[lang]}</p>
+        <ul className="tx-specs">{layer.specs[lang].map((spec) => <li key={spec}><Tick />{spec}</li>)}</ul>
+      </div>
+    </article>
+  )
+}
+
+/** Dot shapes for the mark beside the cards: one set of dots, a new home for each on every step. */
+const SHAPES = [
+  (x: number, y: number) => x * x + y * y < 0.72,
+  (x: number, y: number) => Math.abs(x) < 0.74 && Math.abs(y) < 0.74,
+  (x: number, y: number) => y > -0.8 && y < 0.8 && Math.abs(x) < 0.16 + (0.8 - y) * 0.42,
+  (x: number, y: number) => { const r = x * x + y * y; return r < 0.76 && r > 0.3 },
+]
+const DOTS = 220
+
+function homes(shape: number, size: number) {
+  const inside = SHAPES[shape % SHAPES.length]
+  const pts: number[][] = []
+  for (let gap = 0.2; pts.length < DOTS && gap > 0.04; gap -= 0.01) {
+    pts.length = 0
+    for (let y = -1, row = 0; y <= 1; y += gap * 0.87, row++) for (let x = -1 + (row % 2) * gap * 0.5; x <= 1; x += gap) if (inside(x, y)) pts.push([x, y])
+  }
+  return Array.from({ length: DOTS }, (_, i) => { const p = pts[Math.floor((i * pts.length) / DOTS)]; return [(p[0] + 1) * size / 2, (p[1] + 1) * size / 2] })
+}
+
+/** A shape made of dots that re-forms for each step and parts round the pointer. */
+function DotMark({ step }: { step: number }) {
+  const ref = useRef<HTMLCanvasElement>(null)
+  const state = useRef<{ dots: number[][]; hand: number[] | null; raf: number }>({ dots: [], hand: null, raf: 0 })
+  const SIZE = 180
+  useEffect(() => {
+    const canvas = ref.current
+    if (!canvas) return
+    const s = state.current
+    const ratio = Math.min(2, window.devicePixelRatio || 1)
+    canvas.width = canvas.height = SIZE * ratio
+    const next = homes(Math.max(0, step), SIZE)
+    if (!s.dots.length) s.dots = next.map(([x, y]) => [x, y, 0, 0, x, y])
+    else {
+      const byAngle = (list: number[][], a: number, b: number) => list.map((d, i) => [Math.atan2(d[b] - SIZE / 2, d[a] - SIZE / 2), i]).sort((p, q) => p[0] - q[0])
+      const from = byAngle(s.dots, 0, 1), to = byAngle(next, 0, 1)
+      from.forEach(([, di], k) => { s.dots[di][4] = next[to[k][1]][0]; s.dots[di][5] = next[to[k][1]][1] })
+    }
+    const g = canvas.getContext('2d')!
+    const tick = () => {
+      let busy = !!s.hand
+      g.setTransform(ratio, 0, 0, ratio, 0, 0); g.clearRect(0, 0, SIZE, SIZE); g.fillStyle = getComputedStyle(canvas).color; g.beginPath()
+      for (const d of s.dots) {
+        if (s.hand) { const dx = d[0] - s.hand[0], dy = d[1] - s.hand[1], dist = Math.hypot(dx, dy); if (dist < 46 && dist > 0.01) { const f = (1 - dist / 46) ** 2 * 5; d[2] += (dx / dist) * f; d[3] += (dy / dist) * f } }
+        d[2] = (d[2] + (d[4] - d[0]) * 0.06) * 0.82; d[3] = (d[3] + (d[5] - d[1]) * 0.06) * 0.82
+        d[0] += d[2]; d[1] += d[3]
+        if (Math.abs(d[2]) + Math.abs(d[3]) + Math.abs(d[4] - d[0]) + Math.abs(d[5] - d[1]) > 0.08) busy = true
+        g.moveTo(d[0] + 1.7, d[1]); g.arc(d[0], d[1], 1.7, 0, Math.PI * 2)
+      }
+      g.fill()
+      s.raf = busy ? requestAnimationFrame(tick) : 0
+    }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { s.dots.forEach((d) => { d[0] = d[4]; d[1] = d[5] }) }
+    cancelAnimationFrame(s.raf); s.raf = requestAnimationFrame(tick)
+    const move = (e: PointerEvent) => { const box = canvas.getBoundingClientRect(); s.hand = [e.clientX - box.left, e.clientY - box.top]; if (!s.raf) s.raf = requestAnimationFrame(tick) }
+    const leave = () => { s.hand = null; if (!s.raf) s.raf = requestAnimationFrame(tick) }
+    canvas.addEventListener('pointermove', move); canvas.addEventListener('pointerleave', leave)
+    return () => { cancelAnimationFrame(s.raf); s.raf = 0; canvas.removeEventListener('pointermove', move); canvas.removeEventListener('pointerleave', leave) }
+  }, [step])
+  return <canvas ref={ref} className="tx-dots" style={{ width: SIZE, height: SIZE }} aria-hidden="true" />
+}
+
+const PHASE_START = 0.06
+const PHASE_END = 0.9
 
 function useWide() {
   const [wide, setWide] = useState(true)
@@ -215,24 +248,11 @@ function useWide() {
   return wide
 }
 
-function Specs({ items, animate }: { items: string[]; animate: boolean }) {
-  return (
-    <ul className="vs-td-specs">
-      {items.map((spec, i) => (
-        <motion.li key={spec} initial={animate ? { opacity: 0, x: -10 } : false} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.15 + i * 0.08, duration: 0.4, ease: EASE }}>
-          <svg width="16" height="16" viewBox="0 0 14 14" fill="none" aria-hidden="true"><motion.path d="M2 7.5 5.5 11 12 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" initial={animate ? { pathLength: 0 } : false} animate={{ pathLength: 1 }} transition={{ delay: 0.2 + i * 0.08, duration: 0.35 }} /></svg>
-          {spec}
-        </motion.li>
-      ))}
-    </ul>
-  )
-}
-
 /**
- * The growth system as a pinned isometric stack. Scrolling separates it layer by
- * layer; the active layer pops out as a small readable app window. At the end the
- * stack goes back together into the call to action. Phones and reduced motion get
- * the same content as a plain sequence.
+ * The growth system, one part at a time. On a wide screen the section pins and each
+ * part arrives as a card dealt onto a small pile, with its own sample screen; the
+ * index on the left jumps between them. Phones and reduced motion get the same
+ * cards as a plain list.
  */
 export default function SystemTeardown() {
   const { lang } = useLang()
@@ -241,116 +261,94 @@ export default function SystemTeardown() {
   const wide = useWide()
   const ref = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  const [phase, setPhase] = useState<'closed' | 'open' | 'done'>('closed')
-  const [step, setStep] = useState(0)
+  const [step, setStep] = useState(-1)
 
   useMotionValueEvent(scrollYProgress, 'change', (p) => {
-    if (p < PHASE_START) { setPhase('closed'); setStep(0); return }
-    if (p > PHASE_END) { setPhase('done'); setStep(LAYERS.length - 1); return }
-    setPhase('open')
+    if (p < PHASE_START) return setStep(-1)
+    if (p > PHASE_END) return setStep(LAYERS.length)
     setStep(Math.min(LAYERS.length - 1, Math.floor(((p - PHASE_START) / (PHASE_END - PHASE_START)) * LAYERS.length)))
   })
 
+  const cta = <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_teardown' })}>{t.cta}</Cta>
+
   if (reduce || !wide) {
     return (
-      <section className="vs-td vs-td--list" aria-labelledby="td-title">
+      <section className="tx tx--list" aria-labelledby="td-title">
         <div className="vs-wrap">
-          <p className="vs-label vs-td-label">{t.label}</p>
-          <h2 id="td-title" className="vs-td-end-title">{t.intro}</h2>
-          <ol className="vs-td-list">
-            {LAYERS.map((layer, i) => (
-              <li key={layer.key} className="vs-td-item">
-                <LayerUI layer={layer.key} lang={lang} />
-                <div>
-                  <span className="vs-td-count">{String(i + 1).padStart(2, '0')} / {String(LAYERS.length).padStart(2, '0')}</span>
-                  <h3 className="vs-td-title">{layer.title[lang]}</h3>
-                  <p className="vs-td-body">{layer.body[lang]}</p>
-                  <Specs items={layer.specs[lang]} animate={false} />
-                </div>
-              </li>
-            ))}
-          </ol>
-          <div className="vs-td-end">
-            <p className="vs-td-end-title">{t.end}</p>
-            <p className="vs-td-body">{t.endBody}</p>
-            <Cta to="/contact" variant="paper" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_teardown' })}>{t.cta}</Cta>
-          </div>
+          <p className="vs-label">{t.label}</p>
+          <h2 id="td-title" className="vs-h2">{t.intro}</h2>
+          <div className="tx-list">{LAYERS.map((layer, i) => <Card key={layer.key} layer={layer} index={i} lang={lang} active />)}</div>
+          <p className="tx-end">{t.end}</p>
+          {cta}
         </div>
       </section>
     )
   }
 
-  const layer = LAYERS[step]
-  const gap = phase === 'open' ? 46 : 12
+  const jump = (i: number) => {
+    const el = ref.current
+    if (!el) return
+    const span = el.offsetHeight - window.innerHeight
+    const at = PHASE_START + ((i + 0.5) / LAYERS.length) * (PHASE_END - PHASE_START)
+    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY + span * at, behavior: 'smooth' })
+  }
+  const done = step >= LAYERS.length
+  const shown = Math.min(step, LAYERS.length - 1)
 
   return (
-    <section ref={ref} className="vs-td" aria-labelledby="td-title" style={{ height: `${LAYERS.length * 70 + 160}vh` }}>
-      <div className="vs-td-sticky">
-        <div className="vs-wrap vs-td-grid">
-          <div className="vs-td-copy">
-            <p className="vs-label vs-td-label">{t.label}</p>
-            <h2 id="td-title" className="vs-visually-hidden">{t.label}</h2>
+    <section ref={ref} className="tx" aria-labelledby="td-title" style={{ height: `${LAYERS.length * 62 + 150}vh` }}>
+      <div className="tx-sticky">
+        <div className="vs-wrap tx-grid">
+          <div className="tx-side">
+            <p className="vs-label">{t.label}</p>
             <AnimatePresence mode="wait">
-              {phase === 'done' ? (
-                <motion.div key="end" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5, ease: EASE }}>
-                  <p className="vs-td-end-title">{t.end}</p>
-                  <p className="vs-td-body">{t.endBody}</p>
-                  <div className="vs-td-actions">
-                    <Cta to="/contact" variant="paper" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_teardown' })}>{t.cta}</Cta>
-                    <Link to="/#resultaten" className="vs-textlink vs-td-link">{t.cases} →</Link>
-                  </div>
-                </motion.div>
-              ) : phase === 'closed' ? (
-                <motion.div key="intro" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.5, ease: EASE }}>
-                  <p className="vs-td-end-title">{t.intro}</p>
-                </motion.div>
-              ) : (
-                <motion.div key={layer.key} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.45, ease: EASE }}>
-                  <span className="vs-td-count">{String(step + 1).padStart(2, '0')} / {String(LAYERS.length).padStart(2, '0')}</span>
-                  <h3 className="vs-td-title">{layer.title[lang]}</h3>
-                  <p className="vs-td-body">{layer.body[lang]}</p>
-                  <Specs items={layer.specs[lang]} animate />
+              <motion.h2 key={done ? 'end' : 'intro'} id="td-title" className="tx-head" initial={{ opacity: 0, y: 18 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.45, ease: EASE }}>
+                {done ? t.end : t.intro}
+              </motion.h2>
+            </AnimatePresence>
+            <ol className="tx-index">
+              {LAYERS.map((layer, i) => (
+                <li key={layer.key}>
+                  <button type="button" className={i === shown ? 'is-on' : i < shown ? 'is-past' : ''} onClick={() => jump(i)} aria-current={i === shown ? 'step' : undefined}>
+                    <span>{String(i + 1).padStart(2, '0')}</span>{layer.title[lang]}
+                  </button>
+                </li>
+              ))}
+            </ol>
+            <div className="tx-foot">
+              <DotMark step={shown} />
+              {done && (
+                <motion.div className="tx-actions" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE }}>
+                  <p>{t.endBody}</p>
+                  {cta}
+                  <Link to="/#resultaten" className="vs-textlink">{t.cases} →</Link>
                 </motion.div>
               )}
-            </AnimatePresence>
-          </div>
-          <div className="vs-td-stage">
-            <div className="vs-td-stack" aria-hidden="true">
-              {LAYERS.map((item, i) => {
-                const active = phase === 'open' && i === step
-                const z = (LAYERS.length - 1 - i) * gap + (active ? 34 : 0)
-                return (
-                  <motion.div
-                    key={item.key}
-                    className="vs-td-layer"
-                    style={{ zIndex: LAYERS.length - i } as CSSProperties}
-                    initial={false}
-                    animate={{ z, opacity: phase === 'open' && !active ? 0.4 : 1 }}
-                    transition={{ type: 'spring', stiffness: 120, damping: 20, mass: 0.9 }}
-                  >
-                    <Panel layer={item} />
-                  </motion.div>
-                )
-              })}
             </div>
-            <AnimatePresence mode="wait">
-              {phase === 'open' && (
+          </div>
+          <div className="tx-deck">
+            {LAYERS.map((layer, i) => {
+              const depth = shown - i
+              const waiting = depth < 0
+              const lean = (i % 2 ? 1 : -1)
+              return (
                 <motion.div
                   key={layer.key}
-                  className="vs-td-pop"
-                  initial={{ opacity: 0, y: 30, scale: 0.92, rotate: -2 }}
-                  animate={{ opacity: 1, y: 0, scale: 1, rotate: 1.5 }}
-                  exit={{ opacity: 0, y: -14, scale: 0.96 }}
-                  transition={{ type: 'spring', stiffness: 220, damping: 20 }}
+                  className="tx-slot"
+                  style={{ zIndex: i + 1, pointerEvents: depth === 0 ? 'auto' : 'none' }}
+                  initial={false}
+                  animate={
+                    waiting ? { y: step < 0 && i === 0 ? '64%' : '118%', rotate: lean * 5, scale: 1, opacity: 1 }
+                    : done ? { y: (i - 3) * 7, x: (i - 3) * 16, rotate: (i - 3) * 2.4, scale: 0.9, opacity: 1 }
+                    : { y: -depth * 18, x: 0, rotate: depth === 0 ? lean * 0.7 : lean * (1.4 + depth), scale: 1 - depth * 0.045, opacity: depth > 2 ? 0 : 1 }
+                  }
+                  transition={{ type: 'spring', stiffness: 150, damping: 21, mass: 0.9 }}
                 >
-                  <LayerUI layer={layer.key} lang={lang} />
+                  <Card layer={layer} index={i} lang={lang} active={depth === 0 && !done} />
                 </motion.div>
-              )}
-            </AnimatePresence>
+              )
+            })}
           </div>
-        </div>
-        <div className="vs-td-progress" aria-hidden="true">
-          {LAYERS.map((item, i) => <span key={item.key} className={phase !== 'closed' && i <= step ? 'is-on' : ''} />)}
         </div>
       </div>
     </section>
