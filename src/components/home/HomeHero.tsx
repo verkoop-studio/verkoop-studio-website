@@ -170,7 +170,7 @@ export default function HomeHero() {
                 <div className="vs-proof-figure"><RollingNumber value={120} prefix="+" suffix="%" /></div>
                 <p className="vs-proof-caption">{t.proofRevenue}</p>
                 <div className="vs-proof-bars" aria-hidden="true">
-                  {[28, 34, 31, 42, 48, 57, 63, 72].map((h, i) => <i key={i} style={{ height: `${h}%`, animationDelay: `${0.9 + i * 0.07}s` }} />)}
+                  {[28, 34, 31, 42, 48, 57, 63, 72].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}
                 </div>
                 <TextLink to="/cases/pinacello">{t.proofLink}</TextLink>
               </div>

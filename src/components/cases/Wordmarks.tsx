@@ -11,10 +11,10 @@ export default function Wordmarks({ lang }: { lang: Lang }) {
   const names = cases.filter((c) => !c.unavailable)
   const row = [...names, ...names]
   return (
-    <section className="vs-marks" aria-label={lang === 'nl' ? 'Klanten' : 'Clients'}>
-      <div className="vs-marks-track">
+    <section className="vs-wordmarks" aria-label={lang === 'nl' ? 'Klanten' : 'Clients'}>
+      <div className="vs-wordmarks-track">
         {[false, true].map((copy) => (
-          <ul key={String(copy)} className="vs-marks-row" aria-hidden={copy || undefined}>
+          <ul key={String(copy)} className="vs-wordmarks-row" aria-hidden={copy || undefined}>
             {row.map((item, i) => (
               <li key={`${item.slug}-${i}`}>
                 <Link to={`/cases/${item.slug}`} tabIndex={copy || i >= names.length ? -1 : undefined} className={`vs-mark vs-mark--${item.slug}`}>{item.name}</Link>

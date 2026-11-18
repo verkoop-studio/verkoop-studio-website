@@ -475,17 +475,15 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-proof-figure { font: 500 clamp(56px, 5vw, 84px)/0.9 var(--font-display); letter-spacing: -0.05em; color: var(--vs-ink); }
 .vs-proof-caption { margin: 0; color: var(--vs-mute); font-size: 14px; }
 .vs-proof-bars { display: flex; align-items: flex-end; gap: 6px; height: 72px; padding-top: 6px; }
-.vs-proof-bars i { flex: 1; border-radius: 4px 4px 0 0; background: var(--vs-blue); transform-origin: bottom; animation: vs-proof-grow 0.7s var(--vs-ease) both; }
+.vs-proof-bars i { flex: 1; border-radius: 4px 4px 0 0; background: var(--vs-blue); transform-origin: bottom; transition: scale 0.3s var(--vs-ease); }
+.vs-proof-win:hover .vs-proof-bars i { scale: 1 1.04; }
 .vs-proof-bars i:last-child { background: var(--vs-ink); }
-@keyframes vs-proof-grow { from { transform: scaleY(0); } }
 .vs-marks { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding: 0; list-style: none; }
 .vs-mark-link { display: inline-flex; flex-direction: column; gap: 2px; min-height: 44px; justify-content: center; color: var(--vs-ink); text-decoration: none; transition: transform var(--vs-dur-fast) var(--vs-ease); }
 .vs-mark-link strong { font: 600 19px/1 var(--font-display); letter-spacing: -0.02em; }
 .vs-mark-link span { color: var(--vs-mute); font-size: 12.5px; }
 .vs-mark-link:hover { transform: translateY(-2px); }
 .vs-mark-link:hover strong { color: var(--vs-blue); }
-@media (max-width: 960px) { .vs-hero-split { grid-template-columns: minmax(0, 1fr); } .vs-hero-proof { max-width: 440px; margin-top: 20px; } }
-@media (prefers-reduced-motion: reduce) { .vs-proof-bars i { animation: none; } }
 
 /* Proof card at full size, with the organic-video result as its own tilted card over the corner. */
 .vs-hero-split { grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr); }
@@ -504,7 +502,22 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-proof-video-text { display: flex; flex-direction: column; gap: 2px; }
 .vs-proof-video-text strong { font: 600 22px/1 var(--font-display); letter-spacing: -0.02em; }
 .vs-proof-video-text span { color: var(--vs-mute); font-size: 13.5px; line-height: 1.3; }
-@media (max-width: 960px) { .vs-proof-video { left: -8px; } }
+@media (max-width: 960px) {
+  .vs-hero-split { grid-template-columns: minmax(0, 1fr); }
+  .vs-hero-proof { max-width: 440px; margin-top: 20px; }
+  .vs-proof-video { left: -8px; }
+}
+/* Phones: the headline gets the full width and the proof stacks under the actions at full width. */
+@media (max-width: 767px) {
+  .vs-hero-split .vs-h1 { font-size: clamp(40px, 11.5vw, 60px); }
+  .vs-hero-proof { max-width: none; margin-top: 36px; padding-bottom: 72px; }
+  .vs-hero-notice { display: none; }
+  .vs-proof-video { left: 0; width: min(88%, 330px); }
+  .vs-hero-copy { display: contents; }
+  .vs-hero-split > .vs-hero-proof { order: 1; margin-top: 20px; }
+  .vs-hero-copy > .vs-proof { order: 2; margin-top: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .vs-proof-bars i { transition: none; } }
 
 /* Watcher, the Verkoop dot: a shape with eyes that follows the pointer and talks when poked. */
 .eyt { position: relative; display: inline-block; flex: none; width: var(--eyt-size); height: var(--eyt-size); vertical-align: middle; }
@@ -521,8 +534,8 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 @media (prefers-reduced-motion: reduce) { .eyt-ball, .eyt-say { transition: none; } .eyt-caret { animation: none; } }
 
 /* The Verkoop dot beside the home hero proof card, watching the pointer inside the hero. */
-.vs-hero-watcher { position: absolute; left: -34px; bottom: 14%; z-index: 3; }
-@media (max-width: 960px) { .vs-hero-watcher { left: auto; right: 6px; bottom: -22px; } }
+.vs-hero-watcher { position: absolute; right: -26px; top: 38%; z-index: 3; }
+@media (max-width: 960px) { .vs-hero-watcher { right: -6px; top: 44%; } }
 @media (prefers-reduced-motion: reduce) {
   :is(a, button):hover .vs-go .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-go .vs-arrow > span:first-child, .vs-textlink:hover .vs-arrow > span:first-child { transform: none; }
   :is(a, button):hover .vs-go .vs-arrow > span + span, :is(a, button):focus-visible .vs-go .vs-arrow > span + span, .vs-textlink:hover .vs-arrow > span + span { transform: translateX(-110%); }
