@@ -5,6 +5,9 @@ import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
+import RollingNumber from '../components/brand/RollingNumber'
+import BelgiumMap from '../components/brand/blocks/BelgiumMap'
+import { cases } from '../data/cases'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
 import { EASE } from '../components/brand/motion'
@@ -30,6 +33,10 @@ const COPY = {
     tanguyTags: ['Websites', 'Software', 'Apps'],
     stefAlt: 'Stef Keppens bij Nooms',
     tanguyAlt: 'Tanguy De Brabandere op een stadsplein',
+    mapTitle: 'Vanuit Lochristi.',
+    mapBody: 'Een studio in Lochristi, vlak bij Gent. Hier bouwen we het werk dat je op deze site ziet.',
+    casesStat: 'gepubliceerde cases',
+    teamStat: 'mensen, één studio',
     processTitle: 'Van probleem naar werkend systeem.',
     modes: 'Zo werken we samen',
     cta: 'Plan een gesprek',
@@ -49,6 +56,10 @@ const COPY = {
     tanguyTags: ['Websites', 'Software', 'Apps'],
     stefAlt: 'Stef Keppens at Nooms',
     tanguyAlt: 'Tanguy De Brabandere on a city square',
+    mapTitle: 'From Lochristi.',
+    mapBody: 'A studio in Lochristi, close to Ghent. This is where we build the work you see on this site.',
+    casesStat: 'published cases',
+    teamStat: 'people, one studio',
     processTitle: 'From problem to working system.',
     modes: 'How we work together',
     cta: 'Plan a call',
@@ -133,6 +144,18 @@ export default function OverStef() {
             </Reveal>
           ))}
         </ul>
+      </section>
+
+      <section className="vs-wrap vs-section ag-map" aria-labelledby="agency-map">
+        <div className="ag-map-copy">
+          <Reveal as="h2" className="vs-h2" id="agency-map">{t.mapTitle}</Reveal>
+          <Reveal as="p" className="vs-lead" delay={0.1}>{t.mapBody}</Reveal>
+          <dl className="ag-stats">
+            <div><dt>{t.casesStat}</dt><dd><RollingNumber value={cases.filter((item) => !item.unavailable).length} /></dd></div>
+            <div><dt>{t.teamStat}</dt><dd><RollingNumber value={2} /></dd></div>
+          </dl>
+        </div>
+        <BelgiumMap lang={lang} />
       </section>
 
       <section className="vs-wrap vs-section" aria-labelledby="agency-process">
