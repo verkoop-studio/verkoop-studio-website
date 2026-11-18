@@ -6,6 +6,7 @@ import WorkScroller from '../components/home/WorkScroller'
 import ResultBand from '../components/home/ResultBand'
 import ServicesList from '../components/home/ServicesList'
 import SoftwareShowcase from '../components/home/SoftwareShowcase'
+import RunItSplit from '../components/home/RunItSplit'
 import PlansSection from '../components/home/PlansSection'
 import { useLang } from '../i18n/LanguageContext'
 
@@ -32,6 +33,7 @@ export default function Home() {
       <ResultBand />
       <ServicesList />
       <SoftwareShowcase />
+      <RunItSplit />
       <PlansSection />
       <FAQ />
     </div>
