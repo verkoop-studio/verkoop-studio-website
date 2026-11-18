@@ -8,6 +8,7 @@ import HeroVideo from '../HeroVideo'
 import HeroRequestForm from '../HeroRequestForm'
 import Cta from '../brand/Cta'
 import HandNote from '../brand/HandNote'
+import Watcher from '../brand/Watcher'
 import RollingNumber from '../brand/RollingNumber'
 import TextLink from '../brand/TextLink'
 import SplitHeadline, { type HeadlinePart } from '../brand/SplitHeadline'
@@ -134,6 +135,7 @@ export default function HomeHero() {
             transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.6 }}
           >
             <HandNote point="down-left" className="vs-hero-proof-note">{t.proofNote}</HandNote>
+            <span className="vs-hero-watcher"><Watcher shape="Ball" size={64} within=".vs-hero" /></span>
             <div className="tx-win vs-proof-win">
               <div className="tx-win-bar"><i /><i /><i /><b>{t.proofTitle}</b><em>{t.proofChip}</em></div>
               <div className="vs-proof-body">

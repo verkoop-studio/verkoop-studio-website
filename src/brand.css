@@ -474,3 +474,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .eyt-caret { display: inline-block; width: 1.5px; height: 1em; margin-left: 1px; vertical-align: -2px; background: currentColor; animation: eyt-blink 1s steps(2) infinite; }
 @keyframes eyt-blink { 50% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .eyt-ball, .eyt-say { transition: none; } .eyt-caret { animation: none; } }
+
+/* The Verkoop dot beside the home hero proof card, watching the pointer inside the hero. */
+.vs-hero-watcher { position: absolute; left: -34px; bottom: 14%; z-index: 3; }
+@media (max-width: 960px) { .vs-hero-watcher { left: auto; right: 6px; bottom: -22px; } }

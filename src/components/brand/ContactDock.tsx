@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { MessageCircle, Phone, X } from 'lucide-react'
-import BotAvatar from './BotAvatar'
+import Watcher from './Watcher'
 import { STUDIO_PHONE, whatsappHref } from '../../data/contact'
 import { useFooterInView } from '../../lib/useFooterInView'
 import { useEffect, useState } from 'react'
@@ -145,7 +145,7 @@ export default function ContactDock() {
                 transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
               />
             )}
-            {open ? <X size={22} /> : <BotAvatar shape="verkoop" size={40} color="#2b4bf2" eyeColor="#ffffff" live mood="happy" />}
+            {open ? <X size={22} /> : <Watcher shape="Ball" size={38} poke={false} within=".vs-dock" />}
           </button>
         </motion.div>
       )}

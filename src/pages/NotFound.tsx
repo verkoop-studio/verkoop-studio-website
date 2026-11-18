@@ -1,5 +1,5 @@
 import Seo from '../components/Seo'
-import BotAvatar from '../components/brand/BotAvatar'
+import Watcher from '../components/brand/Watcher'
 import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
 import TextLink from '../components/brand/TextLink'
@@ -17,10 +17,10 @@ export default function NotFound() {
     <div className="vs-page">
       <Seo title={t.title} description={t.description} path="/404" noindex />
       <section className="vs-wrap vs-404" aria-labelledby="nf-title">
-        <div className="vs-404-mark" aria-hidden="true">
-          <span>4</span>
-          <BotAvatar shape="verkoop" size={150} live mood="thinking" />
-          <span>4</span>
+        <div className="vs-404-mark">
+          <span aria-hidden="true">4</span>
+          <Watcher shape="Ball" size={150} within=".vs-404" />
+          <span aria-hidden="true">4</span>
           <HandNote point="up-left" className="vs-404-note">{t.note}</HandNote>
         </div>
         <h1 id="nf-title" className="vs-h2">{t.heading}</h1>
