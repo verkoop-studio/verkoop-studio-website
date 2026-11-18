@@ -5,9 +5,9 @@ import { VIEWPORT } from './motion'
 const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 
 /**
- * Each digit sits on its own drum of 0–9 and rolls to its value when the number
- * scrolls into view, one after the other, settling out of a short blur.
- * Screen readers get the plain value.
+ * Each digit sits on its own drum of 0–9. At rest, and in the prerendered page, the
+ * drums show the real value; when the number scrolls into view they roll up to it,
+ * one after the other, out of a short blur. Screen readers get the plain value.
  */
 export default function RollingNumber({ value, prefix = '', suffix = '' }: { value: number; prefix?: string; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null)
@@ -20,27 +20,23 @@ export default function RollingNumber({ value, prefix = '', suffix = '' }: { val
 
   return (
     <span ref={ref} className="vs-roll-number" role="img" aria-label={label}>
-      {prefix && (
-        <motion.span aria-hidden="true" initial={false} animate={{ opacity: inView ? 1 : 0, x: inView ? 0 : 12 }} transition={{ duration: 0.5 }}>
-          {prefix}
-        </motion.span>
-      )}
-      {digits.map((digit, i) => (
-        <span key={i} className="vs-roll-digit" aria-hidden="true">
-          <motion.span
-            className="vs-roll-drum"
-            initial={false}
-            animate={{
-              y: inView ? `${-digit * 10}%` : '10%',
-              opacity: inView ? 1 : 0,
-              filter: inView ? 'blur(0px)' : 'blur(8px)',
-            }}
-            transition={{ type: 'spring', stiffness: 60, damping: 14, mass: 1, delay: inView ? 0.1 + i * 0.09 : 0 }}
-          >
-            {DIGITS.map((d) => <span key={d}>{d}</span>)}
-          </motion.span>
-        </span>
-      ))}
+      {prefix && <span aria-hidden="true">{prefix}</span>}
+      {digits.map((digit, i) => {
+        const rest = `${-digit * 10}%`
+        return (
+          <span key={i} className="vs-roll-digit" aria-hidden="true">
+            <motion.span
+              className="vs-roll-drum"
+              initial={false}
+              animate={inView ? { y: ['10%', rest], filter: ['blur(8px)', 'blur(0px)'] } : { y: rest, filter: 'blur(0px)' }}
+              transition={inView ? { duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.1 + i * 0.09 } : { duration: 0 }}
+              style={{ y: rest }}
+            >
+              {DIGITS.map((d) => <span key={d}>{d}</span>)}
+            </motion.span>
+          </span>
+        )
+      })}
       {suffix && <span aria-hidden="true" className="vs-roll-suffix">{suffix}</span>}
     </span>
   )

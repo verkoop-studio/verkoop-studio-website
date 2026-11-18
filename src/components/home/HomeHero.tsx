@@ -33,7 +33,8 @@ const COPY = {
     proofTitle: 'Pinacello · online omzet',
     proofChip: 'Echte cijfers',
     proofRevenue: 'groei in online omzet',
-    proofVideo: '20 verkopen uit één organische video',
+    proofVideoLead: '20 verkopen',
+    proofVideoRest: 'uit één organische video',
     proofLink: 'Lees de case',
     proofNote: 'echte cijfers :)',
     note: 'Maandelijkse pakketten vanaf €1.500',
@@ -54,7 +55,8 @@ const COPY = {
     proofTitle: 'Pinacello · online revenue',
     proofChip: 'Real figures',
     proofRevenue: 'growth in online revenue',
-    proofVideo: '20 sales from one organic video',
+    proofVideoLead: '20 sales',
+    proofVideoRest: 'from one organic video',
     proofLink: 'Read the case',
     proofNote: 'real figures :)',
     note: 'Monthly plans from €1,500',
@@ -143,10 +145,26 @@ export default function HomeHero() {
                 <div className="vs-proof-bars" aria-hidden="true">
                   {[28, 34, 31, 42, 48, 57, 63, 72].map((h, i) => <i key={i} style={{ height: `${h}%`, animationDelay: `${0.9 + i * 0.07}s` }} />)}
                 </div>
-                <p className="vs-proof-row"><span>{t.proofVideo}</span></p>
                 <TextLink to="/cases/pinacello">{t.proofLink}</TextLink>
               </div>
             </div>
+            <motion.div
+              className="vs-proof-video"
+              initial={reduce ? false : { opacity: 0, y: 24, rotate: -8 }}
+              animate={{ opacity: 1, y: 0, rotate: -3.5 }}
+              transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 1.1 }}
+            >
+              <Link to="/cases/pinacello" className="vs-proof-video-link">
+                <span className="vs-proof-thumb">
+                  <img src="/images/ads/pinacello-personal.jpg" alt="" width={120} height={150} loading="eager" decoding="async" />
+                  <span className="vs-proof-play" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>
+                </span>
+                <span className="vs-proof-video-text">
+                  <strong>{t.proofVideoLead}</strong>
+                  <span>{t.proofVideoRest}</span>
+                </span>
+              </Link>
+            </motion.div>
           </motion.div>
         </div>
         <motion.span className="vs-scroll-cue" aria-hidden="true" {...arrive(1.2)}>

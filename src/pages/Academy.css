@@ -960,3 +960,5 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 @media (max-width: 760px) { .ac-subnav { padding-top: 96px; } .ac-pill-nav { border-radius: 18px; } }
 /* One sticky action on phones: the Academy's own, not the site-wide bar. */
 body:has(.academy-page) .mobile-contact-bar { display: none; }
+/* Same as the homepage: the video plays muted with burned-in subtitles, without a sound toggle. */
+.academy-page .hero-video-sound { display: none; }
