@@ -859,3 +859,14 @@
 @media (max-width: 900px) { .pr-hero { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 520px) { .pr-tiles { grid-template-columns: minmax(0, 1fr); } .pr-tile { grid-template-columns: 1fr auto; align-items: end; } }
 @media (prefers-reduced-motion: reduce) { .pr-tile { transition: none; } .pr-tile:hover { translate: none; } }
+/* Article cover, the current section in the contents, and the three-way comparison. */
+.bl-cover--hero { width: 100%; max-width: 880px; aspect-ratio: 21 / 8; margin: 4px 0 10px; font-size: clamp(26px, 3vw, 40px); }
+.bl-toc a.is-on { background: color-mix(in srgb, var(--vs-blue) 10%, #fff); color: var(--vs-ink); box-shadow: inset 3px 0 0 var(--vs-blue); }
+.bl-compare { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0 4px; }
+.bl-compare-col { display: grid; align-content: start; gap: 8px; padding: 16px; border-radius: 16px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); }
+.bl-compare-col--1 { background: color-mix(in srgb, var(--vs-blue) 8%, #fff); box-shadow: inset 0 0 0 1.5px var(--vs-blue); }
+.bl-compare-n { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--vs-ink); color: #fff; font-size: 13px; font-weight: 700; }
+.bl-compare-col--1 .bl-compare-n { background: var(--vs-blue); }
+.bl-compare-col b { font: 500 18px/1.2 var(--font-display); letter-spacing: -0.01em; }
+.bl-compare-col p { margin: 0; color: var(--vs-ink-2); font-size: 14.5px; line-height: 1.5; }
+@media (max-width: 760px) { .bl-compare { grid-template-columns: minmax(0, 1fr); } .bl-cover--hero { aspect-ratio: 16 / 7; } }

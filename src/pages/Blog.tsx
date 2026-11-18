@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import Seo from '../components/Seo'
 import Breadcrumbs from '../components/Breadcrumbs'
@@ -27,6 +28,32 @@ const COPY = {
   en: { title: 'Insights for businesses in and around Ghent', description: 'Practical articles on marketing, Google Ads and websites for businesses in and around Ghent. From Verkoop Studio in Lochristi.', by: 'By', updated: 'Updated', from: 'From Lochristi', toc: 'In this article', apply: 'Putting it into practice', cta: 'Talk to us about your growth', all: 'All articles', read: 'Read the article', dutchOnly: 'This article is only available in Dutch for now.', headline: [{ text: 'Insights for businesses' }, { text: 'in Ghent.', tone: 'accent' as const }], note: 'free to read :)' },
 }
 
+/** The article's own short answer as three options side by side (landingspagina-of-website, first section). */
+const COMPARE: Record<string, Record<'nl' | 'en', [string, string][]>> = {
+  'landingspagina-of-website': {
+    nl: [['Bestaande dienstenpagina', 'als die de belofte van je campagne duidelijk waarmaakt.'], ['Aparte landingspagina', 'wanneer één doelgroep, aanbod of actie een eigen uitleg nodig heeft.'], ['De volledige website', 'als bezoekers meerdere diensten moeten vergelijken of als de algemene informatie en navigatie tekortschieten.']],
+    en: [['Existing service page', 'if it clearly delivers on your campaign’s promise.'], ['Separate landing page', 'when one audience, offer or action needs its own explanation.'], ['The whole website', 'if visitors need to compare several services, or if the general information and navigation fall short.']],
+  },
+}
+
+/** The section being read: the last heading that has passed the upper third of the screen. */
+function useCurrentSection(count: number, key?: string) {
+  const [current, setCurrent] = useState(0)
+  useEffect(() => {
+    if (!count) return
+    const sections = Array.from({ length: count }, (_, i) => document.getElementById(`deel-${i + 1}`)).filter((el): el is HTMLElement => !!el)
+    const io = new IntersectionObserver(() => {
+      const line = window.innerHeight * 0.33
+      let at = 0
+      sections.forEach((el, i) => { if (el.getBoundingClientRect().top <= line) at = i })
+      setCurrent(at)
+    }, { rootMargin: '-33% 0px -60% 0px', threshold: [0, 1] })
+    sections.forEach((el) => io.observe(el))
+    return () => io.disconnect()
+  }, [count, key])
+  return current
+}
+
 export default function Blog() {
  usePageStyles(PAGES_STYLES)
  const { slug } = useParams()
@@ -37,6 +64,9 @@ export default function Blog() {
  const description = article?.description ?? c.description
  const pageLang = article ? (article.en ? 'en' : 'nl') : lang
  const path = article ? `/blog/${article.slug}` : '/blog'
+ const current = useCurrentSection(article?.sections.length ?? 0, article?.slug)
+ const cover = article ? nlArticles.findIndex((a) => a.slug === article.slug) % 4 : 0
+ const compare = article ? COMPARE[article.slug]?.[lang] : undefined
  return <div lang={pageLang} className="vs-page bl-page">
   <Seo title={title} description={description} path={path} language={pageLang} />
   {article && <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({'@context':'https://schema.org','@type':'BlogPosting',headline:title,description,url:SITE_URL+path,inLanguage:pageLang==='nl'?'nl-BE':'en',datePublished:article.publishedAt,...(article.modifiedAt ? {dateModified:article.modifiedAt} : {}),author:{'@type':'Organization',name:'Verkoop Studio',url:SITE_URL+'/agency'},publisher:{'@id':SITE_URL+'/#organization'},mainEntityOfPage:{'@id':SITE_URL+path+'#webpage'}}).replace(/</g,'\\u003c')}} />}
@@ -44,6 +74,7 @@ export default function Blog() {
    <div className="vs-wrap bl-article">
     <header className="bl-head">
      <Breadcrumbs items={[{ label: 'Blog', href: '/blog' }, { label: article.category }]} />
+     <span className={`bl-cover bl-cover--${cover} bl-cover--hero`} aria-hidden="true"><span>{article.category}</span></span>
      <span className="bl-chip">{article.category}</span>
      <h1 className="vs-h1 bl-h1">{title}</h1>
      <p className="vs-lead">{description}</p>
@@ -51,12 +82,17 @@ export default function Blog() {
      {lang === 'en' && !article.en && <p className="bl-note" lang="en">{c.dutchOnly}</p>}
     </header>
     <div className="bl-layout">
-     <nav aria-label={c.toc} className="bl-toc"><p>{c.toc}</p><ol>{article.sections.map((s, i) => <li key={s.title}><a href={`#deel-${i + 1}`}><span>0{i + 1}</span>{s.title}</a></li>)}</ol></nav>
+     <nav aria-label={c.toc} className="bl-toc"><p>{c.toc}</p><ol>{article.sections.map((s, i) => <li key={s.title}><a href={`#deel-${i + 1}`} className={current === i ? 'is-on' : undefined} aria-current={current === i ? 'location' : undefined}><span>0{i + 1}</span>{s.title}</a></li>)}</ol></nav>
      <div>
       <article className="bl-body">{article.sections.map((s, i) => (
        <section key={s.title} id={`deel-${i + 1}`} className="bl-section">
         <h2>{s.title}</h2>
         {s.paragraphs.map((para) => <p key={para}>{para}</p>)}
+        {i === 0 && compare && (
+         <div className="bl-compare" role="group" aria-label={s.title}>
+          {compare.map(([option, when], k) => <div key={option} className={`bl-compare-col bl-compare-col--${k}`}><span className="bl-compare-n">{k + 1}</span><b>{option}</b><p>{when}</p></div>)}
+         </div>
+        )}
         {s.checklist && <ul className="bl-check">{s.checklist.map((item) => <li key={item}><span className="sv-tick" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7.5 6 10.5 11 4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg></span>{item}</li>)}</ul>}
        </section>
       ))}</article>
