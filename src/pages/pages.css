@@ -669,15 +669,25 @@
 .vs-wall-row { display: flex; align-items: flex-end; gap: 16px; margin: 0; padding: 0 16px 0 0; list-style: none; }
 .vs-wall-tile { position: relative; display: grid; gap: 8px; }
 .vs-wall-tile--video { width: 220px; }
-.vs-wall-tile--image { width: 380px; }
+.vs-wall-tile--case { width: 420px; }
+@media (max-width: 640px) { .vs-wall-tile--case { width: 280px; } .vs-wall-tile--video { width: 150px; } }
 .vs-wall-media { display: block; width: 100%; border-radius: 18px; background: var(--vs-stone); object-fit: cover; box-shadow: 0 30px 60px -40px rgb(17 17 16 / 0.5); }
 .vs-wall-tile--video .vs-wall-media { aspect-ratio: 9 / 16; }
-.vs-wall-tile--image .vs-wall-media { aspect-ratio: 16 / 10; object-position: top; }
+.vs-wall-case { display: grid; gap: 8px; border-radius: 18px; color: inherit; text-decoration: none; }
+.vs-wall-frame { position: relative; display: block; aspect-ratio: 960 / 680; overflow: hidden; border-radius: 18px; background: #e9e6dd; box-shadow: 0 30px 60px -40px rgb(17 17 16 / 0.5); transition: translate 0.45s var(--vs-ease), box-shadow 0.45s var(--vs-ease); }
+.vs-wall-case:focus-visible { outline: none; }
+.vs-wall-case:focus-visible .vs-wall-frame { outline: 3px solid #839bff; outline-offset: 3px; }
+/* The stickers follow the pointer at their own depth; the scroll parallax on home needs a scroller the wall does not have. */
+.vs-wall-case .vs-sticker { animation: none; translate: calc(-50% + var(--px, 0) * var(--depth) * -18px) calc(-50% + var(--py, 0) * var(--depth) * -14px); transition: translate 0.5s var(--vs-ease); }
+@media (hover: hover) {
+  .vs-wall-case:hover .vs-wall-frame { translate: 0 -8px; box-shadow: 0 44px 70px -40px rgb(17 17 16 / 0.6); }
+  .vs-wall-case:hover .vs-wall-label { color: var(--vs-ink); }
+}
 .vs-wall-play { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
 .vs-wall-play:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; border-radius: 18px; }
 .vs-wall-btn { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 60px; height: 60px; margin: -30px 0 0 -30px; padding-left: 3px; border-radius: 50%; background: #fff; color: var(--vs-ink); transition: scale 0.3s var(--vs-ease), background-color 0.25s, color 0.25s; }
 .vs-wall-play:hover .vs-wall-btn { scale: 1.08; background: var(--vs-blue); color: #fff; }
-.vs-wall-label { color: var(--vs-mute); font-size: 13px; }
+.vs-wall-label { color: var(--vs-mute); font-size: 13px; transition: color 0.25s; }
 @media (prefers-reduced-motion: reduce) {
   .vs-wall-track { animation: none; width: auto; overflow-x: auto; padding-inline: var(--vs-gutter); }
   .vs-wall-row[aria-hidden] { display: none; }
