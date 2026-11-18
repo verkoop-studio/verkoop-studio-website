@@ -125,12 +125,12 @@ export const services: Service[] = [
     },
     includes: {
       nl: [
-        'B2B lead-generation pages',
-        'B2C booking pages',
-        'ecommerce product pages',
-        'campaign landing pages',
-        'local landing pages',
-        'event pages',
+        'B2B-leadpagina’s',
+        'B2C-boekingspagina’s',
+        'Productpagina’s voor webshops',
+        'Campagnepagina’s',
+        'Lokale landingspagina’s',
+        'Eventpagina’s',
       ],
       en: [
         'B2B lead-generation pages',
@@ -184,12 +184,12 @@ export const services: Service[] = [
     },
     includes: {
       nl: [
-        'B2B lead funnels',
-        'B2C booking funnels',
-        'email funnels & segmentatie',
-        'ecommerce funnels',
-        'retargeting flows',
-        'post-purchase flows',
+        'B2B-leadfunnels',
+        'B2C-boekingsfunnels',
+        'E-mailfunnels en segmentatie',
+        'Webshopfunnels',
+        'Retargeting',
+        'Opvolging na aankoop',
       ],
       en: [
         'B2B lead funnels',
@@ -244,12 +244,12 @@ export const services: Service[] = [
     },
     includes: {
       nl: [
-        'campaign strategy',
-        'creative concepts',
-        'audience structure',
-        'retargeting',
-        'conversion campaigns',
-        'performance analysis',
+        'Campagnestrategie',
+        'Creatieve concepten',
+        'Doelgroepstructuur',
+        'Retargeting',
+        'Conversiecampagnes',
+        'Resultaatanalyse',
       ],
       en: [
         'campaign strategy',
@@ -304,12 +304,12 @@ export const services: Service[] = [
     },
     includes: {
       nl: [
-        'search campaigns',
-        'local campaigns',
-        'brand and non-brand structure',
-        'conversion tracking',
-        'landing-page alignment',
-        'remarketing',
+        'Zoekcampagnes',
+        'Lokale campagnes',
+        'Merk- en niet-merkstructuur',
+        'Conversiemeting',
+        'Afgestemde landingspagina’s',
+        'Remarketing',
       ],
       en: [
         'search campaigns',
@@ -364,13 +364,13 @@ export const services: Service[] = [
     },
     includes: {
       nl: [
-        'product-page optimisation',
-        'offers and bundles',
-        'checkout flow',
-        'upsells',
-        'email flows',
-        'subscription strategy',
-        'abandoned-cart flows',
+        'Betere productpagina’s',
+        'Aanbiedingen en bundels',
+        'Afrekenproces',
+        'Upsells',
+        'E-mailflows',
+        'Abonnementsstrategie',
+        'Verlaten winkelmandjes',
       ],
       en: [
         'product-page optimisation',
@@ -426,14 +426,14 @@ export const services: Service[] = [
     },
     includes: {
       nl: [
-        'lead qualification',
-        'automatic follow-up',
-        'personalised email workflows',
-        'reporting summaries',
-        'internal content workflows',
-        'proposal preparation',
-        'CRM updates',
-        'customer-support routing',
+        'Leads kwalificeren',
+        'Automatische opvolging',
+        'Persoonlijke e-mailflows',
+        'Samenvattingen van rapporten',
+        'Interne contentflows',
+        'Offertes voorbereiden',
+        'CRM bijwerken',
+        'Klantvragen doorsturen',
       ],
       en: [
         'lead qualification',
