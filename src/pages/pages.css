@@ -875,3 +875,14 @@
 .ag-statement-pair .vs-statement { max-width: none; font-size: clamp(24px, 2.6vw, 38px); }
 .ag-statement-pair .vs-statement-pill { margin-right: 0.2em; }
 @media (max-width: 860px) { .ag-statement-pair { grid-template-columns: minmax(0, 1fr); } }
+/* Small ad cards three across: labels and buttons fit without clipping. */
+.sv-ads .sv-ad-head p { display: none; }
+.sv-ads .sv-stage { white-space: nowrap; }
+.sv-ads .sv-ad-foot { flex-direction: column; align-items: stretch; gap: 8px; }
+.sv-ads .sv-ad-foot p { font-size: 11.5px; }
+.sv-ads .sv-btn { text-align: center; white-space: nowrap; }
+/* "Waar het vastloopt": the label beside the text, so the section fills its width. */
+.sv-problem { display: grid; grid-template-columns: minmax(0, 0.32fr) minmax(0, 1fr); align-items: baseline; gap: 16px clamp(24px, 4vw, 64px); }
+.sv-problem .sv-problem-label { margin: 0; }
+.sv-problem .sv-problem-text { max-width: 30ch; }
+@media (max-width: 760px) { .sv-problem { grid-template-columns: minmax(0, 1fr); } }
