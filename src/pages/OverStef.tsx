@@ -1,9 +1,9 @@
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { useRef } from 'react'
+import { motion, useReducedMotion } from 'motion/react'
 import Seo from '../components/Seo'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
+import ProcessLine from '../components/brand/ProcessLine'
 import Reveal from '../components/brand/Reveal'
 import { NoteCard } from '../components/brand/Playful'
 import RollingNumber from '../components/brand/RollingNumber'
@@ -12,7 +12,7 @@ import { cases } from '../data/cases'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
 import { EASE } from '../components/brand/motion'
-import { processSteps, workModes } from '../data/process'
+import { workModes } from '../data/process'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
@@ -72,28 +72,6 @@ const COPY = {
 const NOTE = {
   nl: ['Vertel ons je doel', 'en wat vandaag vastloopt.', 'We bespreken je aanpak', 'en zoeken samen', 'waar de grootste kans zit.'],
   en: ['Tell us your goal', 'and what is holding you back.', 'We discuss your approach', 'and look together for', 'the biggest opportunity.'],
-}
-
-/** The five steps on one line that draws itself as the section scrolls past. */
-function Process({ lang }: { lang: 'nl' | 'en' }) {
-  const ref = useRef<HTMLOListElement>(null)
-  const reduce = useReducedMotion()
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start 85%', 'end 55%'] })
-  const scaleX = useTransform(scrollYProgress, [0, 1], [0, 1])
-  return (
-    <div className="ag-process">
-      <motion.span className="ag-process-line" aria-hidden="true" style={reduce ? undefined : { scaleX }} />
-      <ol ref={ref} className="ag-process-list">
-        {processSteps.map((step, i) => (
-          <Reveal as="li" key={step.number} delay={i * 0.08} y={30}>
-            <span className="ag-process-dot" aria-hidden="true">{step.number}</span>
-            <h3 className="ag-process-title">{step.title[lang]}</h3>
-            <p className="ag-process-body">{step.description[lang]}</p>
-          </Reveal>
-        ))}
-      </ol>
-    </div>
-  )
 }
 
 export default function OverStef() {
@@ -171,7 +149,7 @@ export default function OverStef() {
 
       <section className="vs-wrap vs-section" aria-labelledby="agency-process">
         <Reveal as="h2" className="vs-h2" id="agency-process">{t.processTitle}</Reveal>
-        <Process lang={lang} />
+        <ProcessLine lang={lang} />
         <div className="ag-modes">
           <h3 className="ag-modes-title">{t.modes}</h3>
           <ul className="sv-chips">{workModes[lang].map((mode) => <li key={mode}>{mode}</li>)}</ul>
