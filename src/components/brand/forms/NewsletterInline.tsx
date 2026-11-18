@@ -72,7 +72,8 @@ export default function NewsletterInline({ id }: { id: string }) {
   if (status === 'success') return <p className="vs-news-done" role="status">{t.done}</p>
   return (
     <form className="vs-news" onSubmit={submit} noValidate data-clarity-mask="true">
-      <div className="vs-news-row">
+      {/* One pill: the field with the button inside it on the right, both the same height. */}
+      <div className="vs-news-pill">
         <Field name="email" type="email" inputMode="email" label={t.email} autoComplete="email" icon="mail" maxLength={254}
           value={email} onValueChange={setEmail} validate={validEmail} message={t.invalid} showError={tried} disabled={status === 'pending'} />
         <button type="submit" className="vs-news-submit" disabled={status === 'pending'}>{status === 'pending' ? t.pending : t.submit}</button>

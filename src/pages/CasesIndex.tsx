@@ -3,12 +3,10 @@ import { Link } from 'react-router-dom'
 import LyteWork from '../components/LyteWork'
 import Seo from '../components/Seo'
 import Arrow from '../components/brand/Arrow'
-import Cta from '../components/brand/Cta'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
-import TextLink from '../components/brand/TextLink'
 import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import { caseHeadline, cases } from '../data/cases'
@@ -26,9 +24,6 @@ const COPY = {
     ongoing: 'Lopend project',
     view: 'Bekijk de case',
     note: 'kies er maar een :)',
-    closingTitle: 'Jouw bedrijf hier?',
-    closingBody: 'Vertel ons waar je naartoe wil. We komen terug met een plan.',
-    cta: 'Plan een gesprek',
   },
   en: {
     seoTitle: 'Cases',
@@ -40,9 +35,6 @@ const COPY = {
     ongoing: 'Ongoing project',
     view: 'View the case',
     note: 'pick one :)',
-    closingTitle: 'Your business here?',
-    closingBody: 'Tell us where you want to go. We come back with a plan.',
-    cta: 'Plan a call',
   },
 }
 
@@ -117,16 +109,6 @@ export default function CasesIndex() {
 
       <LyteWork />
 
-      <section className="vs-wrap vs-section" aria-labelledby="cases-closing">
-        <div className="vs-closing">
-          <h2 id="cases-closing" className="vs-h2">{t.closingTitle}</h2>
-          <p className="vs-lead">{t.closingBody}</p>
-          <div className="vs-closing-actions">
-            <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'cases_index' })}>{t.cta}</Cta>
-            <TextLink href="mailto:stef@verkoop.studio" arrow={false}>stef@verkoop.studio</TextLink>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

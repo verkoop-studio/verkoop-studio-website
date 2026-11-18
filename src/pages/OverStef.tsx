@@ -32,8 +32,6 @@ const COPY = {
     tanguyAlt: 'Tanguy De Brabandere op een stadsplein',
     processTitle: 'Van probleem naar werkend systeem.',
     modes: 'Zo werken we samen',
-    closingTitle: 'Zullen we kennismaken?',
-    closingBody: 'Vertel ons waar je vastloopt. We komen terug met een eerlijk plan.',
     cta: 'Plan een gesprek',
     cases: 'Bekijk de cases',
   },
@@ -53,8 +51,6 @@ const COPY = {
     tanguyAlt: 'Tanguy De Brabandere on a city square',
     processTitle: 'From problem to working system.',
     modes: 'How we work together',
-    closingTitle: 'Shall we meet?',
-    closingBody: 'Tell us where you are stuck. We come back with an honest plan.',
     cta: 'Plan a call',
     cases: 'See the cases',
   },
@@ -148,16 +144,6 @@ export default function OverStef() {
         </div>
       </section>
 
-      <section className="vs-wrap vs-section" aria-labelledby="agency-closing">
-        <div className="vs-closing">
-          <h2 id="agency-closing" className="vs-h2">{t.closingTitle}</h2>
-          <p className="vs-lead">{t.closingBody}</p>
-          <div className="vs-closing-actions">
-            <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'final_cta' })}>{t.cta}</Cta>
-            <TextLink href="mailto:stef@verkoop.studio" arrow={false}>stef@verkoop.studio</TextLink>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }

@@ -356,7 +356,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 /* ---------- Full-screen hero ---------- */
 
-.vs-page .studio-hero.vs-hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 120px 0 72px; box-sizing: border-box; }
+.vs-page .studio-hero.vs-hero { position: relative; overflow-x: clip; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 120px 0 72px; box-sizing: border-box; }
 .vs-hero-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--vs-ink); transform-origin: 0 50%; opacity: 0.12; }
 .vs-hero .vs-h1 { font-size: clamp(54px, 8.6vw, 156px); line-height: 1.02; letter-spacing: -0.045em; }
 .vs-h1 .vs-h1-sub { display: block; max-width: 30ch; margin-top: 0.45em; font-size: 0.36em; letter-spacing: -0.02em; line-height: 1.2; }

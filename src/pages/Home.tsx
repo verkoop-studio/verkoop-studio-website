@@ -7,7 +7,6 @@ import ResultBand from '../components/home/ResultBand'
 import ServicesList from '../components/home/ServicesList'
 import SoftwareShowcase from '../components/home/SoftwareShowcase'
 import PlansSection from '../components/home/PlansSection'
-import ClosingCta from '../components/home/ClosingCta'
 import { useLang } from '../i18n/LanguageContext'
 
 export default function Home() {
@@ -35,7 +34,6 @@ export default function Home() {
       <SoftwareShowcase />
       <PlansSection />
       <FAQ />
-      <ClosingCta />
     </div>
   )
 }

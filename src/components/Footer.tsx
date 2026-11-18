@@ -1,119 +1,209 @@
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
-import { useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { motion, useReducedMotion } from 'motion/react'
+import { Mail, MessageCircle } from 'lucide-react'
+import { useRef, type PointerEvent } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import stef from '../assets/stef-desk-640.webp'
+import { articles } from '../data/articles'
+import { whatsappHref } from '../data/contact'
 import { persistentCta, persistentCtaHref } from '../data/nav'
 import { services } from '../data/services'
 import { useLang } from '../i18n/LanguageContext'
+import { trackEvent } from '../lib/analytics'
 import Arrow from './brand/Arrow'
+import BotAvatar from './brand/BotAvatar'
+import Cta from './brand/Cta'
+import HandNote from './brand/HandNote'
+import SoftwarePreview from './brand/SoftwarePreview'
 import Watcher from './brand/Watcher'
 import NewsletterInline from './brand/forms/NewsletterInline'
+import { EASE } from './brand/motion'
 
 const COPY = {
   nl: {
-    newsTitle: 'Advertentietips in je inbox.',
-    newsBody: 'Praktische tips over Meta Ads, Google Ads en opschalen, van Verkoop Studio.',
-    services: 'Diensten',
-    software: 'Software',
-    agency: 'Agency',
-    contact: 'Contact',
+    band: 'Laten we groeien.', bandCta: 'Plan een gesprek', bandNote: 'we antwoorden snel :)',
+    newsTitle: 'Advertentietips in je inbox.', newsBody: 'Praktische tips over Meta Ads, Google Ads en opschalen.', newsNote: 'Uitschrijven kan altijd, met één klik.',
+    software: 'Software', crm: 'Gratis tot 500 leads', perf: 'Vanaf €49 per maand',
+    contact: 'Contact', reply: 'Antwoord binnen 24 uur', where: 'Lochristi, België',
+    blog: 'Nieuw op de blog', allPosts: 'Alle artikels',
+    services: 'Diensten', agency: 'Agency', legal: 'Juridisch', privacy: 'Privacy', terms: 'Voorwaarden',
     agencyLinks: [['De agency', '/agency'], ['Cases', '/cases'], ['Academy', '/academy'], ['Blog', '/blog'], ['Groeianalyse', '/funnel-audit']],
-    software1: 'Sales CRM',
-    software2: 'Performance',
-    where: 'Lochristi, België',
-    legal: 'Juridisch',
-    privacy: 'Privacy',
-    terms: 'Voorwaarden',
-    hand: 'gebouwd in Lochristi, met veel koffie :)',
-    entity: 'TanguyDeBee BV · BE 1002.613.972',
-    home: 'Verkoop Studio, naar de homepage',
-    lang: 'Taal',
+    hand: 'gebouwd in Lochristi, met veel koffie :)', entity: 'TanguyDeBee BV · BE 1002.613.972', lang: 'Taal',
   },
   en: {
-    newsTitle: 'Ad tips in your inbox.',
-    newsBody: 'Practical tips on Meta Ads, Google Ads and scaling, from Verkoop Studio.',
-    services: 'Services',
-    software: 'Software',
-    agency: 'Agency',
-    contact: 'Contact',
+    band: 'Let’s grow.', bandCta: 'Plan a call', bandNote: 'we reply fast :)',
+    newsTitle: 'Ad tips in your inbox.', newsBody: 'Practical tips on Meta Ads, Google Ads and scaling.', newsNote: 'Unsubscribe any time, in one click.',
+    software: 'Software', crm: 'Free up to 500 leads', perf: 'From €49 a month',
+    contact: 'Contact', reply: 'Reply within 24 hours', where: 'Lochristi, Belgium',
+    blog: 'New on the blog', allPosts: 'All articles',
+    services: 'Services', agency: 'Agency', legal: 'Legal', privacy: 'Privacy', terms: 'Terms',
     agencyLinks: [['The agency', '/agency'], ['Cases', '/cases'], ['Academy', '/academy'], ['Blog', '/blog'], ['Growth analysis', '/funnel-audit']],
-    software1: 'Sales CRM',
-    software2: 'Performance',
-    where: 'Lochristi, Belgium',
-    legal: 'Legal',
-    privacy: 'Privacy',
-    terms: 'Terms',
-    hand: 'built in Lochristi, with lots of coffee :)',
-    entity: 'TanguyDeBee BV · BE 1002.613.972',
-    home: 'Verkoop Studio, to the homepage',
-    lang: 'Language',
+    hand: 'built in Lochristi, with lots of coffee :)', entity: 'TanguyDeBee BV · BE 1002.613.972', lang: 'Language',
   },
 }
 
+/** Pages that already end in their own form or call to action do not get the band on top of it. */
+const NO_BAND = /^\/(contact|crm|performance|academy|gratis-website|funnel-audit|cases\/.+|[a-z-]+-ads|landing-pages|funnels|ecommerce-conversie|ai-automatiseringen|distributie|email-marketing|data-analytics|websites|software)\/?$/
+
+const LETTERS = 'verkoop'.split('')
+
+/** The wordmark: letters rise one by one, then lift and lean toward the pointer like a magnetic wave. */
+function Wordmark() {
+  const reduce = useReducedMotion()
+  const letters = useRef<(HTMLSpanElement | null)[]>([])
+  const onMove = (e: PointerEvent<HTMLDivElement>) => {
+    if (reduce || e.pointerType !== 'mouse') return
+    for (const el of letters.current) {
+      if (!el) continue
+      const r = el.getBoundingClientRect()
+      const d = (e.clientX - (r.left + r.width / 2)) / r.width
+      const pull = Math.max(0, 1 - Math.abs(d) / 2.2)
+      el.style.setProperty('--lift', `${(-pull * 0.12).toFixed(3)}em`)
+      el.style.setProperty('--lean', `${(-d * pull * 5).toFixed(2)}deg`)
+    }
+  }
+  const onLeave = () => letters.current.forEach((el) => { el?.style.removeProperty('--lift'); el?.style.removeProperty('--lean') })
+  return (
+    <div className="vs-footer-mark" aria-hidden="true" onPointerMove={onMove} onPointerLeave={onLeave}>
+      <span className="vs-footer-word">
+        {LETTERS.map((letter, i) => (
+          <motion.span
+            key={i}
+            className="vs-footer-letter"
+            initial={reduce ? false : { y: '70%', opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+            transition={{ type: 'spring', stiffness: 160, damping: 18, delay: i * 0.06 }}
+          >
+            <span ref={(el) => { letters.current[i] = el }}>{letter}</span>
+          </motion.span>
+        ))}
+        <span className="vs-footer-dot"><Watcher shape="Circle" size={200} poke={false} within=".vs-footer" /></span>
+      </span>
+    </div>
+  )
+}
+
+/** The blue band before the footer: one bold line and one call to action, with a wave that draws itself. */
+function CtaBand({ home }: { home: boolean }) {
+  const { lang } = useLang()
+  const t = COPY[lang]
+  const reduce = useReducedMotion()
+  const placement = home ? 'home_closing' : 'footer_band'
+  return (
+    <section className="vs-band" aria-labelledby="band-title">
+      <svg className="vs-band-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+        <path className="vs-band-wave-fill" d="M0 80V40C160 8 320 8 480 32s320 56 480 32 320-48 480-24V80Z" />
+        <motion.path className="vs-band-wave-line" d="M0 40C160 8 320 8 480 32s320 56 480 32 320-48 480-24" initial={reduce ? false : { pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 1.4, ease: EASE }} />
+      </svg>
+      <span className="vs-band-bot" aria-hidden="true"><BotAvatar shape="bunny" size={72} color="#ffd23f" live /></span>
+      <div className="vs-wrap vs-band-inner">
+        <h2 id="band-title" className="vs-band-title">{t.band}</h2>
+        <div className="vs-band-actions">
+          <Cta to="/contact" variant="paper" onClick={() => trackEvent('audit_cta_clicked', { placement })}>{t.bandCta}</Cta>
+          <a className="vs-band-link" href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement })}><MessageCircle size={17} aria-hidden="true" />WhatsApp</a>
+          <HandNote point="up-left" className="vs-band-note">{t.bandNote}</HandNote>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const card = (i: number, reduce: boolean | null) => (reduce ? {} : {
+  initial: { opacity: 0, y: 40, rotate: i % 2 ? 1.5 : -1.5 },
+  whileInView: { opacity: 1, y: 0, rotate: 0 },
+  viewport: { once: true, margin: '-60px' },
+  transition: { type: 'spring' as const, stiffness: 110, damping: 16, delay: i * 0.08 },
+})
+
 /**
- * The closing frame of every page: the newsletter, four columns of links, and a giant
- * "verkoop" wordmark that rises out of its mask as the visitor reaches the end, with
- * the blue dot as the live Watcher looking at the pointer.
+ * The closing frame of every page: the blue band where it adds something, a bento of
+ * cards (newsletter, software, contact, the newest posts), quiet link columns, the
+ * giant wordmark with the watching dot, and one base row.
  */
 export default function Footer() {
   const { lang, setLang } = useLang()
   const t = COPY[lang]
   const reduce = useReducedMotion()
-  const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ['start end', 'end end'] })
-  const rise = useTransform(scrollYProgress, [0.25, 1], ['62%', '0%'])
+  const { pathname } = useLocation()
+  const latest = [...articles].sort((a, b) => (b.publishedAt ?? '').localeCompare(a.publishedAt ?? '')).slice(0, 2)
+  const date = (iso?: string) => (iso ? new Date(iso).toLocaleDateString(lang === 'nl' ? 'nl-BE' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '')
 
   return (
-    <footer ref={ref} className="vs-footer" data-watch-area>
-      <div className="vs-wrap vs-footer-top">
-        <div className="vs-footer-news">
-          <h2 className="vs-footer-title">{t.newsTitle}</h2>
-          <p>{t.newsBody}</p>
-          <NewsletterInline id="footer-newsletter" />
+    <>
+      {!NO_BAND.test(pathname) && <CtaBand home={pathname === '/'} />}
+      <footer className="vs-footer" data-watch-area>
+        <div className="vs-wrap vs-bento">
+          <motion.section className="vs-bento-card vs-bento-news" aria-labelledby="footer-news" {...card(0, reduce)}>
+            <h2 id="footer-news" className="vs-bento-title">{t.newsTitle}</h2>
+            <p>{t.newsBody}</p>
+            <NewsletterInline id="footer-newsletter" />
+            <p className="vs-bento-small">{t.newsNote}</p>
+          </motion.section>
+          <motion.section className="vs-bento-card" aria-labelledby="footer-software" {...card(1, reduce)}>
+            <h2 id="footer-software" className="vs-bento-label">{t.software}</h2>
+            <ul className="vs-bento-products">
+              {[{ href: '/crm', kind: 'crm' as const, name: 'Sales CRM', fact: t.crm }, { href: '/performance', kind: 'performance' as const, name: 'Performance', fact: t.perf }].map((p) => (
+                <li key={p.href}>
+                  <Link to={p.href} className="vs-bento-product">
+                    <SoftwarePreview kind={p.kind} reduce={Boolean(reduce)} />
+                    <span><b>{p.name}</b><em>{p.fact}</em></span>
+                    <Arrow size={15} />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </motion.section>
+          <motion.section className="vs-bento-card" aria-labelledby="footer-contact" {...card(2, reduce)}>
+            <h2 id="footer-contact" className="vs-bento-label">{t.contact}</h2>
+            <p className="vs-bento-who"><img src={stef} alt="" width={44} height={44} loading="lazy" decoding="async" /><span><b>Stef Keppens</b><em className="vs-bento-pill">{t.reply}</em></span></p>
+            <ul className="vs-bento-lines">
+              <li><a href="mailto:stef@verkoop.studio"><Mail size={15} aria-hidden="true" />stef@verkoop.studio</a></li>
+              <li><a href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement: 'footer', channel: 'whatsapp' })}><MessageCircle size={15} aria-hidden="true" />WhatsApp</a></li>
+              <li><Link to={persistentCtaHref} className="vs-bento-cta">{persistentCta[lang]}<Arrow size={14} /></Link></li>
+              <li className="vs-bento-where">{t.where}</li>
+            </ul>
+          </motion.section>
+          <motion.section className="vs-bento-card vs-bento-blog" aria-labelledby="footer-blog" {...card(3, reduce)}>
+            <h2 id="footer-blog" className="vs-bento-label">{t.blog}</h2>
+            <ul>
+              {latest.map((post) => (
+                <li key={post.slug}><Link to={`/blog/${post.slug}`}><b>{post.title}</b><em>{date(post.publishedAt)}</em></Link></li>
+              ))}
+            </ul>
+            <Link to="/blog" className="vs-bento-cta">{t.allPosts}<Arrow size={14} /></Link>
+          </motion.section>
         </div>
-        <nav className="vs-footer-cols" aria-label={lang === 'nl' ? 'Footer' : 'Footer'}>
-          <div>
+
+        <nav className="vs-wrap vs-footer-links" aria-label={lang === 'nl' ? 'Alle pagina’s' : 'All pages'}>
+          <div className="vs-footer-links-services">
             <h3>{t.services}</h3>
             <ul>{services.map((service) => <li key={service.slug}><Link to={`/${service.slug}`}>{service.title[lang]}</Link></li>)}</ul>
           </div>
           <div>
-            <h3>{t.software}</h3>
-            <ul>
-              <li><Link to="/crm">{t.software1}</Link></li>
-              <li><Link to="/performance">{t.software2}</Link></li>
-            </ul>
-            <h3 className="vs-footer-sub">{t.agency}</h3>
+            <h3>{t.agency}</h3>
             <ul>{t.agencyLinks.map(([label, href]) => <li key={href}><Link to={href}>{label}</Link></li>)}</ul>
           </div>
           <div>
-            <h3>{t.contact}</h3>
-            <ul>
-              <li><a href="mailto:stef@verkoop.studio">stef@verkoop.studio</a></li>
-              <li><Link to={persistentCtaHref} className="vs-footer-cta">{persistentCta[lang]}<Arrow size={14} /></Link></li>
-              <li className="vs-footer-where">{t.where}</li>
-            </ul>
+            <h3>{t.legal}</h3>
+            <ul><li><Link to="/privacy">{t.privacy}</Link></li><li><Link to="/voorwaarden">{t.terms}</Link></li></ul>
           </div>
         </nav>
-      </div>
 
-      <div className="vs-footer-mark" aria-hidden="true">
-        <motion.span className="vs-footer-word" style={reduce ? undefined : { y: rise }}>
-          verkoop<span className="vs-footer-dot"><Watcher shape="Circle" size={200} poke={false} within=".vs-footer" /></span>
-        </motion.span>
-      </div>
+        <Wordmark />
 
-      <div className="vs-wrap vs-footer-base">
-        <Link to="/" className="vs-footer-home" aria-label={t.home}>© {new Date().getFullYear()} Verkoop Studio</Link>
-        <p className="vs-footer-hand">{t.hand}</p>
-        <nav aria-label={t.legal} className="vs-footer-legal">
-          <Link to="/privacy">{t.privacy}</Link>
-          <Link to="/voorwaarden">{t.terms}</Link>
-          <span>{t.entity}</span>
-        </nav>
-        <div className="vs-footer-lang" role="group" aria-label={t.lang}>
-          <button type="button" aria-pressed={lang === 'nl'} onClick={() => setLang('nl')}>NL</button>
-          <button type="button" aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
+        <div className="vs-wrap vs-footer-base">
+          <span>© {new Date().getFullYear()} Verkoop Studio · {t.entity}</span>
+          <span className="vs-footer-hand">{t.hand}</span>
+          <nav aria-label={t.legal} className="vs-footer-legal">
+            <Link to="/privacy">{t.privacy}</Link>
+            <Link to="/voorwaarden">{t.terms}</Link>
+          </nav>
+          <div className="vs-footer-lang" role="group" aria-label={t.lang}>
+            <button type="button" aria-pressed={lang === 'nl'} onClick={() => setLang('nl')}>NL</button>
+            <button type="button" aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   )
 }
