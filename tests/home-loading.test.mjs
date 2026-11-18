@@ -63,15 +63,15 @@ test('homepage retains all existing tracking scripts verbatim', async () => {
   for (const script of scripts) assert(html.includes(script), 'Tracking source must not be changed by prerendering')
 })
 
-test('Meta Pixel starts before fonts, and the other trackers wait until load', async () => {
+test('Meta Pixel starts first, fonts are self-hosted, and the other trackers wait until load', async () => {
   const heroPoster = 'https://i.ytimg.com/vi/tSjPY9J6ynk/maxresdefault.jpg'
   const routes = JSON.parse(await readFile('dist/routes.json', 'utf8'))
   for (const route of [...routes, '/404']) {
     const html = await readFile(`dist${route === '/' ? '' : route}/index.html`, 'utf8')
     const head = html.split('</head>')[0]
     const pixel = head.indexOf('https://connect.facebook.net/en_US/fbevents.js')
-    const font = head.indexOf('https://fonts.googleapis.com/css2')
-    assert(pixel > -1 && font > pixel, `${route}: pixel request before the font stylesheet`)
+    assert(pixel > -1, `${route}: pixel request in the head`)
+    assert(!head.includes('https://fonts.googleapis.com/'), `${route}: no third-party font request`)
     assert(head.includes("fbq('init'"), route)
     assert(head.includes("fbq('track', 'PageView')"), route)
     assert(head.includes("t.fetchPriority='high'"), route)

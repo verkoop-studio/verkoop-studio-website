@@ -1,19 +1,19 @@
 import Seo from '../components/Seo'
-import GrowthGoals from '../components/GrowthGoals'
-import PersonalHero from '../components/PersonalHero'
-import SelectedWork from '../components/SelectedWork'
-import PersonalAds from '../components/PersonalAds'
-import AgencyCapabilities from '../components/AgencyCapabilities'
-import { StudioTools, OwnPlatforms } from '../components/StudioPlatforms'
-import ProcessSection from '../components/ProcessSection'
-import PricingSection from '../components/PricingSection'
 import FAQ from '../components/FAQ'
-import FinalCTA from '../components/FinalCTA'
+import HomeHero from '../components/home/HomeHero'
+import SystemStrip from '../components/home/SystemStrip'
+import WorkScroller from '../components/home/WorkScroller'
+import ResultBand from '../components/home/ResultBand'
+import ServicesList from '../components/home/ServicesList'
+import SoftwareShowcase from '../components/home/SoftwareShowcase'
+import PlansSection from '../components/home/PlansSection'
+import ClosingCta from '../components/home/ClosingCta'
 import { useLang } from '../i18n/LanguageContext'
+
 export default function Home() {
   const { lang } = useLang()
   return (
-    <div className="studio-home">
+    <div className="vs-page">
       <Seo
         title={
           lang === 'nl'
@@ -27,19 +27,15 @@ export default function Home() {
         }
         path="/"
       />
-      <PersonalHero />
-      <SelectedWork />
-      <PricingSection />
-      <div id="aanpak">
-        <ProcessSection />
-      </div>
-      <PersonalAds />
-      <GrowthGoals />
-      <AgencyCapabilities />
-      <StudioTools />
-      <OwnPlatforms />
+      <HomeHero />
+      <SystemStrip />
+      <WorkScroller />
+      <ResultBand />
+      <ServicesList />
+      <SoftwareShowcase />
+      <PlansSection />
       <FAQ />
-      <FinalCTA />
+      <ClosingCta />
     </div>
   )
 }

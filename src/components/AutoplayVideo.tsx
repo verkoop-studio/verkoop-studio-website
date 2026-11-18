@@ -15,7 +15,7 @@ type YouTubeAPI = { Player: new (element: HTMLElement, options: {
   host: string
   videoId: string
   playerVars: Record<string, string | number>
-  events: { onReady: (event: PlayerEvent) => void }
+  events: { onReady: (event: PlayerEvent) => void; onStateChange?: (event: { data: number }) => void }
 }) => Player }
 type YouTubeWindow = Window & { YT?: YouTubeAPI; onYouTubeIframeAPIReady?: () => void }
 let apiPromise: Promise<YouTubeAPI> | undefined
@@ -48,6 +48,7 @@ export default function AutoplayVideo({ videoId, title, lang }: { videoId: strin
   const [ready, setReady] = useState(false)
   const [sound, setSound] = useState(false)
   const [failed, setFailed] = useState(false)
+  const [playing, setPlaying] = useState(false)
   useEffect(() => {
     let active = true, instance: Player | undefined, timer: number | undefined, readyTimeout: number | undefined
     if (!container.current) return
@@ -73,6 +74,9 @@ export default function AutoplayVideo({ videoId, title, lang }: { videoId: strin
           const syncSound = () => setSound(!target.isMuted() && target.getVolume() > 0)
           syncSound()
           timer = window.setInterval(syncSound, 500)
+        }, onStateChange: ({ data }) => {
+          // 1 is YT.PlayerState.PLAYING: frames are on screen, so the still can go.
+          if (active && data === 1) setPlaying(true)
         } },
       })
     }).catch(() => { if (active) setFailed(true) })
@@ -100,6 +104,8 @@ export default function AutoplayVideo({ videoId, title, lang }: { videoId: strin
   }
   return <>
     {failed ? <iframe src={`https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0&mute=1`} title={title} allow="autoplay; encrypted-media; picture-in-picture; fullscreen" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen /> : <div className="hero-video-player" ref={container} />}
+    {/* The video's own still covers the player until the first frame plays, so the box is never black. */}
+    {!failed && <img className={`hero-video-poster${playing ? ' is-hidden' : ''}`} src={`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`} alt="" width={1280} height={720} decoding="async" fetchPriority="high" aria-hidden="true" />}
     {!failed && <button type="button" className="hero-video-sound" onClick={toggleSound} disabled={!ready} aria-pressed={sound} aria-label={lang === 'nl' ? (sound ? 'Geluid uit' : 'Geluid aan') : (sound ? 'Sound off' : 'Sound on')}>
       <span aria-hidden="true">{sound ? '🔊' : '🔇'}</span> {lang === 'nl' ? (sound ? 'Geluid uit' : 'Geluid aan') : (sound ? 'Sound off' : 'Sound on')}
     </button>}

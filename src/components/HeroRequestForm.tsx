@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useLang } from '../i18n/LanguageContext'
 import { captureAttribution, getGa4Context, trackAcademyConversion, trackEvent, trackLeadConversion } from '../lib/analytics'
 import { recordAcademyPopup } from '../lib/academy-popup'
+import SuccessCheck from './brand/SuccessCheck'
 import './HeroRequestForm.css'
 
 export default function HeroRequestForm({ kind, onSuccess }: { kind: 'plan' | 'lesson'; onSuccess?: (name: string) => void }) {
@@ -55,7 +56,7 @@ export default function HeroRequestForm({ kind, onSuccess }: { kind: 'plan' | 'l
   }
   return <section className="hero-request" aria-labelledby={`${formId}-title`}>
     <h2 id={`${formId}-title`}>{status === 'success' ? (nl ? 'Je aanvraag is binnen.' : 'Your request is in.') : title}</h2>
-    {status === 'success' ? <p role="status">{success}</p> : <>
+    {status === 'success' ? <><SuccessCheck /><p role="status">{success}</p></> : <>
       <form onSubmit={submit} aria-busy={status === 'pending'} data-clarity-mask="true" onInput={() => {
         if (!started.current) { started.current = true; trackEvent('form_started', { form_id: formId }) }
       }}>
