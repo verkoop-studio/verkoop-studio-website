@@ -4,6 +4,9 @@ import { isLegalPath } from '../data/legal'
 import { performance } from '../data/performance'
 import { useLang } from '../i18n/LanguageContext'
 import { trackNewsletterConversion } from '../lib/analytics'
+import Field from './brand/forms/Field'
+import SubmitButton from './brand/forms/SubmitButton'
+import { validEmail } from './brand/forms/validate'
 import './EmailCapture.css'
 
 const STORAGE_KEY = 'verkoop_newsletter_until'
@@ -55,6 +58,8 @@ export default function EmailCapture({ openRequest = 0, automatic = true }: { op
   const [manuallyOpened, setManuallyOpened] = useState(false)
   const [status, setStatus] = useState<'idle' | 'pending' | 'success'>('idle')
   const [error, setError] = useState('')
+  const [emailOk, setEmailOk] = useState(false)
+  const [consent, setConsent] = useState(false)
   const dismissed = useRef(false)
   const pending = useRef(false)
   const submissionId = useRef('')
@@ -151,21 +156,20 @@ export default function EmailCapture({ openRequest = 0, automatic = true }: { op
         {status === 'success' ? t.successText : t.description}
       </p>
       {status !== 'success' && <form onSubmit={submit} aria-busy={status === 'pending'}>
-        <label className="sr-only" htmlFor="newsletter-email">{t.email}</label>
-        <input id="newsletter-email" name="email" type="email" autoComplete="email" placeholder={t.placeholder}
-          required maxLength={254} disabled={status === 'pending'} />
+        <Field name="email" type="email" inputMode="email" label={t.email} autoComplete="email" maxLength={254} disabled={status === 'pending'}
+          validate={validEmail} message={lang === 'nl' ? 'Dit e-mailadres klopt niet helemaal.' : 'This email address doesn’t look quite right.'}
+          onValidChange={(_, ok) => setEmailOk(ok)} />
         <div className="email-capture-trap" aria-hidden="true">
           <label>Website<input name="company_website" tabIndex={-1} autoComplete="off" /></label>
         </div>
-        <label className="email-capture-consent">
-          <input name="consent" type="checkbox" required disabled={status === 'pending'} />
+        <label className="email-capture-consent vs-check-box" data-checked={consent || undefined}>
+          <input name="consent" type="checkbox" required disabled={status === 'pending'} checked={consent} onChange={(event) => setConsent(event.target.checked)} />
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="5" /><path d="M5.5 10.5 8.5 13.5 14.5 6.5" pathLength={1} /></svg>
           <span>{t.consent}</span>
         </label>
         {error && <p className="email-capture-error" role="alert">{error} {error === t.preferences &&
           <a href="mailto:stef@verkoop.studio">stef@verkoop.studio</a>}</p>}
-        <button className="email-capture-submit" type="submit" disabled={status === 'pending'}>
-          {status === 'pending' ? t.busy : t.action}<span aria-hidden="true">↗</span>
-        </button>
+        <SubmitButton state={status === 'pending' ? 'pending' : emailOk && consent ? 'ready' : 'locked'} label={t.action} pendingLabel={t.busy} />
         <div className="email-capture-footnote">
           <span>{t.note}</span>
           <details><summary>{t.privacyLabel}</summary><p>{t.privacy} <a href="mailto:stef@verkoop.studio">stef@verkoop.studio</a>. <Link to="/privacy">{t.privacyPage}</Link></p></details>

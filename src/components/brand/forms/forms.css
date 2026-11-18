@@ -95,3 +95,21 @@
 .vs-goal[data-checked] strong { color: var(--vs-paper); }
 .vs-goal[data-checked] span:last-child { color: #c9c6bf; }
 .vs-qform-done { text-align: left; }
+
+/* Checkbox with a tick that draws itself */
+.vs-check-box { position: relative; cursor: pointer; }
+.vs-check-box input { position: absolute; opacity: 0; width: 20px; height: 20px; margin: 0; }
+.vs-check-box svg { flex: none; }
+.vs-check-box rect { fill: var(--vs-paper); stroke: var(--vs-line); stroke-width: 1.5; transition: fill 0.25s ease, stroke 0.25s ease; }
+.vs-check-box path { stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.35s var(--vs-ease) 0.05s; }
+.vs-check-box[data-checked] rect { fill: var(--vs-blue); stroke: var(--vs-blue); }
+.vs-check-box[data-checked] path { stroke-dashoffset: 0; }
+.vs-check-box input:focus-visible + svg rect { stroke: var(--vs-blue); stroke-width: 2.5; }
+
+/* Newsletter panel in the new palette */
+.email-capture { background: var(--vs-card); border-color: var(--vs-line); color: var(--vs-ink); }
+.email-capture-mark { background: var(--vs-ink); }
+.email-capture h2 { font-family: var(--font-display); letter-spacing: -0.02em; }
+.email-capture-eyebrow { text-transform: none; letter-spacing: 0; font-size: 12px; color: var(--vs-mute); }
+.email-capture-description, .email-capture-consent { color: var(--vs-ink-2); }
+.email-capture-consent { font-size: 12px; }
