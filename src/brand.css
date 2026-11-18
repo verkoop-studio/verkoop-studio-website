@@ -147,9 +147,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 /* Menu panel: one box under the tabs, sized and placed by NavMenu.tsx. */
 .vs-mega { position: absolute; top: calc(100% + 18px); left: 0; overflow: hidden; border-radius: 20px; background: var(--vs-card); box-shadow: 0 0 0 1px var(--vs-line), 0 24px 60px -24px rgb(17 17 16 / 0.3); }
 .vs-mega-in { position: absolute; top: 0; left: 0; box-sizing: border-box; padding: 14px; }
-.vs-mega-cols { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 6px; }
 .vs-mega-label { padding: 6px 12px 8px; color: var(--vs-mute); font-size: 13px; }
-.vs-mega-list--2 { display: grid; grid-template-columns: 1fr 1fr; column-gap: 6px; }
 .vs-mega-more { display: flex; align-items: center; gap: 6px; min-height: 44px; margin-top: 8px; padding: 6px 12px 0; border-top: 1px solid var(--vs-line); color: var(--vs-ink); font-size: 14px; font-weight: 500; text-decoration: none; }
 .vs-mega-more svg { transition: transform 0.3s var(--vs-ease); }
 .vs-mega-more:hover svg { transform: translateX(3px); }

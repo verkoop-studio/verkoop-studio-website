@@ -69,7 +69,7 @@ export const menuTabs: MenuTab[] = [
     id: 'cases',
     label: { nl: 'Cases', en: 'Work' },
     href: '/cases',
-    width: 640,
+    width: 820,
     more: { nl: 'Alle cases', en: 'All cases' },
     groups: [
       {
@@ -87,7 +87,7 @@ export const menuTabs: MenuTab[] = [
     id: 'diensten',
     label: { nl: 'Diensten', en: 'Services' },
     href: '/#expertise',
-    width: 900,
+    width: 1040,
     more: { nl: 'Alle diensten op een rij', en: 'All services in one list' },
     groups: [
       {
@@ -122,7 +122,7 @@ export const menuTabs: MenuTab[] = [
     id: 'software',
     label: { nl: 'Software', en: 'Software' },
     href: '/#software',
-    width: 600,
+    width: 680,
     visual: 'software',
     more: { nl: 'Onze software in het kort', en: 'Our software at a glance' },
     groups: [
@@ -140,7 +140,7 @@ export const menuTabs: MenuTab[] = [
     id: 'agency',
     label: { nl: 'Agency', en: 'Agency' },
     href: '/agency',
-    width: 640,
+    width: 700,
     groups: [
       {
         label: { nl: 'Over Verkoop Studio', en: 'About Verkoop Studio' },

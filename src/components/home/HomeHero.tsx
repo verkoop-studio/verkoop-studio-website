@@ -171,7 +171,7 @@ export default function HomeHero() {
 
       <VideoStage lang={lang} />
 
-      <section className="vs-wrap vs-plan-form" aria-label={lang === 'nl' ? 'Gratis groeiplan' : 'Free growth plan'}>
+      <section id="groeiplan" className="vs-wrap vs-plan-form" aria-label={lang === 'nl' ? 'Gratis groeiplan' : 'Free growth plan'}>
         <div className="vs-hero-form">
           <HandNote point="down-left" className="vs-hero-form-note">{t.formNote}</HandNote>
           <HeroRequestForm kind="plan" />

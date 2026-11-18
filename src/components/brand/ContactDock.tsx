@@ -1,13 +1,13 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { MessageCircle, Phone, X } from 'lucide-react'
 import BotAvatar from './BotAvatar'
+import { STUDIO_PHONE, whatsappHref } from '../../data/contact'
 import { useFooterInView } from '../../lib/useFooterInView'
 import { useEffect, useState } from 'react'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import { EASE } from './motion'
 
-const PHONE = '+32478731138'
 
 const COPY = {
   nl: {
@@ -107,14 +107,14 @@ export default function ContactDock() {
                 <p>{t.body}</p>
                 <div className="vs-dock-actions">
                   <a
-                    href={`https://wa.me/${PHONE.slice(1)}?text=${encodeURIComponent(t.message)}`}
+                    href={whatsappHref(t.message)}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => trackEvent('whatsapp_clicked', { placement: 'dock', channel: 'whatsapp' })}
                   >
                     <MessageCircle size={15} aria-hidden="true" />{t.whatsapp}
                   </a>
-                  <a href={`tel:${PHONE}`} onClick={() => trackEvent('whatsapp_clicked', { placement: 'dock', channel: 'phone' })}>
+                  <a href={`tel:${STUDIO_PHONE}`} onClick={() => trackEvent('whatsapp_clicked', { placement: 'dock', channel: 'phone' })}>
                     <Phone size={15} aria-hidden="true" />{t.call}
                   </a>
                 </div>

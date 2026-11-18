@@ -3,6 +3,7 @@ import { trackEvent } from '../../lib/analytics'
 import Cta from '../brand/Cta'
 import Reveal from '../brand/Reveal'
 import SplitHeadline from '../brand/SplitHeadline'
+import { whatsappHref } from '../../data/contact'
 
 const COPY = {
   nl: { title: [{ text: 'Laten we' }, { text: 'groeien.', tone: 'accent' as const }], primary: 'Bespreek je project', whatsapp: 'WhatsApp' },
@@ -18,7 +19,7 @@ export default function ClosingCta() {
         <SplitHeadline id="closing-title" className="vs-closing-title" parts={t.title} />
         <Reveal className="vs-closing-actions" y={12}>
           <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_closing' })}>{t.primary}</Cta>
-          <Cta href="https://wa.me/32478731138" variant="line" onClick={() => trackEvent('whatsapp_clicked', { placement: 'home_closing' })}>{t.whatsapp}</Cta>
+          <Cta href={whatsappHref()} variant="line" onClick={() => trackEvent('whatsapp_clicked', { placement: 'home_closing' })}>{t.whatsapp}</Cta>
           <a className="vs-textlink" href="mailto:stef@verkoop.studio">stef@verkoop.studio</a>
         </Reveal>
       </div>

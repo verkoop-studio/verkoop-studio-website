@@ -1,10 +1,16 @@
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { ChevronDown } from 'lucide-react'
+import { AnimatePresence, motion, useReducedMotion, type Variants } from 'motion/react'
+import { ChevronDown, Megaphone, MessageCircle, ShoppingBag, Sparkles } from 'lucide-react'
+import team from '../../assets/studio-flyers-640.webp'
+import { caseHeadline, getCase } from '../../data/cases'
+import { whatsappHref } from '../../data/contact'
+import { trackEvent } from '../../lib/analytics'
+import CasePoster from '../home/CasePoster'
+import HandNote from './HandNote'
 import Arrow from './Arrow'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type RefObject } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { menuTabs, type MenuLink, type MenuTab } from '../../data/nav'
-import type { Lang } from '../../data/types'
+import { menuTabs, type MenuGroup, type MenuLink, type MenuTab } from '../../data/nav'
+import type { CaseSlug, Lang } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
 import { EASE } from './motion'
 
@@ -142,46 +148,141 @@ function SoftwarePreview({ kind, reduce }: { kind: 'crm' | 'performance'; reduce
   )
 }
 
-/** The groups of one tab. Rendered inside the shared panel, replaced when the tab changes. */
+const PANEL_COPY = {
+  nl: { call: 'Plan een gesprek', whatsapp: 'WhatsApp', read: 'Lees de case', featured: 'Pinacello · online omzet', unsure: 'Niet zeker wat je nodig hebt?', unsureBody: 'Vraag je gratis groeiplan aan. We zeggen welke aanpak past.', unsureCta: 'Vraag je groeiplan aan', bundled: 'CRM en dashboard zitten in elk maandpakket', bundledLink: 'Bekijk de pakketten', crmFact: 'Gratis tot 500 leads', perfFact: 'Vanaf €49 per maand', us: 'dit zijn wij :)' },
+  en: { call: 'Plan a call', whatsapp: 'WhatsApp', read: 'Read the case', featured: 'Pinacello · online revenue', unsure: 'Not sure what you need?', unsureBody: 'Ask for your free growth plan. We tell you which approach fits.', unsureCta: 'Ask for your growth plan', bundled: 'CRM and dashboard come with every monthly plan', bundledLink: 'See the plans', crmFact: 'Free up to 500 leads', perfFact: 'From €49 a month', us: 'this is us :)' },
+}
+
+const GROUP_ICONS = [Megaphone, ShoppingBag, Sparkles]
+
+/** Cases: the real posters, small, with the featured result beside them. */
+function CasesPanel({ group, lang, onNavigate, item }: { group: MenuGroup; lang: Lang; onNavigate: () => void; item: Variants }) {
+  const c = PANEL_COPY[lang]
+  return (
+    <div className="vs-mega-cases">
+      <ul className="vs-mega-tiles">
+        {group.links.map((link) => {
+          const study = getCase(link.href.split('/').pop() as CaseSlug)
+          if (!study) return null
+          return (
+            <motion.li key={link.href} variants={item}>
+              <Link to={link.href} className="vs-mega-tile vs-case-live" onClick={onNavigate}>
+                <span className="vs-mega-tile-art" aria-hidden="true"><CasePoster slug={study.slug} name={study.name} caption={caseHeadline(study, lang)} lang={lang} /></span>
+                <b>{study.name}</b>
+                <span>{caseHeadline(study, lang)}</span>
+              </Link>
+            </motion.li>
+          )
+        })}
+      </ul>
+      <motion.div className="vs-mega-feature" variants={item}>
+        <p className="vs-mega-feature-figure">+120%</p>
+        <p className="vs-mega-feature-label">{c.featured}</p>
+        <Link to="/cases/pinacello" className="vs-mega-more" onClick={onNavigate}>{c.read}<Arrow size={15} /></Link>
+      </motion.div>
+    </div>
+  )
+}
+
+/** Services: three groups with an icon tile each, a soft bed under the hovered link, and a dark card for the undecided. */
+function ServicesPanel({ groups, lang, onNavigate, item }: { groups: MenuGroup[]; lang: Lang; onNavigate: () => void; item: Variants }) {
+  const c = PANEL_COPY[lang]
+  const [hover, setHover] = useState<string | null>(null)
+  return (
+    <div className="vs-mega-services">
+      <div className="vs-mega-groups" onMouseLeave={() => setHover(null)}>
+        {groups.map((group, g) => {
+          const Icon = GROUP_ICONS[g % GROUP_ICONS.length]
+          return (
+            <div key={g} role="group" aria-labelledby={`vs-mega-diensten-${g}`}>
+              <p id={`vs-mega-diensten-${g}`} className="vs-mega-group-head"><span className={`vs-mega-icon vs-mega-icon--${g}`} aria-hidden="true"><Icon size={16} /></span>{group.label[lang]}</p>
+              <ul>
+                {group.links.map((link) => (
+                  <motion.li key={link.href} variants={item} className="vs-mega-bedded" onMouseEnter={() => setHover(link.href)} onFocus={() => setHover(link.href)}>
+                    {hover === link.href && <motion.span layoutId="vs-mega-bed" className="vs-mega-bed" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
+                    <Item link={link} lang={lang} onClick={onNavigate} />
+                  </motion.li>
+                ))}
+              </ul>
+            </div>
+          )
+        })}
+      </div>
+      <motion.div className="vs-mega-dark" variants={item}>
+        <p className="vs-mega-dark-title">{c.unsure}</p>
+        <p>{c.unsureBody}</p>
+        <Link to="/#groeiplan" className="vs-mega-dark-cta" onClick={() => { trackEvent('audit_cta_clicked', { placement: 'nav_services' }); onNavigate() }}>{c.unsureCta}<Arrow size={15} /></Link>
+      </motion.div>
+    </div>
+  )
+}
+
+/** Software: one tile per product with its live mini mock, the price fact and an arrow. */
+function SoftwarePanel({ lang, onNavigate, reduce, item }: { lang: Lang; onNavigate: () => void; reduce: boolean; item: Variants }) {
+  const c = PANEL_COPY[lang]
+  const products = [
+    { href: '/crm', kind: 'crm' as const, title: 'Sales CRM', fact: c.crmFact },
+    { href: '/performance', kind: 'performance' as const, title: 'Performance', fact: c.perfFact },
+  ]
+  return (
+    <div className="vs-mega-software">
+      <ul className="vs-mega-products">
+        {products.map((product) => (
+          <motion.li key={product.href} variants={item}>
+            <Link to={product.href} className="vs-mega-product" onClick={onNavigate}>
+              <SoftwarePreview kind={product.kind} reduce={reduce} />
+              <span className="vs-mega-product-row"><b>{product.title}</b><Arrow size={15} /></span>
+              <span className="vs-mega-product-fact">{product.fact}</span>
+            </Link>
+          </motion.li>
+        ))}
+      </ul>
+      <motion.p className="vs-mega-bundled" variants={item}>{c.bundled} · <Link to="/#groeipakketten" onClick={onNavigate}>{c.bundledLink}</Link></motion.p>
+    </div>
+  )
+}
+
+/** Agency: the team photo with a hand note, and the links with their one-line notes. */
+function AgencyPanel({ group, lang, onNavigate, item }: { group: MenuGroup; lang: Lang; onNavigate: () => void; item: Variants }) {
+  return (
+    <div className="vs-mega-agency">
+      <motion.div className="vs-mega-photo" variants={item}>
+        <img src={team} alt="" width={320} height={400} loading="lazy" decoding="async" />
+        <HandNote point="down-left" className="vs-mega-photo-note">{PANEL_COPY[lang].us}</HandNote>
+      </motion.div>
+      <ul className="vs-mega-agency-list">
+        {group.links.map((link) => <motion.li key={link.href} variants={item}><Item link={link} lang={lang} onClick={onNavigate} /></motion.li>)}
+      </ul>
+    </div>
+  )
+}
+
+/** The content of one tab, rendered inside the shared panel and replaced when the tab changes. */
 function PanelContent({ tab, width, dir, lang, reduce, onNavigate }: { tab: MenuTab; width: number; dir: number; lang: Lang; reduce: boolean; onNavigate: () => void }) {
-  const [preview, setPreview] = useState<'crm' | 'performance'>('crm')
   const groups = tab.groups ?? []
-  const twoColumns = groups.length === 1 && !tab.visual
+  const c = PANEL_COPY[lang]
   const shift = reduce ? 0 : 26
   const content = {
     enter: (d: number) => ({ opacity: 0, x: d * shift }),
-    center: { opacity: 1, x: 0, transition: reduce ? INSTANT : { duration: 0.32, ease: EASE, staggerChildren: 0.025, delayChildren: 0.03 } },
+    center: { opacity: 1, x: 0, transition: reduce ? INSTANT : { duration: 0.32, ease: EASE, staggerChildren: 0.035, delayChildren: 0.03 } },
     exit: (d: number) => ({ opacity: 0, x: d * -shift, transition: reduce ? INSTANT : { duration: 0.16, ease: EASE } }),
   }
-  const item = {
-    enter: { opacity: 0, y: reduce ? 0 : 7 },
+  const item: Variants = {
+    enter: { opacity: 0, y: reduce ? 0 : 8 },
     center: { opacity: 1, y: 0, transition: reduce ? INSTANT : { duration: 0.4, ease: EASE } },
   }
+  const body = tab.id === 'cases' && groups[0] ? <CasesPanel group={groups[0]} lang={lang} onNavigate={onNavigate} item={item} />
+    : tab.id === 'diensten' ? <ServicesPanel groups={groups} lang={lang} onNavigate={onNavigate} item={item} />
+    : tab.id === 'software' ? <SoftwarePanel lang={lang} onNavigate={onNavigate} reduce={reduce} item={item} />
+    : groups[0] ? <AgencyPanel group={groups[0]} lang={lang} onNavigate={onNavigate} item={item} /> : null
   return (
     <motion.div className="vs-mega-in" data-menu-content={tab.id} style={{ width }} custom={dir} variants={content} initial="enter" animate="center" exit="exit">
-      <div className="vs-mega-cols" style={tab.visual ? { gridAutoFlow: 'row', gridTemplateColumns: 'minmax(0, 1fr) 210px', gap: 12 } : undefined}>
-        {groups.map((group, g) => (
-          <div key={g} role="group" aria-labelledby={`vs-mega-${tab.id}-${g}`}>
-            <p id={`vs-mega-${tab.id}-${g}`} className="vs-mega-label">{group.label[lang]}</p>
-            <ul className={twoColumns ? 'vs-mega-list--2' : undefined}>
-              {group.links.map((link) => (
-                <motion.li key={link.href} variants={item}>
-                  <Item link={link} lang={lang} onClick={onNavigate} onPreview={tab.visual ? (href) => setPreview(href === '/performance' ? 'performance' : 'crm') : undefined} />
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-        ))}
-        {tab.visual && <SoftwarePreview kind={preview} reduce={reduce} />}
-      </div>
-      {tab.more && (
-        <motion.div variants={item}>
-          <Link className="vs-mega-more" to={tab.href} onClick={onNavigate}>
-            {tab.more[lang]}
-            <Arrow size={15} />
-          </Link>
-        </motion.div>
-      )}
+      {body}
+      <motion.div className="vs-mega-strip" variants={item}>
+        <Link to="/contact" className="vs-mega-strip-cta" onClick={() => { trackEvent('audit_cta_clicked', { placement: 'nav_panel' }); onNavigate() }}>{c.call}<Arrow size={14} /></Link>
+        <a href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="vs-mega-strip-link" onClick={() => trackEvent('whatsapp_clicked', { placement: 'nav_panel', channel: 'whatsapp' })}><MessageCircle size={15} aria-hidden="true" />{c.whatsapp}</a>
+        {tab.more && <Link className="vs-mega-more vs-mega-strip-more" to={tab.href} onClick={onNavigate}>{tab.more[lang]}<Arrow size={15} /></Link>}
+      </motion.div>
     </motion.div>
   )
 }
