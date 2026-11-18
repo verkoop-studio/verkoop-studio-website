@@ -25,3 +25,14 @@ body:has(.mobile-navigation, .whatsapp-support-panel:not([hidden])) .coaching-po
  body:has(.coaching-popup) .mobile-contact-bar { visibility:hidden; }
 }
 @media(prefers-reduced-motion:reduce) { .coaching-popup { animation:none; } }
+/* Inline on the Academy page: a paper card in the flow, with the yellow "every month, one spot" chip. */
+.coaching-popup.coaching-card { position: static; width: auto; max-width: 560px; max-height: none; margin: 0 auto; overflow: visible; padding: clamp(22px, 3vw, 32px); border: 1px solid var(--vs-line); border-radius: 24px; background: var(--vs-card); color: var(--vs-ink); box-shadow: 0 30px 60px -40px rgb(17 17 16 / 0.4); animation: none; }
+.coaching-card .coaching-popup-kicker { display: inline-block; margin: 0 0 12px; padding: 4px 10px; border-radius: 99px; background: #ffd23f; color: var(--vs-ink); font-size: 12.5px; letter-spacing: 0; text-transform: none; }
+.coaching-card h2 { margin-right: 0; font-family: var(--font-display); font-weight: 500; }
+.coaching-card p { color: var(--vs-ink-2); }
+.ac-raffle { margin-top: clamp(64px, 8vw, 110px); }
+@media (max-width: 767px) {
+  .coaching-popup.coaching-card { left: auto; right: auto; bottom: auto; max-height: none; border-width: 1px; border-radius: 22px; padding: 20px; }
+  .coaching-card .coaching-popup-kicker, .coaching-card #coaching-popup-description:not([role]) { display: revert; }
+  .coaching-card h2 { margin-right: 0; font-size: 22px; }
+}

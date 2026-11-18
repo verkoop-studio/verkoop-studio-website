@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import FaqFolder from '../components/brand/FaqFolder'
+import AcademyRaffleCard from '../components/AcademyRaffleCard'
 import AcademySignup from '../components/AcademySignup'
 import { recordAcademyPopup } from '../lib/academy-popup'
 import BrandMark from '../components/BrandMark'
@@ -466,6 +467,8 @@ export default function Academy() {
         </div>
       </section>
 
+      <div className="ac-wrap ac-raffle"><AcademyRaffleCard /></div>
+
       <section id="faq" className="ac-faq ac-wrap" aria-labelledby="faq-title">
         <FaqFolder id="academy-faq" titleId="faq-title" title={t("Nog even dit.")} lang={lang} lede={<>{t("Staat je vraag er niet bij?") + " "}<Link to={contactAcademy}>{t("Stel ze rechtstreeks.")}</Link></>} items={academyFaq} />
       </section>
@@ -475,7 +478,7 @@ export default function Academy() {
       </section>
     </main>
 
-    {/* No newsletter pop-up here: this page is the sign-up itself. */}
+    {/* No newsletter pop-up here: the monthly raffle sits in the page as a card instead. */}
 
     {!signedUp && stickyArmed && <div className={`ac-sticky ${sticky ? 'is-visible' : ''}`} aria-hidden={!sticky}>
       <button className="ac-button" tabIndex={sticky ? 0 : -1} onClick={goToSignup}>{t('Vraag je gratis les aan')}</button>
