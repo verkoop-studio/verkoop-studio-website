@@ -107,8 +107,8 @@ const PROOF = {
   en: { lead: 'One organic video.', figure: '20 sales.', body: 'For Pinacello we made a video that brought in twenty sales without any ad budget. That video then became the base for the campaigns.', short: 'Pinacello, ecommerce' },
 }
 
-/** Meta Ads hero: a phone with one sample ad, and a sale arriving from it. */
-function MetaHero({ lang, toast }: { lang: Lang; toast: [string, string] }) {
+/** Meta Ads hero: a phone with one sample ad. */
+function MetaHero({ lang }: { lang: Lang }) {
   const reduce = useReducedMotion()
   return (
     <div className="sv-hero-visual sv-phone-stage" aria-hidden="true">
@@ -118,31 +118,18 @@ function MetaHero({ lang, toast }: { lang: Lang; toast: [string, string] }) {
         <AdCard index={0} lang={lang} />
         <div className="sv-feed-next"><AdCard index={2} lang={lang} /></div>
       </motion.div>
-      <HeroToast toast={toast} />
     </div>
   )
 }
 
-/** A notice that pops in beside the hero object: what the service ends in. */
-function HeroToast({ toast }: { toast: [string, string] }) {
-  const reduce = useReducedMotion()
-  return (
-    <motion.div className="sv-toast" initial={reduce ? false : { opacity: 0, x: -30, scale: 0.9 }} animate={{ opacity: 1, x: 0, scale: 1 }} transition={{ type: 'spring', stiffness: 160, damping: 16, delay: 1.3 }}>
-      <span className="sv-toast-dot"><Check size={14} strokeWidth={2.6} /></span>
-      <b>{toast[0]}<em>{toast[1]}</em></b>
-    </motion.div>
-  )
-}
-
-/** Every other service: its own sample screen, tilted, with the notice beside it. */
-function HeroObject({ screen, lang, toast }: { screen: ServiceScreen; lang: Lang; toast: [string, string] }) {
+/** Every other service: its own sample screen, tilted. */
+function HeroObject({ screen, lang }: { screen: ServiceScreen; lang: Lang }) {
   const reduce = useReducedMotion()
   return (
     <div className="sv-hero-visual sv-hero-object" aria-hidden="true">
       <motion.div initial={reduce ? false : { opacity: 0, x: 50, rotate: 5 }} animate={{ opacity: 1, x: 0, rotate: 1.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
         <ServiceScreenView screen={screen} lang={lang} />
       </motion.div>
-      <HeroToast toast={toast} />
     </div>
   )
 }
@@ -262,17 +249,12 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
           <Breadcrumbs items={[{ label: t.servicesCrumb, href: '/#expertise' }, { label: service.title[lang] }]} />
           <SplitHeadline as="h1" id="service-title" className="vs-h1 sv-h1" parts={parts} onMount />
           <motion.p className="vs-lead" {...arrive(0.55)}>{service.summary[lang]}</motion.p>
-          {slug !== 'websites' && (
-            <motion.ul className="sv-chips" {...arrive(0.7)}>
-              {service.includes[lang].map((item) => <li key={item}>{item.charAt(0).toUpperCase() + item.slice(1)}</li>)}
-            </motion.ul>
-          )}
           <motion.div className="sv-hero-actions" {...arrive(0.85)}>
             <Cta href="#audit-formulier-section" onClick={() => trackEvent('audit_cta_clicked', { placement: 'service_hero', service: slug })}>{t.cta}</Cta>
             <span className="sv-reply">{t.reply}</span>
           </motion.div>
         </div>
-        {slug === 'websites' ? <WebsiteStage lang={lang} /> : slug === 'meta-ads' ? <MetaHero lang={lang} toast={story.toast[lang]} /> : <HeroObject screen={story.hero} lang={lang} toast={story.toast[lang]} />}
+        {slug === 'websites' ? <WebsiteStage lang={lang} /> : slug === 'meta-ads' ? <MetaHero lang={lang} /> : <HeroObject screen={story.hero} lang={lang} />}
       </section>
 
       {slug !== 'websites' && (

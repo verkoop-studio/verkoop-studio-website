@@ -146,9 +146,6 @@ export default function SalesCrm() {
               <Signup placement="crm_hero" label={c.cta[lang]} />
               <Cta to="/crm#schermen" variant="line">{t.how}</Cta>
             </div>
-            <dl className="pp-facts">
-              {c.hero.facts[lang].map((fact) => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
-            </dl>
           </div>
           <div className="pp-hero-stage">
             <LivePipeline lang={lang} />

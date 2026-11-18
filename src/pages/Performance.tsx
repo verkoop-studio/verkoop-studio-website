@@ -12,7 +12,6 @@ import { faqItems } from '../data/faq'
 import HandNote from '../components/brand/HandNote'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import Tilted from '../components/product/Tilted'
-import { StackedBars } from '../components/brand/blocks/StackedBars'
 import { performance as p } from '../data/performance'
 import { trackEvent, trackLandingView } from '../lib/analytics'
 import { useLang } from '../i18n/LanguageContext'
@@ -90,9 +89,6 @@ function TruthTable({ lang }: { lang: 'nl' | 'en' }) {
             <strong><Count to={84} on={on} /> {t.orders}</strong>
           </div>
         </div>
-      </div>
-      <div className="pp-chart-stb">
-        <StackedBars lang={lang} title={lang === 'nl' ? 'Omzet per kanaal' : 'Revenue by channel'} unit={lang === 'nl' ? 'omzet' : 'revenue'} prefix="€ " cats={['Meta', 'Google', 'TikTok', lang === 'nl' ? 'E-mail' : 'Email']} escLabel={lang === 'nl' ? 'Retouren' : 'Returns'} width={300} plotHeight={64} belowHeight={12} bars={18} />
       </div>
     </div>
   )
@@ -195,9 +191,6 @@ export default function Performance() {
               <Cta to="/performance#starten" onClick={start('performance_hero')}>{p.hero.cta[lang]}</Cta>
               <Cta to="/performance#prijzen" variant="line">{t.prices}</Cta>
             </div>
-            <dl className="pp-facts">
-              {p.hero.facts[lang].map((fact) => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
-            </dl>
           </div>
           <div className="pp-hero-stage">
             <TruthTable lang={lang} />
