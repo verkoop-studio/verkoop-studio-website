@@ -8,6 +8,8 @@ export interface HeadlinePart {
   tone?: 'accent' | 'mute'
   /** Start this part on a new line. */
   breakBefore?: boolean
+  /** Extra class on this part's words, e.g. a smaller second line. */
+  className?: string
 }
 
 const container = { hidden: {}, visible: { transition: { staggerChildren: 0.028 } } }
@@ -49,7 +51,7 @@ export default function SplitHeadline({
             {p.breakBefore && <br />}
             {p.tone === 'accent'
               ? <span className="vs-mark"><span className="vs-mark-bg" aria-hidden="true" />{p.text}</span>
-              : <span style={p.tone === 'mute' ? muteStyle : undefined}>{p.text}</span>}
+              : <span className={p.className} style={p.tone === 'mute' ? muteStyle : undefined}>{p.text}</span>}
             {i < parts.length - 1 && ' '}
           </Fragment>
         ))}
@@ -85,7 +87,7 @@ export default function SplitHeadline({
                 <motion.span className="vs-mark-bg" variants={highlight} />
                 {body}
               </span>
-            ) : body}
+            ) : part.className ? <span className={part.className}>{body}</span> : body}
             {p < parts.length - 1 && <span aria-hidden="true"> </span>}
           </Fragment>
         )

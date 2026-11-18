@@ -607,40 +607,28 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
   .site-shell footer ul.space-y-2 > * + * { margin-top: 0; }
 }
 
-/* ---------- Poster themes: each client its own world ---------- */
+/* ---------- Poster themes: calm, one quiet idea each ---------- */
 
 .vs-poster { container-type: inline-size; }
-.vs-poster--track { background: #0b0b0d; }
-.vs-poster--pop { background: #ffd3e6; }
-.vs-poster--editorial { background: #10140f; }
+.vs-poster--ticker { background: #0d1424; }
+.vs-poster--glow { background: #0c0b10; }
+.vs-poster--stipple { background: #a9b29c; }
 
-/* Night track: the neon line draws, the name streaks in, the lap timer runs. */
-.vs-track-line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.3s var(--vs-ease-wipe) 0.15s; }
-.vs-slide.is-active .vs-track-line { stroke-dashoffset: 0; }
-.vs-track-name { transform-box: view-box; transform: translateX(-70%); filter: blur(14px); opacity: 0; transition: transform 0.3s ease, filter 0.3s ease, opacity 0.2s ease; }
-.vs-slide.is-active .vs-track-name { transform: none; filter: blur(0); opacity: 1; transition: transform 0.75s cubic-bezier(0.12, 0.9, 0.2, 1) 0.2s, filter 0.6s ease 0.3s, opacity 0.2s ease 0.2s; }
-.vs-lap { position: absolute; top: 5.5%; right: 4.5%; display: inline-flex; align-items: baseline; gap: 0.6em; padding: 0.5em 0.9em; border-radius: 0.6em; background: rgb(245 243 238 / 0.08); box-shadow: inset 0 0 0 1px rgb(215 255 62 / 0.45); color: #d7ff3e; font: 600 2.3cqw/1 var(--font-display); font-variant-numeric: tabular-nums; }
-.vs-lap-label { color: #f5f3ee; opacity: 0.7; font-weight: 500; }
-@property --vs-lap-s { syntax: '<integer>'; initial-value: 0; inherits: false; }
-@property --vs-lap-cs { syntax: '<integer>'; initial-value: 0; inherits: false; }
-.vs-lap-time { counter-reset: lap-s var(--vs-lap-s) lap-cs var(--vs-lap-cs); }
-.vs-lap-time::after { content: '0:' counter(lap-s, decimal-leading-zero) '.' counter(lap-cs, decimal-leading-zero); }
-.vs-slide.is-active .vs-lap-time { animation: vs-lap-s 60s steps(60) infinite, vs-lap-cs 1s steps(100) infinite; }
-@keyframes vs-lap-s { to { --vs-lap-s: 60; } }
-@keyframes vs-lap-cs { to { --vs-lap-cs: 100; } }
+/* Ticker: the bright row crawls, the playhead sweeps the evening. */
+.vs-ticker-live { animation: vs-ticker 38s linear infinite; }
+@keyframes vs-ticker { to { transform: translateX(-46%); } }
+.vs-ticker-head { animation: vs-playhead 9s ease-in-out infinite alternate; }
+@keyframes vs-playhead { from { transform: translateX(0); } to { transform: translateX(240px); } }
 
-/* Pop: confetti pops, then the stamp slams down and shakes. */
-.vs-pop-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 0.2s ease; }
-.vs-slide.is-active .vs-pop-dot { transform: none; transition: transform 0.55s var(--vs-ease-bounce) calc(0.1s + var(--i) * 0.04s); }
-.vs-pop-stamp { transform-box: fill-box; transform-origin: center; opacity: 0; transform: scale(2.6); }
-.vs-slide.is-active .vs-pop-stamp { animation: vs-stamp 0.75s cubic-bezier(0.2, 0.9, 0.3, 1) 0.55s both; }
-@keyframes vs-stamp { 0% { opacity: 0; transform: scale(2.6); } 38% { opacity: 1; transform: scale(0.94); } 50% { transform: scale(1.03) translate(-4px, 2px); } 62% { transform: scale(1) translate(4px, -2px); } 74% { transform: translate(-2px, 1px); } 100% { opacity: 1; transform: none; } }
+/* Glow: the colour breathes, the ghost shapes drift. */
+.vs-glow-breathe { animation: vs-breathe 7s ease-in-out infinite alternate; }
+@keyframes vs-breathe { from { opacity: 0.78; } to { opacity: 1; } }
+.vs-glow-ghosts { animation: vs-ghosts 14s ease-in-out infinite alternate; }
+@keyframes vs-ghosts { from { transform: translate(-14px, 8px); } to { transform: translate(14px, -8px); } }
 
-/* Editorial: the halftone swells in and the heartbeat draws across. */
-.vs-halftone { transform-box: view-box; transform-origin: 75% 37%; transform: scale(0.82); opacity: 0.35; transition: transform 0.4s ease, opacity 0.3s ease; }
-.vs-slide.is-active .vs-halftone { transform: none; opacity: 1; transition: transform 1.2s var(--vs-ease) 0.1s, opacity 0.7s ease 0.1s; }
-.vs-pulse { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.3s ease; }
-.vs-slide.is-active .vs-pulse { stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s cubic-bezier(0.5, 0, 0.2, 1) 0.35s; }
+/* Stipple: the dots settle into the object row by row when the poster is centred. */
+.vs-stipple-dot { opacity: 0; transition: opacity 0.2s ease; }
+.vs-slide.is-active .vs-stipple-dot { opacity: 1; transition: opacity 0.5s ease calc(0.1s + var(--r) * 0.07s); }
 
 /* Larger hit areas for mouse users on the small text links. */
 .vs-nav a { min-height: 40px; }
@@ -648,9 +636,75 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 .site-shell footer ul.space-y-2 > * + * { margin-top: 0; }
 
 @media (prefers-reduced-motion: reduce) {
-  .vs-track-line, .vs-pulse { stroke-dashoffset: 0; transition: none; }
-  .vs-track-name, .vs-pop-dot, .vs-halftone { transform: none; filter: none; opacity: 1; transition: none; }
-  .vs-pop-stamp, .vs-slide.is-active .vs-pop-stamp { animation: none; opacity: 1; transform: none; }
-  .vs-slide.is-active .vs-lap-time { animation: none; }
-  .vs-lap-time { --vs-lap-s: 42; --vs-lap-cs: 31; }
+  .vs-ticker-live, .vs-ticker-head, .vs-glow-breathe, .vs-glow-ghosts { animation: none; }
+  .vs-stipple-dot { opacity: 1; transition: none; }
 }
+
+/* ---------- Full-screen hero ---------- */
+
+.vs-page .studio-hero.vs-hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 120px 0 72px; box-sizing: border-box; }
+.vs-hero-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--vs-ink); transform-origin: 0 50%; opacity: 0.12; }
+.vs-hero .vs-h1 { font-size: clamp(54px, 8.6vw, 156px); line-height: 1.02; letter-spacing: -0.045em; }
+.vs-h1 .vs-h1-sub { display: block; max-width: 30ch; margin-top: 0.45em; font-size: 0.36em; letter-spacing: -0.02em; line-height: 1.2; }
+.vs-hero .vs-hero-actions { margin-top: clamp(32px, 4vw, 52px); }
+.vs-scroll-cue { position: absolute; left: 50%; bottom: 24px; translate: -50% 0; display: inline-flex; flex-direction: column; align-items: center; gap: 8px; color: var(--vs-mute); font-size: 13px; }
+.vs-scroll-cue span { width: 1px; height: 38px; background: linear-gradient(var(--vs-ink), transparent); animation: vs-cue 1.8s var(--vs-ease) infinite; transform-origin: top; }
+@keyframes vs-cue { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
+
+/* Video opens from an inset window as the page scrolls. */
+.vs-video-stage { height: 170vh; }
+.vs-video-sticky { position: sticky; top: 0; height: 100svh; display: flex; align-items: center; justify-content: center; padding: 84px var(--vs-gutter) 24px; box-sizing: border-box; }
+.vs-video-frame { width: min(100%, 1440px); aspect-ratio: 16 / 9; max-height: 100%; overflow: hidden; border-radius: 22px; background: var(--vs-stone); }
+.vs-video-zoom { width: 100%; height: 100%; }
+.vs-video-frame .hero-video { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
+.vs-plan-form { display: flex; justify-content: center; padding-block: clamp(80px, 10vw, 140px) clamp(40px, 6vw, 80px); }
+.vs-plan-form .vs-hero-form { width: min(100%, 560px); margin: 0; }
+@media (max-width: 760px) {
+  .vs-video-stage { height: auto; }
+  .vs-video-sticky { position: static; height: auto; padding-block: 0; }
+  .vs-scroll-cue { display: none; }
+}
+
+/* ---------- Teardown: the system, taken apart ---------- */
+
+.vs-td { position: relative; background: var(--vs-ink); color: var(--vs-paper); margin-top: clamp(80px, 10vw, 160px); }
+.vs-td-sticky { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+.vs-td-grid { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+.vs-td .vs-td-label { color: #a3a09a; margin: 0 0 22px; }
+.vs-td-count { display: block; margin-bottom: 14px; color: var(--vs-blue-on-ink); font: 600 clamp(28px, 3vw, 44px)/1 var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.vs-td-title { margin: 0 0 14px; font: 500 clamp(38px, 4.6vw, 72px)/1 var(--font-display); letter-spacing: -0.035em; }
+.vs-td-body { margin: 0 0 24px; max-width: 460px; color: #c9c6bf; font-size: clamp(16px, 1.3vw, 19px); line-height: 1.55; }
+.vs-td-specs { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--vs-line-dark); max-width: 480px; }
+.vs-td-specs li { display: flex; align-items: center; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--vs-line-dark); font-size: 15px; color: #e7e4dd; }
+.vs-td-specs li svg { flex: none; color: var(--vs-blue-on-ink); }
+.vs-td-end-title { margin: 0 0 18px; font: 500 clamp(40px, 4.8vw, 76px)/1.02 var(--font-display); letter-spacing: -0.04em; max-width: 12ch; }
+.vs-td-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; }
+.vs-td .vs-textlink.vs-td-link { color: #c9c6bf; }
+.vs-td .vs-textlink.vs-td-link:hover { color: #fff; }
+.vs-td-stage { height: min(68vh, 620px); display: flex; align-items: center; justify-content: center; perspective: 1800px; }
+.vs-td-stack { position: relative; width: min(100%, 460px); aspect-ratio: 320 / 200; transform-style: preserve-3d; transform: rotateX(58deg) rotateZ(-38deg); }
+.vs-td-layer { position: absolute; inset: 0; transform-style: preserve-3d; }
+.vs-td-panel-art { display: block; width: 100%; height: auto; filter: drop-shadow(0 18px 24px rgb(0 0 0 / 0.35)); }
+.vs-td-progress { position: absolute; left: 50%; bottom: 28px; translate: -50% 0; display: flex; gap: 6px; }
+.vs-td-progress span { width: 28px; height: 3px; border-radius: 2px; background: var(--vs-line-dark); transition: background var(--vs-dur-medium) ease; }
+.vs-td-progress span.is-on { background: var(--vs-blue-on-ink); }
+.vs-visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+.vs-td--list { padding-block: clamp(72px, 10vw, 120px); }
+.vs-td--list .vs-h2 { margin-bottom: 40px; }
+.vs-td-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 40px; }
+.vs-td-item { display: grid; gap: 20px; }
+.vs-td-item .vs-td-panel-art { max-width: 360px; transform: rotate(-2deg); }
+.vs-td-item .vs-td-title { font-size: clamp(30px, 8vw, 44px); }
+.vs-td--list .vs-td-end { margin-top: 48px; }
+
+/* Unfocused posters: one even paper veil over the whole frame instead of a filter on the art,
+   which Chrome can paint in tiles when the poster is half outside the scroller. */
+.vs-slide .vs-poster, .vs-slide:not(.is-active) .vs-poster { opacity: 1; filter: none; animation: none; }
+.vs-slide-frame::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #f5f3ee; opacity: 0.5; transition: opacity 0.4s ease; }
+.vs-slide.is-active .vs-slide-frame::after { opacity: 0; }
+@supports (animation-timeline: view()) {
+  .vs-slide .vs-slide-frame::after { opacity: unset; animation: vs-veil linear both; animation-timeline: --vs-slide; }
+}
+@keyframes vs-veil { 0% { opacity: 0.5; } 45%, 55% { opacity: 0; } 100% { opacity: 0.5; } }
+@media (prefers-reduced-motion: reduce) { .vs-slide .vs-slide-frame::after { animation: none; } }

@@ -40,10 +40,10 @@ type Sticker = { icon: keyof typeof DOODLES } | { tag: string }
 const SLOTS = [
   { x: 4, y: 30, size: 25, tilt: -12, depth: 1 },
   { x: 27, y: 20, size: 10, tilt: 15, depth: 0.45 },
-  { x: 13, y: 87, size: 21, tilt: -14, depth: 0.8 },
+  { x: 13, y: 84, size: 21, tilt: -14, depth: 0.8 },
   { x: 84, y: 23, size: 22, tilt: 11, depth: 0.9 },
   { x: 98, y: 54, size: 20, tilt: -9, depth: 0.55 },
-  { x: 89, y: 93, size: 24, tilt: 16, depth: 1.1 },
+  { x: 89, y: 89, size: 24, tilt: 16, depth: 1.1 },
 ]
 
 function StickerArt({ sticker }: { sticker: Sticker }) {
@@ -124,167 +124,152 @@ function PaperPoster({ name, caption }: PosterProps) {
   )
 }
 
-/* ------------------------------------------------------------- */
-/* Night track: asphalt, kerbs, a neon racing line, a lap timer.  */
-/* ------------------------------------------------------------- */
+/* ----------------------------------------------------------------------- */
+/* Ticker: flat night ground, faint rows of booking data, a sweeping clock. */
+/* ----------------------------------------------------------------------- */
 
-const RACING_LINE = 'M-40 560C140 560 210 150 430 150s250 330 470 330 160-120 160-120'
-const NEON = '#d7ff3e'
+const TICKER_ROWS = [
+  'Baan 1 · ronde 04 · 0:41.8 · karts 1–8 · groep 12 pers. · bevestigd',
+  'Teambuilding · vrijdag 19:30 · 24 pers. · offerte verstuurd · B2B',
+  'Baan 2 · ronde 11 · 0:43.2 · karts 9–16 · verjaardag · bevestigd',
+  'Online boeking · zaterdag 14:00 · 6 pers. · betaald · B2C',
+  'Bedrijfsevent · donderdag 18:00 · 40 pers. · aanvraag · B2B',
+  'Baan 1 · ronde 07 · 0:40.9 · karts 3–10 · vrijgezellen · bevestigd',
+  'Online boeking · zondag 11:30 · 4 pers. · betaald · B2C',
+]
 
-function TrackPoster({ name, caption }: PosterProps) {
-  return (
-    <>
-      <Art>
-        <defs>
-          <filter id="track-grain" x="0" y="0" width="100%" height="100%">
-            <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" stitchTiles="stitch" />
-            <feColorMatrix type="saturate" values="0" />
-          </filter>
-          <filter id="track-glow" x="-10%" y="-10%" width="120%" height="120%">
-            <feGaussianBlur stdDeviation="9" />
-          </filter>
-          <linearGradient id="track-streak" x1="0" x2="1">
-            <stop offset="0" stopColor="#fff" stopOpacity="0" />
-            <stop offset="1" stopColor="#fff" stopOpacity="0.9" />
-          </linearGradient>
-        </defs>
-        <rect width={W} height={H} fill="#0b0b0d" />
-        <rect width={W} height={H} filter="url(#track-grain)" opacity="0.2" style={{ mixBlendMode: 'screen' }} />
-        <path d={RACING_LINE} fill="none" stroke="#17171b" strokeWidth="150" strokeLinecap="round" />
-        <path d={RACING_LINE} fill="none" stroke="#f5f3ee" strokeWidth="2" strokeDasharray="16 22" opacity="0.28" />
-        <path d={RACING_LINE} fill="none" stroke={NEON} strokeWidth="10" opacity="0.5" filter="url(#track-glow)" pathLength={1} className="vs-track-line" />
-        <path d={RACING_LINE} fill="none" stroke={NEON} strokeWidth="3" pathLength={1} className="vs-track-line" />
-        <g>
-          {Array.from({ length: 16 }, (_, i) => (
-            <path key={i} d={`M${i * 64 - 20} 680l26-44h64l-26 44Z`} fill={i % 2 ? '#f5f3ee' : '#e5342b'} />
-          ))}
-        </g>
-        <g className="vs-track-name">
-          <g transform="skewX(-14)" style={{ transformOrigin: `${W / 2}px ${H / 2}px` }}>
-            {[292, 322, 352, 382].map((y, i) => (
-              <rect key={y} x={40 + i * 26} y={y} width={230 - i * 30} height="5" rx="2.5" fill="url(#track-streak)" opacity={0.75 - i * 0.12} />
-            ))}
-            <text x={W / 2 + 60} y={H / 2 + 44} textAnchor="middle" className="vs-p-display" fontSize="150" fontWeight="800" fontStyle="italic" letterSpacing="-4" fill="#f5f3ee">{name.toUpperCase()}</text>
-          </g>
-        </g>
-        <text x={W / 2 + 40} y={H / 2 + 108} textAnchor="middle" fontSize="27" fontWeight="500" fill={NEON} className="vs-p-text vs-poster-caption">{caption}</text>
-      </Art>
-      <span className="vs-lap">
-        <span className="vs-lap-label">Lap</span>
-        <span className="vs-lap-time" />
-      </span>
-    </>
-  )
-}
-
-/* ------------------------------------------------------- */
-/* Pop: candy ground, soft blobs, a stamp, confetti dots.   */
-/* ------------------------------------------------------- */
-
-const CONFETTI = [
-  [118, 96, 13, '#2447f5'], [236, 560, 10, '#ff7a59'], [352, 86, 9, '#12b886'], [704, 100, 14, '#ff7a59'], [842, 250, 10, '#2447f5'],
-  [70, 392, 9, '#12b886'], [884, 470, 13, '#ffd23f'], [612, 596, 10, '#2447f5'], [432, 610, 12, '#ffd23f'], [156, 250, 8, '#ff7a59'],
-  [786, 590, 8, '#12b886'], [548, 60, 8, '#ffd23f'],
-] as const
-
-function PopPoster({ name, caption, lang }: PosterProps) {
+function TickerPoster({ name }: PosterProps) {
   return (
     <Art>
-      <defs>
-        <filter id="pop-soft" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="46" />
-        </filter>
-      </defs>
-      <rect width={W} height={H} fill="#ffd3e6" />
-      <g filter="url(#pop-soft)">
-        <circle cx="160" cy="150" r="210" fill="#bfe1ff" />
-        <circle cx="820" cy="560" r="240" fill="#fff0a3" />
-        <circle cx="760" cy="90" r="150" fill="#c9f5d6" />
-        <circle cx="220" cy="640" r="170" fill="#ffb1d3" />
+      <rect width={W} height={H} fill="#0d1424" />
+      <g className="vs-p-text" fontSize="17" fill="#f5f3ee">
+        {TICKER_ROWS.map((row, i) => (
+          <text key={i} x="-40" y={92 + i * 52} opacity={i === 3 ? 0.2 : 0.07} className={i === 3 ? 'vs-ticker-live' : undefined}>
+            {`${row}   ·   ${row}`}
+          </text>
+        ))}
       </g>
-      {CONFETTI.map(([cx, cy, r, fill], i) => (
-        <circle key={i} cx={cx} cy={cy} r={r} fill={fill} className="vs-pop-dot" style={{ '--i': i } as CSSProperties} />
-      ))}
-      <text
-        x={W / 2}
-        y={H / 2 + 58}
-        textAnchor="middle"
-        className="vs-p-display"
-        fontSize="212"
-        fontWeight="800"
-        letterSpacing="-6"
-        fill="#2447f5"
-        stroke="#2447f5"
-        strokeWidth="16"
-        strokeLinejoin="round"
-        paintOrder="stroke"
-      >
-        {name.toLowerCase()}
-      </text>
-      <text x={W / 2} y={H / 2 + 132} textAnchor="middle" fontSize="27" fontWeight="600" fill="#1b2a7a" className="vs-p-text vs-poster-caption">{caption}</text>
-      <g transform="translate(700 196) rotate(-11)">
-        <g className="vs-pop-stamp">
-          <rect x="-150" y="-44" width="300" height="88" rx="12" fill="#ffd3e6" fillOpacity="0.55" stroke="#e5342b" strokeWidth="7" />
-          <rect x="-138" y="-32" width="276" height="64" rx="7" fill="none" stroke="#e5342b" strokeWidth="2.5" />
-          <text x="0" y="14" textAnchor="middle" className="vs-p-display" fontSize="40" fontWeight="800" letterSpacing="3" fill="#e5342b">{lang === 'nl' ? 'UITVERKOCHT' : 'SOLD OUT'}</text>
+      <g transform={`translate(${W / 2} ${H / 2 - 18})`}>
+        <g transform="translate(-178 -40)">
+          {[0, 1, 2, 3].map((i) => (
+            <rect key={i} x={(i % 2) * 14} y={Math.floor(i / 2) * 14} width="14" height="14" fill="#f5f3ee" opacity={i === 0 || i === 3 ? 1 : 0.25} />
+          ))}
+        </g>
+        <text x="18" y="0" textAnchor="middle" className="vs-p-display" fontSize="104" fontWeight="600" letterSpacing="-3" fill="#f5f3ee">{name}</text>
+      </g>
+      <g transform="translate(120 560)">
+        <line x1="0" x2="720" y1="0" y2="0" stroke="#f5f3ee" strokeOpacity="0.22" />
+        {Array.from({ length: 25 }, (_, i) => (
+          <line key={i} x1={i * 30} x2={i * 30} y1={i % 4 === 0 ? -12 : -6} y2="0" stroke="#f5f3ee" strokeOpacity={i % 4 === 0 ? 0.45 : 0.22} />
+        ))}
+        <rect x="270" y="-4" width="240" height="8" rx="4" fill="#7d93ff" opacity="0.35" />
+        <g className="vs-ticker-head">
+          <line x1="270" x2="270" y1="-34" y2="10" stroke="#f5f3ee" strokeWidth="1.5" />
+          <text x="276" y="-22" fontSize="14" fill="#f5f3ee" opacity="0.8" className="vs-p-text">19:30</text>
         </g>
       </g>
     </Art>
   )
 }
 
-/* ---------------------------------------------------------------- */
-/* Editorial: a halftone field, a condensed name, a heartbeat line.  */
-/* ---------------------------------------------------------------- */
+/* ------------------------------------------------------------------ */
+/* Glow: dark ground falling into one colour, a sticker-outlined name. */
+/* ------------------------------------------------------------------ */
 
-const LIME = '#c9f26a'
-const HALFTONE = (() => {
-  const dots: { x: number; y: number; r: number }[] = []
-  const step = 26
-  for (let row = 0; row * step <= H + step; row++) {
-    for (let col = 0; col * step <= W + step; col++) {
-      const x = col * step + (row % 2 ? step / 2 : 0)
-      const y = row * step
-      const distance = Math.hypot(x - 720, y - 250) / 520
-      const r = Math.max(0, 11 * (1 - distance))
-      if (r > 0.9) dots.push({ x, y, r: Math.round(r * 10) / 10 })
+const GUMMY = 'M-46 -30c0-20 12-32 30-32h32c18 0 30 12 30 32v52c0 22-12 34-30 34h-32c-18 0-30-12-30-34Z'
+
+function GlowPoster({ name }: PosterProps) {
+  return (
+    <Art>
+      <defs>
+        <radialGradient id="glow-fall" cx="0.82" cy="1.05" r="0.95">
+          <stop offset="0" stopColor="#ff5fa2" />
+          <stop offset="0.45" stopColor="#6d1d4a" />
+          <stop offset="1" stopColor="#0c0b10" />
+        </radialGradient>
+      </defs>
+      <rect width={W} height={H} fill="#0c0b10" />
+      <rect width={W} height={H} fill="url(#glow-fall)" className="vs-glow-breathe" />
+      <g fill="none" stroke="#fff" strokeOpacity="0.07" strokeWidth="3" className="vs-glow-ghosts">
+        <path d={GUMMY} transform="translate(120 170) scale(3.4) rotate(-14)" />
+        <path d={GUMMY} transform="translate(860 520) scale(4.2) rotate(12)" />
+        <path d={GUMMY} transform="translate(780 40) scale(2.2) rotate(26)" />
+      </g>
+      <g transform={`translate(${W / 2} ${H / 2})`}>
+        <text y="44" textAnchor="middle" className="vs-p-display" fontSize="168" fontWeight="800" letterSpacing="-5" fill="#ff5fa2" stroke="#fff" strokeWidth="18" strokeLinejoin="round" paintOrder="stroke">{name.toLowerCase()}</text>
+        <g transform="translate(0 -96) scale(0.42)">
+          <path d={GUMMY} fill="#fff" stroke="#fff" strokeWidth="20" strokeLinejoin="round" />
+          <path d={GUMMY} fill="#ff5fa2" />
+          <circle cx="-16" cy="-6" r="6" fill="#0c0b10" />
+          <circle cx="16" cy="-6" r="6" fill="#0c0b10" />
+          <path d="M-14 16c8 8 20 8 28 0" fill="none" stroke="#0c0b10" strokeWidth="6" strokeLinecap="round" />
+        </g>
+      </g>
+    </Art>
+  )
+}
+
+/* -------------------------------------------------------------------- */
+/* Stipple: muted ground with fine noise, a left lockup, a dotted object. */
+/* -------------------------------------------------------------------- */
+
+/** A kettlebell drawn as stipple dots that thin out towards the floor. */
+const STIPPLE = (() => {
+  const dots: { x: number; y: number; r: number; row: number }[] = []
+  const cx = 720
+  for (let y = 120; y <= 640; y += 11) {
+    for (let x = 520; x <= 920; x += 11) {
+      const jx = x + ((y * 7) % 5) - 2
+      const handle = Math.abs(Math.hypot(jx - cx, y - 230) - 92) < 20 && y < 300
+      const body = Math.hypot(jx - cx, y - 430) < 170
+      if (!handle && !body) continue
+      const shade = body ? 0.55 + 0.45 * ((jx - cx) / 170) : 0.6
+      const fade = Math.max(0, 1 - Math.max(0, y - 470) / 170)
+      const r = Math.max(0, 3.4 * fade * (0.55 + shade * 0.45))
+      if (r < 0.6 || ((x + y) % 3 === 0 && fade < 0.7)) continue
+      dots.push({ x: jx, y, r: Math.round(r * 10) / 10, row: Math.floor((y - 120) / 52) })
     }
   }
   return dots
 })()
-const PULSE = 'M0 470h250l26-12 22 24 30-150 34 232 30-118 20 24h110l22-40 26 66 24-26h366'
 
-function EditorialPoster({ name, caption }: PosterProps) {
+function StipplePoster({ name, lang }: PosterProps) {
+  const words = lang === 'nl' ? ['Fitness', 'Persoonlijke videoadvertenties'] : ['Fitness', 'Personal video ads']
   const title = name.toUpperCase()
   return (
     <Art>
-      <rect width={W} height={H} fill="#10140f" />
-      <g fill={LIME} className="vs-halftone">
-        {HALFTONE.map((dot, i) => <circle key={i} cx={dot.x} cy={dot.y} r={dot.r} />)}
-      </g>
-      <rect width={W} height={H} fill="url(#editorial-fade)" />
       <defs>
-        <linearGradient id="editorial-fade" x1="0" x2="1">
-          <stop offset="0" stopColor="#10140f" stopOpacity="0.92" />
-          <stop offset="0.55" stopColor="#10140f" stopOpacity="0.35" />
-          <stop offset="1" stopColor="#10140f" stopOpacity="0" />
-        </linearGradient>
+        <filter id="stipple-noise" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
       </defs>
-      <path d="M60 96h220" stroke="#f5f3ee" strokeWidth="2" />
-      <text x="60" y="140" fontSize="27" fontWeight="500" fill="#f5f3ee" className="vs-p-text vs-poster-caption">{caption}</text>
-      <g transform={`translate(60 ${H / 2 + 62}) scale(0.72 1)`}>
-        <text className="vs-p-display" fontSize="168" fontWeight="800" letterSpacing="-5" fill="#f5f3ee">{title}</text>
+      <rect width={W} height={H} fill="#a9b29c" />
+      <rect width={W} height={H} filter="url(#stipple-noise)" opacity="0.18" style={{ mixBlendMode: 'multiply' }} />
+      <g fill="#20261d">
+        {STIPPLE.map((dot, i) => (
+          <circle key={i} cx={dot.x} cy={dot.y} r={dot.r} className="vs-stipple-dot" style={{ '--r': dot.row } as CSSProperties} />
+        ))}
       </g>
-      <path d={PULSE} fill="none" stroke={LIME} strokeWidth="5" strokeLinejoin="round" strokeLinecap="round" pathLength={1} className="vs-pulse" />
+      <g transform="translate(70 352)">
+        <g transform="translate(14 -66)" fill="#20261d">
+          {[0, 45, 90, 135].map((angle) => <rect key={angle} x="-4" y="-16" width="8" height="32" rx="4" transform={`rotate(${angle})`} />)}
+        </g>
+        <text x="0" y="0" className="vs-p-display" fontSize="64" fontWeight="700" letterSpacing="3" fill="#20261d" transform="skewX(-10)" textLength="440" lengthAdjust="spacingAndGlyphs">{title}</text>
+        <g className="vs-p-text" fontSize="15" fill="#20261d">
+          <text x="0" y="44">{words[0]}</text>
+          <text x="0" y="66" opacity="0.7">{words[1]}</text>
+        </g>
+      </g>
     </Art>
   )
 }
 
 const THEMES: Record<CaseSlug, { theme: string; Poster: (props: PosterProps) => ReactNode }> = {
   pinacello: { theme: 'paper', Poster: PaperPoster },
-  'e-kart': { theme: 'track', Poster: TrackPoster },
-  nooms: { theme: 'pop', Poster: PopPoster },
-  healthfactor: { theme: 'editorial', Poster: EditorialPoster },
+  'e-kart': { theme: 'ticker', Poster: TickerPoster },
+  nooms: { theme: 'glow', Poster: GlowPoster },
+  healthfactor: { theme: 'stipple', Poster: StipplePoster },
 }
 
 /**

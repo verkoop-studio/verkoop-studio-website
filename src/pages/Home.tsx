@@ -1,7 +1,7 @@
 import Seo from '../components/Seo'
 import FAQ from '../components/FAQ'
 import HomeHero from '../components/home/HomeHero'
-import SystemStrip from '../components/home/SystemStrip'
+import SystemTeardown from '../components/home/SystemTeardown'
 import WorkScroller from '../components/home/WorkScroller'
 import ResultBand from '../components/home/ResultBand'
 import ServicesList from '../components/home/ServicesList'
@@ -28,7 +28,7 @@ export default function Home() {
         path="/"
       />
       <HomeHero />
-      <SystemStrip />
+      <SystemTeardown />
       <WorkScroller />
       <ResultBand />
       <ServicesList />
