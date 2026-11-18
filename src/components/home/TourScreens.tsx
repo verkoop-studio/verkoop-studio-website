@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useInView } from 'motion/react'
 import { useRef, type CSSProperties, type ReactNode } from 'react'
+import pinacelloPage from '../../assets/cases/pinacello-640.webp'
 import { AUDIT_SCOPE } from '../../data/audit'
 import { PAINS } from '../../data/pains'
 import type { Lang } from '../../data/types'
@@ -12,7 +13,7 @@ const UI = {
     audit: 'Groeianalyse', site: 'jouwsite.be', run: 'Analyseer', checked: 'bekeken',
     prio: 'Prioriteiten', sort: 'Sorteer', impact: 'Impact',
     funnel: 'Creative-ronde', flow: ['Advertentie', 'Landingspagina', 'Formulier', 'Sales CRM'], creative: 'Meer klanten uit je advertenties', platform: 'Instagram', waiting: 'Ter goedkeuring', live: 'Live', approve: 'Goedkeuren',
-    url: 'jouwsite.be/actie', publish: 'Publiceren', publishing: 'Publiceren…', lead: ['Formulier verstuurd', 'Sarah P.'],
+    url: 'promo.pinacello.com', publish: 'Publiceren', publishing: 'Publiceren…', draft: 'Concept', published: 'Gepubliceerd', order: '+1 bestelling',
     report: 'Maandrapport · oktober', revenue: 'Omzet uit advertenties', budget: 'Budget Google', feed: [['Aankoop', '€ 84', 'Google'], ['Formulier verstuurd', 'Sarah P.', 'Meta']],
   },
   en: {
@@ -20,7 +21,7 @@ const UI = {
     audit: 'Growth analysis', site: 'yoursite.com', run: 'Analyse', checked: 'reviewed',
     prio: 'Priorities', sort: 'Sort', impact: 'Impact',
     funnel: 'Creative round', flow: ['Ad', 'Landing page', 'Form', 'Sales CRM'], creative: 'More customers from your ads', platform: 'Instagram', waiting: 'Awaiting approval', live: 'Live', approve: 'Approve',
-    url: 'yoursite.com/offer', publish: 'Publish', publishing: 'Publishing…', lead: ['Form sent', 'Sarah P.'],
+    url: 'promo.pinacello.com', publish: 'Publish', publishing: 'Publishing…', draft: 'Draft', published: 'Published', order: '+1 order',
     report: 'Monthly report · October', revenue: 'Revenue from ads', budget: 'Google budget', feed: [['Purchase', '€ 84', 'Google'], ['Form sent', 'Sarah P.', 'Meta']],
   },
 }
@@ -119,27 +120,27 @@ export function FunnelScreen({ lang, on }: ScreenProps) {
   )
 }
 
-/* 04 Implementatie: the page builds, the pointer presses Publish, the bar fills and a first lead lands. */
-const LAUNCH_T = [1500, 700, 1500, 2600]
+/* 04 Implementatie: the Pinacello campaign page as a draft; the pointer presses Publish, the bar fills, it goes live and an order lands. */
+const LAUNCH_T = [1400, 700, 1500, 2800]
 export function LaunchScreen({ lang, on }: ScreenProps) {
   const t = UI[lang]
   const win = useScreen(on, LAUNCH_T)
   const p = win.phase
+  const live = p >= 3
   return (
     <Win title={t.url} lang={lang} win={win}>
-      <div className={`st-page${win.live ? ' is-on' : ''}`} key={win.live && p === 0 ? 'build' : 'built'}>
-        <span className="st-page-hero" /><span className="st-page-line" /><span className="st-page-line st-page-line--short" />
-        <span className="st-page-cards"><i /><i /><i /></span>
-        <span className="st-page-btn" />
+      <div className={`st-page${live ? ' is-live' : ''}`}>
+        <img src={pinacelloPage} alt="" width={640} height={400} loading="lazy" decoding="async" />
+        <span className={`st-pill ${live ? 'st-pill--green st-live' : 'st-pill--grey'} st-page-state`}>{live && <i />}{live ? t.live : t.draft}</span>
+        <AnimatePresence>
+          {live && <motion.span className="st-page-toast" initial={{ opacity: 0, y: 16, scale: 0.9 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0 }} transition={{ delay: 0.6, type: 'spring', stiffness: 260, damping: 18 }}><b>{t.order}</b><small>{t.now}</small></motion.span>}
+        </AnimatePresence>
       </div>
       <p className="st-launch">
-        {p >= 3 ? <span className="st-pill st-pill--green st-live"><i />{t.live}</span> : <span className={`st-btn${p === 1 ? ' is-press' : ''}`}>{p === 2 ? t.publishing : t.publish}</span>}
-        <span className="st-meter"><i style={{ width: p >= 3 ? '100%' : p === 2 ? '100%' : '0%', transitionDuration: p === 2 ? '1.4s' : '0s' }} /></span>
+        {live ? <span className="st-launch-done">✓ {t.published}</span> : <span className={`st-btn${p === 1 ? ' is-press' : ''}`}>{p === 2 ? t.publishing : t.publish}</span>}
+        <span className="st-meter"><i style={{ width: p >= 2 ? '100%' : '0%', transitionDuration: p === 2 ? '1.4s' : '0s' }} /></span>
       </p>
-      <AnimatePresence>
-        {p >= 3 && <motion.p className="st-feed" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ delay: 0.5 }}><span className="st-feed-dot" /><b>{t.lead[0]}</b><em>{t.lead[1]}</em><i className="is-meta">Meta</i><small>{t.now}</small></motion.p>}
-      </AnimatePresence>
-      <Pointer x={p === 0 ? 70 : 12} y={p === 0 ? 40 : 78} click={p === 1 ? 'publish' : false} hidden={p >= 2} />
+      <Pointer x={p === 0 ? 70 : 12} y={p === 0 ? 40 : 88} click={p === 1 ? 'publish' : false} hidden={p >= 2} />
     </Win>
   )
 }

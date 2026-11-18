@@ -473,6 +473,9 @@
 /* The dock's one opening line. */
 .vs-dock-greet { position: absolute; right: 66px; bottom: 6px; width: max-content; max-width: min(260px, calc(100vw - 110px)); padding: 10px 14px; border: 0; border-radius: 16px 16px 4px 16px; background: #fff; color: var(--vs-ink); box-shadow: 0 18px 40px -18px rgb(17 17 16 / 0.45); font: 500 14px/1.35 var(--font-sans); text-align: left; cursor: pointer; white-space: normal; }
 .vs-dock-trigger .vs-bot { pointer-events: none; }
+.vs-dock-trigger { transition: transform var(--vs-dur-fast) var(--vs-ease), background var(--vs-dur-fast), box-shadow var(--vs-dur-fast), scale 0.35s var(--vs-ease), translate 0.35s var(--vs-ease), opacity 0.35s; }
+.vs-dock.is-tucked .vs-dock-trigger { scale: 0.62; translate: 14px 10px; opacity: 0.7; }
+.vs-dock.is-tucked .vs-dock-greet { opacity: 0; pointer-events: none; }
 
 /* 404 */
 .vs-404 { display: grid; justify-items: center; gap: 18px; min-height: 80svh; align-content: center; padding-block: clamp(120px, 14vw, 160px) 80px; text-align: center; }
@@ -1124,20 +1127,13 @@
 .st-approve.is-live path { stroke-dashoffset: 0; }
 
 /* 04 Implementatie */
-.st-page { display: grid; gap: 10px; padding: 14px; border-radius: 12px; background: #f7f6f2; }
-.st-page > span { display: block; border-radius: 8px; background: #e4e1d8; opacity: 0; translate: 0 10px; }
-.st-page.is-on > span { animation: st-build 0.45s var(--vs-ease) forwards; }
-.st-page.is-on > span:nth-child(2) { animation-delay: 0.25s; }
-.st-page.is-on > span:nth-child(3) { animation-delay: 0.4s; }
-.st-page.is-on > span:nth-child(4) { animation-delay: 0.6s; }
-.st-page.is-on > span:nth-child(5) { animation-delay: 0.85s; }
-@keyframes st-build { to { opacity: 1; translate: 0 0; } }
-.st-page > .st-page-hero { height: 70px; background: linear-gradient(135deg, #dfe5ff, #f0e8ff); }
-.st-page-line { height: 12px; width: 80%; }
-.st-page-line--short { width: 55%; }
-.st-page > .st-page-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: none; }
-.st-page-cards i { height: 46px; border-radius: 8px; background: #fff; }
-.st-page > .st-page-btn { width: 130px; height: 30px; border-radius: 99px; background: var(--vs-blue); }
+.st-page { position: relative; overflow: hidden; height: 210px; border: 1px solid var(--vs-line); border-radius: 12px; background: #f7f6f2; }
+.st-page img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; filter: grayscale(0.6) opacity(0.7); transition: filter 0.6s ease; }
+.st-page.is-live img { filter: none; }
+.st-page-state { position: absolute; left: 10px; top: 10px; box-shadow: 0 4px 10px -4px rgb(17 17 16 / 0.3); }
+.st-page-toast { position: absolute; right: 10px; bottom: 10px; display: grid; gap: 1px; padding: 9px 13px; border-radius: 12px; background: var(--vs-ink); color: #fff; font-size: 13px; box-shadow: 0 14px 24px -12px rgb(17 17 16 / 0.6); }
+.st-page-toast small { color: #b9b6af; font-size: 11px; }
+.st-launch-done { color: #1d7a45; font-size: 13px; font-weight: 600; white-space: nowrap; }
 .st-launch { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 0; }
 .st-launch em { flex-basis: 100%; color: var(--vs-mute); font-style: normal; font-size: 12px; }
 .st-live i { width: 7px; height: 7px; border-radius: 50%; background: #2fbf71; animation: sk-pulse-green 1.6s ease-out infinite; }
@@ -1169,7 +1165,6 @@
 @media (prefers-reduced-motion: reduce) {
   .st-check { background: var(--vs-blue); box-shadow: none; }
   .st-check path, .st-approve path { stroke-dashoffset: 0; }
-  .st-page > span, .st-page.is-on > span { opacity: 1; translate: none; animation: none; }
   .st-dots i.is-lit, .st-dots.is-on i.is-lit { background: var(--vs-blue); animation: none; }
   .st-live i { animation: none; }
 }

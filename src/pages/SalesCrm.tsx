@@ -126,7 +126,10 @@ export default function SalesCrm() {
   const final = useRef<HTMLElement>(null)
   const finalInView = useInView(final, { margin: '0px 0px -25% 0px' })
   const footerInView = useFooterInView()
-  const pillHidden = finalInView || footerInView
+  // It also steps aside while the stepper's sticky window is on screen, so it never covers it.
+  const screens = useRef<HTMLElement>(null)
+  const screensInView = useInView(screens, { margin: '-30% 0px -30% 0px' })
+  const pillHidden = finalInView || footerInView || screensInView
   const [first, ...rest] = c.hero.title[lang].split(' ')
   const words = [first, ...rest]
   const accent = lang === 'nl' ? 'vandaag' : 'today.'
@@ -171,7 +174,7 @@ export default function SalesCrm() {
         </div>
       </section>
 
-      <section id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
+      <section ref={screens} id="schermen" className="pp-screens" aria-labelledby="schermen-titel">
         <div className="vs-wrap">
           <SplitHeadline id="schermen-titel" className="vs-h2" parts={[{ text: c.screens.title[lang] }]} />
           <CrmStepper lang={lang} />

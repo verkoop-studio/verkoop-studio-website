@@ -45,11 +45,25 @@ export default function ContactDock() {
   const [open, setOpen] = useState(false)
   const [greet, setGreet] = useState(false)
 
+  // On phones the button tucks in while a sample screen passes beneath it, so it never covers one.
+  const [tucked, setTucked] = useState(false)
   useEffect(() => {
-    const onScroll = () => setPast(window.scrollY > window.innerHeight * 0.85)
-    onScroll()
+    let frame = 0
+    const check = () => {
+      setPast(window.scrollY > window.innerHeight * 0.85)
+      if (window.innerWidth >= 768) { setTucked(false); return }
+      const zone = window.innerHeight - 160
+      const under = [...document.querySelectorAll<HTMLElement>('.st-win, .tx-win')].some((el) => {
+        const box = el.getBoundingClientRect()
+        return box.bottom > zone && box.top < window.innerHeight && box.right > window.innerWidth - 90
+      })
+      setTucked(under)
+    }
+    const onScroll = () => { cancelAnimationFrame(frame); frame = requestAnimationFrame(check) }
+    check()
     window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    window.addEventListener('resize', onScroll)
+    return () => { cancelAnimationFrame(frame); window.removeEventListener('scroll', onScroll); window.removeEventListener('resize', onScroll) }
   }, [])
 
   useEffect(() => {
@@ -85,7 +99,7 @@ export default function ContactDock() {
     <AnimatePresence>
       {past && (
         <motion.div
-          className="vs-dock"
+          className={`vs-dock${tucked && !open ? ' is-tucked' : ''}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
