@@ -103,13 +103,15 @@ test('production server returns route HTML, permanent redirects and real 404s', 
 test('FAQ answers exist in initial HTML and service sections use headings', async () => {
   const { faqItems } = await import('../dist-ssr/entry-server.js')
   const home = await readFile('dist/index.html', 'utf8')
-  const details = [...home.matchAll(/<details\b[^>]*name="studio-faq"[^>]*>([\s\S]*?)<\/details>/g)]
-  assert.equal(details.length, faqItems.length)
-  for (const [index, detail] of details.entries()) {
-    assert.match(detail[1], /<summary[\s>]/)
-    assert.match(detail[1], /<p[\s>]/)
+  // Each FAQ row is a heading with a toggle button and its answer region, closed rows included.
+  const rows = home.split('data-faq="studio-faq"').slice(1)
+  assert.equal(rows.length, faqItems.length)
+  for (const [index, row] of rows.entries()) {
+    assert.match(row, /<h3[^>]*><button[^>]*aria-expanded="(true|false)"/)
+    assert.match(row, /role="region"/)
+    const text = row.replace(/<[^>]+>/g, '')
     const escaped = faqItems[index].answer.nl.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-    assert(detail[1].includes(escaped), faqItems[index].question.nl)
+    assert(text.includes(escaped), faqItems[index].question.nl)
   }
   const service = await readFile('dist/google-ads/index.html', 'utf8')
   for (const heading of ['Waar het vastloopt', 'Wat je krijgt', 'Zo werken we']) assert.match(service, new RegExp(`<h2[^>]*>${heading}</h2>`))

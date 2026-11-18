@@ -287,7 +287,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 @media (prefers-reduced-motion: reduce) {
   .vs-ripple, .vs-cursor { display: none; }
-  .vs-roll > span, .vs-page .faq-item summary, .vs-tab-caret, .vs-mi::before, .vs-mi-t, .vs-mega-more svg { transition: none; }
+  .vs-roll > span, .vs-tab-caret, .vs-mi::before, .vs-mi-t, .vs-mega-more svg { transition: none; }
   .hero-request-error, .vs-check { animation: none; }
   .vs-check-tick { animation: none; stroke-dashoffset: 0; }
 }

@@ -122,7 +122,7 @@ export default function Contact() {
         </div>
       </section>
 
-      <FaqList id="contact-faq" title={t.faq} items={[faqItems[14], faqItems[11], faqItems[10]]} lang={lang} />
+      <FaqList id="contact-faq" title={t.faq} items={[faqItems[14], faqItems[11], faqItems[10]]} lang={lang} lede={false} />
 
       <section className="vs-wrap ct-proof" aria-label={t.proof}>
         <span className="ct-proof-label">{t.proof}</span>

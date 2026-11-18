@@ -6,6 +6,8 @@ import WorksWith from '../components/brand/WorksWith'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
+import FaqList from '../components/brand/FaqList'
+import { faqItems } from '../data/faq'
 import HandNote from '../components/brand/HandNote'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import Tilted from '../components/product/Tilted'
@@ -244,6 +246,8 @@ export default function Performance() {
       </section>
 
       <WorksWith lang={lang} platforms={['meta', 'google', 'tiktok', 'chatgpt', 'shopify', 'wix', 'klaviyo', 'mailchimp', 'resend', 'perplexity']} />
+
+      <FaqList id="performance-faq" title={lang === 'nl' ? 'Veelgestelde vragen' : 'Frequently asked questions'} items={[faqItems[12], faqItems[15], faqItems[4]]} lang={lang} />
 
       <section ref={final} id="starten" className="pp-final pp-form" aria-labelledby="starten-titel">
         <div className="vs-wrap">

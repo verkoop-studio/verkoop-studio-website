@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import FaqFolder from '../components/brand/FaqFolder'
 import AcademySignup from '../components/AcademySignup'
 import AcademyCapturePopup from '../components/AcademyCapturePopup'
 import { recordAcademyPopup } from '../lib/academy-popup'
@@ -29,7 +30,7 @@ function useReveal(lang: string) {
     const motion = matchMedia('(prefers-reduced-motion: reduce)')
     const animations = new Set<Animation>()
     let observer: IntersectionObserver | undefined
-    const selector = '.ac-reveal, .ac-hero-copy > *, .ac-hero > .hero-video, .ac-hero-conversion > *, main section h2, .ac-dot-kicker, .ac-ledger > li, .ac-promise, .ac-focus-card, .ac-mini-case, .ac-signup-card, .ac-faq-list details, .ac-footer-top, .ac-footer-columns > div'
+    const selector = '.ac-reveal, .ac-hero-copy > *, .ac-hero > .hero-video, .ac-hero-conversion > *, main section h2, .ac-dot-kicker, .ac-ledger > li, .ac-promise, .ac-focus-card, .ac-mini-case, .ac-signup-card, .ac-footer-top, .ac-footer-columns > div'
     const stop = () => {
       observer?.disconnect()
       animations.forEach(animation => animation.cancel())
@@ -466,8 +467,7 @@ export default function Academy() {
       </section>
 
       <section id="faq" className="ac-faq ac-wrap" aria-labelledby="faq-title">
-        <div><p className="ac-dot-kicker"><span />{" " + t("Goed om te weten")}</p><h2 id="faq-title">{t("Nog even dit.")}</h2><p>{t("Staat je vraag er niet bij?") + " "}<Link to={contactAcademy}>{t("Stel ze rechtstreeks.")}</Link></p></div>
-        <div className="ac-glass ac-faq-list">{academyFaq.map(item => <details key={item.question}><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div>
+        <FaqFolder id="academy-faq" titleId="faq-title" title={t("Nog even dit.")} lang={lang} lede={<>{t("Staat je vraag er niet bij?") + " "}<Link to={contactAcademy}>{t("Stel ze rechtstreeks.")}</Link></>} items={academyFaq} />
       </section>
 
       <section className="ac-final ac-wrap" aria-labelledby="final-title">

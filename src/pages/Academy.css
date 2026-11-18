@@ -271,18 +271,7 @@ button.ac-row.is-active { background: #f1f4ff; border-color: #d5dcff; }
 /* Honest */
 
 /* FAQ */
-.ac-faq { display: grid; grid-template-columns: .8fr 1.2fr; align-items: start; gap: 64px; margin-top: 140px; }
-.ac-faq h2 { margin-top: 12px; font-size: 44px; }
-.ac-faq > div:first-child > p:last-child { margin-top: 14px; color: var(--ac-mute); font-size: 15px; }
-.ac-faq > div:first-child a { color: var(--ac-blue); text-decoration: underline; text-underline-offset: 3px; }
-.ac-faq-list { padding: 6px 26px; }
-.ac-faq-list details { border-bottom: 1px solid var(--ac-line); }
-.ac-faq-list details:last-child { border-bottom: 0; }
-.ac-faq-list summary { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 0; font-size: 17px; font-weight: 600; letter-spacing: -.015em; list-style: none; cursor: pointer; }
-.ac-faq-list summary::-webkit-details-marker { display: none; }
-.ac-faq-list summary span { color: var(--ac-blue); font-size: 22px; font-weight: 400; transition: transform .25s; }
-.ac-faq-list details[open] summary span { transform: rotate(45deg); }
-.ac-faq-list details p { max-width: 640px; padding-bottom: 22px; color: var(--ac-text); font-size: 15px; line-height: 1.7; }
+.ac-faq { margin-top: 140px; }
 
 /* Final */
 .ac-final { margin-top: 120px; }
@@ -319,11 +308,11 @@ button.ac-row.is-active { background: #f1f4ff; border-color: #d5dcff; }
   .ac-hero { padding-top: 36px; }
   .ac-hero-signup { margin-top: 0; }
   .ac-signup-section { margin-top: 96px; }
-  .ac-slide, .ac-faq { grid-template-columns: 1fr; }
+  .ac-slide { grid-template-columns: 1fr; }
   .ac-focus { grid-template-columns: 1fr; gap: 36px; margin-top: 88px; }
   .ac-focus-card { position: static; max-width: 420px; }
   .ac-curriculum, .ac-faq { margin-top: 88px; }
-  .ac-faq h2, .ac-final h2 { font-size: 36px; }
+  .ac-final h2 { font-size: 36px; }
   .ac-slide-visual { min-height: 0; padding: 32px 22px; }
   .ac-testlog { grid-template-columns: 1fr; }
   .ac-testlog-side { flex-direction: row; flex-wrap: wrap; }
@@ -347,7 +336,7 @@ button.ac-row.is-active { background: #f1f4ff; border-color: #d5dcff; }
   .ac-welcome-card .ac-button { width: 100%; margin-left: 0; }
   .ac-signup-card { padding: 22px 18px 20px; border-radius: 20px; }
   .ac-footer { padding-bottom: 100px; }
-  .academy-page section h2, .ac-faq h2, .ac-final h2 { font-size: 31px; }
+  .academy-page section h2, .ac-final h2 { font-size: 31px; }
   .ac-focus-article h2 { font-size: 31px; }
   .ac-curriculum-top h2 { font-size: 28px; }
   .ac-focus-lead { font-size: 16.5px; }
@@ -362,8 +351,6 @@ button.ac-row.is-active { background: #f1f4ff; border-color: #d5dcff; }
   .ac-testlog { padding: 10px; }
   .ac-testlog-main { padding: 14px; }
   .ac-row { padding: 12px 10px; }
-  .ac-faq-list { padding: 2px 18px; }
-  .ac-faq-list summary { font-size: 16px; }
   .ac-final-inner { padding: 32px 22px; }
 }
 
@@ -489,7 +476,6 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
   .ac-mini-case-title > span, .ac-text-link > span { display: inline-block; transition: transform .35s cubic-bezier(.22, 1, .36, 1); }
   .ac-button:active { transform: scale(.98); }
   .ac-mini-case:focus-visible { transform: translateY(-3px); }
-  .ac-faq-list details[open] p { animation: ac-answer-in .35s cubic-bezier(.22, 1, .36, 1); }
   .ac-decision-copy { animation: ac-answer-in .4s cubic-bezier(.22, 1, .36, 1); }
   .ac-slide { animation: ac-slide-in .6s cubic-bezier(.22, 1, .36, 1); }
   .ac-chart-line circle { transition: r .3s; }
@@ -642,7 +628,6 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 .ac-curriculum .ac-progress-tabs { --ac-mute: #596582; }
 .ac-case-main, .ac-student-proof { background: #fff; border-color: var(--ac-line); }
 .ac-student-proof .ac-quiet-kicker { color: var(--ac-blue); }
-.ac-faq-list { background: #fff; border-color: var(--ac-line); box-shadow: none; }
 .ac-final-inner { background: linear-gradient(135deg, var(--ac-blue), var(--ac-blue-deep)); }
 .ac-final .ac-quiet-kicker-light, .ac-final-inner > div:first-child > p:last-child { color: #e4eaff; }
 @media (max-width: 700px) {

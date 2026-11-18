@@ -109,18 +109,6 @@
 
 /* ---------- FAQ (existing markup, new skin) ---------- */
 
-.vs-page .studio-faq { padding-block: clamp(72px, 10vw, 128px); background: transparent; }
-.vs-page .studio-faq-inner { max-width: var(--vs-max); margin-inline: auto; padding-inline: var(--vs-gutter); display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: 48px; }
-.vs-page .studio-faq h2 { font-size: clamp(34px, 4.2vw, 58px); font-weight: 500; letter-spacing: -0.04em; line-height: 1.04; margin: 0; }
-.vs-page .faq-list { border-bottom: 1px solid var(--vs-line); }
-.vs-page .faq-item { border-top: 1px solid var(--vs-line); background: transparent; border-radius: 0; box-shadow: none; padding: 0; }
-.vs-page .faq-item summary:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 4px; border-radius: 6px; }
-.vs-page .faq-item summary { display: flex; justify-content: space-between; gap: 24px; padding: 22px 0; font-size: 18px; font-weight: 500; letter-spacing: -0.01em; cursor: pointer; list-style: none; }
-.vs-page .faq-item summary::-webkit-details-marker { display: none; }
-.vs-page .faq-item summary span:last-child { transition: transform 0.4s var(--vs-ease); color: var(--vs-mute); }
-.vs-page .faq-item[open] summary span:last-child { transform: rotate(45deg); color: var(--vs-ink); }
-.vs-page .faq-item p { margin: 0; padding: 0 40px 24px 0; font-size: 16px; line-height: 1.6; color: var(--vs-mute); }
-@media (max-width: 860px) { .vs-page .studio-faq-inner { grid-template-columns: 1fr; gap: 28px; } }
 
 /* ---------- Closing ---------- */
 
@@ -156,16 +144,6 @@
 
 .vs-cursor { position: fixed; top: 0; left: 0; z-index: 65; margin: 18px 0 0 18px; display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 12px; border-radius: 9999px; background: var(--vs-ink); color: var(--vs-paper); font: 500 12px/1 var(--font-sans); pointer-events: none; box-shadow: 0 10px 24px -10px rgb(17 17 16 / 0.5); }
 @media (hover: none) { .vs-cursor { display: none; } }
-
-/* ---------- FAQ: smooth open and close ---------- */
-
-@supports (interpolate-size: allow-keywords) {
-  .vs-page .faq-item { interpolate-size: allow-keywords; }
-  .vs-page .faq-item::details-content { block-size: 0; overflow-y: clip; opacity: 0; filter: blur(6px); transition: block-size 0.5s var(--vs-ease), opacity 0.4s ease, filter 0.5s var(--vs-ease), content-visibility 0.5s allow-discrete; }
-  .vs-page .faq-item[open]::details-content { block-size: auto; opacity: 1; filter: none; }
-}
-.vs-page .faq-item summary { transition: color var(--vs-dur-fast) ease, padding var(--vs-dur-medium) var(--vs-ease); }
-.vs-page .faq-item summary:hover { padding-left: 8px; }
 
 
 /* ---------- Hand-written notes ---------- */
@@ -232,13 +210,6 @@
 .vs-logo-item { display: inline-flex; align-items: center; gap: 10px; color: var(--vs-mute); font-size: 15px; font-weight: 500; white-space: nowrap; }
 .vs-logo-item img { display: block; width: auto; height: 24px; filter: grayscale(1) contrast(0.9); opacity: 0.75; transition: filter var(--vs-dur-medium) ease, opacity var(--vs-dur-medium) ease; }
 .vs-marquee-band:hover .vs-logo-item img { filter: none; opacity: 1; }
-
-/* ---------- FAQ: the questions that sell first, the rest behind a button ---------- */
-
-.vs-page .faq-list:not(.is-expanded) .faq-item--extra { display: none; }
-.faq-more { margin-top: 22px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 9999px; background: transparent; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); font: 500 15px/1 var(--font-sans); cursor: pointer; transition: box-shadow var(--vs-dur-fast) ease, background var(--vs-dur-fast) ease, color var(--vs-dur-fast) ease, transform var(--vs-dur-fast) var(--vs-ease); }
-.faq-more:hover { background: var(--vs-ink); color: var(--vs-paper); box-shadow: none; }
-.faq-more:active { transform: scale(0.96); }
 
 
 /* ---------- Poster themes: calm, one quiet idea each ---------- */
@@ -982,7 +953,6 @@
 
 /* Home: how we start. */
 .vs-start-cta { margin-top: 36px; }
-.vs-faq-block .faq-list { max-width: 820px; margin-top: 24px; }
 
 @media (max-width: 900px) { .vs-pains-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 560px) { .vs-pains-grid { grid-template-columns: minmax(0, 1fr); } }
@@ -1007,3 +977,62 @@
   .ag-process-dot { position: absolute; left: 0; top: -6px; }
 }
 .vs-plans-more { margin: 24px 0 0; }
+
+/* ---------- FAQ folder: an accent card with a tab, numbered rows and a white answer slip ---------- */
+
+.vs-faq-block { padding-block: clamp(64px, 9vw, 120px); }
+.vs-faq { position: relative; padding-top: 40px; --faq-ease: cubic-bezier(0.22, 1, 0.36, 1); }
+.vs-faq-tab { position: absolute; left: 0; top: 0; z-index: 1; margin: 0; height: 52px; }
+.vs-faq-tab-face { position: relative; z-index: 2; display: inline-flex; align-items: center; gap: 9px; height: 46px; padding: 0 22px 0 14px; border-radius: 16px 16px 0 0; background: var(--vs-blue); color: var(--vs-paper); font-size: 14px; font-weight: 600; }
+.vs-faq-tab-face::after { content: ''; position: absolute; right: -18px; bottom: 0; width: 18px; height: 18px; background: radial-gradient(circle at 100% 0, transparent 17.5px, var(--vs-blue) 18px); }
+.vs-faq-tab-face i { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: rgb(255 255 255 / 0.18); font-style: normal; font-size: 13px; }
+.vs-faq-sheet { position: absolute; left: 30px; top: 6px; z-index: 0; width: 180px; height: 60px; border-radius: 8px; background: #fbfaf6; box-shadow: 0 6px 16px -10px rgb(17 17 16 / 0.4); rotate: -4deg; transition: rotate 0.5s var(--faq-ease), translate 0.5s var(--faq-ease); }
+.vs-faq-sheet--2 { left: 60px; top: 2px; width: 160px; background: #fff; rotate: 3deg; }
+.vs-faq:hover .vs-faq-sheet { rotate: -7deg; translate: -4px -6px; }
+.vs-faq:hover .vs-faq-sheet--2 { rotate: 6deg; translate: 6px -8px; }
+.vs-faq-card { position: relative; z-index: 1; overflow: hidden; padding: clamp(26px, 4vw, 56px); border-radius: 0 28px 28px 28px; background: var(--vs-blue); color: var(--vs-paper); isolation: isolate; }
+.vs-faq-card::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(60% 70% at 85% 0%, rgb(255 255 255 / 0.22), transparent 70%), radial-gradient(50% 60% at 0% 100%, rgb(17 17 16 / 0.18), transparent 70%); }
+.vs-faq-card::after { content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0.16; mix-blend-mode: overlay; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.vs-faq-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 14px 40px; margin-bottom: clamp(22px, 3vw, 40px); }
+.vs-faq-head .vs-h2 { margin: 0; color: var(--vs-paper); }
+.vs-faq-lede { max-width: 34ch; margin: 0; color: rgb(255 255 255 / 0.78); font-size: 16px; line-height: 1.5; }
+.vs-faq-lede a { color: var(--vs-paper); text-decoration: underline; text-underline-offset: 3px; }
+.vs-faq-rows { border-top: 1px solid rgb(255 255 255 / 0.2); }
+.vs-faq-row { position: relative; border-bottom: 1px solid rgb(255 255 255 / 0.2); opacity: 0; translate: 0 16px; transition: opacity 0.6s var(--faq-ease) calc(var(--i) * 55ms), translate 0.6s var(--faq-ease) calc(var(--i) * 55ms); }
+.vs-faq.is-seen .vs-faq-row { opacity: 1; translate: 0 0; }
+.vs-faq-row.is-extra { display: none; }
+.vs-faq-q { margin: 0; }
+.vs-faq-q button { display: grid; grid-template-columns: 64px minmax(0, 1fr) 36px; align-items: center; gap: 12px; width: 100%; padding: 20px 0; border: 0; background: none; color: inherit; font: 600 clamp(19px, 1.7vw, 24px)/1.25 var(--font-sans); letter-spacing: -0.015em; text-align: left; cursor: pointer; }
+.vs-faq-q button:focus-visible { outline: 2px solid var(--vs-paper); outline-offset: 4px; border-radius: 10px; }
+.vs-faq-num { color: rgb(255 255 255 / 0.55); font-size: 14px; font-weight: 500; font-variant-numeric: tabular-nums; letter-spacing: 0; }
+.vs-faq-text { transition: translate 0.35s var(--faq-ease); }
+.vs-faq-q button:hover .vs-faq-text { translate: 6px 0; }
+.vs-faq-mark { position: relative; width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.55); transition: rotate 0.55s var(--faq-ease), background-color 0.3s, box-shadow 0.3s; }
+.vs-faq-mark i { position: absolute; left: 50%; top: 50%; width: 14px; height: 2px; margin: -1px 0 0 -7px; border-radius: 2px; background: var(--vs-paper); transition: background-color 0.3s; }
+.vs-faq-mark i + i { rotate: 90deg; }
+.vs-faq-q button:hover .vs-faq-mark { box-shadow: inset 0 0 0 1.5px var(--vs-paper); }
+.vs-faq-row.is-open .vs-faq-mark { rotate: 135deg; background: var(--vs-paper); box-shadow: none; }
+.vs-faq-row.is-open .vs-faq-mark i { background: var(--vs-blue); }
+.vs-faq-a { display: grid; grid-template-rows: 0fr; visibility: hidden; transition: grid-template-rows 0.62s var(--faq-ease), visibility 0s linear 0.62s; }
+.vs-faq-row.is-open .vs-faq-a { grid-template-rows: 1fr; visibility: visible; transition: grid-template-rows 0.62s var(--faq-ease), visibility 0s; }
+.vs-faq-a-inner { min-height: 0; overflow: hidden; }
+.vs-faq-slip { max-width: 64ch; margin: 0 48px 22px 76px; padding: 18px 20px; border-radius: 14px; background: linear-gradient(180deg, #fff, #f2f5fe); color: var(--vs-ink-2); font-size: 16px; line-height: 1.6; box-shadow: 0 18px 30px -22px rgb(17 17 16 / 0.55); opacity: 0; translate: 0 10px; transition: opacity 0.4s ease, translate 0.5s var(--faq-ease); }
+.vs-faq-row.is-open .vs-faq-slip { opacity: 1; translate: 0 0; transition-delay: 0.14s; }
+.vs-faq-slip strong { color: var(--vs-blue); font-weight: 700; }
+.vs-faq-progress { position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%; background: var(--vs-paper); transform-origin: 0 50%; animation: vs-faq-progress 6s linear both; }
+@keyframes vs-faq-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.vs-faq-more { margin-top: 24px; min-height: 44px; padding: 0 20px; border: 0; border-radius: 99px; background: rgb(255 255 255 / 0.12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3); color: var(--vs-paper); font: 600 15px/1 var(--font-sans); cursor: pointer; transition: background-color 0.25s, color 0.25s, scale 0.2s var(--faq-ease); }
+.vs-faq-more:hover { background: var(--vs-paper); color: var(--vs-blue); }
+.vs-faq-more:active { scale: 0.97; }
+.vs-faq-more:focus-visible { outline: 2px solid var(--vs-paper); outline-offset: 3px; }
+@media (max-width: 640px) {
+  .vs-faq-q button { grid-template-columns: 34px minmax(0, 1fr) 32px; gap: 10px; padding: 16px 0; }
+  .vs-faq-mark { width: 32px; height: 32px; }
+  .vs-faq-slip { margin: 0 0 18px 44px; padding: 14px 16px; font-size: 15px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vs-faq-row, .vs-faq.is-seen .vs-faq-row { opacity: 1; translate: none; transition: none; }
+  .vs-faq-sheet, .vs-faq-text, .vs-faq-mark, .vs-faq-slip, .vs-faq-a { transition: none; }
+  .vs-faq-row.is-open .vs-faq-slip { translate: none; }
+  .vs-faq:hover .vs-faq-sheet { translate: none; }
+}

@@ -5,6 +5,8 @@ import Seo from '../components/Seo'
 import { useFooterInView } from '../lib/useFooterInView'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
+import FaqList from '../components/brand/FaqList'
+import { faqItems } from '../data/faq'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
@@ -226,6 +228,8 @@ export default function SalesCrm() {
           </Link>
         </Reveal>
       </section>
+
+      <FaqList id="crm-faq" title={lang === 'nl' ? 'Veelgestelde vragen' : 'Frequently asked questions'} items={[faqItems[15], faqItems[14], faqItems[12]]} lang={lang} />
 
       <section ref={final} className="pp-final" aria-labelledby="start-titel">
         <div className="vs-wrap">
