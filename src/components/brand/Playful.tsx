@@ -13,7 +13,7 @@ import { EASE } from './motion'
 export function WaveEdge({ flip = false, className = '' }: { flip?: boolean; className?: string }) {
   return (
     <svg className={`vs-wave ${flip ? 'vs-wave--flip' : ''} ${className}`.trim()} viewBox="0 0 1440 64" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="M0 64V30C120 6 260 4 400 22s300 40 460 22 280-44 420-30 120 14 160 18V64Z" />
+      <path d="M0 66V30C120 6 260 4 400 22s300 40 460 22 280-44 420-30 120 14 160 18V66Z" />
     </svg>
   )
 }

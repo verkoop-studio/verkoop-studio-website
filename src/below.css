@@ -632,7 +632,6 @@
 
 /* Footer: a bento of cards on the dark ground, quiet link columns, the wordmark and one base row. */
 .vs-footer { position: relative; overflow: hidden; background: var(--vs-ink); color: #e9e6df; }
-.vs-band + .vs-footer { margin-top: 0; }
 .vs-footer a { color: inherit; text-decoration: none; transition: color 0.2s ease; }
 .vs-footer a:hover { color: #fff; }
 .vs-bento { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr); gap: 14px; padding-top: clamp(48px, 6vw, 80px); }
@@ -882,7 +881,7 @@
 }
 
 /* Playful pieces: wavy edges, the dark doodle section, the ribbon with characters, the handwritten note. */
-.vs-wave { display: block; width: 100%; height: clamp(28px, 4vw, 56px); fill: var(--vs-ink); }
+.vs-wave { display: block; width: 100%; height: clamp(28px, 4vw, 56px); overflow: visible; fill: var(--vs-ink); }
 .vs-wave--flip { transform: scaleY(-1); }
 
 .vs-dark { position: relative; overflow: hidden; margin-block: clamp(40px, 6vw, 80px); background: var(--vs-ink); color: var(--vs-paper); }
