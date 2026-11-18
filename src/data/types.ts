@@ -33,6 +33,8 @@ export interface CaseStudy {
   slug: CaseSlug
   name: string
   sector: Bi<string>
+  /** The one published result, shown wherever the case is listed. Cases without one show their sector. */
+  result?: Bi<string>
   status: 'ongoing' | 'afgerond' | 'showcase'
   summary: Bi<string>
   situation: Bi<string>

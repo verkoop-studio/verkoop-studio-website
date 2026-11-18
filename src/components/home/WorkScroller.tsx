@@ -2,8 +2,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react'
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { cases } from '../../data/cases'
-import type { Bi, CaseSlug } from '../../data/types'
+import { caseHeadline, cases } from '../../data/cases'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import Arrow from '../brand/Arrow'
@@ -12,12 +11,6 @@ import TextLink from '../brand/TextLink'
 import Reveal from '../brand/Reveal'
 import CasePoster from './CasePoster'
 import SplitHeadline from '../brand/SplitHeadline'
-
-/** Published results only. Cases without a validated figure show their sector. */
-const RESULT: Partial<Record<CaseSlug, Bi<string>>> = {
-  pinacello: { nl: '+120% online omzet', en: '+120% online revenue' },
-  nooms: { nl: 'pre-sale volledig uitverkocht', en: 'pre-sale sold out' },
-}
 
 const COPY = {
   nl: { title: [{ text: 'Geselecteerd' }, { text: 'werk', tone: 'accent' as const }], hint: 'Scroll of sleep opzij', prev: 'Vorige case', next: 'Volgende case', all: 'Alle cases', drag: 'Sleep', dragging: 'Loslaten', note: 'sleep maar :)' },
@@ -126,7 +119,7 @@ export default function WorkScroller() {
         onClickCapture={onClickCapture}
       >
         {items.map((item, i) => {
-          const label = RESULT[item.slug]?.[lang] ?? item.sector[lang]
+          const label = caseHeadline(item, lang)
           return (
             <figure key={item.slug} className={`vs-slide${i === active ? ' is-active' : ''}`} aria-roledescription="slide" aria-label={`${i + 1} / ${items.length}`}>
               <Link to={`/cases/${item.slug}`} draggable={false} aria-label={`${item.name}: ${item.summary[lang]}`} onClick={(event) => {

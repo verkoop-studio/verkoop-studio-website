@@ -2,6 +2,7 @@ import { motion, useInView, useReducedMotion, useScroll, useTransform } from 'mo
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
+import { useFooterInView } from '../lib/useFooterInView'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
@@ -121,7 +122,9 @@ export default function SalesCrm() {
   const pill = useTransform(scrollYProgress, [0, 1], [90, 0])
   // The pill repeats the final call to action, so it steps aside once that section is on screen.
   const final = useRef<HTMLElement>(null)
-  const pillHidden = useInView(final, { margin: '0px 0px -25% 0px' })
+  const finalInView = useInView(final, { margin: '0px 0px -25% 0px' })
+  const footerInView = useFooterInView()
+  const pillHidden = finalInView || footerInView
   const [first, ...rest] = c.hero.title[lang].split(' ')
   const words = [first, ...rest]
   const accent = lang === 'nl' ? 'vandaag' : 'today.'

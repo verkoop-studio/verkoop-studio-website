@@ -16,9 +16,9 @@ import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import ServiceScreenView, { AdCard } from '../components/service/ServiceScreens'
 import { serviceStories, type ServiceScreen, type ServiceStep } from '../data/serviceSteps'
-import { getCase } from '../data/cases'
+import { caseHeadline, getCase } from '../data/cases'
 import { getService } from '../data/services'
-import type { Bi, CaseSlug, Lang, ServiceSlug } from '../data/types'
+import type { Bi, Lang, ServiceSlug } from '../data/types'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useInView } from '../lib/useInView'
@@ -76,12 +76,6 @@ const HEADLINE: Record<ServiceSlug, Bi<[string, string]>> = {
   'data-analytics': { nl: ['Zie wat je', 'groei drijft.'], en: ['See what drives your', 'growth.'] },
   websites: { nl: ['Websites die', 'aanvragen opleveren.'], en: ['Websites that bring in', 'enquiries.'] },
   software: { nl: ['Software op', 'maat.'], en: ['Software built', 'for you.'] },
-}
-
-/** Published results only, as on the cases page. */
-const CASE_RESULT: Partial<Record<CaseSlug, Bi<string>>> = {
-  pinacello: { nl: '+120% online omzet', en: '+120% online revenue' },
-  nooms: { nl: 'Pre-sale volledig uitverkocht', en: 'Pre-sale sold out' },
 }
 
 function leadIn(lang: Lang, slug: ServiceSlug) {
@@ -313,11 +307,11 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
       ) : relatedCase ? (
         <section className="vs-wrap vs-section" aria-labelledby="service-proof">
           <Link to={`/cases/${relatedCase.slug}`} className="sv-proof vs-case-live" onClick={() => trackEvent('case_viewed', { case: relatedCase.slug, placement: 'service_page' })}>
-            <span className="sv-proof-frame"><CasePoster slug={relatedCase.slug} name={relatedCase.name} caption={CASE_RESULT[relatedCase.slug]?.[lang] ?? relatedCase.sector[lang]} lang={lang} /></span>
+            <span className="sv-proof-frame"><CasePoster slug={relatedCase.slug} name={relatedCase.name} caption={caseHeadline(relatedCase, lang)} lang={lang} /></span>
             <span className="sv-proof-copy">
               <span className="vs-label">{t.proofLabel}</span>
               <span id="service-proof" className="sv-proof-title">{relatedCase.name}</span>
-              <span className="sv-proof-result">{CASE_RESULT[relatedCase.slug]?.[lang] ?? relatedCase.sector[lang]}</span>
+              <span className="sv-proof-result">{caseHeadline(relatedCase, lang)}</span>
               <span className="sv-proof-body">{relatedCase.summary[lang]}</span>
               <span className="vs-textlink vs-textlink--arrow">{t.view}<Arrow size={15} /></span>
             </span>

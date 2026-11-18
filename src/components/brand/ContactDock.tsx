@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { MessageCircle, Phone, X } from 'lucide-react'
 import BotAvatar from './BotAvatar'
+import { useFooterInView } from '../../lib/useFooterInView'
 import { useEffect, useState } from 'react'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
@@ -40,6 +41,7 @@ export default function ContactDock() {
   const t = COPY[lang]
   const reduce = useReducedMotion()
   const [past, setPast] = useState(false)
+  const footerInView = useFooterInView()
   const [open, setOpen] = useState(false)
   const [greet, setGreet] = useState(false)
 
@@ -120,7 +122,7 @@ export default function ContactDock() {
             )}
           </AnimatePresence>
           <AnimatePresence>
-            {greet && !open && (
+            {greet && !open && !footerInView && (
               <motion.button
                 type="button"
                 className="vs-dock-greet"

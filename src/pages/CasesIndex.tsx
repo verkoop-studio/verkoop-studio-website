@@ -11,16 +11,9 @@ import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
 import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
-import { cases } from '../data/cases'
-import type { Bi, CaseSlug } from '../data/types'
+import { caseHeadline, cases } from '../data/cases'
 import { trackEvent } from '../lib/analytics'
 import { useLang } from '../i18n/LanguageContext'
-
-/** Published results only. Cases without a validated figure show their sector. */
-const RESULT: Partial<Record<CaseSlug, Bi<string>>> = {
-  pinacello: { nl: '+120% online omzet', en: '+120% online revenue' },
-  nooms: { nl: 'Pre-sale volledig uitverkocht', en: 'Pre-sale sold out' },
-}
 
 const COPY = {
   nl: {
@@ -88,7 +81,7 @@ export default function CasesIndex() {
               transition={{ type: 'spring', stiffness: 90, damping: 15, delay: 0.3 + i * 0.12 }}
               style={{ zIndex: i + 1 }}
             >
-              <CasePoster slug={item.slug} name={item.name} caption={RESULT[item.slug]?.[lang] ?? item.sector[lang]} lang={lang} />
+              <CasePoster slug={item.slug} name={item.name} caption={caseHeadline(item, lang)} lang={lang} />
             </motion.div>
           ))}
         </div>
@@ -105,12 +98,12 @@ export default function CasesIndex() {
                 onClick={() => trackEvent('case_viewed', { case: c.slug, placement: 'cases_index' })}
               >
                 <div className="vs-case-card-frame">
-                  <CasePoster slug={c.slug} name={c.name} caption={RESULT[c.slug]?.[lang] ?? c.sector[lang]} lang={lang} />
+                  <CasePoster slug={c.slug} name={c.name} caption={caseHeadline(c, lang)} lang={lang} />
                 </div>
                 <div className="vs-case-card-meta">
                   <div>
                     <h2 className="vs-case-card-name">{c.name}</h2>
-                    <p className="vs-case-card-result">{RESULT[c.slug]?.[lang] ?? c.sector[lang]}</p>
+                    <p className="vs-case-card-result">{caseHeadline(c, lang)}</p>
                   </div>
                   {c.status === 'ongoing' && <span className="vs-case-card-chip">{t.ongoing}</span>}
                 </div>

@@ -694,8 +694,8 @@
 .vs-news-done { margin: 0; padding: 14px 16px; border-radius: 14px; background: rgb(40 200 72 / 0.14); color: #c8f2cf; }
 
 /* The wordmark rises out of its mask as the page ends. */
-.vs-footer-mark { position: relative; display: flex; justify-content: center; height: clamp(110px, 19vw, 300px); margin-top: clamp(40px, 6vw, 80px); overflow: hidden; }
-.vs-footer-word { display: inline-flex; align-items: flex-end; color: #fff; font: 600 clamp(110px, 22vw, 340px)/0.8 var(--font-display); letter-spacing: -0.06em; white-space: nowrap; }
+.vs-footer-mark { position: relative; display: flex; justify-content: center; height: clamp(64px, 17.5vw, 290px); margin-top: clamp(40px, 6vw, 80px); overflow: hidden; }
+.vs-footer-word { display: inline-flex; align-items: flex-end; color: #fff; font: 600 clamp(56px, 20vw, 320px)/0.8 var(--font-display); letter-spacing: -0.06em; white-space: nowrap; }
 .vs-footer-dot { display: inline-flex; align-self: flex-end; margin: 0 0 0.04em 0.04em; }
 /* The Watcher writes its size inline in px; here the dot must scale with the wordmark, so the em size wins. */
 .vs-footer-dot .eyt { --eyt-size: 0.26em !important; }
@@ -708,6 +708,7 @@
 .vs-footer-lang button[aria-pressed='true'] { background: #fff; color: var(--vs-ink); }
 .vs-footer-lang button:focus-visible { outline: 2px solid #839bff; outline-offset: 2px; }
 
+@media (max-width: 1023px) { .vs-footer-base { padding-bottom: 104px; } }
 @media (max-width: 900px) {
   .vs-footer-top { grid-template-columns: minmax(0, 1fr); }
   .vs-footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }

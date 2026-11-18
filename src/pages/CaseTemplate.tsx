@@ -16,7 +16,7 @@ import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import ResponsiveImage from '../components/ResponsiveImage'
 import type { CaseContent, CaseScreen, CaseStat } from '../data/caseContent'
-import { cases } from '../data/cases'
+import { caseHeadline, cases } from '../data/cases'
 import type { CaseStudy, Lang } from '../data/types'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
@@ -25,12 +25,6 @@ import { useLang } from '../i18n/LanguageContext'
 const COPY = {
   nl: { crumb: 'Cases', approach: 'Bekijk de aanpak', site: 'Bekijk de website', more: 'Meer over deze aanpak', sample: 'Voorbeeld', play: 'Speel de video af', evidence: 'Wat deze case laat zien', next: 'Volgende case', others: 'Bekijk andere cases', result: 'Resultaat' },
   en: { crumb: 'Cases', approach: 'See the approach', site: 'View the website', more: 'More about this approach', sample: 'Sample', play: 'Play the video', evidence: 'What this case shows', next: 'Next case', others: 'See other cases', result: 'Result' },
-}
-
-/** Published results, shown on the next-case poster. */
-const RESULT: Record<string, { nl: string; en: string }> = {
-  pinacello: { nl: '+120% online omzet', en: '+120% online revenue' },
-  nooms: { nl: 'Pre-sale volledig uitverkocht', en: 'Pre-sale sold out' },
 }
 
 function StatIcon({ icon }: { icon: CaseStat['icon'] }) {
@@ -233,7 +227,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
           transition={{ type: 'spring', stiffness: 80, damping: 15, delay: 0.35 }}
           aria-hidden="true"
         >
-          <CasePoster slug={c.slug} name={c.name} caption={RESULT[c.slug]?.[lang] ?? c.sector[lang]} lang={lang} />
+          <CasePoster slug={c.slug} name={c.name} caption={caseHeadline(c, lang)} lang={lang} />
         </motion.div>
         <ul className="cs-stats" aria-label={t.result}>
           {k.stats.map((stat, i) => (
@@ -326,7 +320,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
             >
               {k.proof.media === 'stamp' ? (
                 <div className="cs-stamp-card vs-case-live" aria-hidden="true">
-                  <CasePoster slug={c.slug} name={c.name} caption={RESULT[c.slug]?.[lang] ?? c.sector[lang]} lang={lang} />
+                  <CasePoster slug={c.slug} name={c.name} caption={caseHeadline(c, lang)} lang={lang} />
                   <motion.span
                     className="cs-stamp"
                     initial={reduce ? false : { scale: 2.2, opacity: 0, rotate: -24 }}
@@ -356,9 +350,9 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
             <span className="cs-next-copy">
               <span className="cs-next-label">{t.next}<Arrow size={18} /></span>
               <span className="cs-next-name">{next.name}</span>
-              <span className="cs-next-result">{RESULT[next.slug]?.[lang] ?? next.sector[lang]}</span>
+              <span className="cs-next-result">{caseHeadline(next, lang)}</span>
             </span>
-            <span className="cs-next-poster"><CasePoster slug={next.slug} name={next.name} caption={RESULT[next.slug]?.[lang] ?? next.sector[lang]} lang={lang} /></span>
+            <span className="cs-next-poster"><CasePoster slug={next.slug} name={next.name} caption={caseHeadline(next, lang)} lang={lang} /></span>
           </Link>
         </section>
       )}

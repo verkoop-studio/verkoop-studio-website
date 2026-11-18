@@ -1,6 +1,7 @@
 import { motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Seo from '../components/Seo'
+import { useFooterInView } from '../lib/useFooterInView'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
@@ -131,7 +132,9 @@ export default function Performance() {
   const pill = useTransform(scrollYProgress, [0, 1], [90, 0])
   // The pill repeats the form's action, so it steps aside while the form is on screen.
   const final = useRef<HTMLElement>(null)
-  const pillHidden = useInView(final, { margin: '0px 0px -25% 0px' })
+  const finalInView = useInView(final, { margin: '0px 0px -25% 0px' })
+  const footerInView = useFooterInView()
+  const pillHidden = finalInView || footerInView
   const accent = lang === 'nl' ? 'echt' : 'actually'
 
   useEffect(() => { trackLandingView('Verkoop Studio Performance') }, [])

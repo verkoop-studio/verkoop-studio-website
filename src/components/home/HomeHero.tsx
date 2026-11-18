@@ -1,7 +1,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { cases } from '../../data/cases'
+import { caseHeadline, cases } from '../../data/cases'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import HeroVideo from '../HeroVideo'
@@ -10,15 +10,8 @@ import Cta from '../brand/Cta'
 import HandNote from '../brand/HandNote'
 import RollingNumber from '../brand/RollingNumber'
 import TextLink from '../brand/TextLink'
-import type { Bi, CaseSlug } from '../../data/types'
 import SplitHeadline, { type HeadlinePart } from '../brand/SplitHeadline'
 import { EASE } from '../brand/motion'
-
-/** One published fact per client; cases without a validated figure show their sector. */
-const MARK_RESULT: Partial<Record<CaseSlug, Bi<string>>> = {
-  pinacello: { nl: '+120% online omzet', en: '+120% online revenue' },
-  nooms: { nl: 'Pre-sale uitverkocht', en: 'Pre-sale sold out' },
-}
 
 const COPY = {
   nl: {
@@ -127,7 +120,7 @@ export default function HomeHero() {
                 <li key={item.slug}>
                   <Link to={`/cases/${item.slug}`} className="vs-mark-link">
                     <strong>{item.name}</strong>
-                    <span>{MARK_RESULT[item.slug]?.[lang] ?? item.sector[lang]}</span>
+                    <span>{caseHeadline(item, lang)}</span>
                   </Link>
                 </li>
               ))}
