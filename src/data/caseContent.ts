@@ -28,7 +28,7 @@ export interface CaseContent {
 }
 
 /** Page copy for the rebuilt case pages. Figures are the published ones in cases.ts; nothing else is claimed. */
-export const caseContent: Partial<Record<CaseSlug, CaseContent>> = {
+export const caseContent: Record<CaseSlug, CaseContent> = {
   pinacello: {
     seoTitle: { nl: 'Pinacello case: +120% online omzet', en: 'Pinacello case: +120% online revenue' },
     headline: { nl: ['Van aandacht naar', 'aankoop.'], en: ['From attention to', 'purchase.'] },
