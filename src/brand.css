@@ -200,27 +200,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-split-inner { display: inline-flex; }
 .vs-split-letter { display: inline-block; white-space: pre; }
 
-/* ---------- System strip ---------- */
-
-.vs-system { border-radius: 24px; background: var(--vs-ink); color: var(--vs-paper); padding: clamp(28px, 4vw, 44px); display: flex; flex-direction: column; gap: 36px; }
-.vs-system .vs-label { color: #a3a09a; }
-.vs-system-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.vs-system-step { display: flex; flex-direction: column; gap: 10px; padding-inline: 24px; border-left: 1px solid var(--vs-line-dark); }
-.vs-system-step:first-child { padding-left: 0; border-left: 0; }
-.vs-system-step .vs-label { color: #8f8c86; }
-.vs-system-title { font-size: clamp(22px, 2.2vw, 28px); font-weight: 500; letter-spacing: -0.02em; }
-.vs-system-copy { font-size: 15px; line-height: 1.5; color: #a3a09a; }
-.vs-signal { position: relative; height: 1px; background: var(--vs-line-dark); }
-.vs-signal span { position: absolute; top: -4px; width: 9px; height: 9px; border-radius: 50%; background: var(--vs-blue-on-ink); box-shadow: 0 0 0 6px rgb(125 147 255 / 0.16); animation: vs-travel 3.6s var(--vs-ease-wipe) infinite; }
-.vs-signal span:nth-child(2) { animation-delay: 1.2s; }
-.vs-signal span:nth-child(3) { animation-delay: 2.4s; }
-@keyframes vs-travel { 0% { left: 0%; opacity: 0; } 8% { opacity: 1; } 92% { opacity: 1; } 100% { left: calc(100% - 9px); opacity: 0; } }
-@media (max-width: 760px) {
-  .vs-system-grid { grid-template-columns: 1fr; gap: 24px; }
-  .vs-system-step { padding: 24px 0 0; border-left: 0; border-top: 1px solid var(--vs-line-dark); }
-  .vs-system-step:first-child { padding-top: 0; border-top: 0; }
-}
-
 /* ---------- Work: landscape scroller ---------- */
 
 .vs-work-track {
@@ -241,24 +220,19 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
   background: #6e6b66; outline: 2px solid transparent; outline-offset: 6px;
   transition: outline-color 0.35s ease;
 }
-.vs-slide-frame img { display: block; width: 100%; height: 100%; object-fit: cover; user-select: none; -webkit-user-drag: none; transition: transform 1.4s var(--vs-ease), opacity 0.4s, filter 0.4s; }
-.vs-slide a:hover .vs-slide-frame img { transform: scale(1.025); }
 .vs-slide-tag { display: inline-flex; align-items: center; min-height: 24px; margin-top: 14px; padding: 0 9px; border-radius: 5px; background: var(--vs-blue); color: #fff; font-size: 13px; font-weight: 600; letter-spacing: -0.01em; transition: opacity 0.35s, transform 0.35s var(--vs-ease); }
 
 /* Default state when scroll-driven animation is unavailable: JS marks the centred slide. */
 .vs-slide.is-active .vs-slide-frame { outline-color: var(--vs-blue); }
-.vs-slide:not(.is-active) .vs-slide-frame img { opacity: 0.5; filter: grayscale(0.85); }
 .vs-slide:not(.is-active) .vs-slide-tag { opacity: 0; transform: translateY(6px); }
 
 @supports (animation-timeline: view()) {
   .vs-slide .vs-slide-frame { animation: vs-ring linear both; animation-timeline: --vs-slide; }
-  .vs-slide .vs-slide-frame img { animation: vs-dim linear both; animation-timeline: --vs-slide; }
   .vs-slide .vs-slide-tag { animation: vs-tag linear both; animation-timeline: --vs-slide; }
-  .vs-slide:not(.is-active) .vs-slide-frame img, .vs-slide:not(.is-active) .vs-slide-tag { opacity: unset; filter: unset; transform: unset; }
+  .vs-slide:not(.is-active) .vs-slide-tag { opacity: unset; transform: unset; }
   .vs-slide.is-active .vs-slide-frame { outline-color: unset; }
 }
 @keyframes vs-ring { 0%, 30% { outline-color: transparent; } 45%, 55% { outline-color: #2b4bf2; } 70%, 100% { outline-color: transparent; } }
-@keyframes vs-dim { 0% { opacity: 0.5; filter: grayscale(0.85); } 45%, 55% { opacity: 1; filter: grayscale(0); } 100% { opacity: 0.5; filter: grayscale(0.85); } }
 @keyframes vs-tag { 0%, 38% { opacity: 0; transform: translateY(6px); } 47%, 53% { opacity: 1; transform: none; } 62%, 100% { opacity: 0; transform: translateY(6px); } }
 
 .vs-work-controls { display: flex; gap: 8px; }
@@ -369,9 +343,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 /* ---------- Reduced motion ---------- */
 
 @media (prefers-reduced-motion: reduce) {
-  .vs-signal span, .vs-marquee { animation: none; }
-  .vs-signal span:not(:first-child) { display: none; }
-  .vs-signal span:first-child { left: 50%; }
+  .vs-marquee { animation: none; }
   .vs-slide .vs-slide-frame, .vs-slide .vs-slide-frame img, .vs-slide .vs-slide-tag { animation: none !important; }
   .vs-cta-bed, .vs-cta-circle, .vs-service, .vs-plan, .vs-product-stage img, .vs-slide-frame img { transition: none; }
 }
@@ -431,9 +403,8 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 
 .vs-spot { position: relative; isolation: isolate; }
 .vs-spot::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity var(--vs-dur-slow) ease; background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgb(43 75 242 / 0.09), transparent 62%); }
-.vs-system.vs-spot::before, .vs-plan--dark.vs-spot::before { background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 50%), rgb(125 147 255 / 0.2), transparent 62%); }
+.vs-plan--dark.vs-spot::before { background: radial-gradient(460px circle at var(--mx, 50%) var(--my, 50%), rgb(125 147 255 / 0.2), transparent 62%); }
 @media (hover: hover) { .vs-spot:hover::before { opacity: 1; } }
-.vs-system { overflow: hidden; }
 .vs-plan { overflow: hidden; }
 
 /* ---------- Tilt card glare ---------- */
@@ -480,20 +451,10 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 
 /* ---------- Display type ---------- */
 
-.vs-h1, .vs-h2, .vs-closing-title, .vs-system-title, .vs-service-title, .vs-product-name, .vs-plan-price, .vs-result-figure, .vs-hero-form .hero-request h2, .vs-page .studio-faq h2 { font-family: var(--font-display); }
+.vs-h1, .vs-h2, .vs-closing-title, .vs-service-title, .vs-product-name, .vs-plan-price, .vs-result-figure, .vs-hero-form .hero-request h2, .vs-page .studio-faq h2 { font-family: var(--font-display); }
 .vs-h1 { letter-spacing: -0.035em; font-weight: 500; }
 .vs-h2, .vs-page .studio-faq h2 { letter-spacing: -0.03em; }
 .vs-closing-title, .vs-result-figure { letter-spacing: -0.045em; }
-
-/* ---------- Case posters ---------- */
-
-.vs-poster { position: absolute; inset: 0; display: block; width: 100%; height: 100%; user-select: none; transition: transform 1.4s var(--vs-ease), opacity 0.4s, filter 0.4s; }
-.vs-slide a:hover .vs-poster { transform: scale(1.025); }
-.vs-slide:not(.is-active) .vs-poster { opacity: 0.5; filter: grayscale(0.85); }
-@supports (animation-timeline: view()) {
-  .vs-slide .vs-poster { animation: vs-dim linear both; animation-timeline: --vs-slide; }
-  .vs-slide:not(.is-active) .vs-poster { opacity: unset; filter: unset; }
-}
 
 /* ---------- Hand-written notes ---------- */
 
@@ -762,3 +723,7 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 
 .vs-td--list .vs-td-item { grid-template-columns: minmax(0, 1fr); }
 .vs-td--list .vs-win { max-width: 380px; }
+
+/* Contact page: the plan a visitor picked on the homepage. */
+.selected-package { margin-top: 26px; padding: 18px 22px; border: 1px solid var(--vs-line); background: var(--vs-card); border-radius: 14px; font-size: 14px; color: var(--vs-ink-2); }
+.selected-package a { display: inline-block; margin-left: 12px; text-decoration: underline; font-size: 13px; }
