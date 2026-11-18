@@ -235,15 +235,191 @@ function Tick({ delay = 0 }: { delay?: number }) {
   return <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path className="tx-tick" style={{ animationDelay: `${delay}s` }} d="M2 7.5 5.5 11 12 3.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" pathLength={1} /></svg>
 }
 
+/* ── App views inside the cards: a second tab per window, laid out like a real CRM table ── */
+
+type Cell =
+  | { t: 'who'; shape: string; color: string; name: string; sub?: string }
+  | { t: 'pill'; v: string; tone: 'blue' | 'green' | 'amber' | 'pink' | 'grey' | 'red' }
+  | { t: 'pills'; v: [string, Tone][] }
+  | { t: 'odds'; v: number }
+  | { t: 'spark'; v: number[] }
+  | { t: 'money'; v: string }
+  | { t: 'text'; v: string }
+  | { t: 'date'; v: string; tag?: string }
+type Tone = 'blue' | 'green' | 'amber' | 'pink' | 'grey' | 'red'
+type Table = { tabs: [string, string]; count?: string; chips: string[]; cols: string[]; widths: string; rows: Cell[][] }
+
+const who = (shape: string, color: string, name: string, sub?: string): Cell => ({ t: 'who', shape, color, name, sub })
+const pill = (v: string, tone: Tone): Cell => ({ t: 'pill', v, tone })
+const odds = (v: number): Cell => ({ t: 'odds', v })
+const spark = (...v: number[]): Cell => ({ t: 'spark', v })
+const money = (v: string): Cell => ({ t: 'money', v })
+const text = (v: string): Cell => ({ t: 'text', v })
+const date = (v: string, tag?: string): Cell => ({ t: 'date', v, tag })
+
+/** The second tab of each window. Every row is sample data under the window's "Voorbeeld" chip. */
+const TABLES: Record<Lang, Record<LayerKey, Table>> = {
+  nl: {
+    ad: { tabs: ['Advertentie', 'Campagnes'], count: '4', chips: ['Sorteer: Rendement', 'Status: Actief'], cols: ['Campagne', 'Status', 'Trend', 'Rendement'], widths: '1.5fr 0.9fr 0.9fr 0.9fr', rows: [
+      [who('rocket', '#2b4bf2', 'Zomeractie', 'Meta'), pill('Actief', 'green'), spark(3, 4, 6, 5, 7, 8, 9), odds(8)],
+      [who('star', '#ffd23f', 'Nieuwe klanten', 'Google'), pill('Actief', 'green'), spark(4, 4, 5, 6, 5, 7, 7), odds(7)],
+      [who('cloud', '#7d93ff', 'Retargeting', 'Meta'), pill('Leert', 'amber'), spark(2, 3, 3, 4, 3, 4, 5), odds(5)],
+      [who('bunny', '#ff9fd0', 'Merkvideo', 'TikTok'), pill('Gepauzeerd', 'grey'), spark(5, 4, 3, 3, 2, 2, 1), odds(2)],
+    ] },
+    page: { tabs: ['Pagina', 'Varianten'], count: '2', chips: ['Test: Kop', 'Laatste 14 dagen'], cols: ['Variant', 'Bezoekers', 'Trend', 'Conversie'], widths: '1.4fr 0.9fr 0.9fr 1fr', rows: [
+      [who('magnifier', '#ffd23f', 'A · "Meer klanten"', 'winnaar'), money('2.140'), spark(3, 5, 6, 6, 7, 8, 8), odds(8)],
+      [who('lightbulb', '#c9f26a', 'B · "Gratis plan"', 'test'), money('2.098'), spark(4, 4, 5, 4, 5, 5, 6), odds(5)],
+    ] },
+    form: { tabs: ['Formulier', 'Inzendingen'], count: '12', chips: ['Bron: Alle', 'Vandaag'], cols: ['Wie', 'Bron', 'Budget', 'Binnen'], widths: '1.5fr 0.9fr 1fr 0.8fr', rows: [
+      [who('mug', '#ff9fd0', 'Sarah Peeters', 'Bakkerij'), pill('Facebook', 'blue'), money('€ 1–5k'), date('14:04')],
+      [who('controller', '#7d93ff', 'Tom De Wit', 'Garage'), pill('Google', 'red'), money('€ 5–15k'), date('11:37')],
+      [who('sprout', '#c9f26a', 'Lien Vos', 'Tuinen'), pill('Website', 'grey'), money('< € 1k'), date('09:12')],
+      [who('chat', '#ff7a59', 'Eva Claes', 'Kliniek'), pill('Facebook', 'blue'), money('€ 1–5k'), date('gisteren')],
+    ] },
+    crm: { tabs: ['Pipeline', 'Leads'], count: '38', chips: ['Eigenaar: Iedereen', 'Fase: Alle', '90 dagen'], cols: ['Lead', 'Fase', 'Kans', 'Waarde', 'Contact'], widths: '1.45fr 1fr 0.95fr 0.8fr 0.8fr', rows: [
+      [who('chat', '#ff7a59', 'Eva Claes', 'Kliniek'), { t: 'pills', v: [['Voorstel', 'blue'], ['Warm', 'pink']] }, odds(8), money('€ 5.100'), date('vandaag', 'Bellen')],
+      [who('lightbulb', '#ffd23f', 'Jonas Maes', 'Bouw'), pill('Afspraak', 'green'), odds(6), money('€ 4.500'), date('ma', 'Demo')],
+      [who('sprout', '#c9f26a', 'Lien Vos', 'Tuinen'), pill('Gecontacteerd', 'amber'), odds(4), money('€ 3.100'), date('do')],
+      [who('mug', '#ff9fd0', 'Sarah Peeters', 'Bakkerij'), pill('Nieuw', 'grey'), odds(3), money('€ 2.400'), date('14:04')],
+    ] },
+    pixel: { tabs: ['Live', 'Bronnen'], count: '5', chips: ['Vandaag', 'Toestemming: ja'], cols: ['Bron', 'Bezoeken', 'Trend', 'Verkopen'], widths: '1.3fr 0.9fr 1fr 1fr', rows: [
+      [who('rocket', '#1877f2', 'Meta', 'advertenties'), money('1.284'), spark(4, 5, 5, 6, 7, 6, 8), odds(7)],
+      [who('magnifier', '#ea4335', 'Google', 'zoeken'), money('962'), spark(5, 5, 6, 6, 6, 7, 7), odds(8)],
+      [who('cloud', '#111110', 'Direct', 'typt je adres'), money('410'), spark(3, 3, 4, 3, 4, 4, 4), odds(5)],
+      [who('book', '#7d93ff', 'E-mail', 'nieuwsbrief'), money('188'), spark(2, 6, 2, 2, 7, 2, 3), odds(9)],
+    ] },
+    dashboard: { tabs: ['Kanalen', 'Advertenties'], count: '6', chips: ['Sorteer: Omzet', 'Laatste 30 dagen'], cols: ['Advertentie', 'Kanaal', 'Uitgaven', 'Omzet', 'Rendement'], widths: '1.4fr 0.8fr 0.8fr 0.8fr 0.95fr', rows: [
+      [who('star', '#ff7a59', 'Video 2 · keuken', 'beste'), pill('Meta', 'blue'), money('€ 420'), money('€ 2.140'), odds(9)],
+      [who('magnifier', '#ffd23f', 'Zoekwoord "offerte"', ''), pill('Google', 'red'), money('€ 310'), money('€ 1.380'), odds(7)],
+      [who('bunny', '#ff9fd0', 'Carrousel · zomer', ''), pill('Meta', 'blue'), money('€ 280'), money('€ 760'), odds(5)],
+      [who('cloud', '#7d93ff', 'Korte video', ''), pill('TikTok', 'grey'), money('€ 230'), money('€ 310'), odds(2)],
+    ] },
+    report: { tabs: ['Samenvatting', 'Acties'], count: '3', chips: ['Oktober', 'Voor: jou'], cols: ['Actie', 'Wie', 'Status', 'Tegen'], widths: '1.7fr 0.9fr 0.9fr 0.7fr', rows: [
+      [text('€ 300 meer budget naar Google'), who('verkoop', '#2b4bf2', 'Stef'), pill('Bezig', 'amber'), date('ma')],
+      [text('Nieuwe video voor Facebook'), who('verkoop', '#2b4bf2', 'Stef'), pill('Gepland', 'blue'), date('do')],
+      [text('Prijspagina sneller maken'), who('cat', '#111110', 'Jij'), pill('Klaar', 'green'), date('✓')],
+    ] },
+  },
+  en: {
+    ad: { tabs: ['Ad', 'Campaigns'], count: '4', chips: ['Sort: Return', 'Status: Active'], cols: ['Campaign', 'Status', 'Trend', 'Return'], widths: '1.5fr 0.9fr 0.9fr 0.9fr', rows: [
+      [who('rocket', '#2b4bf2', 'Summer offer', 'Meta'), pill('Active', 'green'), spark(3, 4, 6, 5, 7, 8, 9), odds(8)],
+      [who('star', '#ffd23f', 'New customers', 'Google'), pill('Active', 'green'), spark(4, 4, 5, 6, 5, 7, 7), odds(7)],
+      [who('cloud', '#7d93ff', 'Retargeting', 'Meta'), pill('Learning', 'amber'), spark(2, 3, 3, 4, 3, 4, 5), odds(5)],
+      [who('bunny', '#ff9fd0', 'Brand video', 'TikTok'), pill('Paused', 'grey'), spark(5, 4, 3, 3, 2, 2, 1), odds(2)],
+    ] },
+    page: { tabs: ['Page', 'Variants'], count: '2', chips: ['Test: Headline', 'Last 14 days'], cols: ['Variant', 'Visitors', 'Trend', 'Conversion'], widths: '1.4fr 0.9fr 0.9fr 1fr', rows: [
+      [who('magnifier', '#ffd23f', 'A · "More customers"', 'winner'), money('2,140'), spark(3, 5, 6, 6, 7, 8, 8), odds(8)],
+      [who('lightbulb', '#c9f26a', 'B · "Free plan"', 'test'), money('2,098'), spark(4, 4, 5, 4, 5, 5, 6), odds(5)],
+    ] },
+    form: { tabs: ['Form', 'Entries'], count: '12', chips: ['Source: All', 'Today'], cols: ['Who', 'Source', 'Budget', 'In'], widths: '1.5fr 0.9fr 1fr 0.8fr', rows: [
+      [who('mug', '#ff9fd0', 'Sarah Peeters', 'Bakery'), pill('Facebook', 'blue'), money('€ 1–5k'), date('14:04')],
+      [who('controller', '#7d93ff', 'Tom De Wit', 'Garage'), pill('Google', 'red'), money('€ 5–15k'), date('11:37')],
+      [who('sprout', '#c9f26a', 'Lien Vos', 'Gardens'), pill('Website', 'grey'), money('< € 1k'), date('09:12')],
+      [who('chat', '#ff7a59', 'Eva Claes', 'Clinic'), pill('Facebook', 'blue'), money('€ 1–5k'), date('yesterday')],
+    ] },
+    crm: { tabs: ['Pipeline', 'Leads'], count: '38', chips: ['Owner: Everyone', 'Stage: All', '90 days'], cols: ['Lead', 'Stage', 'Odds', 'Value', 'Contact'], widths: '1.45fr 1fr 0.95fr 0.8fr 0.8fr', rows: [
+      [who('chat', '#ff7a59', 'Eva Claes', 'Clinic'), { t: 'pills', v: [['Proposal', 'blue'], ['Warm', 'pink']] }, odds(8), money('€ 5,100'), date('today', 'Call')],
+      [who('lightbulb', '#ffd23f', 'Jonas Maes', 'Building'), pill('Meeting', 'green'), odds(6), money('€ 4,500'), date('Mon', 'Demo')],
+      [who('sprout', '#c9f26a', 'Lien Vos', 'Gardens'), pill('Contacted', 'amber'), odds(4), money('€ 3,100'), date('Thu')],
+      [who('mug', '#ff9fd0', 'Sarah Peeters', 'Bakery'), pill('New', 'grey'), odds(3), money('€ 2,400'), date('14:04')],
+    ] },
+    pixel: { tabs: ['Live', 'Sources'], count: '5', chips: ['Today', 'Consent: yes'], cols: ['Source', 'Visits', 'Trend', 'Sales'], widths: '1.3fr 0.9fr 1fr 1fr', rows: [
+      [who('rocket', '#1877f2', 'Meta', 'ads'), money('1,284'), spark(4, 5, 5, 6, 7, 6, 8), odds(7)],
+      [who('magnifier', '#ea4335', 'Google', 'search'), money('962'), spark(5, 5, 6, 6, 6, 7, 7), odds(8)],
+      [who('cloud', '#111110', 'Direct', 'types your address'), money('410'), spark(3, 3, 4, 3, 4, 4, 4), odds(5)],
+      [who('book', '#7d93ff', 'Email', 'newsletter'), money('188'), spark(2, 6, 2, 2, 7, 2, 3), odds(9)],
+    ] },
+    dashboard: { tabs: ['Channels', 'Ads'], count: '6', chips: ['Sort: Revenue', 'Last 30 days'], cols: ['Ad', 'Channel', 'Spend', 'Revenue', 'Return'], widths: '1.4fr 0.8fr 0.8fr 0.8fr 0.95fr', rows: [
+      [who('star', '#ff7a59', 'Video 2 · kitchen', 'best'), pill('Meta', 'blue'), money('€ 420'), money('€ 2,140'), odds(9)],
+      [who('magnifier', '#ffd23f', 'Keyword "quote"', ''), pill('Google', 'red'), money('€ 310'), money('€ 1,380'), odds(7)],
+      [who('bunny', '#ff9fd0', 'Carousel · summer', ''), pill('Meta', 'blue'), money('€ 280'), money('€ 760'), odds(5)],
+      [who('cloud', '#7d93ff', 'Short video', ''), pill('TikTok', 'grey'), money('€ 230'), money('€ 310'), odds(2)],
+    ] },
+    report: { tabs: ['Summary', 'Actions'], count: '3', chips: ['October', 'For: you'], cols: ['Action', 'Who', 'Status', 'By'], widths: '1.7fr 0.9fr 0.9fr 0.7fr', rows: [
+      [text('€ 300 more budget to Google'), who('verkoop', '#2b4bf2', 'Stef'), pill('Doing', 'amber'), date('Mon')],
+      [text('A new video for Facebook'), who('verkoop', '#2b4bf2', 'Stef'), pill('Planned', 'blue'), date('Thu')],
+      [text('Make the pricing page faster'), who('cat', '#111110', 'You'), pill('Done', 'green'), date('✓')],
+    ] },
+  },
+}
+
+/** Ten small blocks, red to green, the share that is lit is the odds. */
+function Odds({ v }: { v: number }) {
+  return <span className="tx-odds" aria-hidden="true">{Array.from({ length: 10 }, (_, i) => <i key={i} className={i < v ? `is-${v >= 7 ? 'hi' : v >= 4 ? 'mid' : 'lo'}` : ''} style={{ animationDelay: `${i * 30}ms` }} />)}<b>{v * 10}%</b></span>
+}
+
+function Spark({ v }: { v: number[] }) {
+  const max = Math.max(...v)
+  return <span className="tx-spk" aria-hidden="true">{v.map((h, i) => <i key={i} style={{ height: `${(h / max) * 100}%`, animationDelay: `${i * 40}ms` }} />)}</span>
+}
+
+function CellView({ c }: { c: Cell }) {
+  if (c.t === 'who') return <span className="tx-who"><BotAvatar shape={c.shape} color={c.color} eyeColor={c.color === '#111110' || c.color === '#2b4bf2' ? '#ffffff' : undefined} size={20} /><span><b>{c.name}</b>{c.sub && <em>{c.sub}</em>}</span></span>
+  if (c.t === 'pill') return <span className={`tx-pill tx-pill--${c.tone}`}>{c.v}</span>
+  if (c.t === 'pills') return <span className="tx-pills">{c.v.map(([v, tone]) => <span key={v} className={`tx-pill tx-pill--${tone}`}>{v}</span>)}</span>
+  if (c.t === 'odds') return <Odds v={c.v} />
+  if (c.t === 'spark') return <Spark v={c.v} />
+  if (c.t === 'money') return <span className="tx-money">{c.v}</span>
+  if (c.t === 'date') return <span className="tx-date"><span>{c.v}</span>{c.tag && <em>{c.tag}</em>}</span>
+  return <span className="tx-cell-text">{c.v}</span>
+}
+
+/** The second tab: filter chips, then the rows. Rows lift under the pointer and the hovered one gets a ring. */
+function TableView({ table }: { table: Table }) {
+  return (
+    <div className="tx-tbl" style={{ '--cols': table.widths } as CSSProperties}>
+      <p className="tx-chips">{table.chips.map((chip) => { const [k, v] = chip.split(': '); return <span key={chip}>{v ? <><em>{k}</em>{v}</> : k}<i>▾</i></span> })}</p>
+      <div className="tx-tr tx-th">{table.cols.map((col) => <span key={col}>{col}</span>)}</div>
+      {table.rows.map((row, i) => (
+        <motion.div key={i} className="tx-tr" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 + i * 0.06, duration: 0.35 }}>
+          {row.map((cell, j) => <CellView key={j} c={cell} />)}
+        </motion.div>
+      ))}
+    </div>
+  )
+}
+
+/** The window's title bar holds the tabs; the line under the open tab slides between them. */
+function WinTabs({ tabs, count, tab, setTab, sample, id }: { tabs: [string, string]; count?: string; tab: number; setTab: (n: number) => void; sample: string; id: string }) {
+  return (
+    <div className="tx-win-bar tx-win-bar--tabs">
+      <i /><i /><i />
+      <span className="tx-tabs" role="tablist">
+        {tabs.map((label, i) => (
+          <span key={label} role="tab" aria-selected={tab === i} className={`tx-tab${tab === i ? ' is-on' : ''}`} onClick={(e) => { e.stopPropagation(); setTab(i) }}>
+            {label}{i === 1 && count && <small>{count}</small>}
+            {tab === i && <motion.b layoutId={`tab-${id}`} className="tx-tab-line" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
+          </span>
+        ))}
+      </span>
+      <em>{sample}</em>
+    </div>
+  )
+}
+
 /** One part of the system as a card: its screen on top, what it does for you underneath. */
 function Card({ layer, index, lang, active }: { layer: Layer; index: number; lang: Lang; active: boolean }) {
   const ui = UI[lang][layer.key]
+  const table = TABLES[lang][layer.key]
+  const [tab, setTab] = useState(0)
+  const [touched, setTouched] = useState(false)
+  /* while the card is in front, the window flips to its second tab and back on its own, until someone picks a tab */
+  useEffect(() => {
+    if (!active) { setTab(0); setTouched(false); return }
+    if (touched || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    const id = window.setInterval(() => setTab((x) => 1 - x), 5200)
+    return () => window.clearInterval(id)
+  }, [active, touched])
   return (
     <article className={`tx-card${active ? ' is-on' : ''}${layer.key === 'dashboard' ? ' tx-card--tall' : ''}`} style={{ '--t': layer.tint } as CSSProperties}>
       <div className="tx-stage" aria-hidden="true">
         <div className="tx-win">
-          <div className="tx-win-bar"><i /><i /><i /><b>{ui.win}</b><em>{COPY[lang].sample}</em></div>
-          <Screen k={layer.key} lang={lang} on={active} />
+          <WinTabs tabs={table.tabs} count={table.count} tab={tab} setTab={(n) => { setTouched(true); setTab(n) }} sample={COPY[lang].sample} id={layer.key} />
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div key={tab} className="tx-view" initial={{ opacity: 0, x: tab ? 18 : -18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: tab ? -18 : 18 }} transition={{ duration: 0.28, ease: EASE }}>
+              {tab === 0 ? <Screen k={layer.key} lang={lang} on={active} /> : <TableView table={table} />}
+            </motion.div>
+          </AnimatePresence>
         </div>
         <p className="tx-note"><Tick delay={0.9} />{ui.note}</p>
         <span className="tx-buddy"><BotAvatar shape={BUDDY[layer.key][0]} color={BUDDY[layer.key][1]} eyeColor={layer.key === 'report' ? '#ffffff' : undefined} size={60} live={active} mood={active ? 'happy' : 'idle'} /></span>
