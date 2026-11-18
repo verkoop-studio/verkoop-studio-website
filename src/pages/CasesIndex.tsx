@@ -1,7 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import LyteWork from '../components/LyteWork'
-import CreativeWall from '../components/cases/CreativeWall'
 import ProofBento from '../components/cases/ProofBento'
 import Wordmarks from '../components/cases/Wordmarks'
 import Seo from '../components/Seo'
@@ -41,13 +40,6 @@ const COPY = {
   },
 }
 
-const FAN = [
-  { x: -150, y: 26, r: -9 },
-  { x: -50, y: -6, r: -3 },
-  { x: 50, y: 4, r: 3 },
-  { x: 150, y: 30, r: 9 },
-]
-
 export default function CasesIndex() {
   usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
@@ -64,21 +56,6 @@ export default function CasesIndex() {
           <p className="vs-label">{t.label}</p>
           <SplitHeadline as="h1" id="cases-title" className="vs-h1" parts={t.title} onMount />
           <motion.p className="vs-lead" initial={reduce ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6, ease: EASE }}>{t.body}</motion.p>
-        </div>
-        {/* The four posters dealt onto a fan: the page's live object. */}
-        <div className="vs-cases-fan" aria-hidden="true">
-          {list.slice(0, 4).map((item, i) => (
-            <motion.div
-              key={item.slug}
-              className="vs-cases-fan-card vs-case-live"
-              initial={reduce ? false : { opacity: 0, y: 160, rotate: 0, x: 0 }}
-              animate={{ opacity: 1, y: FAN[i].y, rotate: FAN[i].r, x: FAN[i].x }}
-              transition={{ type: 'spring', stiffness: 90, damping: 15, delay: 0.3 + i * 0.12 }}
-              style={{ zIndex: i + 1 }}
-            >
-              <CasePoster slug={item.slug} name={item.name} caption={caseHeadline(item, lang)} lang={lang} />
-            </motion.div>
-          ))}
         </div>
       </section>
 
@@ -112,7 +89,6 @@ export default function CasesIndex() {
 
       <Wordmarks lang={lang} />
       <ProofBento lang={lang} placement="cases_bento" />
-      <CreativeWall lang={lang} />
 
       <LyteWork />
 
