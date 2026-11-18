@@ -872,6 +872,23 @@
 @keyframes sk-pulse-green { 0% { box-shadow: 0 0 0 0 rgb(47 191 113 / 0.6); } 100% { box-shadow: 0 0 0 6px rgb(47 191 113 / 0); } }
 
 @media (max-width: 860px) { .vs-split-grid { grid-template-columns: minmax(0, 1fr); } }
+
+/* The split cards: bigger type, the actions above, the phone breaking out of the card's lower edge. */
+.vs-split-panel h3 { font-size: clamp(30px, 3.2vw, 48px); }
+.vs-split-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin: 6px 0 4px; }
+.vs-split-more { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 18px; border-radius: 99px; box-shadow: inset 0 0 0 1px var(--vs-line); color: inherit; font-weight: 600; text-decoration: none; transition: box-shadow 0.25s, background-color 0.25s, scale 0.2s var(--vs-ease); }
+.vs-split-panel--dark .vs-split-more { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25); }
+.vs-split-more:hover { box-shadow: inset 0 0 0 1.5px currentColor; }
+.vs-split-more:active { scale: 0.97; }
+.vs-split-more:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 3px; }
+.vs-split-arrow { width: 30px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: translate 0.3s var(--vs-ease); }
+.vs-split-more:hover .vs-split-arrow, .vs-split-more:focus-visible .vs-split-arrow { translate: 6px 0; }
+@media (min-width: 861px) {
+  .vs-split-grid { padding-bottom: 96px; }
+  .vs-split-panel { padding-bottom: 0; }
+  .vs-split-tilt { margin: 16px 0 -96px; }
+}
+@media (prefers-reduced-motion: reduce) { .vs-split-arrow, .vs-split-more { transition: none; } }
 @media (prefers-reduced-motion: reduce) {
   .vs-split-report li, .sk-toast { animation: none; }
   .vs-split-line { animation: none; stroke-dashoffset: 0; }

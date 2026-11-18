@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react'
 import type { ReactNode } from 'react'
+import { Link } from 'react-router-dom'
 import { crmLanding } from '../../data/crmLanding'
 import type { Lang } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
@@ -17,12 +18,14 @@ const COPY = {
     self: { label: 'Zelf doen', head: 'Jij beheert het, met onze software.', fact: 'Gratis tot 500 leads', cta: crmLanding.cta.nl },
     done: { label: 'Wij doen het', head: 'Wij draaien je groei, elke maand.', fact: 'Vanaf €1.500 per maand', cta: 'Plan een gesprek' },
     sample: 'Voorbeeld',
+    more: 'Ontdek meer',
   },
   en: {
     title: 'Run it yourself, or we do?',
     self: { label: 'Run it yourself', head: 'You run it, with our software.', fact: 'Free up to 500 leads', cta: crmLanding.cta.en },
     done: { label: 'We do it', head: 'We run your growth, every month.', fact: 'From €1,500 a month', cta: 'Plan a call' },
     sample: 'Sample',
+    more: 'Learn more',
   },
 }
 
@@ -30,6 +33,9 @@ const PHONE = {
   nl: { crm: 'Sales CRM', report: 'Maandrapport · oktober', from: 'Van: Verkoop Studio', date: '1 nov', rows: [['Omzet uit advertenties', 18, '+', '%'], ['Nieuwe leads', 38, '', ''], ['Meeste omzet via Google', 0, '', '€ 2.910']], weeks: ['wk 1', 'wk 2', 'wk 3', 'wk 4'], next: 'Volgende stap', advice: 'Zet € 300 meer op Google', note: 'dit doen we deze maand' },
   en: { crm: 'Sales CRM', report: 'Monthly report · October', from: 'From: Verkoop Studio', date: '1 Nov', rows: [['Revenue from ads', 18, '+', '%'], ['New leads', 38, '', ''], ['Most revenue through Google', 0, '', '€ 2,910']], weeks: ['wk 1', 'wk 2', 'wk 3', 'wk 4'], next: 'Next step', advice: 'Put € 300 more on Google', note: 'we do this this month' },
 } as const
+
+/** A long arrow for the ghost link; it stretches on hover. */
+const LongArrow = () => <svg className="vs-split-arrow" viewBox="0 0 40 12" aria-hidden="true"><path d="M0 6h38M33 1l5 5-5 5" /></svg>
 
 /** The phone frame both sides share: notch, app bar with the sample chip, tilt toward the pointer. */
 function Phone({ dark = false, title, lang, children }: { dark?: boolean; title: string; lang: Lang; children: ReactNode }) {
@@ -92,15 +98,21 @@ export default function RunItSplit() {
           <p className="vs-split-label">{t.self.label}</p>
           <h3>{t.self.head}</h3>
           <p className="vs-split-fact">{t.self.fact}</p>
+          <div className="vs-split-actions">
+            <Cta to="/crm" onClick={() => trackCrmSignupClick('home_split')}>{t.self.cta}</Cta>
+            <Link to="/crm" className="vs-split-more">{t.more}<LongArrow /></Link>
+          </div>
           <Phone title={PHONE[lang].crm} lang={lang}><SamplePipeline lang={lang} layout="lanes" id="split" today /></Phone>
-          <Cta to="/crm" onClick={() => trackCrmSignupClick('home_split')}>{t.self.cta}</Cta>
         </motion.article>
         <motion.article className="vs-split-panel vs-split-panel--dark" {...deal(80)}>
           <p className="vs-split-label">{t.done.label}</p>
           <h3>{t.done.head}</h3>
           <p className="vs-split-fact">{t.done.fact}</p>
+          <div className="vs-split-actions">
+            <Cta to="/contact" variant="paper" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_split' })}>{t.done.cta}</Cta>
+            <Link to="/prijzen" className="vs-split-more">{t.more}<LongArrow /></Link>
+          </div>
           <Phone dark title={lang === 'nl' ? 'Maandrapport' : 'Monthly report'} lang={lang}><ReportScreen lang={lang} /></Phone>
-          <Cta to="/contact" variant="paper" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_split' })}>{t.done.cta}</Cta>
         </motion.article>
       </div>
     </section>
