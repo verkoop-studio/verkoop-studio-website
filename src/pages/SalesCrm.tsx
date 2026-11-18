@@ -14,7 +14,7 @@ import { useLang } from '../i18n/LanguageContext'
 import crmDashboard from '../assets/crm/crm-dashboard.webp'
 import crmProspectflow from '../assets/crm/crm-prospectflow.webp'
 import crmLeads from '../assets/crm/crm-leads.webp'
-import './product.css'
+import { PRODUCT_STYLES, usePageStyles } from '../lib/deferredStyles'
 
 const SCREENS: Record<CrmScreenKey, string> = { dashboard: crmDashboard, prospectflow: crmProspectflow, leads: crmLeads }
 const TINTS = ['#2b4bf2', '#c9f26a', '#ff9fd0']
@@ -112,6 +112,7 @@ function PriceSlider({ lang }: { lang: 'nl' | 'en' }) {
 }
 
 export default function SalesCrm() {
+  usePageStyles(PRODUCT_STYLES)
   const { lang } = useLang()
   const c = crmLanding
   const t = T[lang]

@@ -13,7 +13,7 @@ import { useLang } from '../i18n/LanguageContext'
 import adsShot from '../assets/performance/ads.webp'
 import customersShot from '../assets/performance/customers.webp'
 import adviceShot from '../assets/performance/advice.webp'
-import './product.css'
+import { PRODUCT_STYLES, usePageStyles } from '../lib/deferredStyles'
 
 const SHOTS = { ads: adsShot, customers: customersShot, advice: adviceShot } as const
 const TINTS = ['#2b4bf2', '#ff7a59', '#c9f26a']
@@ -126,6 +126,7 @@ function PlanSlider({ lang }: { lang: 'nl' | 'en' }) {
 }
 
 export default function Performance() {
+  usePageStyles(PRODUCT_STYLES)
   const { lang } = useLang()
   const t = T[lang]
   const hero = useRef<HTMLElement>(null)

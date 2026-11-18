@@ -283,20 +283,9 @@
 .tx-actions p { margin: 0; max-width: 26ch; color: var(--vs-ink-2); font-size: 16px; line-height: 1.5; }
 .tx-deck { position: relative; height: min(80svh, 720px); }
 .tx-slot { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; will-change: transform; }
-.tx-card { width: min(100%, 680px); border-radius: 24px; background: var(--vs-card); border: 1px solid var(--vs-line); box-shadow: 0 30px 60px -34px rgb(17 17 16 / 0.42), 0 2px 4px rgb(17 17 16 / 0.05); overflow: hidden; }
-.tx-stage { position: relative; height: clamp(220px, 35svh, 310px); padding: 26px 0 0 clamp(56px, 12%, 96px); background: color-mix(in srgb, var(--t) 15%, var(--vs-stone)); border-bottom: 1px solid var(--vs-line); overflow: hidden; }
-.tx-win { height: 100%; border-radius: 14px 0 0 0; background: #fff; border: 1px solid var(--vs-line); border-width: 1px 0 0 1px; box-shadow: -18px 20px 40px -26px rgb(17 17 16 / 0.35); display: flex; flex-direction: column; font-size: 13px; color: var(--vs-ink); }
-.tx-win-bar { display: flex; align-items: center; gap: 6px; padding: 11px 14px; border-bottom: 1px solid var(--vs-line); }
-.tx-win-bar i { width: 9px; height: 9px; border-radius: 50%; background: #ff5f57; }
-.tx-win-bar i:nth-child(2) { background: #febc2e; }
-.tx-win-bar i:nth-child(3) { background: #28c840; margin-right: 8px; }
-.tx-win-bar b { font-weight: 600; }
-.tx-win-bar em { margin-left: auto; margin-right: 14px; padding: 3px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-style: normal; font-size: 11px; }
-.tx-win > :last-child { flex: 1; padding: 14px 18px 54px; min-height: 0; }
 .tx-note { position: absolute; left: 16px; bottom: 16px; margin: 0; display: flex; align-items: center; gap: 8px; padding: 11px 15px; border-radius: 13px; background: #fff; border: 1px solid var(--vs-line); box-shadow: 0 16px 30px -18px rgb(17 17 16 / 0.45); font: 600 13.5px/1.2 var(--font-sans); rotate: -3deg; opacity: 0; translate: 0 14px; transition: opacity 0.5s 0.5s, translate 0.6s var(--vs-ease-bounce, var(--vs-ease)) 0.5s; }
 .tx-note svg { color: #1f9d55; }
 .tx-card.is-on .tx-note { opacity: 1; translate: 0 0; }
-.tx-dim { margin: 0 0 8px; color: var(--vs-mute); font-size: 12px; }
 .tx-strong { margin: 10px 0 8px; font-weight: 600; font-size: 14px; }
 .tx-btn { display: inline-flex; align-items: center; min-height: 28px; padding: 0 13px; border-radius: 99px; background: var(--vs-stone); font-weight: 600; font-size: 12.5px; }
 .tx-btn--ink { background: var(--vs-ink); color: #fff; }
@@ -332,10 +321,6 @@
 .tx-card.is-on .tx-bars i { animation: tx-grow 0.7s var(--vs-ease) forwards; }
 .tx-tick { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .tx-card.is-on .tx-tick { animation: tx-draw 0.4s ease forwards; }
-.tx-info { padding: clamp(18px, 2.4vw, 28px) clamp(20px, 2.6vw, 32px) clamp(20px, 2.6vw, 30px); }
-.tx-step { margin: 0 0 6px; color: var(--vs-blue); font: 400 20px/1 var(--font-condensed); letter-spacing: 0.03em; }
-.tx-title { margin: 0 0 8px; font: 500 clamp(30px, 3vw, 44px)/1 var(--font-display); letter-spacing: -0.035em; }
-.tx-body { margin: 0 0 14px; color: var(--vs-ink-2); font-size: 17px; line-height: 1.45; }
 .tx-specs { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
 .tx-specs li { display: flex; gap: 10px; align-items: baseline; font-size: 15px; color: var(--vs-ink); }
 .tx-specs svg { flex: none; color: var(--vs-mute); translate: 0 2px; }

@@ -1,4 +1,8 @@
+import { useEffect } from 'react'
 import belowFold from '../below.css?url'
+import productStyles from '../pages/product.css?url'
+import { crmLanding } from '../data/crmLanding'
+import { performance } from '../data/performance'
 
 /**
  * URL of the below-the-fold stylesheet. Prerendered pages link it without blocking
@@ -6,12 +10,30 @@ import belowFold from '../below.css?url'
  */
 export const DEFERRED_STYLES = belowFold
 
-/** Adds the stylesheet when the page was not prerendered with it (dev server, client-only render). */
-export function loadDeferredStyles() {
-  if (typeof document === 'undefined' || document.querySelector('link[data-deferred-styles]')) return
+/** The product landing pages' own styles. Needed at first paint, so linked normally, on those routes only. */
+export const PRODUCT_STYLES = productStyles
+
+/** Route → stylesheet the prerendered page links in its head. Keeps page styles out of the inlined budget. */
+export const PAGE_STYLES: Record<string, string> = {
+  [crmLanding.path]: PRODUCT_STYLES,
+  [performance.path]: PRODUCT_STYLES,
+}
+
+function ensureLink(href: string, marker: 'deferredStyles' | 'pageStyles') {
+  if (typeof document === 'undefined' || document.querySelector(`link[rel="stylesheet"][href="${href}"]`)) return
   const link = document.createElement('link')
   link.rel = 'stylesheet'
-  link.href = DEFERRED_STYLES
-  link.dataset.deferredStyles = ''
+  link.href = href
+  link.dataset[marker] = ''
   document.head.append(link)
+}
+
+/** Adds the below-the-fold stylesheet when the page was not prerendered with it (dev server, client-only render). */
+export function loadDeferredStyles() {
+  ensureLink(DEFERRED_STYLES, 'deferredStyles')
+}
+
+/** Loads a page's own stylesheet when the visitor arrives through client-side navigation. */
+export function usePageStyles(href: string) {
+  useEffect(() => { ensureLink(href, 'pageStyles') }, [href])
 }

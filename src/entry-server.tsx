@@ -9,7 +9,7 @@ import { giveaway } from './data/giveaway'
 import { crmLanding } from './data/crmLanding'
 import { performance } from './data/performance'
 export { SITE_URL } from './lib/site'
-export { DEFERRED_STYLES } from './lib/deferredStyles'
+export { DEFERRED_STYLES, PAGE_STYLES } from './lib/deferredStyles'
 export const routes = ['/', '/academy', '/blog', ...articles.map(a => `/blog/${a.slug}`), '/cases', '/agency', '/contact', '/privacy', '/voorwaarden', '/funnel-audit', giveaway.path, performance.path, crmLanding.path, ...services.map(s => `/${s.slug}`), ...cases.map(c => `/cases/${c.slug}`)]
 export function render(location: string, lang: 'nl' | 'en' = 'nl') {
   return renderToString(<LanguageProvider initialLang={lang}><App location={location} /></LanguageProvider>)
