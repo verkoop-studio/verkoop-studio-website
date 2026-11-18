@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
+import { caseHeadline, cases } from '../data/cases'
 import { pricingTiers } from '../data/pricing'
 import Seo from '../components/Seo'
 import QualificationForm from '../components/QualificationForm'
@@ -23,6 +24,9 @@ const COPY = {
     platformBody: (name: string) => `Je wilt meer weten over ${name}. Deze platforms zijn gratis voor klanten van Verkoop Studio. Vertel ons waarvoor je het wilt gebruiken.`,
     reply: 'Je hoort binnen 24 uur van ons.',
     note: 'drie korte stappen :)',
+    callTitle: 'Wat er in het gesprek gebeurt',
+    call: [['Jij vertelt', 'Je deelt je doel en wat vandaag vastloopt.'], ['We kijken samen', 'We bespreken de kansen en wat eerst moet.'], ['Je krijgt een voorstel', 'Met de scope en het budget, zwart op wit.']],
+    proof: 'Werk voor',
     academy: ['Je wilt Meta ads leren met', 'een begeleid leertraject', 'Naar de academy'],
     package: ['Je wilt meer weten over', 'Pakketten bekijken'],
   },
@@ -36,6 +40,9 @@ const COPY = {
     platformBody: (name: string) => `You’re interested in ${name}. These platforms are free for Verkoop Studio clients. Tell us how you would like to use it.`,
     reply: 'You’ll hear from us within 24 hours.',
     note: 'three short steps :)',
+    callTitle: 'What happens in the call',
+    call: [['You tell us', 'You share your goal and what is stuck today.'], ['We look together', 'We discuss the opportunities and what comes first.'], ['You get a proposal', 'With the scope and the budget, in writing.']],
+    proof: 'Work for',
     academy: ['You want to learn Meta ads with', 'a guided learning track', 'Back to the academy'],
     package: ['You’re interested in', 'View packages'],
   },
@@ -60,8 +67,8 @@ export default function Contact() {
     <div className="vs-page ct-page">
       <Seo title={t.seoTitle} description={t.seoDescription} path="/contact" />
 
-      <section className="vs-wrap ct-hero" aria-labelledby="contact-title">
-        <div className="ct-hero-copy">
+      <section className="vs-wrap ct-book" aria-labelledby="contact-title">
+        <div className="ct-copy">
           <motion.p className="vs-label" {...arrive(0)}>{t.label}</motion.p>
           <SplitHeadline as="h1" id="contact-title" className="vs-h1 ct-h1" parts={selectedPlatform ? t.platformTitle : t.title} onMount />
           <motion.p className="vs-lead" {...arrive(0.55)}>{selectedPlatform ? t.platformBody(selectedPlatform) : t.body}</motion.p>
@@ -71,24 +78,37 @@ export default function Contact() {
           {selectedPackage && (
             <p className="ct-context">{t.package[0]} <strong>{selectedPackage.name[lang]}</strong>. <TextLink to="/#groeipakketten">{t.package[1]}</TextLink></p>
           )}
+          <motion.div className="ct-call" {...arrive(0.7)}>
+            <h2 className="ct-call-title">{t.callTitle}</h2>
+            <ol>
+              {t.call.map(([title, line], i) => (
+                <li key={title}><span className="ct-call-num">0{i + 1}</span><span><b>{title}</b>{line}</span></li>
+              ))}
+            </ol>
+          </motion.div>
+          <motion.div className="ct-who" {...arrive(0.8)}>
+            <img src={stefSmall} alt="" width={56} height={56} decoding="async" />
+            <span>
+              <strong>Stef Keppens</strong>
+              <TextLink href="mailto:stef@verkoop.studio" arrow={false}>stef@verkoop.studio</TextLink>
+              <em>{t.reply}</em>
+            </span>
+          </motion.div>
         </div>
-        <motion.div className="ct-who" {...arrive(0.7)}>
-          <img src={stefSmall} alt="" width={56} height={56} decoding="async" />
-          <span>
-            <strong>Stef Keppens</strong>
-            <TextLink href="mailto:stef@verkoop.studio" arrow={false}>stef@verkoop.studio</TextLink>
-            <em>{t.reply}</em>
-          </span>
-        </motion.div>
+        {/* The form duo's two parts become cells of this grid: the form on the panel, the live preview under the steps. */}
+        <div className="ct-panel">
+          <HandNote point="down-left" className="ct-note">{t.note}</HandNote>
+          <QualificationForm
+            id="audit-formulier-contact"
+            preview
+            inquiryContext={selectedPlatform ? `Platform: ${selectedPlatform}` : selectedPackage ? `Pakket: ${selectedPackage.name[lang]}` : academyInterest ? 'Academy: begeleid Meta Ads-leertraject' : undefined}
+          />
+        </div>
       </section>
 
-      <section className="vs-wrap ct-form" aria-label={lang === 'nl' ? 'Contactformulier' : 'Contact form'}>
-        <HandNote point="down-left" className="ct-note">{t.note}</HandNote>
-        <QualificationForm
-          id="audit-formulier-contact"
-          preview
-          inquiryContext={selectedPlatform ? `Platform: ${selectedPlatform}` : selectedPackage ? `Pakket: ${selectedPackage.name[lang]}` : academyInterest ? 'Academy: begeleid Meta Ads-leertraject' : undefined}
-        />
+      <section className="vs-wrap ct-proof" aria-label={t.proof}>
+        <span className="ct-proof-label">{t.proof}</span>
+        <ul>{cases.filter((item) => !item.unavailable).map((item) => <li key={item.slug}><Link to={`/cases/${item.slug}`}><b>{item.name}</b><span>{caseHeadline(item, lang)}</span></Link></li>)}</ul>
       </section>
     </div>
   )
