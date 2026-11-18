@@ -1,6 +1,7 @@
 import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import LyteWork from '../components/LyteWork'
+import CreativeWall from '../components/cases/CreativeWall'
 import Seo from '../components/Seo'
 import Arrow from '../components/brand/Arrow'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
@@ -106,6 +107,8 @@ export default function CasesIndex() {
           ))}
         </ul>
       </section>
+
+      <CreativeWall lang={lang} />
 
       <LyteWork />
 

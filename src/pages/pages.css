@@ -666,3 +666,25 @@
 .sv-approve-btn[aria-pressed='true'] path { stroke-dashoffset: 0; }
 @media (max-width: 860px) { .sv-approve-grid { grid-template-columns: minmax(0, 1fr); max-width: 380px; } }
 @media (prefers-reduced-motion: reduce) { .sv-approve-card, .sv-approve-btn path { transition: none; } }
+
+/* Cases: a slow wall of real creatives. */
+.vs-wall { overflow-x: clip; }
+.vs-wall-track { display: flex; width: max-content; margin-top: 32px; animation: vs-wall-run 60s linear infinite; }
+.vs-wall-track:hover, .vs-wall-track:focus-within { animation-play-state: paused; }
+@keyframes vs-wall-run { to { transform: translateX(-50%); } }
+.vs-wall-row { display: flex; align-items: flex-end; gap: 16px; margin: 0; padding: 0 16px 0 0; list-style: none; }
+.vs-wall-tile { position: relative; display: grid; gap: 8px; }
+.vs-wall-tile--video { width: 220px; }
+.vs-wall-tile--image { width: 380px; }
+.vs-wall-media { display: block; width: 100%; border-radius: 18px; background: var(--vs-stone); object-fit: cover; box-shadow: 0 30px 60px -40px rgb(17 17 16 / 0.5); }
+.vs-wall-tile--video .vs-wall-media { aspect-ratio: 9 / 16; }
+.vs-wall-tile--image .vs-wall-media { aspect-ratio: 16 / 10; object-position: top; }
+.vs-wall-play { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; }
+.vs-wall-play:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; border-radius: 18px; }
+.vs-wall-btn { position: absolute; left: 50%; top: 50%; display: grid; place-items: center; width: 60px; height: 60px; margin: -30px 0 0 -30px; padding-left: 3px; border-radius: 50%; background: #fff; color: var(--vs-ink); transition: scale 0.3s var(--vs-ease), background-color 0.25s, color 0.25s; }
+.vs-wall-play:hover .vs-wall-btn { scale: 1.08; background: var(--vs-blue); color: #fff; }
+.vs-wall-label { color: var(--vs-mute); font-size: 13px; }
+@media (prefers-reduced-motion: reduce) {
+  .vs-wall-track { animation: none; width: auto; overflow-x: auto; padding-inline: var(--vs-gutter); }
+  .vs-wall-row[aria-hidden] { display: none; }
+}
