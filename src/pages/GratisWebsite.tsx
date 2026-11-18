@@ -5,11 +5,11 @@ import Seo from '../components/Seo'
 import GiveawayEntryForm from '../components/GiveawayEntryForm'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Arrow from '../components/brand/Arrow'
+import { useArrive } from '../components/brand/useArrive'
 import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
-import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import { giveaway } from '../data/giveaway'
 import { caseHeadline, getCase } from '../data/cases'
@@ -43,7 +43,7 @@ export default function GratisWebsite() {
   const g = giveaway
   const reduce = useReducedMotion()
   const proofCases = g.proof.cases.map((slug) => getCase(slug)).filter((item) => item !== undefined)
-  const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
+  const arrive = useArrive()
 
   return (
     <div className="vs-page gw-page">

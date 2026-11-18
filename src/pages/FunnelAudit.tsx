@@ -3,12 +3,12 @@ import { Check } from 'lucide-react'
 import Seo from '../components/Seo'
 import QualificationForm from '../components/QualificationForm'
 import Cta from '../components/brand/Cta'
+import { useArrive } from '../components/brand/useArrive'
 import HandNote from '../components/brand/HandNote'
 import ProcessLine from '../components/brand/ProcessLine'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
-import { EASE } from '../components/brand/motion'
 import { Win } from '../components/service/ServiceScreens'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
@@ -60,7 +60,7 @@ export default function FunnelAudit() {
   const { lang } = useLang()
   const t = COPY[lang]
   const reduce = useReducedMotion()
-  const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
+  const arrive = useArrive()
 
   return (
     <div className="vs-page fa-page">

@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Seo from '../components/Seo'
 import Arrow from '../components/brand/Arrow'
+import { useArrive } from '../components/brand/useArrive'
 import BotAvatar from '../components/brand/BotAvatar'
 import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
@@ -12,7 +13,6 @@ import Reveal from '../components/brand/Reveal'
 import RollingNumber from '../components/brand/RollingNumber'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
-import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import ResponsiveImage from '../components/ResponsiveImage'
 import type { CaseContent, CaseScreen, CaseStat } from '../data/caseContent'
@@ -207,7 +207,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
   const list = cases.filter((item) => !item.unavailable)
   const next = list[(list.findIndex((item) => item.slug === c.slug) + 1) % list.length]
   const [lead, accent] = k.headline[lang]
-  const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
+  const arrive = useArrive(16)
 
   return (
     <div className="vs-page cs-page">

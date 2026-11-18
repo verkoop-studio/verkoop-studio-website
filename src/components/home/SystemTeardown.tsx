@@ -8,6 +8,7 @@ import BotAvatar from '../brand/BotAvatar'
 import { StackedBars } from '../brand/blocks/StackedBars'
 import Cta from '../brand/Cta'
 import { EASE } from '../brand/motion'
+import { useWide } from '../../lib/useWide'
 
 type LayerKey = 'ad' | 'page' | 'form' | 'crm' | 'pixel' | 'dashboard' | 'report'
 
@@ -497,18 +498,6 @@ function DotMark({ step }: { step: number }) {
 
 const PHASE_START = 0.06
 const PHASE_END = 0.9
-
-function useWide() {
-  const [wide, setWide] = useState(true)
-  useEffect(() => {
-    const query = window.matchMedia('(min-width: 900px)')
-    const update = () => setWide(query.matches)
-    update()
-    query.addEventListener('change', update)
-    return () => query.removeEventListener('change', update)
-  }, [])
-  return wide
-}
 
 /**
  * The growth system, one part at a time. On a wide screen the section pins and each

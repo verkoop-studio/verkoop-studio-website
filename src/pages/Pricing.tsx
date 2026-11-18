@@ -2,6 +2,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 import Seo from '../components/Seo'
 import Cta from '../components/brand/Cta'
+import { useArrive } from '../components/brand/useArrive'
 import FaqList from '../components/brand/FaqList'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
@@ -109,8 +110,7 @@ export default function Pricing() {
   usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
   const t = COPY[lang]
-  const reduce = useReducedMotion()
-  const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
+  const arrive = useArrive()
   const crm = crmLanding.pricing
   const perf = performance.pricing
 

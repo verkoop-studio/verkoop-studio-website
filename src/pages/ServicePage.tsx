@@ -1,18 +1,18 @@
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
 import { Check } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '../components/Breadcrumbs'
 import QualificationForm from '../components/QualificationForm'
 import Seo from '../components/Seo'
 import WebsiteStage from '../components/WebsiteStage'
 import Arrow from '../components/brand/Arrow'
+import { useArrive } from '../components/brand/useArrive'
 import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline, { type HeadlinePart } from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
-import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import ApprovalCards from '../components/service/ApprovalCards'
 import BotAvatar from '../components/brand/BotAvatar'
@@ -30,6 +30,7 @@ import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useInView } from '../lib/useInView'
 import { useLang } from '../i18n/LanguageContext'
+import { useWide } from '../lib/useWide'
 
 const COPY = {
   nl: {
@@ -152,18 +153,6 @@ function HeroObject({ screen, lang, toast }: { screen: ServiceScreen; lang: Lang
 /* How it works: pinned on wide screens, a plain list otherwise.      */
 /* ------------------------------------------------------------------ */
 
-function useWide() {
-  const [wide, setWide] = useState(true)
-  useEffect(() => {
-    const query = window.matchMedia('(min-width: 900px)')
-    const update = () => setWide(query.matches)
-    update()
-    query.addEventListener('change', update)
-    return () => query.removeEventListener('change', update)
-  }, [])
-  return wide
-}
-
 function HowItWorks({ steps: story, lang }: { steps: ServiceStep[]; lang: Lang }) {
   const steps = story.map((item) => ({ title: item.title[lang], body: item.body[lang], screen: item.screen }))
   const t = COPY[lang]
@@ -255,8 +244,8 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
   const service = getService(slug)
   const { lang } = useLang()
   const t = COPY[lang]
-  const reduce = useReducedMotion()
   const { ref } = useInView<HTMLDivElement>(() => trackEvent('service_viewed', { service: slug, placement: 'page' }))
+  const arrive = useArrive()
 
   if (!service) return null
   const relatedCase = service.relatedCase ? getCase(service.relatedCase) : undefined
@@ -265,7 +254,6 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
   const story = serviceStories[slug]
   const extra = serviceExtras[slug]
   const next = services[(services.findIndex((item) => item.slug === slug) + 1) % services.length]
-  const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
 
   return (
     <div ref={ref} className="vs-page sv-page">

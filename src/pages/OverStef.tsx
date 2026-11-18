@@ -1,7 +1,8 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import Seo from '../components/Seo'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
+import { useArrive } from '../components/brand/useArrive'
 import Polaroids from '../components/brand/Polaroids'
 import ProcessLine from '../components/brand/ProcessLine'
 import Reveal from '../components/brand/Reveal'
@@ -11,7 +12,6 @@ import BelgiumMap from '../components/brand/blocks/BelgiumMap'
 import { cases } from '../data/cases'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
-import { EASE } from '../components/brand/motion'
 import { workModes } from '../data/process'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
@@ -78,8 +78,7 @@ export default function OverStef() {
   usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
   const t = COPY[lang]
-  const reduce = useReducedMotion()
-  const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 16 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
+  const arrive = useArrive(16)
   return (
     <div className="vs-page ag-page">
       <Seo title={t.seoTitle} description={t.seoDescription} path="/agency" />

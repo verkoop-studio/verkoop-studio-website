@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { motion } from 'motion/react'
 import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
@@ -7,13 +7,13 @@ import { STUDIO_PHONE, whatsappHref } from '../data/contact'
 import { faqItems } from '../data/faq'
 import { pricingTiers } from '../data/pricing'
 import FaqList from '../components/brand/FaqList'
+import { useArrive } from '../components/brand/useArrive'
 import { trackEvent } from '../lib/analytics'
 import Seo from '../components/Seo'
 import QualificationForm from '../components/QualificationForm'
 import HandNote from '../components/brand/HandNote'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
-import { EASE } from '../components/brand/motion'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
 import stefSmall from '../assets/stef-desk-640.webp'
@@ -63,7 +63,6 @@ export default function Contact() {
   usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
   const t = COPY[lang]
-  const reduce = useReducedMotion()
   const [params] = useSearchParams()
   const [ready, setReady] = useState(false)
   useEffect(() => { setReady(true) }, [])
@@ -72,7 +71,7 @@ export default function Contact() {
   const platformNames = { overview: lang === 'nl' ? 'onze klantenplatforms' : 'our client platforms', crm: 'Sales CRM', dashboard: lang === 'nl' ? 'het marketingdashboard' : 'the marketing dashboard' }
   const platformKey = ready ? params.get('platform') : null
   const selectedPlatform = platformKey && Object.hasOwn(platformNames, platformKey) ? platformNames[platformKey as keyof typeof platformNames] : undefined
-  const arrive = (delay: number) => (reduce ? {} : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.8, delay, ease: EASE } })
+  const arrive = useArrive()
 
   return (
     <div className="vs-page ct-page">
