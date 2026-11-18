@@ -94,7 +94,8 @@ export default function MonthlyCoachingPopup({ source, completed = false, suppre
       if (shown || interacting) return
       const blocked = document.hidden || innerHeight < 440
         || !!document.activeElement?.closest('form, input, textarea, select, iframe')
-        || visible('.mobile-navigation, .whatsapp-support-panel, .email-capture, #aanmelden, .ac-footer')
+        // Never over a page's own form: the invitation waits until no form is on screen.
+        || visible('main form, .mobile-navigation, .whatsapp-support-panel, .email-capture, #aanmelden, .ac-footer')
         || visible('.hero-video.is-playing')
       const scrollable = document.documentElement.scrollHeight - innerHeight
       const scrollProgress = scrollable > 0 ? scrollY / scrollable : 1
@@ -155,7 +156,7 @@ export default function MonthlyCoachingPopup({ source, completed = false, suppre
       <div className="coaching-popup-trap" aria-hidden="true"><label>Website<input name="company_website" tabIndex={-1} autoComplete="off" /></label></div>
       <label className="coaching-popup-consent vs-check-box" data-checked={consent || undefined}><input type="checkbox" name="consent" required disabled={pending} checked={consent} onChange={(event) => setConsent(event.target.checked)} /><svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="1" y="1" width="18" height="18" rx="5" /><path d="M5.5 10.5 8.5 13.5 14.5 6.5" pathLength={1} /></svg><span>{t.consent}</span></label>
       {error && <p className="coaching-popup-error" role="alert">{error}</p>}
-      <SubmitButton state={pending ? 'pending' : emailOk && consent ? 'ready' : 'locked'} label={t.submit} pendingLabel={t.busy} />
+      <SubmitButton state={pending ? 'pending' : emailOk && consent ? 'ready' : 'locked'} label={t.submit} pendingLabel={t.busy} confirm={false} />
       <p className="coaching-popup-note">{t.note} <Link to="/privacy">{t.privacy}</Link></p>
     </form>}
     {stage === 'success' && <button className="coaching-popup-later" onClick={close}>{t.close}</button>}
