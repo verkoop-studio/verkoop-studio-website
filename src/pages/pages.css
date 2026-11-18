@@ -607,8 +607,17 @@
 .ct-proof b { font: 600 18px/1 var(--font-display); }
 .ct-proof span { color: var(--vs-mute); font-size: 12.5px; }
 .ct-proof a:hover b { color: var(--vs-blue); }
+/* Desktop: the form stays in view while the left column scrolls past. */
+@media (min-width: 1024px) { .ct-book .hero-request { position: sticky; top: 96px; } }
+/* Phones and tablets: the headline, then the form, then the preview of the request, then the call steps. */
 @media (max-width: 1023px) {
-  .ct-book { grid-template-columns: minmax(0, 1fr); grid-template-areas: 'copy' 'preview' 'panel'; }
+  .ct-book { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; gap: 20px; }
+  .ct-copy { display: contents; }
+  .ct-book .hero-request, .ct-book .vs-form-side, .ct-panel > .ct-note { grid-area: auto; }
+  .ct-book .hero-request { order: 1; }
+  .ct-panel > .ct-note { order: 1; margin: 0 0 -10px 18px; }
+  .ct-book .vs-form-side { order: 2; }
+  .ct-copy > .ct-call, .ct-copy > .ct-routes { order: 3; }
 }
 
 /* Agency: the dotted map of Belgium with the studio and the known client city. */
