@@ -12,9 +12,9 @@ export interface HeadlinePart {
   className?: string
 }
 
-const container = { hidden: {}, visible: { transition: { staggerChildren: 0.028 } } }
-const word = { hidden: { x: '80%' }, visible: { x: '0%', transition: { duration: 0.65, ease: EASE_LETTER } } }
-const letter = { hidden: { x: '150%' }, visible: { x: '0%', transition: { duration: 0.65, ease: EASE_LETTER } } }
+const container = { hidden: {}, visible: { transition: { staggerChildren: 0.02 } } }
+const word = { hidden: { x: '80%' }, visible: { x: '0%', transition: { duration: 0.45, ease: EASE_LETTER } } }
+const letter = { hidden: { x: '150%' }, visible: { x: '0%', transition: { duration: 0.45, ease: EASE_LETTER } } }
 const highlight = { hidden: { scaleX: 0 }, visible: { scaleX: 1, transition: { duration: 0.6, ease: EASE_WIPE } } }
 
 const muteStyle = { color: 'var(--vs-mute)' }

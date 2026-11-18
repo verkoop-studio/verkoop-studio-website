@@ -4,7 +4,7 @@ import { EASE, VIEWPORT } from './motion'
 
 type Tag = 'div' | 'section' | 'li' | 'article' | 'p' | 'span' | 'h2' | 'h3'
 
-/** Fades content up out of a soft blur as it enters the viewport. */
+/** Fades content up out of a soft blur as it enters the viewport; it starts readable, so a frame caught mid-reveal still reads. */
 export default function Reveal({
   children,
   as = 'div',
@@ -30,10 +30,10 @@ export default function Reveal({
     <Component
       id={id}
       className={className}
-      initial={{ opacity: 0, y, filter: 'blur(10px)' }}
+      initial={{ opacity: 0.35, y: Math.min(y, 16), filter: 'blur(3px)' }}
       whileInView={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       viewport={VIEWPORT}
-      transition={{ duration: 0.8, delay, ease: EASE }}
+      transition={{ duration: 0.5, delay: Math.min(delay, 0.2), ease: EASE }}
     >
       {children}
     </Component>
