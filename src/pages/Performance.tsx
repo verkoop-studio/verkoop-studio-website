@@ -132,6 +132,9 @@ export default function Performance() {
   const hero = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: hero, offset: ['end 60%', 'end 20%'] })
   const pill = useTransform(scrollYProgress, [0, 1], [90, 0])
+  // The pill repeats the form's action, so it steps aside while the form is on screen.
+  const final = useRef<HTMLElement>(null)
+  const pillHidden = useInView(final, { margin: '0px 0px -25% 0px' })
   const accent = lang === 'nl' ? 'echt' : 'actually'
 
   useEffect(() => { trackLandingView('Verkoop Studio Performance') }, [])
@@ -239,7 +242,7 @@ export default function Performance() {
         </div>
       </section>
 
-      <section id="starten" className="pp-final pp-form" aria-labelledby="starten-titel">
+      <section ref={final} id="starten" className="pp-final pp-form" aria-labelledby="starten-titel">
         <div className="vs-wrap">
           <SplitHeadline id="starten-titel" className="pp-final-title" parts={[{ text: p.form.title[lang], tone: 'accent' }]} />
           <p className="vs-lead pp-narrow">{p.form.body[lang]}</p>
@@ -247,7 +250,14 @@ export default function Performance() {
         </div>
       </section>
 
-      <motion.div className="pp-pill" style={{ y: pill }}>
+      <motion.div
+        className="pp-pill"
+        style={{ y: pill, pointerEvents: pillHidden ? 'none' : undefined }}
+        animate={{ opacity: pillHidden ? 0 : 1 }}
+        transition={{ duration: 0.3 }}
+        aria-hidden={pillHidden || undefined}
+        inert={pillHidden || undefined}
+      >
         <span>{t.pill}</span>
         <Cta to="/performance#starten" onClick={start('performance_pill')}>{p.hero.cta[lang]}</Cta>
       </motion.div>

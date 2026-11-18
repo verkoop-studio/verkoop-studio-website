@@ -1,4 +1,4 @@
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
+import { motion, useInView, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from 'react'
 import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
@@ -119,6 +119,9 @@ export default function SalesCrm() {
   const hero = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({ target: hero, offset: ['end 60%', 'end 20%'] })
   const pill = useTransform(scrollYProgress, [0, 1], [90, 0])
+  // The pill repeats the final call to action, so it steps aside once that section is on screen.
+  const final = useRef<HTMLElement>(null)
+  const pillHidden = useInView(final, { margin: '0px 0px -25% 0px' })
   const [first, ...rest] = c.hero.title[lang].split(' ')
   const words = [first, ...rest]
   const accent = lang === 'nl' ? 'vandaag' : 'today.'
@@ -221,7 +224,7 @@ export default function SalesCrm() {
         </Reveal>
       </section>
 
-      <section className="pp-final" aria-labelledby="start-titel">
+      <section ref={final} className="pp-final" aria-labelledby="start-titel">
         <div className="vs-wrap">
           <SplitHeadline id="start-titel" className="pp-final-title" parts={[{ text: c.final.title[lang], tone: 'accent' }]} />
           <p className="vs-lead pp-narrow">{c.final.body[lang]}</p>
@@ -229,7 +232,14 @@ export default function SalesCrm() {
         </div>
       </section>
 
-      <motion.div className="pp-pill" style={{ y: pill }}>
+      <motion.div
+        className="pp-pill"
+        style={{ y: pill, pointerEvents: pillHidden ? 'none' : undefined }}
+        animate={{ opacity: pillHidden ? 0 : 1 }}
+        transition={{ duration: 0.3 }}
+        aria-hidden={pillHidden || undefined}
+        inert={pillHidden || undefined}
+      >
         <span>{t.pill}</span>
         <Signup placement="crm_pill" label={c.cta[lang]} />
       </motion.div>
