@@ -27,6 +27,8 @@ const COPY = {
     scopeLabel: 'De analyse bekijkt',
     scope: AUDIT_SCOPE.nl,
     deliverablesLabel: 'Mogelijke opleverpunten',
+    report: 'Groeianalyse · rapport',
+    levels: { pink: 'Eerst', blue: 'Daarna', grey: 'Later' },
     deliverables: ['Belangrijkste conversieproblemen', 'Screenshots en observaties', 'Geprioriteerde aanbevelingen', 'Voorgestelde nieuwe funnel', 'Voorgestelde landingspagina’s', 'Trackinghiaten', 'Automatiseringskansen', 'Aanbevolen vervolgstappen'],
     packagesNote: 'De opstart die hieruit volgt zit altijd inbegrepen in een groeipakket.',
     packagesLink: 'Bekijk de groeipakketten',
@@ -46,6 +48,8 @@ const COPY = {
     scopeLabel: 'The analysis reviews',
     scope: AUDIT_SCOPE.en,
     deliverablesLabel: 'Possible deliverables',
+    report: 'Growth analysis · report',
+    levels: { pink: 'First', blue: 'Next', grey: 'Later' },
     deliverables: ['Key conversion problems', 'Screenshots and observations', 'Prioritised recommendations', 'Proposed new funnel', 'Suggested landing pages', 'Tracking gaps', 'Automation opportunities', 'Recommended next steps'],
     packagesNote: 'The setup that follows from this is always included in a growth package.',
     packagesLink: 'See the growth packages',
@@ -55,6 +59,9 @@ const COPY = {
     note: 'no template :)',
   },
 }
+
+/** Sample priorities for the report mock; the window says Voorbeeld. */
+const REPORT_LEVELS = ['pink', 'blue', 'grey', 'blue', 'pink', 'grey'] as const
 
 export default function FunnelAudit() {
   usePageStyles(PAGES_STYLES)
@@ -94,7 +101,14 @@ export default function FunnelAudit() {
       <section className="vs-wrap vs-section fa-scope" aria-labelledby="audit-scope">
         <div>
           <Reveal as="h2" className="vs-h2" id="audit-scope">{t.scopeLabel}</Reveal>
-          <ul className="sv-chips fa-chips">{t.scope.map((item) => <li key={item}>{item}</li>)}</ul>
+          <Reveal y={30}><Win title={t.report} lang={lang}>
+            <ul className="fa-report">
+              {t.scope.map((item, i) => {
+                const level = REPORT_LEVELS[i % REPORT_LEVELS.length]
+                return <li key={item}><span className="sv-tick"><Check size={12} strokeWidth={2.6} /></span><b>{item}</b><span className={`sv-tag sv-tag--${level}`}>{t.levels[level]}</span></li>
+              })}
+            </ul>
+          </Win></Reveal>
         </div>
         <div>
           <Reveal as="h2" className="vs-h2">{t.deliverablesLabel}</Reveal>
