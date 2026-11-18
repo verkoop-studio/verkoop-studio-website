@@ -1,5 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { MessageCircle, Phone, X } from 'lucide-react'
+import BotAvatar from './BotAvatar'
 import { useEffect, useState } from 'react'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
@@ -16,6 +17,7 @@ const COPY = {
     open: 'Contactopties openen',
     close: 'Contactopties sluiten',
     message: 'Hallo Verkoop Studio, ik heb een vraag over ',
+    greet: 'Vraagje? Stuur ons gerust een bericht.',
   },
   en: {
     title: 'A question about growth?',
@@ -25,6 +27,7 @@ const COPY = {
     open: 'Open contact options',
     close: 'Close contact options',
     message: 'Hi Verkoop Studio, I have a question about ',
+    greet: 'A question? Feel free to send us a message.',
   },
 }
 
@@ -38,6 +41,7 @@ export default function ContactDock() {
   const reduce = useReducedMotion()
   const [past, setPast] = useState(false)
   const [open, setOpen] = useState(false)
+  const [greet, setGreet] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setPast(window.scrollY > window.innerHeight * 0.85)
@@ -53,7 +57,21 @@ export default function ContactDock() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  const toggle = () => setOpen((value) => !value)
+  // One short opening line, once per visit, a moment after the dock appears.
+  useEffect(() => {
+    if (!past) return
+    let seen = false
+    try { seen = sessionStorage.getItem('vs-dock-greet') === '1' } catch { /* storage blocked */ }
+    if (seen) return
+    const show = window.setTimeout(() => {
+      setGreet(true)
+      try { sessionStorage.setItem('vs-dock-greet', '1') } catch { /* storage blocked */ }
+    }, 2500)
+    const hide = window.setTimeout(() => setGreet(false), 9500)
+    return () => { window.clearTimeout(show); window.clearTimeout(hide) }
+  }, [past])
+
+  const toggle = () => { setGreet(false); setOpen((value) => !value) }
 
   return (
     <AnimatePresence>
@@ -95,6 +113,21 @@ export default function ContactDock() {
               </motion.div>
             )}
           </AnimatePresence>
+          <AnimatePresence>
+            {greet && !open && (
+              <motion.button
+                type="button"
+                className="vs-dock-greet"
+                onClick={toggle}
+                initial={reduce ? false : { opacity: 0, y: 8, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 6, scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+              >
+                {t.greet}
+              </motion.button>
+            )}
+          </AnimatePresence>
           <button type="button" className="vs-dock-trigger" aria-label={open ? t.close : t.open} aria-expanded={open} aria-controls="vs-dock-card" onClick={toggle}>
             {!open && !reduce && (
               <motion.span
@@ -104,7 +137,7 @@ export default function ContactDock() {
                 transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
               />
             )}
-            {open ? <X size={22} /> : <MessageCircle size={22} />}
+            {open ? <X size={22} /> : <BotAvatar shape="verkoop" size={40} color="#2b4bf2" eyeColor="#ffffff" live mood="happy" />}
           </button>
         </motion.div>
       )}

@@ -515,3 +515,14 @@
 .stb-axis { display: flex; justify-content: space-between; margin-top: -8px; font-size: 11px; line-height: 14px; color: var(--stb-faint); font-variant-numeric: tabular-nums; }
 @keyframes stb-pop { from { transform: translateY(0.18em); opacity: 0; filter: blur(2px); } to { transform: none; opacity: 1; filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) { .stb-digit[data-pop] { animation: none; } .tx-card.is-on .tx-buddy { animation: none; } }
+
+/* The dock's one opening line. */
+.vs-dock-greet { position: absolute; right: 64px; bottom: 8px; max-width: 220px; padding: 10px 14px; border: 0; border-radius: 16px 16px 4px 16px; background: #fff; color: var(--vs-ink); box-shadow: 0 18px 40px -18px rgb(17 17 16 / 0.45); font: 500 14px/1.35 var(--font-sans); text-align: left; cursor: pointer; white-space: normal; }
+.vs-dock-trigger .vs-bot { pointer-events: none; }
+
+/* 404 */
+.vs-404 { display: grid; justify-items: center; gap: 18px; min-height: 80svh; align-content: center; padding-block: clamp(120px, 14vw, 160px) 80px; text-align: center; }
+.vs-404 .vs-lead { max-width: 40ch; margin: 0; }
+.vs-404-mark { position: relative; display: flex; align-items: center; gap: clamp(4px, 1.5vw, 16px); font: 600 clamp(120px, 18vw, 220px)/1 var(--font-display); letter-spacing: -0.06em; color: var(--vs-ink); }
+.vs-404-note { position: absolute; right: -40px; bottom: -18px; }
+.vs-404-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 14px 22px; margin-top: 8px; }
