@@ -552,8 +552,8 @@
 .ag-polaroid:hover .ag-tape, .ag-polaroid:focus-visible .ag-tape { transform: rotate(-7deg) translateY(-3px); }
 @media (prefers-reduced-motion: reduce) { .ag-polaroid-photo img, .ag-tape { transition: none; } }
 
-.ag-hero { overflow-x: clip; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: center; gap: clamp(28px, 5vw, 80px); min-height: 88svh; padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(40px, 6vw, 80px); }
-.ag-h1 { margin-top: 16px; font-size: clamp(40px, 5.2vw, 80px); }
+.ag-hero { overflow-x: clip; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: center; gap: clamp(40px, 6vw, 96px); min-height: 0; padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(40px, 6vw, 80px); }
+.ag-h1 { margin-top: 16px; font-size: clamp(40px, 4.6vw, 72px); }
 .ag-hero-copy .vs-lead { margin-top: 22px; max-width: 40ch; }
 .ag-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; margin-top: 30px; }
 .ag-polaroids { position: relative; height: clamp(380px, 38vw, 540px); }
@@ -873,3 +873,8 @@
 .cs-route-mini li.is-done { background: #e3f6ea; box-shadow: none; }
 .cs-route-mini .cs-route-dot { width: 18px; height: 18px; font-size: 10px; }
 .cs-next-shot img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+/* Agency statement: one block per founder, each opening with their photo pill. */
+.ag-statement-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); margin-top: clamp(24px, 3vw, 40px); }
+.ag-statement-pair .vs-statement { max-width: none; font-size: clamp(24px, 2.6vw, 38px); }
+.ag-statement-pair .vs-statement-pill { margin-right: 0.2em; }
+@media (max-width: 860px) { .ag-statement-pair { grid-template-columns: minmax(0, 1fr); } }

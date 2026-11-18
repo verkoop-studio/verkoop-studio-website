@@ -98,8 +98,11 @@ export default function OverStef() {
       </section>
 
       <section className="vs-wrap vs-section ag-statement" aria-labelledby="agency-team">
-        <h2 className="sr-only" id="agency-team">{t.teamTitle}</h2>
-        <ScrollStatement parts={[t.teamTitle, { name: 'Stef', photo: stef }, t.stefRole, { name: 'Tanguy', photo: tanguy }, t.tanguyRole]} />
+        <Reveal as="h2" className="vs-h2" id="agency-team">{t.teamTitle}</Reveal>
+        <div className="ag-statement-pair">
+          <ScrollStatement parts={[{ name: 'Stef', photo: stef }, t.stefRole]} />
+          <ScrollStatement parts={[{ name: 'Tanguy', photo: tanguy }, t.tanguyRole]} />
+        </div>
       </section>
 
       <section className="vs-wrap ag-team-wrap" aria-label={t.teamTitle}>
