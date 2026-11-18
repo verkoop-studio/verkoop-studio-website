@@ -6,7 +6,9 @@ import { cases } from '../../data/cases'
 import type { Bi, CaseSlug } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
+import Arrow from '../brand/Arrow'
 import HandNote from '../brand/HandNote'
+import TextLink from '../brand/TextLink'
 import Reveal from '../brand/Reveal'
 import CasePoster from './CasePoster'
 import SplitHeadline from '../brand/SplitHeadline'
@@ -104,8 +106,8 @@ export default function WorkScroller() {
         <SplitHeadline id="work-title" className="vs-h2" parts={t.title} />
         <Reveal className="vs-work-controls" y={12}>
           <HandNote point="down-right" className="vs-work-note">{t.note}</HandNote>
-          <button type="button" className="vs-round-btn" aria-label={t.prev} onClick={() => go(active - 1)} disabled={active === 0}><ArrowLeft size={18} /></button>
-          <button type="button" className="vs-round-btn" aria-label={t.next} onClick={() => go(active + 1)} disabled={active === items.length - 1}><ArrowRight size={18} /></button>
+          <button type="button" className="vs-round-btn" aria-label={t.prev} onClick={() => go(active - 1)} disabled={active === 0}><Arrow direction="left" size={18} /></button>
+          <button type="button" className="vs-round-btn" aria-label={t.next} onClick={() => go(active + 1)} disabled={active === items.length - 1}><Arrow size={18} /></button>
         </Reveal>
       </div>
       <div
@@ -150,7 +152,7 @@ export default function WorkScroller() {
         </motion.span>
       )}
       <div className="vs-wrap" style={{ marginTop: 28 }}>
-        <Link to="/cases" className="vs-textlink">{t.all} →</Link>
+        <TextLink to="/cases">{t.all}</TextLink>
       </div>
     </section>
   )

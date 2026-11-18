@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
-import { Link } from 'react-router-dom'
+import TextLink from '../brand/TextLink'
 import type { Bi, Lang } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
@@ -321,7 +321,7 @@ export default function SystemTeardown() {
                 <motion.div className="tx-actions" initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.45, ease: EASE }}>
                   <p>{t.endBody}</p>
                   {cta}
-                  <Link to="/#resultaten" className="vs-textlink">{t.cases} →</Link>
+                  <TextLink to="/#resultaten">{t.cases}</TextLink>
                 </motion.div>
               )}
             </div>

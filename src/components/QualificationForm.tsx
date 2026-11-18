@@ -6,6 +6,7 @@ import { useLang } from '../i18n/LanguageContext'
 import SuccessCheck from './brand/SuccessCheck'
 import Burst from './brand/forms/Burst'
 import Field from './brand/forms/Field'
+import FieldError from './brand/forms/FieldError'
 import FormProgress from './brand/forms/FormProgress'
 import SubmitButton from './brand/forms/SubmitButton'
 import { formatPhone, validEmail, validName, validPhone } from './brand/forms/validate'
@@ -264,7 +265,7 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
               )
             })}
           </div>
-          {errors.doel && <p id={`${id}-goal-error`} className="hero-request-error" role="alert">{t.errors.doel}</p>}
+          {errors.doel && <FieldError id={`${id}-goal-error`}>{t.errors.doel}</FieldError>}
         </fieldset>
 
         <Field name="uitdaging" multiline rows={3} label={t.labels.uitdaging} disabled={busy} maxLength={2000}

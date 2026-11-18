@@ -3,6 +3,7 @@ import { useRef, useState, type FormEvent } from 'react'
 import SuccessCheck from './brand/SuccessCheck'
 import Burst from './brand/forms/Burst'
 import Field from './brand/forms/Field'
+import FieldError from './brand/forms/FieldError'
 import FormProgress from './brand/forms/FormProgress'
 import SubmitButton from './brand/forms/SubmitButton'
 import { formatPhone, validEmail, validName, validPhone } from './brand/forms/validate'
@@ -242,7 +243,7 @@ export default function PerformanceSignupForm({ id = performance.formId }: { id?
           )
         })}
       </div>
-      {error && <p id={`${id}-${key}-error`} className="hero-request-error" role="alert">{error}</p>}
+      {error && <FieldError id={`${id}-${key}-error`}>{error}</FieldError>}
     </fieldset>
   )
 

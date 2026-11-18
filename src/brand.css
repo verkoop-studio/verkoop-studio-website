@@ -377,3 +377,19 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 .tx-step { margin: 0 0 6px; color: var(--vs-blue); font: 400 20px/1 var(--font-condensed); letter-spacing: 0.03em; }
 .tx-title { margin: 0 0 8px; font: 500 clamp(30px, 3vw, 44px)/1 var(--font-display); letter-spacing: -0.035em; }
 .tx-body { margin: 0 0 14px; color: var(--vs-ink-2); font-size: 17px; line-height: 1.45; }
+
+/* ---------- Arrows: leave on hover while a copy arrives ---------- */
+
+.vs-arrow { position: relative; display: inline-block; flex: none; overflow: hidden; vertical-align: -0.15em; }
+.vs-arrow > span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.45s var(--vs-ease); }
+.vs-arrow > span + span { transform: translateX(-110%); }
+.vs-arrow--left > span + span { transform: translateX(110%); }
+.vs-arrow--up-right > span + span { transform: translate(-110%, 110%); }
+:is(a, button, .vs-cta):hover > .vs-arrow > span:first-child, :is(a, button, .vs-cta):hover .vs-cta-circle .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-arrow > span:first-child { transform: translateX(110%); }
+:is(a, button, .vs-cta):hover .vs-arrow--left > span:first-child { transform: translateX(-110%); }
+:is(a, button, .vs-cta):hover .vs-arrow--up-right > span:first-child, :is(a, button):focus-visible .vs-arrow--up-right > span:first-child { transform: translate(110%, -110%); }
+:is(a, button, .vs-cta):hover .vs-arrow > span + span, :is(a, button):focus-visible .vs-arrow > span + span { transform: none; }
+.vs-cta:hover .vs-cta-circle:has(.vs-arrow--up-right) { rotate: 45deg; }
+.vs-cta:hover .vs-cta-circle:has(.vs-arrow--up-right) .vs-arrow { rotate: -45deg; }
+.vs-textlink--arrow { display: inline-flex; align-items: center; gap: 6px; }
+@media (prefers-reduced-motion: reduce) { .vs-arrow > span { transition: none; } }

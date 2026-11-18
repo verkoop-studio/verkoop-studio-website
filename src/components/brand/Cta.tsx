@@ -1,7 +1,7 @@
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react'
-import { ArrowRight } from 'lucide-react'
 import { useState, type MouseEventHandler, type PointerEvent, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import Arrow from './Arrow'
 
 type Variant = 'ink' | 'paper' | 'line'
 
@@ -20,6 +20,7 @@ export default function Cta({
   children,
   variant = 'ink',
   icon = true,
+  external = false,
   onClick,
   className = '',
 }: {
@@ -28,6 +29,8 @@ export default function Cta({
   children: ReactNode
   variant?: Variant
   icon?: boolean | ReactNode
+  /** Leaves the site or opens an app: the arrow points up and to the right. */
+  external?: boolean
   onClick?: MouseEventHandler<HTMLAnchorElement>
   className?: string
 }) {
@@ -67,7 +70,7 @@ export default function Cta({
       <span className="vs-cta-text">{children}</span>
       {hasIcon && (
         <span className="vs-cta-circle" aria-hidden="true">
-          {icon === true ? <ArrowRight size={17} strokeWidth={2} /> : icon}
+          {icon === true ? <Arrow direction={external ? 'up-right' : 'right'} /> : icon}
         </span>
       )}
     </>

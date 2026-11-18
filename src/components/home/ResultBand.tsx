@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom'
 import { useLang } from '../../i18n/LanguageContext'
 import Reveal from '../brand/Reveal'
+import TextLink from '../brand/TextLink'
 import RollingNumber from '../brand/RollingNumber'
 
 const COPY = {
@@ -19,7 +19,7 @@ export default function ResultBand() {
         </div>
         <Reveal>
           <p className="vs-lead">{t.body}</p>
-          <p style={{ margin: '18px 0 0' }}><Link to="/cases/pinacello" className="vs-textlink">{t.link} →</Link></p>
+          <p style={{ margin: '18px 0 0' }}><TextLink to="/cases/pinacello">{t.link}</TextLink></p>
         </Reveal>
       </div>
     </section>

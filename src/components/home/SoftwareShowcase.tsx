@@ -5,6 +5,7 @@ import { useLang } from '../../i18n/LanguageContext'
 import { trackCrmSignupClick } from '../../lib/analytics'
 import Reveal from '../brand/Reveal'
 import SplitHeadline from '../brand/SplitHeadline'
+import Arrow from '../brand/Arrow'
 import TiltCard from '../brand/TiltCard'
 
 /** Platforms the dashboard reads from. Logos live in /public/platforms. */
@@ -25,14 +26,14 @@ const COPY = {
   nl: {
     label: 'Onze eigen software',
     title: [{ text: 'De tools waarop we je groei laten draaien.' }, { text: 'Zelf gebouwd.', tone: 'accent' as const }],
-    crm: 'Sales CRM', crmNote: 'Gratis tot 500 leads →', crmAlt: 'Pipeline-scherm van het Sales CRM',
-    perf: 'Performance-dashboard', perfNote: 'Attributie voor elk kanaal →', perfAlt: 'Overzichtsscherm van het Performance-dashboard',
+    crm: 'Sales CRM', crmNote: 'Gratis tot 500 leads', crmAlt: 'Pipeline-scherm van het Sales CRM',
+    perf: 'Performance-dashboard', perfNote: 'Attributie voor elk kanaal', perfAlt: 'Overzichtsscherm van het Performance-dashboard',
   },
   en: {
     label: 'Our own software',
     title: [{ text: 'The tools we run your growth on.' }, { text: 'Built in-house.', tone: 'accent' as const }],
-    crm: 'Sales CRM', crmNote: 'Free up to 500 leads →', crmAlt: 'Sales CRM pipeline screen',
-    perf: 'Performance dashboard', perfNote: 'Attribution for every channel →', perfAlt: 'Performance dashboard overview screen',
+    crm: 'Sales CRM', crmNote: 'Free up to 500 leads', crmAlt: 'Sales CRM pipeline screen',
+    perf: 'Performance dashboard', perfNote: 'Attribution for every channel', perfAlt: 'Performance dashboard overview screen',
   },
 }
 
@@ -53,7 +54,7 @@ export default function SoftwareShowcase() {
             </TiltCard>
             <div className="vs-product-row">
               <span className="vs-product-name">{t.crm}</span>
-              <span className="vs-label">{t.crmNote}</span>
+              <span className="vs-label vs-textlink--arrow">{t.crmNote}<Arrow size={15} /></span>
             </div>
           </Link>
         </Reveal>
@@ -64,7 +65,7 @@ export default function SoftwareShowcase() {
             </TiltCard>
             <div className="vs-product-row">
               <span className="vs-product-name">{t.perf}</span>
-              <span className="vs-label">{t.perfNote}</span>
+              <span className="vs-label vs-textlink--arrow">{t.perfNote}<Arrow size={15} /></span>
             </div>
           </Link>
         </Reveal>
