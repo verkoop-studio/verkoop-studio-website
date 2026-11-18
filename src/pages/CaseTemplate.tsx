@@ -84,15 +84,22 @@ function Screen({ kind, lang, tags, c }: { kind: CaseScreen; lang: Lang; tags: s
     )
   }
   const steps = nl ? ['Bekeken', 'In het mandje', 'Herinnering', 'Betaald'] : ['Viewed', 'In the cart', 'Reminder', 'Paid']
+  // A retargeting reminder for the case's own shop, then the route it closes.
   return (
-    <ol className="cs-mock cs-mock--route">
-      {steps.map((step, i) => (
-        <li key={step} className={i === 3 ? 'is-done' : ''} style={{ '--i': i } as CSSProperties}>
-          <span className="cs-route-dot">{i === 3 ? <Check size={12} strokeWidth={3} /> : i + 1}</span>{step}
-          {i === 2 && <em>{tags[0]}</em>}
-        </li>
-      ))}
-    </ol>
+    <div className="cs-mock cs-mock--retarget">
+      <div className="cs-mock cs-mock--ad cs-mock--ad-sm">
+        <div className="cs-mock-head"><span className="cs-ava">{name.charAt(0)}</span><p><b>{name}</b><span>{tags[0]}</span></p></div>
+        <div className="cs-mock-site"><img src={art.site} alt="" width={640} height={400} loading="lazy" decoding="async" /></div>
+        <div className="cs-mock-foot"><span className="cs-mock-caption"><b>{nl ? 'Je mandje wacht nog op je.' : 'Your cart is still waiting.'}</b>{site && <em>{site}</em>}</span><span className="cs-mock-btn">{nl ? 'Afrekenen' : 'Check out'}</span></div>
+      </div>
+      <ol className="cs-mock--route cs-route-mini">
+        {steps.map((step, i) => (
+          <li key={step} className={i === 3 ? 'is-done' : ''} style={{ '--i': i } as CSSProperties}>
+            <span className="cs-route-dot">{i === 3 ? <Check size={12} strokeWidth={3} /> : i + 1}</span>{step}
+          </li>
+        ))}
+      </ol>
+    </div>
   )
 }
 
@@ -369,7 +376,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
               <span className="cs-next-name">{next.name}</span>
               <span className="cs-next-result">{caseHeadline(next, lang)}</span>
             </span>
-            <span className="cs-next-poster"><CasePoster slug={next.slug} name={next.name} caption={caseHeadline(next, lang)} lang={lang} /></span>
+            <span className="cs-next-poster cs-next-shot"><img src={ASSETS[next.slug].site} alt="" width={640} height={400} loading="lazy" decoding="async" /></span>
           </Link>
         </section>
       )}
