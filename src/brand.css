@@ -1,6 +1,6 @@
 /* Verkoop Studio design system.
-   Warm paper and ink, one blue accent. Geist for text, Funnel Display for headlines,
-   Instrument Serif italic for accent words, Caveat for hand-written notes.
+   Warm paper and ink, one blue accent. Geist for text, Funnel Display for headlines, a blue chip for accent words,
+   Caveat for hand-written notes, Bebas Neue for small step numbers.
    Classes are prefixed `vs-` so they never collide with the older page styles. */
 
 :root {

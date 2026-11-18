@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { access, readFile } from 'node:fs/promises'
 
 const routes = JSON.parse(await readFile('dist/routes.json', 'utf8'))
-const families = ['Geist Variable', 'Funnel Display Variable', 'Caveat Variable', 'Bebas Neue', 'Instrument Serif']
+const families = ['Geist Variable', 'Funnel Display Variable', 'Caveat Variable', 'Bebas Neue']
 
 test('every production page self-hosts its fonts without blocking initial rendering', async () => {
   for (const route of [...routes, '/404']) {
