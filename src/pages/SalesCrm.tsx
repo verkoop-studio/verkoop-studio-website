@@ -12,6 +12,7 @@ import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import CrmStepper from '../components/product/CrmStepper'
+import { SamplePipeline } from '../components/brand/samples'
 import Tilted from '../components/product/Tilted'
 import { crmLanding, signupHref, type CrmScreenKey } from '../data/crmLanding'
 import { trackCrmSignupClick } from '../lib/analytics'
@@ -69,13 +70,7 @@ function LivePipeline({ lang }: { lang: 'nl' | 'en' }) {
       <div className="tx-win pp-win">
         <div className="tx-win-bar"><i /><i /><i /><b>Sales CRM</b><em>{t.sample}</em></div>
         <div className="pp-board">
-          {t.stages.map((name, col) => (
-            <div key={name} className="pp-col">
-              <p className="tx-dim">{name}</p>
-              {Array.from({ length: [2, 2, 1, 1][col] }, (_, i) => <i key={i} />)}
-              {stage === col + 1 && <motion.b layoutId="pp-lead" className="pp-lead" transition={{ type: 'spring', stiffness: 260, damping: 24 }}>Sarah · € 2.400</motion.b>}
-            </div>
-          ))}
+          <SamplePipeline lang={lang} layout="columns" id="crm-hero" ms={1500} />
           <div className="pp-meter"><b style={{ width: `${(leads / 500) * 100 + 4}%` }} /><span><strong>{leads}</strong> {t.meter}</span></div>
         </div>
       </div>
