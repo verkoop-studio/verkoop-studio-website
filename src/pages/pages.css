@@ -5,6 +5,8 @@
 .vs-poster { position: absolute; inset: 0; overflow: hidden; container-type: inline-size; user-select: none; }
 .vs-poster-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 .vs-sticker { position: absolute; display: block; translate: -50% -50%; pointer-events: none; }
+.vs-p-display { font-family: var(--font-display); }
+.vs-p-text { font-family: var(--font-sans); }
 .vs-sticker svg { display: block; width: 100%; height: auto; overflow: visible; }
 
 /* ---------- Cases index ---------- */
@@ -34,3 +36,21 @@
   .vs-cases-grid > li:nth-child(even) { margin-top: 0; }
   .vs-cases-note { display: none; }
 }
+
+/* ---------- Earlier work (LYTE Studios), calm posters ---------- */
+
+.vs-lyte { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(28px, 5vw, 80px); align-items: start; }
+.vs-lyte-head { display: grid; gap: 14px; max-width: 30ch; }
+.vs-lyte-head .vs-lead { margin: 0; }
+.vs-lyte-strip { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: clamp(18px, 2.4vw, 32px); margin: 0; padding: 0; list-style: none; }
+.vs-lyte-card { display: flex; flex-direction: column; gap: 12px; color: var(--vs-ink); text-decoration: none; }
+.vs-lyte-frame { position: relative; display: block; aspect-ratio: 960 / 680; border-radius: 14px; overflow: hidden; background: var(--vs-stone); outline: 2px solid transparent; outline-offset: 5px; transition: transform 0.5s var(--vs-ease), outline-color 0.3s ease; }
+.vs-lyte-card:hover .vs-lyte-frame, .vs-lyte-card:focus-visible .vs-lyte-frame { transform: translateY(-6px); outline-color: var(--vs-blue); }
+.vs-lyte-card:focus-visible { outline: none; }
+.vs-lyte-meta { display: grid; gap: 8px; justify-items: start; }
+.vs-lyte-chip { padding: 4px 10px; border-radius: 999px; background: var(--vs-stone); color: var(--vs-ink-2); font-size: 12.5px; font-weight: 500; }
+.vs-lyte-desc { color: var(--vs-ink-2); font-size: 15.5px; line-height: 1.5; }
+.vs-lyte-link { align-self: flex-start; }
+.vs-lyte-credit { color: var(--vs-ink-2); opacity: 0.75; font-size: 13px; }
+@media (prefers-reduced-motion: reduce) { .vs-lyte-frame { transition: none; } }
+@media (max-width: 860px) { .vs-lyte { grid-template-columns: minmax(0, 1fr); } }

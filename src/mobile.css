@@ -70,9 +70,6 @@
   .service-visual { padding-inline: 16px; }
   .revenue-copy > p,.revenue-principles p { font-size: 14px; line-height: 1.8; }
   .revenue-proof { min-width: 0; }
-  .lyte-case-copy { padding: 22px; }
-  .lyte-case-heading { flex-wrap: wrap; gap: 10px; }
-  .lyte-credit { flex-wrap: wrap; }
   .pricing-wrap { padding: 46px 20px; }
   .plan-outcome,.plan-audience,.plan-includes li { font-size: 14px; }
   .plan-cta { min-height: 50px; font-size: 14px; }

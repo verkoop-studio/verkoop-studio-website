@@ -8,7 +8,7 @@
     translate: calc(var(--motion-x, 0px) * -.6) calc(var(--motion-y, 0px) * -.6);
     transition: translate .8s cubic-bezier(.22,1,.36,1), transform .35s;
   }
-  .project-arrow, .lyte-case-arrow, .service-more > span {
+  .project-arrow, .service-more > span {
     transition: transform .4s cubic-bezier(.22,1,.36,1), background .3s, color .3s;
   }
   .growth-goal h3::after {
@@ -26,7 +26,7 @@
   .floating-strategy:is(:hover, :focus-visible) .strategy-go {
     transform: translate(3px, -3px);
   }
-  :is(.project-tile, .lyte-case-card, .marketing-card):is(:hover, :focus-visible) :is(.project-arrow, .lyte-case-arrow, .service-more > span) {
+  :is(.project-tile, .marketing-card):is(:hover, :focus-visible) :is(.project-arrow, .service-more > span) {
     transform: rotate(45deg);
   }
   :is(.button-dark, .button-light) {
@@ -57,14 +57,14 @@
   .dashboard-metrics > span:nth-child(3) { transition-delay: 120ms; }
 }
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-  :is(.project-tile, .lyte-case-card) {
+  .project-tile {
     transform: perspective(1000px) rotateX(var(--motion-rx, 0deg)) rotateY(var(--motion-ry, 0deg));
     transition: transform .5s cubic-bezier(.22,1,.36,1), box-shadow .35s;
   }
-  :is(.project-tile, .lyte-case-card):is(:hover, :focus-visible) {
+  .project-tile:is(:hover, :focus-visible) {
     box-shadow: 0 18px 40px #10131c22;
   }
-  :is(.project-image, .lyte-case-cover)::after {
+  .project-image::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -73,7 +73,7 @@
     opacity: 0;
     transition: opacity .4s;
   }
-  :is(.project-tile, .lyte-case-card):hover :is(.project-image, .lyte-case-cover)::after { opacity: 1; }
+  .project-tile:hover .project-image::after { opacity: 1; }
   .button-dark:hover { transform: translateY(-3px); }
   .button-dark:active {
     transform: translateY(1px) scale(.96);

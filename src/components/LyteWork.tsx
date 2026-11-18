@@ -1,50 +1,39 @@
-import ResponsiveImage from './ResponsiveImage'
 import { lyteCases } from '../data/lyteCases'
 import { useLang } from '../i18n/LanguageContext'
+import Arrow from './brand/Arrow'
+import Reveal from './brand/Reveal'
+import CalmPoster from './home/CalmPoster'
+
+const COPY = {
+  nl: { title: 'Eerder werk van ons team bij LYTE Studios.', body: 'Elke case opent op de site van LYTE Studios.', view: 'Bekijk de case', credit: 'Design en development door LYTE Studios' },
+  en: { title: 'Earlier work by our team at LYTE Studios.', body: 'Each case opens on the LYTE Studios site.', view: 'View the case', credit: 'Design and development by LYTE Studios' },
+}
+
+/** Work the team did at LYTE Studios, in the calm poster family. Links go to the original case pages. */
 export default function LyteWork() {
   const { lang } = useLang()
-  const nl = lang === 'nl'
+  const t = COPY[lang]
   return (
-    <section id="lyte-projects" className="border-b border-line bg-surface/30">
-      <div className="mx-auto max-w-6xl px-5 py-16 sm:px-8 sm:py-20">
-        <h2 className="font-display text-3xl text-paper sm:text-4xl">
-          {nl
-            ? 'Eerder werk. In de praktijk.'
-            : 'Earlier work. Out in the world.'}
-        </h2>
-        <p className="mt-4 max-w-2xl text-sm text-bone">
-          {nl
-            ? 'Werk van LYTE Studios binnen de ervaring achter ons team. Bekijk het originele werk voor hun aanpak en uitvoering.'
-            : 'Work by LYTE Studios within the experience behind our team. Explore the original work for their approach and execution.'}
-        </p>
-        <div className="mt-10 grid gap-5 sm:grid-cols-2">
-          {lyteCases.map((c) => (
-            <a
-              key={c.url}
-              href={c.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="lyte-case-card"
-            >
-              <div className="lyte-case-cover">
-                <ResponsiveImage src={c.image} alt={`${c.name}, ${c.category}`} loading="lazy" />
-                <span className="lyte-case-category">{c.category}</span>
-                <span className="lyte-case-arrow" aria-hidden="true">↗</span>
-              </div>
-              <div className="lyte-case-copy">
-                <div className="lyte-case-heading"><h3>{c.name}</h3>{c.logo && <ResponsiveImage src={c.logo} alt="" className="lyte-client-logo" loading="lazy" />}</div>
-                <p className="text-sm leading-relaxed text-bone">
-                  {c.description[lang]}
-                </p>
-                <p className="mt-5 text-xs text-accent-2">
-                  {nl ? 'Bekijk de case' : 'Explore the case'} ↗
-                </p>
-                <div className="lyte-credit"><span>{nl ? 'Design & development door' : 'Design & development by'}</span><ResponsiveImage src="/partners/lyte-logo.png" alt="LYTE Studios" loading="lazy" /></div>
-              </div>
-            </a>
-          ))}
-        </div>
+    <section id="lyte-projects" className="vs-wrap vs-section vs-lyte" aria-labelledby="lyte-title">
+      <div className="vs-lyte-head">
+        <h2 id="lyte-title" className="vs-h2">{t.title}</h2>
+        <p className="vs-lead">{t.body}</p>
       </div>
+      <ul className="vs-lyte-strip">
+        {lyteCases.map((c, i) => (
+          <Reveal as="li" key={c.url} delay={i * 0.08} y={30}>
+            <a href={c.url} target="_blank" rel="noopener noreferrer" className="vs-lyte-card">
+              <span className="vs-lyte-frame"><CalmPoster name={c.name} pattern={c.pattern} /></span>
+              <span className="vs-lyte-meta">
+                <span className="vs-lyte-chip">{c.category}</span>
+                <span className="vs-lyte-desc">{c.description[lang]}</span>
+              </span>
+              <span className="vs-textlink vs-textlink--arrow vs-lyte-link">{t.view}<Arrow direction="up-right" size={15} /><span className="sr-only"> ({lang === 'nl' ? 'opent LYTE Studios in een nieuw venster' : 'opens LYTE Studios in a new window'})</span></span>
+              <span className="vs-lyte-credit">{t.credit}</span>
+            </a>
+          </Reveal>
+        ))}
+      </ul>
     </section>
   )
 }
