@@ -864,3 +864,4 @@
   .bl-shot { display: grid; gap: 8px; }
   .bl-shot-note { position: static; max-width: none; rotate: none; box-shadow: inset 0 0 0 1px var(--vs-line); }
 }
+.fa-proof:hover .vs-go, .fa-proof:focus-visible .vs-go { background: var(--vs-paper); color: var(--vs-blue); box-shadow: none; }
