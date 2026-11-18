@@ -577,3 +577,6 @@
 .tx-date em { font-style: normal; padding: 1px 6px; border-radius: 5px; background: var(--vs-stone); color: var(--vs-ink-2); font-size: 10px; font-weight: 600; }
 .tx-cell-text { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 @keyframes tx-grow-y { from { scale: 1 0; } }
+
+/* On phones the contact bar owns the bottom edge; the dock sits just above it. */
+@media (max-width: 1023px) { body:has(.mobile-contact-bar:not(.is-suppressed)) .vs-dock { bottom: calc(86px + env(safe-area-inset-bottom)); } }

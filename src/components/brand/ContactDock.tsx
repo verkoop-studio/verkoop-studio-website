@@ -67,9 +67,15 @@ export default function ContactDock() {
       setGreet(true)
       try { sessionStorage.setItem('vs-dock-greet', '1') } catch { /* storage blocked */ }
     }, 2500)
-    const hide = window.setTimeout(() => setGreet(false), 9500)
-    return () => { window.clearTimeout(show); window.clearTimeout(hide) }
+    return () => window.clearTimeout(show)
   }, [past])
+
+  // The line leaves on its own after seven seconds.
+  useEffect(() => {
+    if (!greet) return
+    const hide = window.setTimeout(() => setGreet(false), 7000)
+    return () => window.clearTimeout(hide)
+  }, [greet])
 
   const toggle = () => { setGreet(false); setOpen((value) => !value) }
 
