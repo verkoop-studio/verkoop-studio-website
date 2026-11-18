@@ -5,7 +5,6 @@ import stef from '../../assets/stef-desk-640.webp'
 import { STUDIO_PHONE, STUDIO_PHONE_LOCAL, whatsappHref } from '../../data/contact'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
-import { useFooterInView } from '../../lib/useFooterInView'
 import Arrow from './Arrow'
 import DockChat from './DockChat'
 import { EASE } from './motion'
@@ -23,7 +22,6 @@ const COPY = {
     open: 'Contactopties openen',
     close: 'Contactopties sluiten',
     message: 'Hallo Verkoop Studio, ik heb een vraag over ',
-    greet: 'Vraagje? Stuur ons gerust een bericht.',
   },
   en: {
     title: 'A question about growth?',
@@ -36,15 +34,7 @@ const COPY = {
     open: 'Open contact options',
     close: 'Close contact options',
     message: 'Hi Verkoop Studio, I have a question about ',
-    greet: 'A question? Feel free to send us a message.',
   },
-}
-
-/** True while a form, a pinned call to action or a pop-up is on screen; the nudge stays away then. */
-function busyScreen() {
-  const onScreen = (el: Element) => { const box = el.getBoundingClientRect(); return box.width > 0 && box.bottom > 0 && box.top < window.innerHeight }
-  if ([...document.querySelectorAll('form')].some(onScreen)) return true
-  return [...document.querySelectorAll('.pp-pill:not([aria-hidden]), .mobile-contact-bar:not(.is-suppressed), .coaching-popup, [role="dialog"]:not(#vs-dock-card)')].some((el) => onScreen(el) && getComputedStyle(el).display !== 'none')
 }
 
 /** Pulls a button up to 6px toward the pointer; it springs back when the pointer leaves. */
@@ -92,10 +82,8 @@ export default function ContactDock() {
   const t = COPY[lang]
   const reduce = useReducedMotion()
   const [past, setPast] = useState(false)
-  const footerInView = useFooterInView()
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<'ask' | 'talk'>('ask')
-  const [greet, setGreet] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)
   const rotateX = useSpring(0, { stiffness: 200, damping: 20 })
   const rotateY = useSpring(0, { stiffness: 200, damping: 20 })
@@ -134,33 +122,7 @@ export default function ContactDock() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
-  // One short opening line, once per visit, a moment after the dock appears.
-  useEffect(() => {
-    if (!past) return
-    let seen = false
-    try { seen = sessionStorage.getItem('vs-dock-greet') === '1' } catch { /* storage blocked */ }
-    if (seen) return
-    // It waits until nothing else is asking for attention: no form, pinned pill, bottom bar or pop-up on screen.
-    let timer = 0
-    const tryShow = () => {
-      if (busyScreen()) { timer = window.setTimeout(tryShow, 3000); return }
-      setGreet(true)
-      try { sessionStorage.setItem('vs-dock-greet', '1') } catch { /* storage blocked */ }
-    }
-    timer = window.setTimeout(tryShow, 2500)
-    return () => window.clearTimeout(timer)
-  }, [past])
-
-  // The line leaves on its own after six seconds, or at once when something else takes the screen.
-  useEffect(() => {
-    if (!greet) return
-    const hide = window.setTimeout(() => setGreet(false), 6000)
-    const onScroll = () => { if (busyScreen()) setGreet(false) }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => { window.clearTimeout(hide); window.removeEventListener('scroll', onScroll) }
-  }, [greet])
-
-  const toggle = () => { setGreet(false); setOpen((value) => !value) }
+  const toggle = () => setOpen((value) => !value)
 
   // The card leans toward the pointer, three degrees at most.
   const tilt = (event: PointerEvent<HTMLDivElement>) => {
@@ -241,21 +203,6 @@ export default function ContactDock() {
                 </motion.div>
                 </>}
               </motion.div>
-            )}
-          </AnimatePresence>
-          <AnimatePresence>
-            {greet && !open && !footerInView && (
-              <motion.button
-                type="button"
-                className="vs-dock-greet"
-                onClick={toggle}
-                initial={reduce ? false : { opacity: 0, y: 8, scale: 0.92 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 6, scale: 0.95 }}
-                transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-              >
-                {t.greet}
-              </motion.button>
             )}
           </AnimatePresence>
           <button ref={trigger} type="button" className={`vs-dock-trigger${open ? ' is-open' : ''}`} aria-label={open ? t.close : t.open} aria-expanded={open} aria-controls="vs-dock-card" onClick={toggle}>

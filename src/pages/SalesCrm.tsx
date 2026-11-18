@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type CSSProperties, type MouseEvent } from
 import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
 import { useFooterInView } from '../lib/useFooterInView'
+import { usePhoneScrollingDown } from '../lib/usePhoneScrollingDown'
 import ResponsiveImage from '../components/ResponsiveImage'
 import { Go } from '../components/brand/Arrow'
 import Cta from '../components/brand/Cta'
@@ -127,7 +128,9 @@ export default function SalesCrm() {
   const screensInView = useInView(screens, { margin: '-30% 0px -30% 0px' })
   const faq = useRef<HTMLDivElement>(null)
   const faqInView = useInView(faq, { margin: '0px 0px -10% 0px' })
-  const pillHidden = finalInView || footerInView || screensInView || faqInView
+  // On phones it only shows while scrolling back up, so it never sits over the text being read.
+  const scrollingDown = usePhoneScrollingDown()
+  const pillHidden = finalInView || footerInView || screensInView || faqInView || scrollingDown
   const [first, ...rest] = c.hero.title[lang].split(' ')
   const words = [first, ...rest]
   const accent = lang === 'nl' ? 'vandaag' : 'today.'

@@ -2,6 +2,7 @@ import { motion, useInView, useReducedMotion, useScroll, useTransform } from 'mo
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import Seo from '../components/Seo'
 import { useFooterInView } from '../lib/useFooterInView'
+import { usePhoneScrollingDown } from '../lib/usePhoneScrollingDown'
 import WorksWith from '../components/brand/WorksWith'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
 import ResponsiveImage from '../components/ResponsiveImage'
@@ -171,7 +172,9 @@ export default function Performance() {
   const screensInView = useInView(screens, { margin: '-30% 0px -30% 0px' })
   const faq = useRef<HTMLDivElement>(null)
   const faqInView = useInView(faq, { margin: '0px 0px -10% 0px' })
-  const pillHidden = finalInView || footerInView || screensInView || faqInView
+  // On phones it only shows while scrolling back up, so it never sits over the text being read.
+  const scrollingDown = usePhoneScrollingDown()
+  const pillHidden = finalInView || footerInView || screensInView || faqInView || scrollingDown
   const accent = lang === 'nl' ? 'echt' : 'actually'
 
   useEffect(() => { trackLandingView('Verkoop Studio Performance') }, [])
