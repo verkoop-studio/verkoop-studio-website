@@ -91,6 +91,7 @@
 .vs-product-row { display: flex; flex-wrap: nowrap; justify-content: space-between; align-items: baseline; gap: 16px; padding-top: 14px; border-top: 1px solid var(--vs-line); }
 .vs-product-name { white-space: nowrap; }
 .vs-product-note { white-space: nowrap; }
+@media (max-width: 600px) { .vs-product-row { flex-direction: column; align-items: flex-start; gap: 6px; } .vs-product-note { white-space: normal; } }
 .vs-product:focus-visible { outline: 3px solid #839bff; outline-offset: 4px; border-radius: 22px; }
 .vs-product:active .vs-product-stage { scale: 0.995; }
 .vs-product-name { font-size: 24px; font-weight: 500; letter-spacing: -0.02em; }
