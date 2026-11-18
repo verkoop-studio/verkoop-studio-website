@@ -218,16 +218,58 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 /* ---------- Contact dock ---------- */
 
 .vs-dock { position: fixed; right: 20px; bottom: 20px; z-index: 60; display: flex; align-items: flex-end; gap: 10px; }
-.vs-dock-card { width: 260px; padding: 18px; border-radius: 18px; background: var(--vs-card); border: 1px solid var(--vs-line); box-shadow: 0 24px 60px -24px rgb(17 17 16 / 0.35); }
-.vs-dock-card p { margin: 6px 0 14px; font-size: 14px; line-height: 1.45; color: var(--vs-ink-2); }
-.vs-dock-card strong { font-size: 15px; font-weight: 600; }
-.vs-dock-actions { display: flex; gap: 8px; }
-.vs-dock-actions a { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 40px; border-radius: 9999px; font-size: 13px; font-weight: 500; text-decoration: none; }
-.vs-dock-actions a:first-child { background: var(--vs-ink); color: var(--vs-paper); }
-.vs-dock-actions a:last-child { box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); }
+.vs-dock-card { display: grid; gap: 10px; width: 280px; padding: 16px; border-radius: 20px; background: var(--vs-card); border: 1px solid var(--vs-line); box-shadow: 0 24px 60px -24px rgb(17 17 16 / 0.35); }
+.vs-dock-head { display: flex; align-items: center; gap: 10px; }
+.vs-dock-head > span:last-child { display: grid; line-height: 1.25; }
+.vs-dock-head b { font-size: 14px; }
+.vs-dock-head em { color: #1d7a45; font-style: normal; font-size: 12px; font-weight: 600; }
+.vs-dock-ava { position: relative; flex: none; width: 40px; height: 40px; }
+.vs-dock-ava img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.vs-dock-ava i { position: absolute; right: 0; bottom: 0; width: 11px; height: 11px; border: 2px solid var(--vs-card); border-radius: 50%; background: #2fbf71; animation: vs-online 1.8s ease-out infinite; }
+@keyframes vs-online { 0% { box-shadow: 0 0 0 0 rgb(47 191 113 / 0.55); } 100% { box-shadow: 0 0 0 7px rgb(47 191 113 / 0); } }
+.vs-dock-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.vs-dock-body { margin: 0; color: var(--vs-ink-2); font-size: 14px; line-height: 1.45; }
+.vs-dock-typing { display: inline-flex; gap: 4px; justify-self: start; margin: 0; padding: 10px 12px; border-radius: 14px 14px 14px 4px; background: var(--vs-stone); }
+.vs-dock-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--vs-mute); animation: vs-typing 1s ease-in-out infinite; }
+.vs-dock-typing i:nth-child(2) { animation-delay: 0.15s; }
+.vs-dock-typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes vs-typing { 0%, 100% { opacity: 0.35; translate: 0 0; } 40% { opacity: 1; translate: 0 -3px; } }
+.vs-dock-actions { display: flex; gap: 8px; margin-top: 2px; }
+.vs-dock-btn { position: relative; isolation: isolate; flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 42px; padding: 0 12px; overflow: hidden; border-radius: 9999px; font-size: 13.5px; font-weight: 600; text-decoration: none; transition: color 0.25s, box-shadow 0.25s; }
+.vs-dock-btn:active { scale: 0.97; }
+.vs-dock-btn:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
+.vs-dock-btn--wa { background: var(--vs-ink); color: var(--vs-paper); }
+.vs-dock-btn--wa::before { content: ''; position: absolute; inset: 0; z-index: -1; background: #1fa855; transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.4s var(--vs-ease); }
+.vs-dock-btn--wa:hover::before, .vs-dock-btn--wa:focus-visible::before { transform: scaleX(1); }
+.vs-dock-btn--wa:hover svg, .vs-dock-btn--wa:focus-visible svg { animation: vs-dock-wiggle 0.5s var(--vs-ease); }
+.vs-dock-btn-go { display: inline-flex; width: 0; overflow: hidden; opacity: 0; transition: width 0.3s var(--vs-ease), opacity 0.25s; }
+.vs-dock-btn--wa:hover .vs-dock-btn-go, .vs-dock-btn--wa:focus-visible .vs-dock-btn-go { width: 13px; opacity: 1; }
+.vs-dock-btn--call { color: var(--vs-ink); box-shadow: inset 0 0 0 1px var(--vs-line); }
+.vs-dock-btn--call::before { content: ''; position: absolute; inset: 0; padding: 1.5px; border-radius: inherit; background: conic-gradient(from 180deg, var(--vs-ink) var(--vs-ring, 0deg), transparent 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; transition: --vs-ring 0.5s ease; pointer-events: none; }
+.vs-dock-btn--call:hover::before, .vs-dock-btn--call:focus-visible::before { --vs-ring: 360deg; }
+.vs-dock-btn--call:hover svg, .vs-dock-btn--call:focus-visible svg { animation: vs-dock-ring 0.6s ease; }
+.vs-dock-btn .vs-roll { line-height: 1.35; }
+@property --vs-ring { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes vs-dock-wiggle { 25% { rotate: -14deg; } 55% { rotate: 10deg; } 80% { rotate: -4deg; } }
+@keyframes vs-dock-ring { 10%, 30%, 50% { rotate: -16deg; } 20%, 40%, 60% { rotate: 16deg; } 70% { rotate: 0deg; } }
+/* The button: the eyes fold into a close mark while the card is open; the mark turns on hover. */
+.vs-dock-eyes, .vs-dock-x { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity 0.25s, scale 0.35s var(--vs-ease), rotate 0.35s var(--vs-ease); }
+.vs-dock-x { opacity: 0; scale: 0.4; }
+.vs-dock-x i { position: absolute; width: 20px; height: 2.5px; border-radius: 2px; background: currentColor; rotate: 0deg; transition: rotate 0.35s var(--vs-ease); }
+.vs-dock-trigger.is-open .vs-dock-eyes { opacity: 0; scale: 1 0.1; }
+.vs-dock-trigger.is-open .vs-dock-x { opacity: 1; scale: 1; }
+.vs-dock-trigger.is-open .vs-dock-x i:first-child { rotate: 45deg; }
+.vs-dock-trigger.is-open .vs-dock-x i:last-child { rotate: -45deg; }
+.vs-dock-trigger.is-open:hover .vs-dock-x { rotate: 90deg; }
+@media (prefers-reduced-motion: reduce) {
+  .vs-dock-ava i, .vs-dock-typing i, .vs-dock-btn--wa:hover svg, .vs-dock-btn--call:hover svg { animation: none; }
+  .vs-dock-eyes, .vs-dock-x, .vs-dock-x i, .vs-dock-btn--wa::before, .vs-dock-btn-go { transition: none; }
+  .vs-dock-btn:active { scale: none; }
+  .vs-dock-trigger.is-open:hover .vs-dock-x { rotate: none; }
+}
 .vs-dock-trigger { position: relative; width: 56px; height: 56px; border-radius: 9999px; border: 0; background: var(--vs-ink); color: var(--vs-paper); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 14px 30px -12px rgb(17 17 16 / 0.5); }
 .vs-dock-halo { position: absolute; inset: 0; border-radius: 9999px; background: rgb(43 75 242 / 0.45); pointer-events: none; }
-@media (max-width: 600px) { .vs-dock { right: 14px; bottom: 14px; } .vs-dock-card { width: min(260px, calc(100vw - 100px)); } }
+@media (max-width: 600px) { .vs-dock { right: 14px; bottom: 14px; } .vs-dock-card { width: min(280px, calc(100vw - 100px)); } }
 
 /* ---------- Reduced motion ---------- */
 

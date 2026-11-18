@@ -1,18 +1,20 @@
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
-import { MessageCircle, Phone, X } from 'lucide-react'
-import Watcher from './Watcher'
-import { STUDIO_PHONE, whatsappHref } from '../../data/contact'
-import { useFooterInView } from '../../lib/useFooterInView'
-import { useEffect, useState } from 'react'
+import { AnimatePresence, motion, useReducedMotion, useSpring, type Variants } from 'motion/react'
+import { MessageCircle, Phone } from 'lucide-react'
+import { useEffect, useRef, useState, type PointerEvent } from 'react'
+import stef from '../../assets/stef-desk-640.webp'
+import { STUDIO_PHONE, STUDIO_PHONE_LOCAL, whatsappHref } from '../../data/contact'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
+import { useFooterInView } from '../../lib/useFooterInView'
+import Arrow from './Arrow'
 import { EASE } from './motion'
-
+import Watcher from './Watcher'
 
 const COPY = {
   nl: {
     title: 'Vraag over je groei?',
     body: 'Stuur ons een bericht op WhatsApp of bel. We antwoorden snel en persoonlijk.',
+    reply: 'Antwoord binnen 24 uur',
     whatsapp: 'WhatsApp',
     call: 'Bellen',
     open: 'Contactopties openen',
@@ -23,6 +25,7 @@ const COPY = {
   en: {
     title: 'A question about growth?',
     body: 'Send us a WhatsApp message or call. We reply quickly and in person.',
+    reply: 'Reply within 24 hours',
     whatsapp: 'WhatsApp',
     call: 'Call',
     open: 'Open contact options',
@@ -32,9 +35,45 @@ const COPY = {
   },
 }
 
+/** Pulls a button up to 6px toward the pointer; it springs back when the pointer leaves. */
+function useMagnet(reduce: boolean | null) {
+  const x = useSpring(0, { stiffness: 300, damping: 20 })
+  const y = useSpring(0, { stiffness: 300, damping: 20 })
+  const clamp = (v: number) => Math.max(-6, Math.min(6, v))
+  return {
+    style: { x, y },
+    onPointerMove: (event: PointerEvent<HTMLElement>) => {
+      if (reduce || event.pointerType !== 'mouse') return
+      const box = event.currentTarget.getBoundingClientRect()
+      x.set(clamp((event.clientX - (box.left + box.width / 2)) * 0.15))
+      y.set(clamp((event.clientY - (box.top + box.height / 2)) * 0.3))
+    },
+    onPointerLeave: () => { x.set(0); y.set(0) },
+  }
+}
+
+/** Three dots that type for a moment, then give way to the line itself. */
+function Typing({ text, reduce }: { text: string; reduce: boolean | null }) {
+  const [done, setDone] = useState(Boolean(reduce))
+  useEffect(() => {
+    if (reduce) return
+    const id = window.setTimeout(() => setDone(true), 1200)
+    return () => window.clearTimeout(id)
+  }, [reduce])
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      {done
+        ? <motion.p key="text" className="vs-dock-body" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>{text}</motion.p>
+        : <motion.p key="dots" className="vs-dock-typing" aria-hidden="true" exit={{ opacity: 0, scale: 0.9 }} transition={{ duration: 0.15 }}><i /><i /><i /></motion.p>}
+    </AnimatePresence>
+  )
+}
+
 /**
  * Appears once the visitor is past the hero, so it never competes with the hero CTAs.
- * The card opens on click only; the halo on the button is the nudge.
+ * The card grows out of the button on click; the halo on the button is the nudge.
+ * The watching eyes fold into a close mark while it is open. Escape closes it and
+ * hands focus back to the button.
  */
 export default function ContactDock() {
   const { lang } = useLang()
@@ -44,6 +83,11 @@ export default function ContactDock() {
   const footerInView = useFooterInView()
   const [open, setOpen] = useState(false)
   const [greet, setGreet] = useState(false)
+  const trigger = useRef<HTMLButtonElement>(null)
+  const rotateX = useSpring(0, { stiffness: 200, damping: 20 })
+  const rotateY = useSpring(0, { stiffness: 200, damping: 20 })
+  const wa = useMagnet(reduce)
+  const call = useMagnet(reduce)
 
   // On phones the button tucks in while a sample screen passes beneath it, so it never covers one.
   const [tucked, setTucked] = useState(false)
@@ -68,7 +112,11 @@ export default function ContactDock() {
 
   useEffect(() => {
     if (!open) return
-    const onKey = (event: KeyboardEvent) => { if (event.key === 'Escape') setOpen(false) }
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return
+      setOpen(false)
+      trigger.current?.focus()
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
@@ -95,6 +143,20 @@ export default function ContactDock() {
 
   const toggle = () => { setGreet(false); setOpen((value) => !value) }
 
+  // The card leans toward the pointer, three degrees at most.
+  const tilt = (event: PointerEvent<HTMLDivElement>) => {
+    if (reduce || event.pointerType !== 'mouse') return
+    const box = event.currentTarget.getBoundingClientRect()
+    rotateY.set(((event.clientX - box.left) / box.width - 0.5) * 6)
+    rotateX.set((0.5 - (event.clientY - box.top) / box.height) * 6)
+  }
+  const untilt = () => { rotateX.set(0); rotateY.set(0) }
+
+  const lines: Variants = {
+    hidden: { opacity: 0, y: reduce ? 0 : 8 },
+    shown: (i: number) => ({ opacity: 1, y: 0, transition: { duration: 0.3, ease: EASE, delay: reduce ? 0 : 0.08 + i * 0.07 } }),
+  }
+
   return (
     <AnimatePresence>
       {past && (
@@ -112,26 +174,41 @@ export default function ContactDock() {
                 className="vs-dock-card"
                 role="dialog"
                 aria-label={t.title}
-                initial={{ opacity: 0, y: 12, scale: 0.96 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 12, scale: 0.96 }}
-                transition={{ duration: 0.35, ease: EASE }}
+                style={{ rotateX, rotateY, transformPerspective: 900, transformOrigin: '100% 100%' }}
+                initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: 'blur(8px)' }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, filter: 'blur(0px)', transition: { type: 'spring', stiffness: 320, damping: 24 } }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: 'blur(8px)', transition: { duration: 0.22, ease: EASE } }}
+                onPointerMove={tilt}
+                onPointerLeave={untilt}
               >
-                <strong>{t.title}</strong>
-                <p>{t.body}</p>
-                <div className="vs-dock-actions">
-                  <a
+                <motion.div className="vs-dock-head" variants={lines} custom={0} initial="hidden" animate="shown">
+                  <span className="vs-dock-ava"><img src={stef} alt="" width={44} height={44} decoding="async" /><i /></span>
+                  <span><b>Stef</b><em>{t.reply}</em></span>
+                </motion.div>
+                <motion.strong className="vs-dock-title" variants={lines} custom={1} initial="hidden" animate="shown">{t.title}</motion.strong>
+                <motion.div variants={lines} custom={2} initial="hidden" animate="shown"><Typing text={t.body} reduce={reduce} /></motion.div>
+                <motion.div className="vs-dock-actions" variants={lines} custom={3} initial="hidden" animate="shown">
+                  <motion.a
                     href={whatsappHref(t.message)}
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="vs-dock-btn vs-dock-btn--wa"
                     onClick={() => trackEvent('whatsapp_clicked', { placement: 'dock', channel: 'whatsapp' })}
+                    {...wa}
                   >
-                    <MessageCircle size={15} aria-hidden="true" />{t.whatsapp}
-                  </a>
-                  <a href={`tel:${STUDIO_PHONE}`} onClick={() => trackEvent('whatsapp_clicked', { placement: 'dock', channel: 'phone' })}>
-                    <Phone size={15} aria-hidden="true" />{t.call}
-                  </a>
-                </div>
+                    <MessageCircle size={15} aria-hidden="true" /><span>{t.whatsapp}</span><span className="vs-dock-btn-go"><Arrow size={13} /></span>
+                  </motion.a>
+                  <motion.a
+                    href={`tel:${STUDIO_PHONE}`}
+                    className="vs-dock-btn vs-dock-btn--call"
+                    aria-label={`${t.call} ${STUDIO_PHONE_LOCAL}`}
+                    onClick={() => trackEvent('whatsapp_clicked', { placement: 'dock', channel: 'phone' })}
+                    {...call}
+                  >
+                    <Phone size={15} aria-hidden="true" />
+                    <span className="vs-roll" aria-hidden="true"><span>{t.call}</span><span>{STUDIO_PHONE_LOCAL}</span></span>
+                  </motion.a>
+                </motion.div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -150,7 +227,7 @@ export default function ContactDock() {
               </motion.button>
             )}
           </AnimatePresence>
-          <button type="button" className="vs-dock-trigger" aria-label={open ? t.close : t.open} aria-expanded={open} aria-controls="vs-dock-card" onClick={toggle}>
+          <button ref={trigger} type="button" className={`vs-dock-trigger${open ? ' is-open' : ''}`} aria-label={open ? t.close : t.open} aria-expanded={open} aria-controls="vs-dock-card" onClick={toggle}>
             {!open && !reduce && (
               <motion.span
                 className="vs-dock-halo"
@@ -159,7 +236,8 @@ export default function ContactDock() {
                 transition={{ duration: 1.8, repeat: Infinity, ease: 'easeOut' }}
               />
             )}
-            {open ? <X size={22} /> : <Watcher shape="Ball" size={38} poke={false} within=".vs-dock" />}
+            <span className="vs-dock-eyes"><Watcher shape="Ball" size={38} poke={false} within=".vs-dock" /></span>
+            <span className="vs-dock-x" aria-hidden="true"><i /><i /></span>
           </button>
         </motion.div>
       )}

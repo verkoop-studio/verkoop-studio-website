@@ -3,7 +3,7 @@ import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { caseHeadline, cases } from '../data/cases'
-import { STUDIO_PHONE, whatsappHref } from '../data/contact'
+import { STUDIO_PHONE, STUDIO_PHONE_LOCAL, whatsappHref } from '../data/contact'
 import { faqItems } from '../data/faq'
 import { pricingTiers } from '../data/pricing'
 import FaqList from '../components/brand/FaqList'
@@ -98,7 +98,7 @@ export default function Contact() {
           </motion.div>
           <motion.ul className="ct-routes" {...arrive(0.75)} aria-label={t.routes}>
             <li><a href="mailto:stef@verkoop.studio"><Mail size={16} aria-hidden="true" />stef@verkoop.studio</a></li>
-            <li><a href={`tel:${STUDIO_PHONE}`}><Phone size={16} aria-hidden="true" />0478 73 11 38</a></li>
+            <li><a href={`tel:${STUDIO_PHONE}`}><Phone size={16} aria-hidden="true" />{STUDIO_PHONE_LOCAL}</a></li>
             <li><a href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement: 'contact_routes', channel: 'whatsapp' })}><MessageCircle size={16} aria-hidden="true" />WhatsApp</a></li>
             <li><MapPin size={16} aria-hidden="true" />{t.where}</li>
           </motion.ul>
