@@ -59,12 +59,12 @@ export default function Blog() {
  const { slug } = useParams()
  const { lang } = useLang(),c = COPY[lang],articles = nlArticles.map(a => localized(a, lang))
  const article = articles.find(a => a.slug === slug)
+ const current = useCurrentSection(article?.sections.length ?? 0, article?.slug)
  if (slug && !article) return <NotFound />
  const title = article?.title ?? c.title
  const description = article?.description ?? c.description
  const pageLang = article ? (article.en ? 'en' : 'nl') : lang
  const path = article ? `/blog/${article.slug}` : '/blog'
- const current = useCurrentSection(article?.sections.length ?? 0, article?.slug)
  const cover = article ? nlArticles.findIndex((a) => a.slug === article.slug) % 4 : 0
  const compare = article ? COMPARE[article.slug]?.[lang] : undefined
  return <div lang={pageLang} className="vs-page bl-page">
