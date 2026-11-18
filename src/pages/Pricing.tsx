@@ -15,7 +15,6 @@ import { crmLanding } from '../data/crmLanding'
 import { faqItems } from '../data/faq'
 import { performance } from '../data/performance'
 import { pricingTiers } from '../data/pricing'
-import { Ticker } from '../components/brand/demo'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
@@ -34,6 +33,7 @@ const COPY = {
     yes: 'Ja',
     no: 'Nee',
     fits: 'Dit pakket past',
+    seePlan: 'Bekijk wat erin zit',
     software: 'Onze software, apart',
     crm: 'Sales CRM',
     perf: 'Performance',
@@ -54,6 +54,7 @@ const COPY = {
     yes: 'Yes',
     no: 'No',
     fits: 'This plan fits',
+    seePlan: 'See what is in it',
     software: 'Our software, on its own',
     crm: 'Sales CRM',
     perf: 'Performance',
@@ -99,9 +100,8 @@ function Builder({ lang }: { lang: 'nl' | 'en' }) {
         <AnimatePresence mode="wait" initial={false}>
           <motion.div key={tier.key} className="pr-result-card" initial={reduce ? false : { opacity: 0, y: 16, rotate: -1.5 }} animate={{ opacity: 1, y: 0, rotate: 0 }} exit={{ opacity: 0, y: -12 }} transition={{ duration: 0.35, ease: EASE }}>
             <h3>{tier.name[lang]}</h3>
-            <p className="pr-price"><PriceTick text={tier.price[lang]} lang={lang} /></p>
             <p className="pr-aud">{tier.audience[lang]}</p>
-            <ul>{tier.highlights[lang].map((item) => <li key={item}>{item}</li>)}</ul>
+            <TextLink href={`#plan-${tier.key}`}>{t.seePlan}</TextLink>
             <Cta to={`/contact?pakket=${tier.key}`} onClick={() => trackEvent('audit_cta_clicked', { placement: 'pricing_builder', tier: tier.key })}>{t.cta}</Cta>
           </motion.div>
         </AnimatePresence>
@@ -110,15 +110,6 @@ function Builder({ lang }: { lang: 'nl' | 'en' }) {
   )
 }
 
-/** A price that counts up to its figure when its card appears; the words around the figure stay as written. */
-function PriceTick({ text, lang }: { text: string; lang: 'nl' | 'en' }) {
-  const match = text.match(/^(\D*)(\d[\d.,]*)(.*)$/)
-  if (!match) return <>{text}</>
-  const [, before, figure, after] = match
-  const value = Number(figure.replace(/[.,]/g, ''))
-  const format = (v: number) => Math.round(v).toLocaleString(lang === 'nl' ? 'nl-BE' : 'en-GB')
-  return <>{before}<Ticker to={value} on ms={700} format={format} />{after}</>
-}
 
 export default function Pricing() {
   usePageStyles(PAGES_STYLES)

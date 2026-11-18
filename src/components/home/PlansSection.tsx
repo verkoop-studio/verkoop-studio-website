@@ -28,6 +28,7 @@ function Plan({ index }: { index: number }) {
 
   return (
     <div
+      id={`plan-${tier.key}`}
       className={`vs-plan vs-spot${dark ? ' vs-plan--dark' : ''}`}
       onPointerMove={trackSpotlight}
       onMouseEnter={() => setHovered(true)}
@@ -75,15 +76,22 @@ export default function PlansSection() {
   const { lang } = useLang()
   const { pathname } = useLocation()
   const t = COPY[lang]
+  const [shown, setShown] = useState(0)
   return (
     <section id="groeipakketten" className="vs-section vs-wrap" aria-labelledby="pricing-title">
       <div className="vs-section-head">
         <SplitHeadline id="pricing-title" className="vs-h2" parts={t.title} />
         <span className="vs-label">{t.label}</span>
       </div>
+      {/* Phones: a segmented switch shows one plan at a time instead of a long stack. */}
+      <div className="vs-plans-switch" role="tablist" aria-label={t.label}>
+        {pricingTiers.map((tier, i) => (
+          <button key={tier.key} type="button" role="tab" aria-selected={shown === i} className={shown === i ? 'is-on' : ''} onClick={() => setShown(i)}>{tier.name[lang].replace('Growth ', '')}</button>
+        ))}
+      </div>
       <div className="vs-plans">
         {pricingTiers.map((tier, i) => (
-          <Reveal key={tier.key} delay={i * 0.08}>
+          <Reveal key={tier.key} delay={i * 0.08} className={shown === i ? 'is-shown' : 'is-other'}>
             <Plan index={i} />
           </Reveal>
         ))}

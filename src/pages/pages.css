@@ -789,7 +789,6 @@
 .pr-result-label { margin: 0 0 10px; color: var(--vs-mute); font-size: 14px; }
 .pr-result-card { display: grid; justify-items: start; gap: 10px; padding: clamp(22px, 3vw, 32px); border-radius: 24px; background: var(--vs-ink); color: var(--vs-paper); }
 .pr-result-card h3 { margin: 0; font: 500 28px/1.1 var(--font-display); }
-.pr-price { margin: 0; color: #9fb0ff; font: 600 clamp(32px, 3.4vw, 46px)/1 var(--font-display); font-variant-numeric: tabular-nums; }
 .pr-aud { margin: 0; color: #cfcbc3; line-height: 1.5; }
 .pr-result-card ul { display: grid; gap: 6px; margin: 4px 0 10px; padding: 0 0 0 18px; color: #e9e6df; }
 .pr-software-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin-top: 28px; }

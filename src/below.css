@@ -1462,3 +1462,16 @@ a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate:
 .dc-foot { margin: 0; color: var(--vs-mute); font-size: 11.5px; }
 @media (max-width: 600px) { .vs-dock-card { width: calc(100vw - 100px); } }
 @media (prefers-reduced-motion: reduce) { .dc-exchange { animation: none; } .dc-chips button { transition: none; } }
+
+/* Plans: a segmented switch on phones (one plan at a time), and a highlight when the builder sends you to a plan. */
+.vs-plans-switch { display: none; }
+.vs-plan:target { box-shadow: 0 0 0 3px var(--vs-blue), 0 30px 60px -36px rgb(43 75 242 / 0.6); animation: vs-plan-arrive 0.8s var(--vs-ease); }
+@keyframes vs-plan-arrive { 30% { translate: 0 -8px; } }
+@media (max-width: 767px) {
+  .vs-plans-switch { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 16px; padding: 4px; border-radius: 99px; background: var(--vs-stone); }
+  .vs-plans-switch button { min-height: 44px; border: 0; border-radius: 99px; background: none; color: var(--vs-ink-2); font: 600 14px/1 var(--font-sans); cursor: pointer; transition: background-color 0.25s, color 0.25s; }
+  .vs-plans-switch button.is-on { background: var(--vs-ink); color: var(--vs-paper); }
+  .vs-plans-switch button:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 2px; }
+  .vs-plans > .is-other { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .vs-plan:target { animation: none; } }
