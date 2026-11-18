@@ -9,6 +9,7 @@ type Player = {
   playVideo: () => void
   destroy: () => void
   getIframe: () => HTMLIFrameElement
+  getCurrentTime: () => number
 }
 type PlayerEvent = { target: Player }
 type YouTubeAPI = { Player: new (element: HTMLElement, options: {
@@ -50,7 +51,7 @@ export default function AutoplayVideo({ videoId, title, lang }: { videoId: strin
   const [failed, setFailed] = useState(false)
   const [playing, setPlaying] = useState(false)
   useEffect(() => {
-    let active = true, instance: Player | undefined, timer: number | undefined, readyTimeout: number | undefined
+    let active = true, instance: Player | undefined, timer: number | undefined, readyTimeout: number | undefined, frameTimer: number | undefined
     if (!container.current) return
     const mount = document.createElement('iframe')
     mount.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&playsinline=1&rel=0&enablejsapi=1&origin=${encodeURIComponent(window.location.origin)}`
@@ -75,14 +76,20 @@ export default function AutoplayVideo({ videoId, title, lang }: { videoId: strin
           syncSound()
           timer = window.setInterval(syncSound, 500)
         }, onStateChange: ({ data }) => {
-          // 1 is YT.PlayerState.PLAYING: frames are on screen, so the still can go.
-          if (active && data === 1) setPlaying(true)
+          // 1 is YT.PlayerState.PLAYING. On slow connections and on phones the player can
+          // report it while the frame is still black, so wait until playback has advanced.
+          if (!active || data !== 1 || frameTimer) return
+          frameTimer = window.setInterval(() => {
+            if (!active || !player.current) return
+            if (player.current.getCurrentTime() > 0.25) { window.clearInterval(frameTimer); setPlaying(true) }
+          }, 120)
         } },
       })
     }).catch(() => { if (active) setFailed(true) })
     return () => {
       active = false
       window.clearInterval(timer)
+      window.clearInterval(frameTimer)
       window.clearTimeout(readyTimeout)
       player.current = null
       instance?.destroy()

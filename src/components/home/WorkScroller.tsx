@@ -129,7 +129,7 @@ export default function WorkScroller() {
             <figure key={item.slug} className={`vs-slide${i === active ? ' is-active' : ''}`} aria-roledescription="slide" aria-label={`${i + 1} / ${items.length}`}>
               <Link to={`/cases/${item.slug}`} draggable={false} aria-label={`${item.name}: ${item.summary[lang]}`} onClick={() => trackEvent('case_viewed', { case: item.slug, placement: 'home_scroller' })}>
                 <div className="vs-slide-frame">
-                  <CasePoster slug={item.slug} name={item.name} caption={label} />
+                  <CasePoster slug={item.slug} name={item.name} caption={label} lang={lang} />
                 </div>
                 <figcaption><span className="vs-slide-tag">{item.name} ({label})</span></figcaption>
               </Link>

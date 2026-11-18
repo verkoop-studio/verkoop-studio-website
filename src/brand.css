@@ -328,7 +328,9 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-plan--dark li { color: #d9d6cf; }
 .vs-plan li svg { flex: none; margin-top: 2px; color: var(--vs-blue); }
 .vs-plan--dark li svg { color: var(--vs-blue-on-ink); }
-.vs-plan .vs-cta { margin-top: auto; justify-content: center; }
+.vs-plan .vs-cta { margin-top: auto; }
+/* Full-width button: the label fills the bed and the circle sits at the far end, where the bed stops. */
+.vs-plan .vs-cta-text { flex: 1; text-align: center; }
 
 /* ---------- FAQ (existing markup, new skin) ---------- */
 
@@ -535,7 +537,7 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
 /* ---------- Case posters: paper, brush stroke, stickers ---------- */
 
 .vs-poster { overflow: hidden; background: #f3f1ea; }
-.vs-poster-paper, .vs-poster-centre { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+.vs-poster-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
 .vs-p-display { font-family: var(--font-display); }
 .vs-p-text { font-family: var(--font-sans); }
 
@@ -603,4 +605,52 @@ a:hover > .vs-roll > span, a:focus-visible > .vs-roll > span { transform: transl
   .vs-round-btn, .vs-menu-btn, .vs-drawer-close { min-width: 44px; min-height: 44px; }
   .site-shell footer a, .site-shell footer button { display: inline-flex; align-items: center; min-height: 44px; }
   .site-shell footer ul.space-y-2 > * + * { margin-top: 0; }
+}
+
+/* ---------- Poster themes: each client its own world ---------- */
+
+.vs-poster { container-type: inline-size; }
+.vs-poster--track { background: #0b0b0d; }
+.vs-poster--pop { background: #ffd3e6; }
+.vs-poster--editorial { background: #10140f; }
+
+/* Night track: the neon line draws, the name streaks in, the lap timer runs. */
+.vs-track-line { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.3s var(--vs-ease-wipe) 0.15s; }
+.vs-slide.is-active .vs-track-line { stroke-dashoffset: 0; }
+.vs-track-name { transform-box: view-box; transform: translateX(-70%); filter: blur(14px); opacity: 0; transition: transform 0.3s ease, filter 0.3s ease, opacity 0.2s ease; }
+.vs-slide.is-active .vs-track-name { transform: none; filter: blur(0); opacity: 1; transition: transform 0.75s cubic-bezier(0.12, 0.9, 0.2, 1) 0.2s, filter 0.6s ease 0.3s, opacity 0.2s ease 0.2s; }
+.vs-lap { position: absolute; top: 5.5%; right: 4.5%; display: inline-flex; align-items: baseline; gap: 0.6em; padding: 0.5em 0.9em; border-radius: 0.6em; background: rgb(245 243 238 / 0.08); box-shadow: inset 0 0 0 1px rgb(215 255 62 / 0.45); color: #d7ff3e; font: 600 2.3cqw/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.vs-lap-label { color: #f5f3ee; opacity: 0.7; font-weight: 500; }
+@property --vs-lap-s { syntax: '<integer>'; initial-value: 0; inherits: false; }
+@property --vs-lap-cs { syntax: '<integer>'; initial-value: 0; inherits: false; }
+.vs-lap-time { counter-reset: lap-s var(--vs-lap-s) lap-cs var(--vs-lap-cs); }
+.vs-lap-time::after { content: '0:' counter(lap-s, decimal-leading-zero) '.' counter(lap-cs, decimal-leading-zero); }
+.vs-slide.is-active .vs-lap-time { animation: vs-lap-s 60s steps(60) infinite, vs-lap-cs 1s steps(100) infinite; }
+@keyframes vs-lap-s { to { --vs-lap-s: 60; } }
+@keyframes vs-lap-cs { to { --vs-lap-cs: 100; } }
+
+/* Pop: confetti pops, then the stamp slams down and shakes. */
+.vs-pop-dot { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform 0.2s ease; }
+.vs-slide.is-active .vs-pop-dot { transform: none; transition: transform 0.55s var(--vs-ease-bounce) calc(0.1s + var(--i) * 0.04s); }
+.vs-pop-stamp { transform-box: fill-box; transform-origin: center; opacity: 0; transform: scale(2.6); }
+.vs-slide.is-active .vs-pop-stamp { animation: vs-stamp 0.75s cubic-bezier(0.2, 0.9, 0.3, 1) 0.55s both; }
+@keyframes vs-stamp { 0% { opacity: 0; transform: scale(2.6); } 38% { opacity: 1; transform: scale(0.94); } 50% { transform: scale(1.03) translate(-4px, 2px); } 62% { transform: scale(1) translate(4px, -2px); } 74% { transform: translate(-2px, 1px); } 100% { opacity: 1; transform: none; } }
+
+/* Editorial: the halftone swells in and the heartbeat draws across. */
+.vs-halftone { transform-box: view-box; transform-origin: 75% 37%; transform: scale(0.82); opacity: 0.35; transition: transform 0.4s ease, opacity 0.3s ease; }
+.vs-slide.is-active .vs-halftone { transform: none; opacity: 1; transition: transform 1.2s var(--vs-ease) 0.1s, opacity 0.7s ease 0.1s; }
+.vs-pulse { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.3s ease; }
+.vs-slide.is-active .vs-pulse { stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s cubic-bezier(0.5, 0, 0.2, 1) 0.35s; }
+
+/* Larger hit areas for mouse users on the small text links. */
+.vs-nav a { min-height: 40px; }
+.site-shell footer a, .site-shell footer button { display: inline-flex; align-items: center; min-height: 36px; }
+.site-shell footer ul.space-y-2 > * + * { margin-top: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-track-line, .vs-pulse { stroke-dashoffset: 0; transition: none; }
+  .vs-track-name, .vs-pop-dot, .vs-halftone { transform: none; filter: none; opacity: 1; transition: none; }
+  .vs-pop-stamp, .vs-slide.is-active .vs-pop-stamp { animation: none; opacity: 1; transform: none; }
+  .vs-slide.is-active .vs-lap-time { animation: none; }
+  .vs-lap-time { --vs-lap-s: 42; --vs-lap-cs: 31; }
 }
