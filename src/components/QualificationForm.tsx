@@ -50,7 +50,7 @@ const COPY = {
     next: 'Volgende',
     back: 'Terug',
     detailsHint: 'Alles hier is optioneel. Het helpt ons om beter voorbereid te bellen.',
-    card: { band: 'Jouw aanvraag', title: (name: string) => `Aanvraag van ${name}`, placeholder: 'Jouw aanvraag', company: 'Bedrijf', goal: 'Doel', challenge: 'Uitdaging', ring: 'Ingevulde velden', back: 'Wat er nu gebeurt', toBack: 'Wat er nu gebeurt', toFront: 'Terug naar je aanvraag',
+    card: { band: 'Jouw aanvraag', title: (name: string) => `Aanvraag van ${name}`, placeholder: 'Jouw aanvraag', company: 'Bedrijf', goal: 'Doel', challenge: 'Uitdaging', ring: 'Stappen klaar', back: 'Wat er nu gebeurt', toBack: 'Wat er nu gebeurt', toFront: 'Terug naar je aanvraag',
       next: ['We lezen je aanvraag', 'We bespreken de kansen en prioriteiten', 'Je krijgt een voorstel met scope en budget', 'Je hoort binnen 24 uur van ons'] },
     submitting: 'Even geduld…',
     submit: 'Verstuur je aanvraag',
@@ -88,7 +88,7 @@ const COPY = {
     next: 'Next',
     back: 'Back',
     detailsHint: 'Everything here is optional. It helps us prepare for the call.',
-    card: { band: 'Your enquiry', title: (name: string) => `Enquiry from ${name}`, placeholder: 'Your enquiry', company: 'Company', goal: 'Goal', challenge: 'Challenge', ring: 'Fields filled in', back: 'What happens next', toBack: 'What happens next', toFront: 'Back to your enquiry',
+    card: { band: 'Your enquiry', title: (name: string) => `Enquiry from ${name}`, placeholder: 'Your enquiry', company: 'Company', goal: 'Goal', challenge: 'Challenge', ring: 'Steps done', back: 'What happens next', toBack: 'What happens next', toFront: 'Back to your enquiry',
       next: ['We read your enquiry', 'We discuss opportunities and priorities', 'You get a proposal with scope and budget', 'You hear from us within 24 hours'] },
     submitting: 'One moment…',
     submit: 'Send your enquiry',
@@ -263,6 +263,9 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
 
   const done = Object.values(required).filter(Boolean).length
   const total = Object.keys(required).length
+  // The preview counts steps, like the rail above the form: a step with no required fields counts once it is reached.
+  const stepsTotal = lastStep + 1
+  const stepsDone = Array.from({ length: stepsTotal }, (_, i) => i).filter((i) => (STEP_FIELDS[i].length ? stepValid(i) : step >= i)).length
   const busy = status === 'submitting'
   const shown = (index: number) => Boolean(tried[index]) || Object.keys(errors).length > 0
   const goal = GOALS.find((item) => item.key === values.doel)?.[lang][0] ?? ''
@@ -397,8 +400,8 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
             { label: c.goal, value: goal },
             { label: c.challenge, value: values.uitdaging.trim().length > 70 ? `${values.uitdaging.trim().slice(0, 68)}…` : values.uitdaging.trim() },
           ]}
-          done={done}
-          total={total}
+          done={stepsDone}
+          total={stepsTotal}
           ringLabel={c.ring}
           showBack={done === total && status !== 'done'}
           settled={status === 'done'}

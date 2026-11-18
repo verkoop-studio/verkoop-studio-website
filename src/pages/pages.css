@@ -579,7 +579,7 @@
 
 /* ---------- Contact: the book-a-call layout ---------- */
 
-.ct-book { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); grid-template-areas: 'copy panel' 'preview panel'; align-items: start; gap: 28px clamp(28px, 5vw, 72px); padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(40px, 6vw, 72px); }
+.ct-book { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); grid-template-areas: 'copy panel' 'copy preview'; align-items: start; gap: 28px clamp(28px, 5vw, 72px); padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(40px, 6vw, 72px); }
 .ct-copy { grid-area: copy; display: grid; gap: 22px; }
 .ct-h1 { margin-top: 0; font-size: clamp(40px, 5vw, 76px); }
 .ct-copy .vs-lead { margin: 0; max-width: 42ch; }
@@ -608,8 +608,6 @@
 .ct-proof b { font: 600 18px/1 var(--font-display); }
 .ct-proof span { color: var(--vs-mute); font-size: 12.5px; }
 .ct-proof a:hover b { color: var(--vs-blue); }
-/* Desktop: the form stays in view while the left column scrolls past. */
-@media (min-width: 1024px) { .ct-book .hero-request { position: sticky; top: 96px; } }
 /* Phones and tablets: the headline, then the form, then the preview of the request, then the call steps. */
 @media (max-width: 1023px) {
   .ct-book { grid-template-columns: minmax(0, 1fr); grid-template-areas: none; gap: 20px; }
