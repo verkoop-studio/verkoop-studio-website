@@ -203,3 +203,6 @@ body:has(.pp) .mobile-contact-bar, body:has(.pp) .back-to-top { display: none; }
   .cx-steps > li { transition: none; }
   .cx-rows li, .cx-rows li:hover { translate: none; transition: none; }
 }
+.pp-pricing { background-image: var(--vs-grain); }
+.cx-stage::before { content: ''; position: absolute; inset: -12% -8%; z-index: -1; background: radial-gradient(50% 50% at 50% 50%, rgb(43 75 242 / 0.16), transparent 70%); pointer-events: none; }
+.cx-stepper { isolation: isolate; }

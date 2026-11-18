@@ -1330,3 +1330,11 @@
   .vs-who-ava, .vs-who-row { transition: none; }
   .vs-who-row:hover .vs-who-ava { translate: none; rotate: none; }
 }
+
+/* ---------- Texture: a fine grain on the dark and accent grounds, soft glows behind key cards ---------- */
+
+:root { --vs-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"); }
+.vs-dark, .vs-band, .vs-footer, .vs-split-panel--dark, .vs-group-tile, .pb-stat { background-image: var(--vs-grain); }
+.vs-split-grid { position: relative; }
+.vs-split-grid::before { content: ''; position: absolute; inset: 10% -4% 0; z-index: -1; background: radial-gradient(40% 50% at 25% 60%, rgb(43 75 242 / 0.14), transparent 70%), radial-gradient(40% 50% at 78% 55%, rgb(255 159 208 / 0.16), transparent 70%); filter: blur(10px); pointer-events: none; }
+.vs-split { isolation: isolate; }
