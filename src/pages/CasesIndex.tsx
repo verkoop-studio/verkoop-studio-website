@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import LyteWork from '../components/LyteWork'
 import CreativeWall from '../components/cases/CreativeWall'
 import ProofBento from '../components/cases/ProofBento'
+import Wordmarks from '../components/cases/Wordmarks'
 import Seo from '../components/Seo'
 import Arrow from '../components/brand/Arrow'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
@@ -109,6 +110,7 @@ export default function CasesIndex() {
         </ul>
       </section>
 
+      <Wordmarks lang={lang} />
       <ProofBento lang={lang} placement="cases_bento" />
       <CreativeWall lang={lang} />
 
