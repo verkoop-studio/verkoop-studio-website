@@ -4,6 +4,7 @@ import ResponsiveImage from '../components/ResponsiveImage'
 import Cta from '../components/brand/Cta'
 import { useArrive } from '../components/brand/useArrive'
 import Polaroids from '../components/brand/Polaroids'
+import ScrollStatement from '../components/brand/ScrollStatement'
 import ProcessLine from '../components/brand/ProcessLine'
 import Reveal from '../components/brand/Reveal'
 import { NoteCard } from '../components/brand/Playful'
@@ -96,18 +97,21 @@ export default function OverStef() {
         <Polaroids photos={[{ src: stef, name: 'Stef' }, { src: tanguy, name: 'Tanguy' }]} note={t.note} />
       </section>
 
-      <section className="vs-wrap vs-section" aria-labelledby="agency-team">
-        <Reveal as="h2" className="vs-h2" id="agency-team">{t.teamTitle}</Reveal>
+      <section className="vs-wrap vs-section ag-statement" aria-labelledby="agency-team">
+        <h2 className="sr-only" id="agency-team">{t.teamTitle}</h2>
+        <ScrollStatement parts={[t.teamTitle, { name: 'Stef', photo: stef }, t.stefRole, { name: 'Tanguy', photo: tanguy }, t.tanguyRole]} />
+      </section>
+
+      <section className="vs-wrap ag-team-wrap" aria-label={t.teamTitle}>
         <ul className="ag-team">
           {[
-            { name: 'Stef Keppens', role: t.stefRole, tags: t.stefTags, img: stef, alt: t.stefAlt },
-            { name: 'Tanguy De Brabandere', role: t.tanguyRole, tags: t.tanguyTags, img: tanguy, alt: t.tanguyAlt },
+            { name: 'Stef Keppens', tags: t.stefTags, img: stef, alt: t.stefAlt },
+            { name: 'Tanguy De Brabandere', tags: t.tanguyTags, img: tanguy, alt: t.tanguyAlt },
           ].map((person, i) => (
             <Reveal as="li" key={person.name} delay={i * 0.1} y={40}>
               <article className="ag-person">
                 <span className="ag-person-photo"><ResponsiveImage src={person.img} alt={person.alt} loading="lazy" sizes="(max-width: 900px) 100vw, 560px" /></span>
                 <h3 className="ag-person-name">{person.name}</h3>
-                <p className="ag-person-role">{person.role}</p>
                 <ul className="cs-tags">{person.tags.map((tag, j) => <li key={tag} className={`cs-tag cs-tag--${(i * 2 + j) % 4}`}>{tag}</li>)}</ul>
               </article>
             </Reveal>
