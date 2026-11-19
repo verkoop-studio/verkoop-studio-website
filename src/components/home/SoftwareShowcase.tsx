@@ -7,20 +7,6 @@ import Arrow from '../brand/Arrow'
 import ProductMini from '../brand/ProductMini'
 import TiltCard from '../brand/TiltCard'
 
-/** Platforms the dashboard reads from. Logos live in /public/platforms. */
-const TOOLS = [
-  { name: 'Meta', icon: 'meta' },
-  { name: 'Google Ads', icon: 'google' },
-  { name: 'Google Analytics', icon: 'googleanalytics' },
-  { name: 'Tag Manager', icon: 'googletagmanager' },
-  { name: 'TikTok', icon: 'tiktok' },
-  { name: 'Shopify', icon: 'shopify' },
-  { name: 'Wix', icon: 'wix' },
-  { name: 'Klaviyo', icon: 'klaviyo' },
-  { name: 'Mailchimp', icon: 'mailchimp' },
-  { name: 'Resend', icon: 'resend' },
-]
-
 const COPY = {
   nl: {
     label: 'Onze eigen software',
@@ -68,16 +54,6 @@ export default function SoftwareShowcase() {
             </div>
           </Link>
         </Reveal>
-      </div>
-      <div className="vs-marquee-band" aria-hidden="true">
-        <div className="vs-marquee">
-          {[...TOOLS, ...TOOLS].map((tool, i) => (
-            <span key={i} className="vs-logo-item">
-              <img src={`/platforms/${tool.icon}.svg`} alt="" width={24} height={24} loading="lazy" decoding="async" />
-              {tool.name}
-            </span>
-          ))}
-        </div>
       </div>
     </section>
   )
