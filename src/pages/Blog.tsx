@@ -13,6 +13,7 @@ import { SITE_URL } from '../lib/site'
 import NotFound from './NotFound'
 import Arrow from '../components/brand/Arrow'
 import Cta from '../components/brand/Cta'
+import { trackEvent } from '../lib/analytics'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
@@ -103,6 +104,7 @@ export default function Blog() {
      <p className="vs-lead">{description}</p>
      <p className="bl-byline">{c.by} <Link to="/agency">Verkoop Studio</Link> · <time dateTime={article.publishedAt}>{dateLabel(article.publishedAt!, lang)}</time>{article.modifiedAt && <> · {c.updated} <time dateTime={article.modifiedAt}>{dateLabel(article.modifiedAt, lang)}</time></>} · {c.from}</p>
      {lang === 'en' && !article.en && <p className="bl-note" lang="en">{c.dutchOnly}</p>}
+     <div className="bl-head-cta"><Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'blog_article_hero' })}>{c.cta}</Cta></div>
      <ArticleCover article={article} />
     </header>
     <div className="bl-layout">
@@ -145,8 +147,8 @@ export default function Blog() {
      <Breadcrumbs items={[{ label: 'Blog' }]} />
      <SplitHeadline as="h1" className="vs-h1 bl-h1" parts={c.headline} onMount />
      <p className="vs-lead">{description}</p>
+     <div className="bl-head-cta"><Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'blog_hero' })}>{c.cta}</Cta></div>
     </header>
-    <HandNote point="down-left" className="bl-handnote">{c.note}</HandNote>
     <ul className="bl-grid">{articles.map((a, i) => (
      <Reveal as="li" key={a.slug} delay={(i % 3) * 0.08} y={30}>
       <article className="bl-card" lang={a.en || lang === 'nl' ? lang : 'nl'}>
