@@ -15,6 +15,10 @@ import { crmLanding } from '../data/crmLanding'
 import { faqItems } from '../data/faq'
 import { performance } from '../data/performance'
 import { pricingTiers } from '../data/pricing'
+import { getCase } from '../data/cases'
+import stef from '../assets/stef.webp'
+import tanguy from '../assets/studio-flyers.webp'
+import ResponsiveImage from '../components/ResponsiveImage'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
@@ -34,6 +38,8 @@ const COPY = {
     no: 'Nee',
     fits: 'Dit pakket past',
     seePlan: 'Bekijk wat erin zit',
+    proofLabel: 'Het team en een resultaat',
+    team: 'Verkoop Studio · Lochristi',
     software: 'Onze software, apart',
     crm: 'Sales CRM',
     perf: 'Performance',
@@ -55,6 +61,8 @@ const COPY = {
     no: 'No',
     fits: 'This plan fits',
     seePlan: 'See what is in it',
+    proofLabel: 'The team and a result',
+    team: 'Verkoop Studio · Lochristi',
     software: 'Our software, on its own',
     crm: 'Sales CRM',
     perf: 'Performance',
@@ -111,6 +119,8 @@ function Builder({ lang }: { lang: 'nl' | 'en' }) {
 }
 
 
+const pinacello = getCase('pinacello')
+
 export default function Pricing() {
   usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
@@ -150,6 +160,20 @@ export default function Pricing() {
       </section>
 
       <Builder lang={lang} />
+
+      {/* The people you plan with, and one published result. */}
+      <section className="vs-wrap pr-proof" aria-label={t.proofLabel}>
+        <Link to="/agency" className="pr-team">
+          <span className="pr-team-photos"><ResponsiveImage src={stef} alt="" sizes="96px" /><ResponsiveImage src={tanguy} alt="" sizes="96px" /></span>
+          <span><b>Stef &amp; Tanguy</b>{t.team}</span>
+        </Link>
+        {pinacello?.result && (
+          <Link to="/cases/pinacello" className="pr-result-tile" onClick={() => trackEvent('case_viewed', { case: 'pinacello', placement: 'pricing_proof' })}>
+            <b>{pinacello.result[lang]}</b>
+            <span>Pinacello · {pinacello.sector[lang]}</span>
+          </Link>
+        )}
+      </section>
       <PlansSection />
 
       <section className="vs-wrap vs-section pr-software" aria-labelledby="software-prices">
