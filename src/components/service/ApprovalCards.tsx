@@ -4,8 +4,8 @@ import type { Lang } from '../../data/types'
 import Reveal from '../brand/Reveal'
 import { AdCard, type AdArt } from './ServiceScreens'
 
-/** Different real material than the hero and the steps above, so nothing repeats on the page. */
-const APPROVAL_ART: AdArt[] = ['pinacello-site', 'healthfactor-site', 'none']
+/** Different real material than the hero and the steps above, so nothing repeats on the page. Two cards: there is no third real asset left to show. */
+const APPROVAL_ART: AdArt[] = ['pinacello-site', 'healthfactor-site']
 
 const COPY = {
   nl: { title: 'Een creative-ronde, in het klein.', body: 'Een voorbeeld van creatives per fase. Druk maar op Goedkeuren.', approve: 'Goedkeuren', waiting: 'Ter goedkeuring', live: 'Live', sample: 'Voorbeeld' },
@@ -18,13 +18,13 @@ const PLATFORMS: Record<'meta' | 'mix', string[]> = { meta: ['Instagram', 'Faceb
 export default function ApprovalCards({ lang, platforms = 'meta' }: { lang: Lang; platforms?: 'meta' | 'mix' }) {
   const t = COPY[lang]
   const reduce = useReducedMotion()
-  const [approved, setApproved] = useState<boolean[]>([false, false, false])
+  const [approved, setApproved] = useState<boolean[]>(APPROVAL_ART.map(() => false))
   return (
     <section className="vs-wrap vs-section sv-approve-wrap" aria-labelledby="approve-title">
       <Reveal as="h2" className="vs-h2" id="approve-title">{t.title}</Reveal>
       <Reveal as="p" className="sv-how-lead" delay={0.1}>{t.body}</Reveal>
       <ul className="sv-approve-grid">
-        {[0, 1, 2].map((i) => {
+        {APPROVAL_ART.map((art, i) => {
           const done = approved[i]
           return (
             <Reveal as="li" key={i} delay={i * 0.1} y={40}>
@@ -40,7 +40,7 @@ export default function ApprovalCards({ lang, platforms = 'meta' }: { lang: Lang
                   </span>
                   <em className="sv-approve-sample">{t.sample}</em>
                 </header>
-                <AdCard index={i} lang={lang} art={APPROVAL_ART[i]} />
+                <AdCard index={i} lang={lang} art={art} />
                 <button type="button" className="sv-approve-btn" aria-pressed={done} onClick={() => setApproved((prev) => prev.map((v, j) => (j === i ? !v : v)))}>
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3.5 9.5 7.5 13.5 14.5 5" pathLength={1} /></svg>
                   {done ? t.live : t.approve}

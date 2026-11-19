@@ -46,7 +46,7 @@ const ART = {
   'pinacello-site': pinacelloShop,
   'healthfactor-site': healthfactorShop,
 } as const
-export type AdArt = keyof typeof ART | 'none'
+export type AdArt = keyof typeof ART
 const DEFAULT_ART: AdArt[] = ['pinacello-still', 'healthfactor-still', 'nooms']
 
 export function AdCard({ index, lang, art = DEFAULT_ART[index] }: { index: number; lang: Lang; art?: AdArt }) {
@@ -54,8 +54,8 @@ export function AdCard({ index, lang, art = DEFAULT_ART[index] }: { index: numbe
   return (
     <div className="sv-ad">
       <div className="sv-ad-head"><span className="sv-ava">v.</span><p><b>{lang === 'nl' ? 'Jouw merk' : 'Your brand'}</b><span>{lang === 'nl' ? 'Gesponsord' : 'Sponsored'}</span></p><span className="sv-stage">{ad.stage}</span></div>
-      <div className={`sv-ad-img sv-ad-img--${ad.tone}${art === 'none' ? ' sv-ad-img--plain' : ''}`} aria-hidden="true">
-        {art !== 'none' && <img src={ART[art]} alt="" width={360} height={360} loading="lazy" decoding="async" />}
+      <div className={`sv-ad-img sv-ad-img--${ad.tone}`} aria-hidden="true">
+        <img src={ART[art]} alt="" width={360} height={360} loading="lazy" decoding="async" />
         {ad.tone === 'video' && <span className="sv-play"><svg width="16" height="16" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>}
         {ad.tone === 'steps' && <span className="sv-ad-steps"><i>1</i><i>2</i><i>3</i></span>}
         {ad.tone === 'cart' && <span className="sv-ad-cart-badge">1</span>}
@@ -81,7 +81,7 @@ function Campaigns({ lang }: ScreenProps) {
 }
 
 function Creatives({ lang }: ScreenProps) {
-  return <Win title="Instagram · Facebook" lang={lang}><div className="sv-ads">{([['nooms', 0], ['none', 1], ['ekart', 2]] as [AdArt, number][]).map(([art, i]) => <AdCard key={i} index={i} lang={lang} art={art} />)}</div></Win>
+  return <Win title="Instagram · Facebook" lang={lang}><div className="sv-ads">{([['nooms', 0], ['ekart', 2]] as [AdArt, number][]).map(([art, i]) => <AdCard key={i} index={i} lang={lang} art={art} />)}</div></Win>
 }
 
 function Table({ title, head, rows, advice, lang }: { title: string; head: string[]; rows: string[][]; advice?: string; lang: Lang }) {
