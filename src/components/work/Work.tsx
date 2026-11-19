@@ -76,7 +76,7 @@ export function WorkAd({ slug, lang, className = '' }: { slug: string; lang: Lan
           <video src={c.video} poster={c.videoPoster} controls autoPlay playsInline onEnded={() => setPlaying(false)} />
         ) : (
           <button type="button" className="wk-ad-play" aria-label={`${w.play}: ${c.name}`} onClick={() => { setPlaying(true); trackEvent('case_viewed', { case: slug, placement: 'work_ad_video' }) }}>
-            <img src={c.videoPoster} alt="" loading="lazy" decoding="async" />
+            <img src={c.videoPoster} alt="" width={360} height={640} loading="lazy" decoding="async" />
             <span className="wk-ad-play-btn" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>
           </button>
         )}
