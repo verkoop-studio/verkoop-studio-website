@@ -7,6 +7,7 @@ import type { CSSProperties, ReactNode } from 'react'
 import type { ServiceScreen } from '../../data/serviceSteps'
 import type { Lang } from '../../data/types'
 import BotAvatar from '../brand/BotAvatar'
+import { StackedBars } from '../brand/blocks/StackedBars'
 
 /*
  * Sample screens for the service pages. Every name and figure in them is invented,
@@ -183,12 +184,13 @@ function Followup({ lang }: ScreenProps) {
 
 function Dashboard({ lang }: ScreenProps) {
   const nl = lang === 'nl'
-  const kpis = nl ? [['Kosten', '€ 1.240'], ['Aanvragen', '38'], ['Omzet', '€ 5.890']] : [['Cost', '€ 1,240'], ['Enquiries', '38'], ['Revenue', '€ 5,890']]
-  const bars = [34, 42, 38, 55, 61, 58, 72]
+  const kpis = nl ? [['Kosten', '€ 1.240'], ['Aanvragen', '38']] : [['Cost', '€ 1,240'], ['Enquiries', '38']]
   return (
     <Win title={nl ? 'Overzicht' : 'Overview'} lang={lang}>
       <dl className="sv-kpis">{kpis.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
-      <div className="sv-bars" aria-hidden="true">{bars.map((h, i) => <i key={i} style={v({ '--h': `${h}%`, '--d': `${0.1 + i * 0.06}s` })} />)}</div>
+      <div className="sv-stb">
+        <StackedBars fluid lang={lang} title={nl ? 'Omzet per kanaal' : 'Revenue by channel'} unit={nl ? 'omzet' : 'revenue'} prefix="€ " cats={['Meta', 'Google', 'TikTok', nl ? 'E-mail' : 'Email']} base={[260, 190, 90, 60]} escLabel={nl ? 'Retouren' : 'Returns'} bars={14} plotHeight={74} belowHeight={12} />
+      </div>
     </Win>
   )
 }

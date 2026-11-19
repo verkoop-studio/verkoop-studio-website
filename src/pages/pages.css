@@ -276,13 +276,12 @@
 .sv-timeline li.is-done::before { background: #28c840; box-shadow: none; }
 .sv-timeline em { color: var(--vs-mute); font-style: normal; font-size: 11.5px; }
 
-.sv-kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin: 0 0 14px; }
+.sv-kpis { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 8px; margin: 0 0 14px; }
 .sv-kpis div { padding: 10px; border-radius: 10px; background: var(--vs-stone); }
 .sv-kpis dt { color: var(--vs-mute); font-size: 11.5px; }
 .sv-kpis dd { margin: 2px 0 0; font: 600 17px/1 var(--font-sans); font-variant-numeric: tabular-nums; }
-.sv-bars { display: flex; align-items: flex-end; gap: 6px; height: 90px; }
-.sv-bars i { flex: 1; height: var(--h); border-radius: 5px 5px 2px 2px; background: linear-gradient(var(--vs-blue), #7d93ff); transform-origin: 50% 100%; animation: sv-bar-up 0.8s var(--vs-ease) var(--d) both; }
-.sv-bars i:hover { filter: brightness(1.15); }
+.sv-stb { margin: 4px -14px -14px; }
+.sv-stb .stb { border-radius: 0; background: transparent; }
 @keyframes sv-bar-up { from { transform: scaleY(0); } }
 
 .sv-product { display: flex; gap: 12px; align-items: center; }
@@ -355,7 +354,7 @@
 .sv-app em { color: var(--vs-mute); font-style: normal; font-size: 11.5px; font-variant-numeric: tabular-nums; }
 .sv-app-chip { position: absolute; right: 14px; top: 12px; padding: 2px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-size: 10.5px; }
 @media (prefers-reduced-motion: reduce) {
-  .sv-caret, .sv-events li, .sv-page-cta, .sv-cursor, .sv-sources li, .sv-funnel li, .sv-bars i, .sv-flow li, .sv-node--goal { animation: none; }
+  .sv-caret, .sv-events li, .sv-page-cta, .sv-cursor, .sv-sources li, .sv-funnel li, .sv-flow li, .sv-node--goal { animation: none; }
 }
 
 /* ---------- Case pages ---------- */

@@ -31,9 +31,9 @@ const MONTHS: Record<Lang, string[]> = {
   nl: ['jan', 'feb', 'mrt', 'apr', 'mei', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'],
   en: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
 }
-const WORDS: Record<Lang, { day: string; week: string; days: string; weeks: string; last: string }> = {
-  nl: { day: 'Dag', week: 'Week', days: 'dagen', weeks: 'weken', last: 'Laatste' },
-  en: { day: 'Day', week: 'Week', days: 'days', weeks: 'weeks', last: 'Last' },
+const WORDS: Record<Lang, { day: string; week: string }> = {
+  nl: { day: 'Dag', week: 'Week' },
+  en: { day: 'Day', week: 'Week' },
 }
 
 /* a small seeded generator: the same chart on every load */
@@ -126,7 +126,8 @@ export function StackedBars({
   const w = WORDS[lang]
   const fmt = (v: number) => prefix + Math.round(v).toString().replace(/\B(?=(\d{3})+(?!\d))/g, lang === 'nl' ? '.' : ',')
   const n = Math.max(2, Math.round(bars))
-  const [mode, setMode] = useState<Mode>('Day')
+  /* Week first: the steadier, fuller view to open on */
+  const [mode, setMode] = useState<Mode>('Week')
   const [at, setAt] = useState<number | null>(null)
   const [seen, setSeen] = useState(false)
   const plot = useRef<HTMLDivElement | null>(null)
@@ -222,7 +223,6 @@ export function StackedBars({
       <div className="stb-head">
         <div className="stb-titles">
           <div className="stb-title">{title}{sample && <em className="stb-sample">{sample}</em>}</div>
-          <div className="stb-sub">{w.last} {n} {mode === 'Day' ? w.days : w.weeks}</div>
         </div>
         <div className="stb-seg-ctl" data-mode={mode} role="tablist">
           <span className="stb-thumb" aria-hidden />
