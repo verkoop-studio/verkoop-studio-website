@@ -1,43 +1,72 @@
-import type { CSSProperties } from 'react'
+import { type CSSProperties, useState } from 'react'
 import type { Lang } from '../../data/types'
-import { Ticker } from './demo'
-import { SamplePipeline } from './samples'
+import { COMPANY, DEALS } from '../../data/samples'
+import { StackedBars } from './blocks/StackedBars'
+import { ToastStack, type ToastItem } from './blocks/ToastStack'
+import { Person } from './samples'
 
-/** Sample channel revenue per week, stacked Meta, Google, TikTok. Under the "Voorbeeld" chip. */
-const WEEKS = [[22, 14, 5], [26, 15, 6], [24, 18, 5], [30, 17, 8], [28, 21, 7], [34, 20, 9], [33, 24, 8], [38, 23, 11]]
-const CHANNELS = [['Meta', '#1877f2'], ['Google', '#ea4335'], ['TikTok', '#111110']] as const
 const WORDS = {
-  nl: { sample: 'Voorbeeld', revenue: 'Omzet uit advertenties', roas: '4,7× per euro' },
-  en: { sample: 'Sample', revenue: 'Revenue from ads', roas: '4.7× per euro' },
+  nl: { sample: 'Voorbeeld', lead: 'Nieuwe lead via', leads: 'Nieuwe leads', revenue: 'Omzet uit advertenties', unit: 'omzet', returns: 'Retouren', mail: 'E-mail' },
+  en: { sample: 'Sample', lead: 'New lead via', leads: 'New leads', revenue: 'Revenue from ads', unit: 'revenue', returns: 'Returns', mail: 'Email' },
+}
+
+const short = (name: string) => { const [first, last] = name.split(' '); return `${first} ${last[0]}.` }
+
+/** The sample deals as arriving leads: who, which company, where from, and what it is worth. */
+function leads(lang: Lang): ToastItem[] {
+  const w = WORDS[lang]
+  return DEALS[lang].map(([ini, who, value, src]) => ({
+    key: ini,
+    icon: <Person ini={ini} size={30} />,
+    title: <>{short(who)} <small>· {COMPANY[lang][ini]}</small></>,
+    body: `${w.lead} ${src}`,
+    aside: value,
+  }))
+}
+
+/** Leads arriving: the count pops a digit at a time, the stack fans out over it on hover. */
+function CrmLeads({ lang }: { lang: Lang }) {
+  const w = WORDS[lang]
+  const [count, setCount] = useState(3)
+  return (
+    <div className="pm-body pm-crm">
+      <p className="pm-crm-head">
+        <span>{w.leads}</span>
+        <b key={count} className="pm-crm-count">{String(count).split('').map((ch, i) => <span key={i} style={{ '--i': i } as CSSProperties}>{ch}</span>)}</b>
+      </p>
+      <ToastStack items={leads(lang)} label={w.leads} height={58} peek={12} gap={8} anchor="bottom" onArrive={setCount} />
+    </div>
+  )
 }
 
 /**
- * The two products as small live screens, for the menu tile and the footer card:
- * the pipeline with one deal moving on, or revenue per channel with the total counting up.
+ * The two products as small live screens, for the home tiles, the menu and the footer card:
+ * sample leads arriving in a toast stack, or revenue per channel as stacked bars.
+ * Both are sample screens under the "Voorbeeld" chip.
  */
-export default function ProductMini({ kind, lang, on = true, id }: { kind: 'crm' | 'performance'; lang: Lang; on?: boolean; id: string }) {
+export default function ProductMini({ kind, lang, id }: { kind: 'crm' | 'performance'; lang: Lang; on?: boolean; id: string }) {
   const w = WORDS[lang]
   const title = kind === 'crm' ? 'Sales CRM' : 'Performance'
-  const max = Math.max(...WEEKS.map((week) => week.reduce((a, b) => a + b, 0)))
-  const total = 5890
-  const fmt = (v: number) => `€ ${Math.round(v).toLocaleString(lang === 'nl' ? 'nl-BE' : 'en-GB')}`
   return (
-    <div className={`pm pm--${kind}`} aria-hidden="true">
+    <div className={`pm pm--${kind}`} aria-hidden="true" data-id={id}>
       <p className="pm-bar"><i /><i /><i /><b>{title}</b><em>{w.sample}</em></p>
       {kind === 'crm' ? (
-        <div className="pm-body"><SamplePipeline lang={lang} id={`pm-${id}`} on={on} ms={3000} /></div>
+        <CrmLeads lang={lang} />
       ) : (
         <div className="pm-body pm-perf">
-          <p className="pm-total"><span>{w.revenue}</span><b><Ticker to={total} on={on} ms={1200} format={fmt} /></b><em>{w.roas}</em></p>
-          <div className="pm-stacks">
-            {WEEKS.map((week, i) => (
-              <span key={i} className="pm-stack" style={{ '--i': i, height: `${(week.reduce((a, b) => a + b, 0) / max) * 100}%` } as CSSProperties}>
-                {week.map((v, c) => <i key={c} style={{ flexGrow: v, background: CHANNELS[c][1] }} />)}
-              </span>
-            ))}
-            <span className="pm-scan" />
-          </div>
-          <p className="pm-legend">{CHANNELS.map(([name, color]) => <span key={name}><i style={{ background: color }} />{name}</span>)}</p>
+          <StackedBars
+            fluid
+            lang={lang}
+            title={w.revenue}
+            unit={w.unit}
+            prefix="€ "
+            cats={['Meta', 'Google', 'TikTok', w.mail]}
+            base={[260, 190, 90, 60]}
+            escLabel={w.returns}
+            bars={16}
+            plotHeight={78}
+            belowHeight={12}
+          />
         </div>
       )}
     </div>

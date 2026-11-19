@@ -1,3 +1,4 @@
+// From Bencho (bencho.dev), MIT licence, (c) 2026 Lorenzo Cabra.
 import { type CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
 import { animate, motion, useMotionValue } from 'motion/react'
 
@@ -88,6 +89,8 @@ export function StackedBars({
   plotHeight = 104,
   belowHeight = 22,
   colour = 'Colour',
+  fluid = false,
+  sample,
 }: {
   lang?: Lang
   title: string
@@ -102,8 +105,21 @@ export function StackedBars({
   plotHeight?: number
   belowHeight?: number
   colour?: 'Mono' | 'Colour'
+  /** Measure the parent and fill its width instead of a fixed `width`. */
+  fluid?: boolean
+  /** A sample chip beside the title ("Voorbeeld"). */
+  sample?: string
 }) {
-  const W = width
+  const root = useRef<HTMLDivElement | null>(null)
+  const [measured, setMeasured] = useState<number | null>(null)
+  useEffect(() => {
+    const box = root.current?.parentElement
+    if (!fluid || !box || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(([e]) => setMeasured(Math.max(200, Math.floor(e.contentRect.width))))
+    ro.observe(box)
+    return () => ro.disconnect()
+  }, [fluid])
+  const W = fluid && measured ? measured : width
   const CW = W - PAD * 2
   const CH = plotHeight
   const BH = belowHeight
@@ -113,7 +129,6 @@ export function StackedBars({
   const [mode, setMode] = useState<Mode>('Day')
   const [at, setAt] = useState<number | null>(null)
   const [seen, setSeen] = useState(false)
-  const root = useRef<HTMLDivElement | null>(null)
   const plot = useRef<HTMLDivElement | null>(null)
 
   /* grow in once, the first time the card is on screen */
@@ -202,11 +217,11 @@ export function StackedBars({
       className="stb"
       data-colour={colour === 'Colour' ? 'on' : 'off'}
       data-scrub={cur ? '' : undefined}
-      style={{ width: W, ['--stb-r' as string]: `${r}px`, ['--stb-rr' as string]: `${r + 3}px` } as CSSProperties}
+      style={{ width: fluid ? '100%' : W, ['--stb-r' as string]: `${r}px`, ['--stb-rr' as string]: `${r + 3}px` } as CSSProperties}
     >
       <div className="stb-head">
         <div className="stb-titles">
-          <div className="stb-title">{title}</div>
+          <div className="stb-title">{title}{sample && <em className="stb-sample">{sample}</em>}</div>
           <div className="stb-sub">{w.last} {n} {mode === 'Day' ? w.days : w.weeks}</div>
         </div>
         <div className="stb-seg-ctl" data-mode={mode} role="tablist">
