@@ -26,7 +26,7 @@ const COPY = {
     label: 'Groeianalyse',
     title: [{ text: 'Vraag een' }, { text: 'groeianalyse aan.', tone: 'accent' as const }],
     body: 'Geen algemene template. We bekijken jullie huidige situatie, doelgroep en commerciële proces. Daarna zien we waar in de klantreis conversie verloren gaat.',
-    cta: 'Bespreek je project',
+    cta: 'Verstuur je aanvraag',
     win: 'Groeianalyse',
     scopeLabel: 'De analyse bekijkt',
     scope: AUDIT_SCOPE.nl,
@@ -48,7 +48,7 @@ const COPY = {
     label: 'Growth analysis',
     title: [{ text: 'Request a' }, { text: 'growth analysis.', tone: 'accent' as const }],
     body: 'No generic template. We look at your current situation, audience and commercial process. Then we see where conversion is lost in the journey.',
-    cta: 'Discuss your project',
+    cta: 'Send your enquiry',
     win: 'Growth analysis',
     scopeLabel: 'The analysis reviews',
     scope: AUDIT_SCOPE.en,
@@ -112,7 +112,7 @@ export default function FunnelAudit() {
           <span className="fa-proof-text"><b>Pinacello</b>{pinacello?.summary[lang]}</span>
           <Go />
         </Link>
-        <div>
+        <div className="fa-deliver-block">
           <Reveal as="h2" className="vs-h2">{t.deliverablesLabel}</Reveal>
           <ul className="sv-deliver-list fa-deliver">{t.deliverables.map((item) => <li key={item}><span className="sv-tick"><Check size={13} strokeWidth={2.6} /></span>{item}</li>)}</ul>
         </div>

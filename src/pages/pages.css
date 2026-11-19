@@ -734,7 +734,9 @@
 
 .fa-scope { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); }
 .fa-scope .sv-win { margin-top: 24px; }
-.fa-deliver { grid-template-columns: minmax(0, 1fr); margin-top: 24px; }
+/* The deliverables use the full width: three short columns instead of one list beside an empty half. */
+.fa-deliver-block { grid-column: 1 / -1; }
+.fa-deliver { grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); margin-top: 24px; }
 .fa-packages { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin: 0; padding: 18px 22px; border-radius: 18px; background: var(--vs-stone); color: var(--vs-ink-2); }
 @media (max-width: 860px) { .fa-scope { grid-template-columns: minmax(0, 1fr); } }
 
