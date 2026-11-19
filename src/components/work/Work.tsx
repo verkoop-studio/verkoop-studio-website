@@ -105,7 +105,7 @@ export function WorkResult({ slug, lang, index = 0, link = true, dark = false, p
     <>
       <span className="wk-result-figure">{f.value !== undefined ? <RollingNumber value={f.value} prefix={f.prefix} suffix={f.suffix} /> : f.text?.[lang]}</span>
       <span className="wk-result-label">{f.label[lang]}</span>
-      <svg className="wk-result-trend" viewBox="0 0 120 28" preserveAspectRatio="none" aria-hidden="true">
+      <svg className="wk-result-trend" viewBox="0 0 120 28" aria-hidden="true">
         <path d="M2 24 C 22 23, 30 18, 46 19 S 74 12, 86 10 S 108 5, 118 3" pathLength={1} data-on={seen || undefined} />
       </svg>
       <span className="wk-result-who"><b>{c.name}</b><em>{c.sector[lang]}</em></span>
