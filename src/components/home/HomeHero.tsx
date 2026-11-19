@@ -1,7 +1,6 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
-import { caseHeadline, cases } from '../../data/cases'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import HeroVideo from '../HeroVideo'
@@ -30,9 +29,7 @@ const COPY = {
     proofVideoLead: '20 verkopen',
     proofVideoRest: 'uit één organische video',
     proofLink: 'Lees de case',
-    proofNote: 'echte cijfers :)',
     formNote: 'helemaal gratis :)',
-    proof: 'Groei gebouwd voor',
     proofAll: 'Alle cases',
     scroll: 'Scroll',
     videoHeading: 'Zo helpen we kmo’s groeien',
@@ -53,9 +50,7 @@ const COPY = {
     proofVideoLead: '20 sales',
     proofVideoRest: 'from one organic video',
     proofLink: 'Read the case',
-    proofNote: 'real figures :)',
     formNote: 'completely free :)',
-    proof: 'Growth built for',
     proofAll: 'All cases',
     scroll: 'Scroll',
     videoHeading: 'How we help small businesses grow',
@@ -111,19 +106,6 @@ export default function HomeHero() {
             <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'hero' })}>{t.primary}</Cta>
             <TextLink to="/#groeipakketten">{t.secondary}</TextLink>
           </motion.div>
-          <motion.div className="vs-proof" {...arrive(0.95)}>
-            <span className="vs-label">{t.proof}</span>
-            <ul className="vs-marks">
-              {cases.filter((item) => !item.unavailable).map((item) => (
-                <li key={item.slug}>
-                  <Link to={`/cases/${item.slug}`} className="vs-mark-link">
-                    <strong>{item.name}</strong>
-                    <span>{caseHeadline(item, lang)}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
           </div>
           <motion.div
             className="vs-hero-proof"
@@ -131,7 +113,6 @@ export default function HomeHero() {
             animate={{ opacity: 1, x: 0, rotate: 1.5 }}
             transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.6 }}
           >
-            <HandNote point="down-left" className="vs-hero-proof-note">{t.proofNote}</HandNote>
             <div className="tx-win vs-proof-win">
               <div className="tx-win-bar"><i /><i /><i /><b>{t.proofTitle}</b><em>{t.proofChip}</em></div>
               <div className="vs-proof-body">
