@@ -1487,3 +1487,8 @@ a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate:
 .vs-case-card-shot { display: block; overflow: hidden; margin-top: 10px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); }
 .vs-case-card-shot img { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; object-position: top; }
 @media (prefers-reduced-motion: reduce) { .vs-poster-shot { transition: none; } }
+/* Home software cards: the live product minis at a size you can read. */
+.vs-product-mini { width: 100%; margin-bottom: 18px; zoom: 1.5; align-self: center; }
+.vs-product-mini .pm { box-shadow: 0 30px 60px -30px rgb(17 17 16 / 0.4); }
+.vs-product--dark .vs-product-mini .pm { border-color: transparent; }
+@media (max-width: 700px) { .vs-product-mini { zoom: 1.15; } }

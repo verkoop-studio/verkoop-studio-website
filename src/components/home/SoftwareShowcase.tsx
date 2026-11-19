@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
-import crmDashboard from '../../assets/crm/crm-dashboard.webp'
-import performanceOverview from '../../assets/performance/overview.webp'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackCrmSignupClick } from '../../lib/analytics'
 import Reveal from '../brand/Reveal'
 import SplitHeadline from '../brand/SplitHeadline'
 import Arrow from '../brand/Arrow'
+import ProductMini from '../brand/ProductMini'
 import TiltCard from '../brand/TiltCard'
 
 /** Platforms the dashboard reads from. Logos live in /public/platforms. */
@@ -50,7 +49,7 @@ export default function SoftwareShowcase() {
         <Reveal>
           <Link to="/crm" className="vs-product" onClick={() => trackCrmSignupClick('home_software')}>
             <TiltCard className="vs-product-stage">
-              <img src={crmDashboard} alt={t.crmAlt} width={1200} height={760} loading="lazy" decoding="async" />
+              <div className="vs-product-mini" role="img" aria-label={t.crmAlt}><ProductMini kind="crm" lang={lang} id="home-crm" /></div>
             </TiltCard>
             <div className="vs-product-row">
               <span className="vs-product-name">{t.crm}</span>
@@ -61,7 +60,7 @@ export default function SoftwareShowcase() {
         <Reveal delay={0.1}>
           <Link to="/performance" className="vs-product vs-product--dark">
             <TiltCard className="vs-product-stage">
-              <img src={performanceOverview} alt={t.perfAlt} width={1200} height={760} loading="lazy" decoding="async" />
+              <div className="vs-product-mini" role="img" aria-label={t.perfAlt}><ProductMini kind="performance" lang={lang} id="home-perf" /></div>
             </TiltCard>
             <div className="vs-product-row">
               <span className="vs-product-name">{t.perf}</span>
