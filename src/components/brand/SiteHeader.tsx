@@ -45,11 +45,14 @@ export default function SiteHeader() {
   const { pathname, hash } = useLocation()
   const reduce = useReducedMotion()
   const [scrolled, setScrolled] = useState(false)
+  /* The header's call to action stays an outline while a page's own first screen is in view,
+     so that screen has one filled button: the hero's. It fills once the hero is passed. */
+  const [past, setPast] = useState(false)
   const [open, setOpen] = useState(false)
   const menuButton = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
+    const onScroll = () => { setScrolled(window.scrollY > 40); setPast(window.scrollY > window.innerHeight * 0.6) }
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -83,7 +86,7 @@ export default function SiteHeader() {
           <NavMenu compact={scrolled} />
           <div className="vs-header-end">
             <LangSwitch />
-            <Cta to={persistentCtaHref} onClick={onCta('nav')}>{cta[lang]}</Cta>
+            <Cta to={persistentCtaHref} className={past ? '' : 'is-quiet'} onClick={onCta('nav')}>{cta[lang]}</Cta>
             <button
               ref={menuButton}
               type="button"
