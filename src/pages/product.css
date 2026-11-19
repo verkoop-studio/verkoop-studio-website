@@ -169,7 +169,11 @@ body:has(.pp) .back-to-top { display: none; }
 @media (max-width: 900px) {
   .cx-stepper { grid-template-columns: minmax(0, 1fr); }
   .cx-stage { display: none; }
-  .cx-steps { gap: 48px; }
+  /* One column the width of the screen: a wide sample window shrinks instead of pushing its step past the edge. */
+  .cx-steps { gap: 48px; grid-template-columns: minmax(0, 1fr); }
+  .cx-steps > li, .cx-own { min-width: 0; }
+  .cx-own > * { max-width: 100%; }
+  .cx-own .st-win { box-sizing: border-box; max-width: 100%; min-width: 0; }
   .cx-steps > li { min-height: 0; padding: 0; opacity: 1; }
   .cx-own { display: block; margin-top: 10px; }
   .cx-rows li { grid-template-columns: auto minmax(0, 1fr) auto; }

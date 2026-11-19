@@ -889,7 +889,11 @@
 @keyframes sk-pulse { 0% { box-shadow: 0 0 0 0 rgb(159 176 255 / 0.6); } 100% { box-shadow: 0 0 0 9px rgb(159 176 255 / 0); } }
 @keyframes sk-pulse-green { 0% { box-shadow: 0 0 0 0 rgb(47 191 113 / 0.6); } 100% { box-shadow: 0 0 0 6px rgb(47 191 113 / 0); } }
 
-@media (max-width: 860px) { .vs-split-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 860px) {
+  .vs-split-grid { grid-template-columns: minmax(0, 1fr); }
+  /* Stacked on a phone, the cards fade in where they sit: dealt in from the side they would start off-screen. */
+  .vs-split-panel { transform: none !important; }
+}
 
 /* The split cards: bigger type, the actions above, the phone breaking out of the card's lower edge. */
 .vs-split-panel h3 { font-size: clamp(30px, 3.2vw, 48px); }
