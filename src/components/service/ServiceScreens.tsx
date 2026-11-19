@@ -8,6 +8,7 @@ import type { ServiceScreen } from '../../data/serviceSteps'
 import type { Lang } from '../../data/types'
 import BotAvatar from '../brand/BotAvatar'
 import { StackedBars } from '../brand/blocks/StackedBars'
+import { WorkAd } from '../work/Work'
 
 /*
  * Sample screens for the service pages. Every name and figure in them is invented,
@@ -81,8 +82,9 @@ function Campaigns({ lang }: ScreenProps) {
   )
 }
 
+/** The real organic Pinacello video as the post it ran as. */
 function Creatives({ lang }: ScreenProps) {
-  return <Win title="Instagram · Facebook" lang={lang}><div className="sv-ads">{([['nooms', 0], ['ekart', 2]] as [AdArt, number][]).map(([art, i]) => <AdCard key={i} index={i} lang={lang} art={art} />)}</div></Win>
+  return <div className="sv-work-ad"><WorkAd slug="pinacello" lang={lang} /></div>
 }
 
 function Table({ title, head, rows, advice, lang }: { title: string; head: string[]; rows: string[][]; advice?: string; lang: Lang }) {

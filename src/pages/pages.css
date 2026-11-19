@@ -942,3 +942,9 @@
 .wk-journey-body { margin: 0; color: var(--vs-ink-2); font-size: 15px; line-height: 1.5; }
 .wk-journey-step .cs-tags { margin: 0; }
 .cs-work-site { max-width: 1100px; margin-inline: auto; }
+.sv-proof-work { display: block; }
+.sv-proof-work .wk-result { box-shadow: none; }
+.sv-work-ad { display: grid; justify-items: center; }
+.sv-work-ad .wk-ad { max-width: 280px; }
+.sv-phone-stage--work { display: grid; justify-items: center; }
+.sv-phone-stage--work .wk-ad { max-width: 300px; }

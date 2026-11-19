@@ -22,7 +22,11 @@ import WorksWith from '../components/brand/WorksWith'
 import { faqItems } from '../data/faq'
 import { serviceExtras } from '../data/serviceExtras'
 import { services } from '../data/services'
-import ServiceScreenView, { AdCard } from '../components/service/ServiceScreens'
+import ServiceScreenView from '../components/service/ServiceScreens'
+import { WorkAd, WorkResult, WorkSite } from '../components/work/Work'
+
+/** Cases with a real site screenshot for the site widget. */
+const REAL_SITE = new Set(['pinacello', 'nooms', 'healthfactor'])
 import { serviceStories, type ServiceScreen, type ServiceStep } from '../data/serviceSteps'
 import { caseHeadline, getCase } from '../data/cases'
 import { getService } from '../data/services'
@@ -108,15 +112,13 @@ const PROOF = {
   en: { lead: 'One organic video.', figure: '20 sales.', body: 'For Pinacello we made a video that brought in twenty sales without any ad budget. That video then became the base for the campaigns.', short: 'Pinacello, ecommerce' },
 }
 
-/** Meta Ads hero: a phone with one sample ad. */
+/** Meta Ads hero: Healthfactor's real ad as the post it ran as. */
 function MetaHero({ lang }: { lang: Lang }) {
   const reduce = useReducedMotion()
   return (
-    <div className="sv-hero-visual sv-phone-stage" aria-hidden="true">
-      <motion.div className="sv-phone" initial={reduce ? false : { opacity: 0, y: 50, rotate: 6 }} animate={{ opacity: 1, y: 0, rotate: 2.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
-        <span className="sv-phone-notch" />
-        <span className="sv-phone-chip">{COPY[lang].sample}</span>
-        <AdCard index={0} lang={lang} art="healthfactor-still" />
+    <div className="sv-hero-visual sv-phone-stage sv-phone-stage--work">
+      <motion.div initial={reduce ? false : { opacity: 0, y: 50, rotate: 6 }} animate={{ opacity: 1, y: 0, rotate: 2.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
+        <WorkAd slug="healthfactor" lang={lang} />
       </motion.div>
     </div>
   )
@@ -286,10 +288,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
       {slug === 'meta-ads' ? (
         <section className="vs-wrap vs-section" aria-labelledby="service-proof">
           <Link to="/cases/pinacello" className="sv-proof sv-proof--video" onClick={() => trackEvent('case_viewed', { case: 'pinacello', placement: 'service_page' })}>
-            <span className="sv-proof-thumb">
-              <img src="/images/ads/pinacello-personal.jpg" alt="" width={360} height={450} loading="lazy" decoding="async" />
-              <span className="sv-play" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>
-            </span>
+            <span className="sv-proof-work"><WorkResult slug="pinacello" lang={lang} index={1} link={false} /></span>
             <span className="sv-proof-copy">
               <span className="vs-label">{t.proofLabel} · {PROOF[lang].short}</span>
               <span id="service-proof" className="sv-proof-title">{PROOF[lang].lead} <span className="vs-mark"><span className="vs-mark-bg" aria-hidden="true" />{PROOF[lang].figure}</span></span>
@@ -301,7 +300,9 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
       ) : relatedCase ? (
         <section className="vs-wrap vs-section" aria-labelledby="service-proof">
           <Link to={`/cases/${relatedCase.slug}`} className="sv-proof vs-case-live" onClick={() => trackEvent('case_viewed', { case: relatedCase.slug, placement: 'service_page' })}>
-            <span className="sv-proof-frame"><CasePoster slug={relatedCase.slug} name={relatedCase.name} caption={caseHeadline(relatedCase, lang)} lang={lang} /></span>
+            {REAL_SITE.has(relatedCase.slug)
+              ? <span className="sv-proof-work"><WorkSite slug={relatedCase.slug} lang={lang} tilt={false} /></span>
+              : <span className="sv-proof-frame"><CasePoster slug={relatedCase.slug} name={relatedCase.name} caption={caseHeadline(relatedCase, lang)} lang={lang} /></span>}
             <span className="sv-proof-copy">
               <span className="vs-label">{t.proofLabel}</span>
               <span id="service-proof" className="sv-proof-title">{relatedCase.name}</span>
