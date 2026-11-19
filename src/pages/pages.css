@@ -940,3 +940,8 @@
 @media (max-width: 760px) { .pr-proof { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .pr-team, .pr-result-tile { transition: none; } }
 .vs-cases-cta { margin-top: 26px; }
+.cs-steps .wk-journey { margin-top: 36px; }
+.wk-journey-title { margin: 0; font: 600 clamp(19px, 1.6vw, 22px)/1.2 var(--font-display); letter-spacing: -0.015em; }
+.wk-journey-body { margin: 0; color: var(--vs-ink-2); font-size: 15px; line-height: 1.5; }
+.wk-journey-step .cs-tags { margin: 0; }
+.cs-work-site { max-width: 1100px; margin-inline: auto; }

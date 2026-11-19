@@ -8,7 +8,7 @@ import healthfactorSite from '../assets/cases/healthfactor-website-640.webp'
 import noomsSite from '../assets/cases/nooms-640.webp'
 import pinacelloSite from '../assets/cases/pinacello-640.webp'
 import { Check, MapPin, Users } from 'lucide-react'
-import { useRef, useState, type CSSProperties } from 'react'
+import { useRef, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
 import Breadcrumbs from '../components/Breadcrumbs'
 import Seo from '../components/Seo'
@@ -23,6 +23,7 @@ import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
 import CasePoster from '../components/home/CasePoster'
 import ResponsiveImage from '../components/ResponsiveImage'
+import { WorkAd, WorkJourney, WorkSite } from '../components/work/Work'
 import type { CaseContent, CaseScreen, CaseStat } from '../data/caseContent'
 import { caseHeadline, cases } from '../data/cases'
 import type { CaseSlug, CaseStudy, Lang } from '../data/types'
@@ -49,6 +50,9 @@ function StatIcon({ icon }: { icon: CaseStat['icon'] }) {
 }
 
 /** Each case's own material: the ad still where one was published, and the live site. */
+/** Cases with a real site to show in the browser widget and real material for each journey step. */
+const REAL_SITE = new Set(['pinacello', 'nooms', 'healthfactor'])
+
 const ASSETS: Record<CaseSlug, { still?: string; site: string }> = {
   pinacello: { still: '/images/ads/pinacello-personal.jpg', site: pinacelloSite },
   'e-kart': { site: ekartSite },
@@ -206,25 +210,6 @@ function ExtraScreen({ kind, nl, art, name, site }: { kind: CaseScreen; nl: bool
   return null
 }
 
-/** A local video in a phone frame. Our own cover shows until the visitor presses play. */
-function PhoneVideo({ c, lang }: { c: CaseStudy; lang: Lang }) {
-  const [playing, setPlaying] = useState(false)
-  if (!c.video) return null
-  return (
-    <div className="cs-phone">
-      <span className="cs-phone-notch" aria-hidden="true" />
-      {playing ? (
-        <video src={c.video} poster={c.videoPoster} controls autoPlay playsInline aria-label={c.videoCaption?.[lang] ?? c.name} />
-      ) : (
-        <button type="button" className="cs-phone-cover" onClick={() => setPlaying(true)} aria-label={`${COPY[lang].play}: ${c.videoCaption?.[lang] ?? c.name}`}>
-          {c.videoPoster && <img src={c.videoPoster} alt="" width={360} height={640} loading="lazy" decoding="async" />}
-          <span className="cs-phone-play" aria-hidden="true"><span /><svg width="22" height="22" viewBox="0 0 14 14"><path d="M4.2 2.4v9.2L11.8 7Z" fill="currentColor" /></svg></span>
-        </button>
-      )}
-    </div>
-  )
-}
-
 export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content: CaseContent }) {
   usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
@@ -291,6 +276,9 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
 
       {c.image && (
         <section className="vs-wrap cs-window-wrap">
+          {REAL_SITE.has(c.slug) ? (
+            <Reveal y={50}><WorkSite slug={c.slug} lang={lang} className="cs-work-site" /></Reveal>
+          ) : (
           <Reveal className="cs-window" y={50}>
             <div className="cs-window-bar">
               <i /><i /><i />
@@ -304,6 +292,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
               </motion.div>
             </div>
           </Reveal>
+          )}
           {c.liveUrl && (
             <p className="cs-window-link">
               <a className="vs-textlink vs-textlink--arrow" href={c.liveUrl} target="_blank" rel="noopener noreferrer">{t.site}<Arrow direction="up-right" size={15} /></a>
@@ -314,6 +303,9 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
 
       <section id="case-steps" className="vs-wrap vs-section cs-steps" aria-labelledby="case-steps-title">
         <Reveal as="h2" className="vs-h2" id="case-steps-title">{k.stepsTitle[lang]}</Reveal>
+        {REAL_SITE.has(c.slug) ? (
+          <Reveal y={40}><WorkJourney slug={c.slug} lang={lang} detail more={t.more} /></Reveal>
+        ) : (
         <ol className="cs-step-grid">
           {k.steps.map((step, i) => (
             <motion.li
@@ -336,6 +328,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
             </motion.li>
           ))}
         </ol>
+        )}
       </section>
 
       {k.proof && (k.proof.media === 'stamp' || c.video) && (
@@ -368,7 +361,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
                   </motion.span>
                 </div>
               ) : (
-                <PhoneVideo c={c} lang={lang} />
+                <WorkAd slug={c.slug} lang={lang} />
               )}
             </motion.div>
           </div>
