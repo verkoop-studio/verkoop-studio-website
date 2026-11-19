@@ -73,7 +73,6 @@
 .ac-hero-request { padding-top: 32px; }
 .ac-hero-cta { display: flex; justify-content: center; margin-top: 22px; }
 .ac-hero-copy h1 { font-size: clamp(38px, 4.5vw, 64px); line-height: 1.04; font-weight: 700; letter-spacing: -.04em; text-wrap: balance; }
-.ac-hero-intro { max-width: 46rem; margin-inline: auto; margin-top: 22px; color: var(--ac-text); font-size: clamp(16px, 1.7vw, 18px); line-height: 1.65; }
 .ac-hero-signup { width: 100%; margin-top: 28px; padding: 0; scroll-margin-top: 100px; }
 /* mobile.css pads every div that wraps a form; these wrappers are already styled. */
 .ac-footer-top { padding: 0; }
@@ -257,15 +256,9 @@ button.ac-row.is-active { background: #f1f4ff; border-color: #d5dcff; }
 /* Plans */
 
 /* Signup section */
-.ac-signup-section { width: min(760px, 100% - 48px); margin-top: 140px; scroll-margin-top: 96px; }
-.ac-privacy { max-width: 46rem; margin-top: 22px; color: var(--ac-mute); font-size: 12.5px; line-height: 1.55; }
-.ac-privacy a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .ac-signup-card { padding: 34px 34px 30px; border-radius: 24px; background: #fff; border: 1px solid var(--ac-line); box-shadow: 0 30px 70px -50px #181c3d66; }
 .academy-page .ac-signup-card h2 { font-size: clamp(32px, 3.2vw, 44px); }
-.ac-signup-lead { margin-top: 14px; max-width: 40rem; color: var(--ac-text); font-size: 16px; line-height: 1.6; }
 .ac-signup-card .ac-signup-full { margin-top: 26px; }
-.ac-signup-done p { margin-top: 8px; color: var(--ac-text); font-size: 15px; line-height: 1.6; }
-.ac-signup-done > div { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 22px; }
 
 /* Sticky signup bar */
 
@@ -308,7 +301,6 @@ button.ac-row.is-active { background: #f1f4ff; border-color: #d5dcff; }
   :where(.academy-page section) h2 { font-size: 36px; }
   .ac-hero { padding-top: 36px; }
   .ac-hero-signup { margin-top: 0; }
-  .ac-signup-section { margin-top: 96px; }
   .ac-slide { grid-template-columns: 1fr; }
   .ac-focus { grid-template-columns: 1fr; gap: 36px; margin-top: 88px; }
   .ac-focus-card { position: static; max-width: 420px; }
@@ -362,7 +354,7 @@ button.ac-row.is-active { background: #f1f4ff; border-color: #d5dcff; }
   .ac-testlog-side button { flex: 0 0 auto; min-width: 156px; scroll-snap-align: start; }
 }
 @media (max-width: 560px) {
-  .ac-focus, .ac-curriculum, .ac-faq, .ac-signup-section, .ac-final, .ac-footer { margin-top: 72px; }
+  .ac-focus, .ac-curriculum, .ac-faq, .ac-final, .ac-footer { margin-top: 72px; }
   .ac-slider-buttons button { height: 44px; }
   .ac-progress-tabs button { min-height: 44px; padding-top: 14px; }
   .ac-slide { touch-action: pan-y; }
@@ -521,13 +513,6 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 }
 
 /* One clear floating action, without an extra outer frame. */
-.ac-sticky { position: fixed; z-index: 50; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom)); width: min(360px, calc(100% - 32px)); opacity: 0; transform: translate(-50%, 140%); pointer-events: none; transition: transform .3s ease, opacity .2s ease; }
-.ac-sticky.is-visible { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
-.ac-sticky .ac-button { display: flex; align-items: center; justify-content: center; width: 100%; min-height: 54px; margin: 0; padding: 14px 22px; border: 1px solid #ffffff40; border-radius: 14px; font-size: 15px; line-height: 1.4; font-weight: 600; box-shadow: 0 8px 24px -8px #172b9b66; }
-@media (max-width: 560px) {
-  .ac-sticky { bottom: calc(16px + env(safe-area-inset-bottom)); }
-  .ac-sticky .ac-button { min-height: 52px; }
-}
 
 /* A quiet, non-modal invitation; the form is opened only on request. */
 @keyframes ac-popup-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
@@ -712,7 +697,6 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 
 /* Immediate free-lesson request in the hero, without a separate reveal button. */
 .ac-hero-target { display: inline-block; margin-top: 18px; padding: 8px 11px; border: 1px solid #cdd7ff; border-radius: 10px; color: #2344d8; background: #eef1ff; font-size: 14px; font-weight: 650; line-height: 1.4; }
-.ac-hero-target + .ac-hero-intro { margin-top: 12px; font-size: 15px; line-height: 1.5; }
 .ac-hero-signup { margin-top: 0; }
 .ac-hero-signup .hero-request { margin-top: 0; }
 .ac-hero > .hero-video { align-self: start; }

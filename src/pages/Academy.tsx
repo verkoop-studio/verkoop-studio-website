@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import FaqFolder from '../components/brand/FaqFolder'
 import AcademyRaffleCard from '../components/AcademyRaffleCard'
-import AcademySignup from '../components/AcademySignup'
 import { recordAcademyPopup } from '../lib/academy-popup'
 import BrandMark from '../components/BrandMark'
 import ResponsiveImage from '../components/ResponsiveImage'
@@ -195,32 +194,11 @@ export default function Academy() {
   const [slide, setSlide] = useState(0)
   const [testId, setTestId] = useState(academyTests[0].id)
   const [signedUp, setSignedUp] = useState<{ naam: string; via: string } | null>(null)
-  const [sticky, setSticky] = useState(false)
-  const [stickyArmed, setStickyArmed] = useState(false)
   const topic = academyModules[slide]
   const test = academyTests.find(item => item.id === testId) ?? academyTests[0]
   const testModule = academyModules.find(item => item.id === test.module)
   const totals = academyTests.reduce((sum, item) => ({ spend: sum.spend + item.spend, purchases: sum.purchases + item.purchases, newCustomers: sum.newCustomers + item.newCustomers }), { spend: 0, purchases: 0, newCustomers: 0 })
   const thanks = signedUp?.naam ? `${t('Bedankt')}, ${signedUp.naam}!` : t("Bedankt!")
-
-  useEffect(() => {
-    const update = () => {
-      const hero = document.getElementById('academy-hero-signup')?.getBoundingClientRect()
-      const signup = document.getElementById('aanmelden')?.getBoundingClientRect()
-      const footer = document.querySelector('.ac-footer')?.getBoundingClientRect()
-      const card = document.querySelector('.ac-focus-card')?.getBoundingClientRect()
-      const promise = document.querySelector('.ac-promise')?.getBoundingClientRect()
-      const visible = (rect?: DOMRect) => !!rect && rect.top < innerHeight && rect.bottom > 0
-      // Keep the reading card quiet and avoid repeating other visible join buttons.
-      setSticky(!!hero && hero.bottom < 0 && !visible(signup) && !visible(footer) && !visible(card) && !visible(promise))
-      // Mount the bar only once the visitor scrolls, so it never animates while the stylesheet is still loading.
-      if (scrollY > 40) setStickyArmed(true)
-    }
-    update()
-    addEventListener('scroll', update, { passive: true })
-    addEventListener('resize', update)
-    return () => { removeEventListener('scroll', update); removeEventListener('resize', update) }
-  }, [])
 
   function scrollToId(id: string, focus?: string) {
     requestAnimationFrame(() => {
@@ -452,21 +430,6 @@ export default function Academy() {
         </details>
       </section>
 
-      <section id="aanmelden" className="ac-signup-section ac-wrap" aria-labelledby="signup-title">
-        <div className="ac-signup-card">
-          {signedUp ? <div className="ac-signup-done" role="status">
-            <h2 id="signup-title">{thanks}</h2>
-            <p>{t("Je aanvraag is binnen. Stef neemt contact op om je gratis les te plannen. Je krijgt ook een bevestiging per mail.")}</p>
-            <div><Link className="ac-button" to="/cases">{t("Bekijk intussen onze cases")}</Link></div>
-          </div> : <>
-            <h2 id="signup-title">{t("Vraag je gratis les aan")}</h2>
-            <p className="ac-signup-lead">{t("Laat je gegevens achter. Stef neemt contact op om je gratis les te plannen.")}</p>
-            <AcademySignup formId="academy-signup" variant="full" requestType="free_lesson" submitLabel={t("Vraag mijn gratis les aan")} onSuccess={joined('academy-signup')} />
-            <p className="ac-privacy">{t("We gebruiken je gegevens alleen om contact met je op te nemen over de academy. Nieuwsbrieven krijg je enkel als je dat aanvinkt.")} <Link to="/privacy">{t("Privacybeleid")}</Link></p>
-          </>}
-        </div>
-      </section>
-
       <div className="ac-wrap ac-raffle"><AcademyRaffleCard /></div>
 
       <section id="faq" className="ac-faq ac-wrap" aria-labelledby="faq-title">
@@ -480,9 +443,6 @@ export default function Academy() {
 
     {/* No newsletter pop-up here: the monthly raffle sits in the page as a card instead. */}
 
-    {!signedUp && stickyArmed && <div className={`ac-sticky ${sticky ? 'is-visible' : ''}`} aria-hidden={!sticky}>
-      <button className="ac-button" tabIndex={sticky ? 0 : -1} onClick={goToSignup}>{t('Vraag je gratis les aan')}</button>
-    </div>}
 
     <section className="ac-footer" aria-label="Academy">
       <div className="ac-wrap">
