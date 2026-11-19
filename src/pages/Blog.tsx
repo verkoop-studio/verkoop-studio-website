@@ -12,6 +12,7 @@ import { useLang } from '../i18n/LanguageContext'
 import { SITE_URL } from '../lib/site'
 import NotFound from './NotFound'
 import Arrow from '../components/brand/Arrow'
+import { ChevronDown } from 'lucide-react'
 import Cta from '../components/brand/Cta'
 import { trackEvent } from '../lib/analytics'
 import HandNote from '../components/brand/HandNote'
@@ -109,7 +110,7 @@ export default function Blog() {
     </header>
     <div className="bl-layout">
      <details className="bl-toc-chip">
-      <summary><span>{c.toc}</span><b><i>0{current + 1}</i>{article.sections[current]?.title}</b></summary>
+      <summary><span>{c.toc}</span><b>{article.sections.length} {lang === 'nl' ? 'onderdelen' : 'sections'}</b><ChevronDown size={18} aria-hidden="true" /></summary>
       <ol>{article.sections.map((s, i) => <li key={s.title}><a href={`#deel-${i + 1}`} className={current === i ? 'is-on' : undefined} onClick={(e) => e.currentTarget.closest('details')?.removeAttribute('open')}><span>0{i + 1}</span>{s.title}</a></li>)}</ol>
      </details>
      <nav aria-label={c.toc} className="bl-toc"><p>{c.toc}</p><ol>{article.sections.map((s, i) => <li key={s.title}><a href={`#deel-${i + 1}`} className={current === i ? 'is-on' : undefined} aria-current={current === i ? 'location' : undefined}><span>0{i + 1}</span>{s.title}</a></li>)}</ol></nav>

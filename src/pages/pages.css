@@ -687,10 +687,12 @@
 @media (max-width: 900px) {
   .bl-layout { grid-template-columns: minmax(0, 1fr); gap: 20px; } .bl-toc { display: none; }
   .bl-toc-chip { display: block; justify-self: stretch; border-radius: 18px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); }
-  .bl-toc-chip summary { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; min-height: 44px; padding: 12px 16px; list-style: none; cursor: pointer; font-size: 14px; line-height: 1.35; }
+  .bl-toc-chip summary { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 12px 16px; list-style: none; cursor: pointer; font-size: 14px; line-height: 1.35; }
+  .bl-toc-chip summary svg { margin-left: auto; color: var(--vs-mute); transition: rotate 0.3s var(--vs-ease); }
+  .bl-toc-chip[open] summary svg { rotate: 180deg; }
   .bl-toc-chip summary::-webkit-details-marker { display: none; }
   .bl-toc-chip summary > span { color: var(--vs-mute); font-weight: 600; }
-  .bl-toc-chip summary b { min-width: 0; font-weight: 500; }
+  .bl-toc-chip summary b { min-width: 0; color: var(--vs-mute); font-weight: 500; }
   .bl-toc-chip summary i { margin-right: 6px; color: var(--vs-blue); font-style: normal; font-weight: 600; }
   .bl-toc-chip ol { display: grid; gap: 2px; margin: 0; padding: 0 6px 8px; list-style: none; }
   .bl-toc-chip a { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 4px; padding: 10px; border-radius: 10px; color: var(--vs-ink-2); font-size: 14px; line-height: 1.35; text-decoration: none; }
