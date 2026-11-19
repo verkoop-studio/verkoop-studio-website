@@ -701,8 +701,8 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 }
 .academy-page :is(h1, h2, h3) { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.035em; }
 .ac-hero { padding-top: clamp(120px, 14vw, 168px); }
-.ac-hero-copy h1 { font-size: clamp(44px, 6.2vw, 104px); line-height: 1.02; }
-.ac-hero-copy h1 span { color: #fff; background: var(--vs-blue); border-radius: 0.16em; padding: 0 0.16em 0.06em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.ac-hero-copy h1 { font-size: clamp(44px, 6.2vw, 104px); line-height: 1.1; isolation: isolate; }
+.ac-hero-copy h1 span { position: relative; z-index: -1; color: #fff; background: var(--vs-blue); border-radius: 0.16em; padding: 0 0.16em 0.04em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 .ac-offer-heading .ac-offer-eyebrow { text-transform: none; letter-spacing: 0; font-size: 14px; font-weight: 500; }
 .ac-subnav { display: flex; justify-content: center; padding-top: clamp(104px, 11vw, 132px); margin-bottom: -48px; }
 .ac-subnav + .ac-hero { padding-top: 72px; }
@@ -718,7 +718,7 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 .ac-tracking-value > span { color: var(--vs-ink-2); }
 .ac-tracking-window { border-color: var(--vs-line); box-shadow: 0 14px 24px -12px rgb(17 17 16 / 0.25); }
 /* The video's own frame carries a caption card at its left edge; the poster shows the right part of the frame, without it. */
-.ac-hero .vs-vc-media img { object-position: 100% 0; scale: 1.35; transform-origin: 100% 20%; }
+.ac-hero .vs-vc-media img { object-position: 50% 40%; }
 /* Cream cards carry ink text: the white text was written for the blue gradient. */
 .ac-promise, .ac-offer-coaching { color: var(--vs-ink); box-shadow: inset 0 0 0 1px var(--vs-line); }
 .ac-offer-coaching h3, .ac-promise > p b, p.ac-promise-done { color: var(--vs-ink); }
