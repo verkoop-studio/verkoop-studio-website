@@ -12,7 +12,6 @@ import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import { caseHeadline, cases } from '../data/cases'
 import { trackEvent } from '../lib/analytics'
-import { CASE_SHOTS } from '../data/caseShots'
 import { useLang } from '../i18n/LanguageContext'
 
 const COPY = {
@@ -21,7 +20,7 @@ const COPY = {
     seoDescription:
       "Ecommerce, hospitality en consumer brands: cases van Pinacello, Healthfactor, E-Kart en Nooms.",
     label: 'Cases',
-    title: [{ text: 'Ons werk,' }, { text: 'met cijfers.', tone: 'accent' as const }],
+    title: [{ text: 'Werk uit' }, { text: 'de praktijk.', tone: 'accent' as const }],
     body: 'Campagnes, webshops en websites. Bij elk project staat wie het maakte.',
     ongoing: 'Lopend project',
     view: 'Bekijk de case',
@@ -32,7 +31,7 @@ const COPY = {
     seoDescription:
       "Ecommerce, hospitality and consumer brands: cases from Pinacello, Healthfactor, E-Kart and Nooms.",
     label: 'Cases',
-    title: [{ text: 'Our work,' }, { text: 'with numbers.', tone: 'accent' as const }],
+    title: [{ text: 'Selected' }, { text: 'work.', tone: 'accent' as const }],
     body: 'Campaigns, shops and websites. Every project says who made it.',
     ongoing: 'Ongoing project',
     view: 'View the case',
@@ -72,7 +71,6 @@ export default function CasesIndex() {
                 <div className="vs-case-card-frame">
                   <CasePoster slug={c.slug} name={c.name} caption={caseHeadline(c, lang)} lang={lang} />
                 </div>
-                <span className="vs-case-card-shot" aria-hidden="true"><span className="vs-poster-shot-bar"><i /><i /><i /></span><img src={CASE_SHOTS[c.slug]} alt="" width={640} height={400} loading="lazy" decoding="async" /></span>
                 <div className="vs-case-card-meta">
                   <div>
                     <h2 className="vs-case-card-name">{c.name}</h2>
@@ -80,7 +78,6 @@ export default function CasesIndex() {
                   </div>
                   {c.status === 'ongoing' && <span className="vs-case-card-chip">{t.ongoing}</span>}
                 </div>
-                <p className="vs-case-card-summary">{c.summary[lang]}</p>
                 <span className="vs-textlink vs-textlink--arrow vs-case-card-link">{t.view}<Arrow size={15} /></span>
               </Link>
             </Reveal>

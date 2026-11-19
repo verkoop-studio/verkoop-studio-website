@@ -16,7 +16,6 @@
 .vs-cases-grid-wrap { position: relative; padding-top: 0; }
 .vs-cases-note { position: absolute; right: var(--vs-gutter); top: -42px; }
 .vs-cases-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); margin: 0; padding: 0; list-style: none; }
-.vs-cases-grid > li:nth-child(even) { margin-top: clamp(0px, 6vw, 96px); }
 .vs-case-card { display: flex; flex-direction: column; gap: 14px; color: var(--vs-ink); text-decoration: none; }
 .vs-case-card-frame { position: relative; aspect-ratio: 960 / 680; border-radius: 18px; overflow: hidden; background: var(--vs-stone); outline: 2px solid transparent; outline-offset: 6px; transition: transform 0.55s var(--vs-ease), outline-color 0.3s ease, box-shadow 0.55s var(--vs-ease); box-shadow: 0 1px 2px rgb(17 17 16 / 0.05); }
 .vs-case-card:hover .vs-case-card-frame, .vs-case-card:focus-visible .vs-case-card-frame { transform: translateY(-8px) rotate(-0.8deg); outline-color: var(--vs-blue); box-shadow: 0 40px 70px -40px rgb(17 17 16 / 0.45); }
@@ -30,7 +29,6 @@
 @media (max-width: 860px) {
   .vs-cases-hero { grid-template-columns: minmax(0, 1fr); min-height: 0; }
   .vs-cases-grid { grid-template-columns: minmax(0, 1fr); }
-  .vs-cases-grid > li:nth-child(even) { margin-top: 0; }
   .vs-cases-note { display: none; }
 }
 
