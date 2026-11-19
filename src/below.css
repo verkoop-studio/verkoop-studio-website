@@ -553,7 +553,6 @@
 @keyframes tx-grow-y { from { scale: 1 0; } }
 
 /* On phones the contact bar owns the bottom edge; the dock sits just above it. */
-@media (max-width: 1023px) { body:has(.mobile-contact-bar:not(.is-suppressed)) .vs-dock { bottom: calc(86px + env(safe-area-inset-bottom)); } }
 
 /* Form preview card, step rail and margin trail. */
 .vs-form-duo { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); align-items: start; gap: clamp(20px, 3vw, 40px); }
@@ -1272,7 +1271,8 @@
 .pb-stat { display: grid; align-content: space-between; gap: 14px; height: 100%; min-height: 200px; box-sizing: border-box; padding: 24px; border-radius: 22px; background: var(--vs-blue); background-image: var(--vs-grain); color: var(--vs-paper); text-decoration: none; transition: translate 0.35s var(--vs-ease), box-shadow 0.35s var(--vs-ease); }
 .pb-stat--1 { background-color: var(--vs-ink); }
 .pb-stat--2 { background-color: #ffd23f; color: var(--vs-ink); }
-.pb-stat b { font: 500 clamp(44px, 5vw, 80px)/0.95 var(--font-display); letter-spacing: -0.04em; overflow-wrap: anywhere; }
+.pb-stat b { font: 500 clamp(44px, 5vw, 80px)/0.95 var(--font-display); letter-spacing: -0.04em; overflow-wrap: normal; hyphens: none; }
+.pb-stat--2 b { font-size: clamp(34px, 3.4vw, 54px); white-space: nowrap; }
 .pb-stat span { max-width: 24ch; font-size: 15px; line-height: 1.4; opacity: 0.9; }
 .pb-stat small { display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 14px; font-weight: 600; }
 .pb-stat .vs-go { background: rgb(255 255 255 / 0.14); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3); color: inherit; }
@@ -1460,7 +1460,7 @@ a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate:
 .dc-composer button { width: 36px; height: 36px; border: 0; border-radius: 10px; background: var(--vs-ink); color: #fff; font-size: 16px; cursor: pointer; }
 .dc-composer button:disabled { opacity: 0.35; cursor: default; }
 .dc-foot { margin: 0; color: var(--vs-mute); font-size: 11.5px; }
-@media (max-width: 600px) { .vs-dock-card { width: calc(100vw - 100px); } }
+@media (max-width: 600px) { .vs-dock-card { position: absolute; right: -2px; bottom: 68px; width: calc(100vw - 24px); box-sizing: border-box; } }
 @media (prefers-reduced-motion: reduce) { .dc-exchange { animation: none; } .dc-chips button { transition: none; } }
 
 /* Plans: a segmented switch on phones (one plan at a time), and a highlight when the builder sends you to a plan. */
@@ -1492,3 +1492,14 @@ a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate:
 .vs-product-mini .pm { box-shadow: 0 30px 60px -30px rgb(17 17 16 / 0.4); }
 .vs-product--dark .vs-product-mini .pm { border-color: transparent; }
 @media (max-width: 700px) { .vs-product-mini { zoom: 1.15; } }
+
+/* Phones: nothing in the sample windows runs past their edge. */
+@media (max-width: 600px) {
+  .tx-view { overflow-x: auto; scrollbar-width: none; }
+  .tx-btn { white-space: normal; text-align: center; }
+  .tx-tab { padding-inline: 8px; font-size: 11px; }
+  .tx-ad-stats { flex-wrap: wrap; row-gap: 4px; }
+  .sk-pipe--columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .tx-win-bar { flex-wrap: wrap; row-gap: 6px; }
+  .tx-crm { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

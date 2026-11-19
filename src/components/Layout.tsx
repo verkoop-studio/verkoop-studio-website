@@ -3,7 +3,6 @@ import { Outlet, useLocation } from 'react-router-dom'
 import SiteHeader from './brand/SiteHeader'
 import ContactDock from './brand/ContactDock'
 import Footer from './Footer'
-import StickyMobileCTA from './StickyMobileCTA'
 import BackToTop from './BackToTop'
 import { usePageMotion } from '../lib/usePageMotion'
 import { usePrimaryButtonMotion } from '../lib/usePrimaryButtonMotion'
@@ -31,7 +30,7 @@ export default function Layout() {
   }, [location.pathname, location.hash, location.key])
 
   return (
-    <div ref={motionRef} className="site-shell min-h-screen pb-28 lg:pb-0">
+    <div ref={motionRef} className="site-shell min-h-screen">
       <SiteHeader />
       <main>
         <Outlet />
@@ -39,8 +38,6 @@ export default function Layout() {
       <Footer />
       {location.pathname !== '/' && <BackToTop />}
       <ContactDock />
-      {/* The product pages carry their own pinned pill, and the pricing page its own calls, so they get no bar. */}
-      {!['/', '/crm', '/performance', '/prijzen'].includes(location.pathname) && <StickyMobileCTA />}
     </div>
   )
 }

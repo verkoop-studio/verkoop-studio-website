@@ -211,7 +211,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-hero-form { min-width: 0; display: flex; }
 
 /* Letter-slide headline: words in clipped masks, letters counter-slide */
-.vs-split-word { display: inline-flex; overflow-x: clip; overflow-y: visible; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.vs-split-word { display: inline-flex; overflow-x: clip; overflow-y: visible; padding-bottom: 0.08em; margin-bottom: -0.08em; padding-inline-end: 0.06em; margin-inline-end: -0.06em; }
 .vs-split-inner { display: inline-flex; }
 .vs-split-letter { display: inline-block; white-space: pre; }
 

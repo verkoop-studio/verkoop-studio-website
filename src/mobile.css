@@ -4,13 +4,7 @@
   html { scroll-behavior: auto; }
   .site-shell [id] { scroll-margin-top: 90px; }
   .site-shell { padding-bottom: calc(92px + env(safe-area-inset-bottom)); }
-  .site-shell:not(:has(.mobile-contact-bar:not(.is-suppressed))) { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
-  .site-shell:has(.mobile-navigation) .mobile-contact-bar,
-  .site-shell:has(form:focus-within) .mobile-contact-bar,
-  .mobile-contact-bar.is-suppressed { display: none; }
-  .mobile-contact-bar { padding-inline: max(16px, env(safe-area-inset-left)); }
-  .mobile-contact-bar a { min-height: 48px; font-size: 15px; display: flex; align-items: center; justify-content: center; }
-  .mobile-contact-bar a:focus-visible { outline: 3px solid #7891ff; outline-offset: 3px; }
+  .site-shell { padding-bottom: max(16px, env(safe-area-inset-bottom)); }
   .back-to-top { display: none; }
   .studio-hero { grid-template-columns: 1fr; min-height: 0; }
   .studio-hero .hero-art { min-height: 0; }

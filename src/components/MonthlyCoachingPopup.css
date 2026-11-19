@@ -22,7 +22,6 @@ body:has(.mobile-navigation, .whatsapp-support-panel:not([hidden])) .coaching-po
  .coaching-popup form > .coaching-popup-consent { margin:0 0 10px; font-size:11.5px; }
  .coaching-popup .coaching-popup-note { margin-top:6px; }
  .coaching-popup .vs-submit { min-height:46px; }
- body:has(.coaching-popup) .mobile-contact-bar { visibility:hidden; }
 }
 @media(prefers-reduced-motion:reduce) { .coaching-popup { animation:none; } }
 /* Inline on the Academy page: a paper card in the flow, with the yellow "every month, one spot" chip. */
