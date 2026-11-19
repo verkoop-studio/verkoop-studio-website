@@ -73,7 +73,7 @@ function Typing({ text, reduce }: { text: string; reduce: boolean | null }) {
 }
 
 /**
- * Appears once the visitor is past the hero, so it never competes with the hero CTAs.
+ * Shown from the first paint. On phones it shrinks while the visitor scrolls down and grows back on the way up.
  * The card grows out of the button on click; the halo on the button is the nudge.
  * The watching eyes fold into a close mark while it is open. Escape closes it and
  * hands focus back to the button.
@@ -82,7 +82,6 @@ export default function ContactDock() {
   const { lang } = useLang()
   const t = COPY[lang]
   const reduce = useReducedMotion()
-  const [past, setPast] = useState(false)
   const [open, setOpen] = useState(false)
   const [tab, setTab] = useState<'ask' | 'talk'>('ask')
   const trigger = useRef<HTMLButtonElement>(null)
@@ -97,7 +96,6 @@ export default function ContactDock() {
   useEffect(() => {
     let frame = 0
     const check = () => {
-      setPast(window.scrollY > window.innerHeight * 0.85)
       if (window.innerWidth >= 768) { setTucked(false); return }
       const zone = window.innerHeight - 160
       const under = [...document.querySelectorAll<HTMLElement>('.st-win, .tx-win')].some((el) => {
@@ -142,7 +140,7 @@ export default function ContactDock() {
 
   return (
     <AnimatePresence>
-      {past && (
+      {(
         <motion.div
           className={`vs-dock${tucked && !open ? ' is-tucked' : ''}${away && !open ? ' is-away' : ''}`}
           initial={{ opacity: 0, y: 20 }}

@@ -490,8 +490,8 @@
 .vs-dock-trigger { transition: transform var(--vs-dur-fast) var(--vs-ease), background var(--vs-dur-fast), box-shadow var(--vs-dur-fast), scale 0.35s var(--vs-ease), translate 0.35s var(--vs-ease), opacity 0.35s; }
 .vs-dock.is-tucked .vs-dock-trigger { scale: 0.62; translate: 14px 10px; opacity: 0.7; }
 /* Phones: the button steps out while the visitor scrolls down, so it never sits on the text being read. */
-.vs-dock.is-away .vs-dock-trigger { translate: 0 96px; opacity: 0; pointer-events: none; }
-@media (prefers-reduced-motion: reduce) { .vs-dock.is-away .vs-dock-trigger { translate: none; } }
+.vs-dock.is-away .vs-dock-trigger { scale: 0.786; translate: 6px 6px; }
+@media (prefers-reduced-motion: reduce) { .vs-dock.is-away .vs-dock-trigger { transition: none; } }
 
 /* 404 */
 .vs-404 { display: grid; justify-items: center; gap: 18px; min-height: 80svh; align-content: center; padding-block: clamp(120px, 14vw, 160px) 80px; text-align: center; }
