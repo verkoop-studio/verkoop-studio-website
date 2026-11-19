@@ -95,7 +95,7 @@ export function WorkAd({ slug, lang, className = '' }: { slug: string; lang: Lan
 /* ── WorkResult ─────────────────────────────────────────────
    Only a published figure: it counts up as it arrives, a small
    line rises under it, and the client and sector sit below. */
-export function WorkResult({ slug, lang, index = 0, link = true, dark = false, className = '' }: { slug: string; lang: Lang; index?: number; link?: boolean; dark?: boolean; className?: string }) {
+export function WorkResult({ slug, lang, index = 0, link = true, dark = false, placement = 'work_result', className = '' }: { slug: string; lang: Lang; index?: number; link?: boolean; dark?: boolean; placement?: string; className?: string }) {
   const c = getCase(slug)
   const f = RESULTS[slug]?.[index]
   const ref = useRef<HTMLDivElement>(null)
@@ -115,7 +115,7 @@ export function WorkResult({ slug, lang, index = 0, link = true, dark = false, c
   return (
     <div ref={ref} className="wk-result-wrap">
       {link ? (
-        <Link to={`/cases/${slug}`} className={cls} onClick={() => trackEvent('case_viewed', { case: slug, placement: 'work_result' })}>{body}</Link>
+        <Link to={`/cases/${slug}`} className={cls} onClick={() => trackEvent('case_viewed', { case: slug, placement })}>{body}</Link>
       ) : (
         <div className={cls}>{body}</div>
       )}

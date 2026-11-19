@@ -925,20 +925,17 @@
 @media (prefers-reduced-motion: reduce) { .fa-finding-note { animation: none; } }
 /* Pricing: the two people behind the plans, and one published result. */
 .pr-proof { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 14px; padding-bottom: clamp(40px, 6vw, 80px); }
-.pr-team, .pr-result-tile { display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 22px; text-decoration: none; transition: translate 0.35s var(--vs-ease); }
+.pr-team { display: flex; align-items: center; gap: 18px; padding: 18px 22px; border-radius: 22px; text-decoration: none; transition: translate 0.35s var(--vs-ease); }
 .pr-team { background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); }
 .pr-team-photos { display: flex; flex: none; }
 .pr-team-photos img { width: 64px; height: 64px; border: 3px solid #fff; border-radius: 50%; object-fit: cover; box-shadow: 0 8px 16px -10px rgb(17 17 16 / 0.5); }
 .pr-team-photos img + img { margin-left: -16px; }
 .pr-team > span:last-child { display: grid; gap: 2px; color: var(--vs-mute); font-size: 14px; }
 .pr-team b { color: var(--vs-ink); font: 500 20px/1.15 var(--font-display); }
-.pr-result-tile { justify-content: space-between; background: var(--vs-blue); background-image: var(--vs-grain); color: var(--vs-paper); }
-.pr-result-tile b { font: 500 clamp(28px, 3vw, 40px)/1 var(--font-display); letter-spacing: -0.03em; }
-.pr-result-tile span { max-width: 22ch; color: rgb(255 255 255 / 0.85); font-size: 14px; text-align: right; }
-.pr-team:hover, .pr-result-tile:hover, .pr-team:focus-visible, .pr-result-tile:focus-visible { translate: 0 -3px; }
-.pr-team:focus-visible, .pr-result-tile:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
+.pr-team:hover, .pr-team:focus-visible { translate: 0 -3px; }
+.pr-team:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
 @media (max-width: 760px) { .pr-proof { grid-template-columns: minmax(0, 1fr); } }
-@media (prefers-reduced-motion: reduce) { .pr-team, .pr-result-tile { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .pr-team { transition: none; } }
 .vs-cases-cta { margin-top: 26px; }
 .cs-steps .wk-journey { margin-top: 36px; }
 .wk-journey-title { margin: 0; font: 600 clamp(19px, 1.6vw, 22px)/1.2 var(--font-display); letter-spacing: -0.015em; }

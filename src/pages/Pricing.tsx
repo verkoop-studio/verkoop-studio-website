@@ -14,9 +14,9 @@ import { crmLanding } from '../data/crmLanding'
 import { faqItems } from '../data/faq'
 import { performance } from '../data/performance'
 import { pricingTiers } from '../data/pricing'
-import { getCase } from '../data/cases'
 import stef from '../assets/stef.webp'
 import tanguy from '../assets/studio-flyers.webp'
+import { WorkResult } from '../components/work/Work'
 import ResponsiveImage from '../components/ResponsiveImage'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
@@ -118,7 +118,6 @@ function Builder({ lang }: { lang: 'nl' | 'en' }) {
 }
 
 
-const pinacello = getCase('pinacello')
 
 export default function Pricing() {
   usePageStyles(PAGES_STYLES)
@@ -165,12 +164,7 @@ export default function Pricing() {
           <span className="pr-team-photos"><ResponsiveImage src={stef} alt="" sizes="96px" /><ResponsiveImage src={tanguy} alt="" sizes="96px" /></span>
           <span><b>Stef &amp; Tanguy</b>{t.team}</span>
         </Link>
-        {pinacello?.result && (
-          <Link to="/cases/pinacello" className="pr-result-tile" onClick={() => trackEvent('case_viewed', { case: 'pinacello', placement: 'pricing_proof' })}>
-            <b>{pinacello.result[lang]}</b>
-            <span>Pinacello · {pinacello.sector[lang]}</span>
-          </Link>
-        )}
+        <WorkResult slug="pinacello" lang={lang} placement="pricing_proof" />
       </section>
       <PlansSection />
 
