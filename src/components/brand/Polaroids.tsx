@@ -14,7 +14,7 @@ const SPRING = { type: 'spring' as const, stiffness: 220, damping: 20 }
  * The photo follows the pointer inside its frame and the name redraws when its card
  * comes forward. Reduced motion keeps only the swap.
  */
-export default function Polaroids({ photos, note }: { photos: [Photo, Photo]; note: string }) {
+export default function Polaroids({ photos, note }: { photos: [Photo, Photo]; note?: string }) {
   const reduce = useReducedMotion()
   const [front, setFront] = useState(0)
   const [hover, setHover] = useState<number | null>(null)
@@ -68,7 +68,7 @@ export default function Polaroids({ photos, note }: { photos: [Photo, Photo]; no
           </motion.figure>
         )
       })}
-      <HandNote point="down-right" className="ag-note">{note}</HandNote>
+      {note && <HandNote point="down-right" className="ag-note">{note}</HandNote>}
     </div>
   )
 }

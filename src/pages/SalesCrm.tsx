@@ -9,7 +9,6 @@ import Cta from '../components/brand/Cta'
 import TextLink from '../components/brand/TextLink'
 import FaqList from '../components/brand/FaqList'
 import { faqItems } from '../data/faq'
-import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import CrmStepper from '../components/product/CrmStepper'
@@ -149,7 +148,6 @@ export default function SalesCrm() {
           </div>
           <div className="pp-hero-stage">
             <LivePipeline lang={lang} />
-            <HandNote point="up-left" className="pp-hero-note">{t.note}</HandNote>
           </div>
         </div>
       </section>

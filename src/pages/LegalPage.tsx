@@ -1,6 +1,5 @@
 import Breadcrumbs from '../components/Breadcrumbs'
 import Seo from '../components/Seo'
-import HandNote from '../components/brand/HandNote'
 import TextLink from '../components/brand/TextLink'
 import { legalDocuments, type LegalSlug } from '../data/legal'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
@@ -21,7 +20,6 @@ export default function LegalPage({ slug }: { slug: LegalSlug }) {
         <header className="bl-head">
           <Breadcrumbs items={[{ label: page.title[lang] }]} />
           <h1 className="vs-h1 bl-h1">{page.title[lang]}</h1>
-          <HandNote point="up-left" className="bl-handnote-inline">{lang === 'nl' ? 'het saaie deel, kort gehouden :)' : 'the boring part, kept short :)'}</HandNote>
           <p className="bl-byline">{page.updated[lang]}</p>
           <p className="bl-note">{page.notice[lang]}</p>
         </header>

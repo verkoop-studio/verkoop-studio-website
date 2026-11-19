@@ -11,7 +11,6 @@ import TextLink from '../components/brand/TextLink'
 import ShotViewer from '../components/product/ShotViewer'
 import FaqList from '../components/brand/FaqList'
 import { faqItems } from '../data/faq'
-import HandNote from '../components/brand/HandNote'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import Tilted from '../components/product/Tilted'
 import { performance as p } from '../data/performance'
@@ -166,7 +165,6 @@ export default function Performance() {
           </div>
           <div className="pp-hero-stage">
             <TruthTable lang={lang} />
-            <HandNote point="up-left" className="pp-hero-note">{t.note}</HandNote>
           </div>
         </div>
       </section>

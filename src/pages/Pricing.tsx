@@ -5,7 +5,6 @@ import Seo from '../components/Seo'
 import Cta from '../components/brand/Cta'
 import { useArrive } from '../components/brand/useArrive'
 import FaqList from '../components/brand/FaqList'
-import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
@@ -141,7 +140,6 @@ export default function Pricing() {
           <motion.div className="sv-hero-actions" {...arrive(0.7)}>
             <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'pricing_hero' })}>{t.cta}</Cta>
             <TextLink href="#builder-title">{t.builder}</TextLink>
-            <HandNote point="up-left" className="pr-note">{t.note}</HandNote>
           </motion.div>
         </div>
         <motion.ul className="pr-tiles" {...arrive(0.85)}>

@@ -11,7 +11,6 @@ import { useArrive } from '../components/brand/useArrive'
 import { trackEvent } from '../lib/analytics'
 import Seo from '../components/Seo'
 import QualificationForm from '../components/QualificationForm'
-import HandNote from '../components/brand/HandNote'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
@@ -113,7 +112,6 @@ export default function Contact() {
         </div>
         {/* The form duo's two parts become cells of this grid: the form on the panel, the live preview under the steps. */}
         <div className="ct-panel">
-          <HandNote point="down-left" className="ct-note">{t.note}</HandNote>
           <QualificationForm
             id="audit-formulier-contact"
             preview
