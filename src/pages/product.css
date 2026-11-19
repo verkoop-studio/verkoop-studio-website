@@ -66,11 +66,12 @@ body:has(.pp) .back-to-top { display: none; }
 .pp-slider input:active { cursor: grabbing; }
 .pp-slider input:active::-webkit-slider-thumb { scale: 1.2; }
 .pp-tiers { list-style: none; margin: 34px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 16px; }
-.pp-tiers li { padding: 26px 28px; border-radius: 20px; border: 1px solid var(--vs-line-dark); opacity: 0.5; transition: opacity 0.4s, background 0.4s, color 0.4s, rotate 0.5s var(--vs-ease), translate 0.5s var(--vs-ease); }
+.pp-tiers li { padding: 26px 28px; border-radius: 20px; border: 1px solid var(--vs-line-dark); color: #e9e6df; background: rgb(255 255 255 / 0.04); transition: opacity 0.4s, background 0.4s, color 0.4s, rotate 0.5s var(--vs-ease), translate 0.5s var(--vs-ease); }
 .pp-tiers li.is-on { opacity: 1; background: var(--vs-paper); color: var(--vs-ink); rotate: -1.4deg; translate: 0 -8px; }
 .pp-tiers p { margin: 0; font-size: 15px; }
 .pp-tiers strong { display: block; margin: 12px 0 6px; font: 500 clamp(40px, 4.4vw, 60px)/1 var(--font-display); letter-spacing: -0.04em; }
-.pp-tiers span { font-size: 14px; opacity: 0.7; }
+.pp-tiers span { font-size: 14px; color: #c9c6bf; }
+.pp-tiers li.is-on span { color: var(--vs-ink-2); }
 
 /* On to Performance */
 .pp-next { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; padding: clamp(28px, 4vw, 52px); border-radius: 26px; background: var(--vs-blue); color: #fff; text-decoration: none; rotate: -0.7deg; transition: rotate 0.5s var(--vs-ease), translate 0.5s var(--vs-ease), box-shadow 0.5s; }
