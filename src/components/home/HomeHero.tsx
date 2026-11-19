@@ -4,11 +4,12 @@ import { Link } from 'react-router-dom'
 import { caseHeadline, cases } from '../../data/cases'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
+import pinacelloPage from '../../assets/cases/pinacello.webp'
 import HeroVideo from '../HeroVideo'
+import ResponsiveImage from '../ResponsiveImage'
 import HeroRequestForm from '../HeroRequestForm'
 import Cta from '../brand/Cta'
 import HandNote from '../brand/HandNote'
-import RollingNumber from '../brand/RollingNumber'
 import TextLink from '../brand/TextLink'
 import SplitHeadline, { type HeadlinePart } from '../brand/SplitHeadline'
 import { EASE } from '../brand/motion'
@@ -24,12 +25,9 @@ const COPY = {
     ] satisfies HeadlinePart[],
     primary: 'Plan een gesprek',
     secondary: 'Bekijk onze pakketten',
-    proofTitle: 'Pinacello · online omzet',
+    proofAlt: 'De campagnepagina van Pinacello',
     proofChip: 'Echte cijfers',
     proofRevenue: 'groei in online omzet',
-    proofVideoLead: '20 verkopen',
-    proofVideoRest: 'uit één organische video',
-    proofLink: 'Lees de case',
     proofNote: 'echte cijfers :)',
     formNote: 'helemaal gratis :)',
     proof: 'Groei gebouwd voor',
@@ -47,12 +45,9 @@ const COPY = {
     ] satisfies HeadlinePart[],
     primary: 'Plan a call',
     secondary: 'See our plans',
-    proofTitle: 'Pinacello · online revenue',
+    proofAlt: 'The Pinacello campaign page',
     proofChip: 'Real figures',
     proofRevenue: 'growth in online revenue',
-    proofVideoLead: '20 sales',
-    proofVideoRest: 'from one organic video',
-    proofLink: 'Read the case',
     proofNote: 'real figures :)',
     formNote: 'completely free :)',
     proof: 'Growth built for',
@@ -132,34 +127,11 @@ export default function HomeHero() {
             transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.6 }}
           >
             <HandNote point="down-left" className="vs-hero-proof-note">{t.proofNote}</HandNote>
-            <div className="tx-win vs-proof-win">
-              <div className="tx-win-bar"><i /><i /><i /><b>{t.proofTitle}</b><em>{t.proofChip}</em></div>
-              <div className="vs-proof-body">
-                <div className="vs-proof-figure"><RollingNumber value={120} prefix="+" suffix="%" /></div>
-                <p className="vs-proof-caption">{t.proofRevenue}</p>
-                <div className="vs-proof-bars" aria-hidden="true">
-                  {[28, 34, 31, 42, 48, 57, 63, 72].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}
-                </div>
-                <TextLink to="/cases/pinacello">{t.proofLink}</TextLink>
-              </div>
-            </div>
-            <motion.div
-              className="vs-proof-video"
-              initial={reduce ? false : { opacity: 0, y: 24, rotate: -8 }}
-              animate={{ opacity: 1, y: 0, rotate: -3.5 }}
-              transition={{ type: 'spring', stiffness: 120, damping: 14, delay: 1.1 }}
-            >
-              <Link to="/cases/pinacello" className="vs-proof-video-link">
-                <span className="vs-proof-thumb">
-                  <img src="/images/ads/pinacello-personal.jpg" alt="" width={120} height={150} loading="eager" decoding="async" />
-                  <span className="vs-proof-play" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>
-                </span>
-                <span className="vs-proof-video-text">
-                  <strong>{t.proofVideoLead}</strong>
-                  <span>{t.proofVideoRest}</span>
-                </span>
-              </Link>
-            </motion.div>
+            <Link to="/cases/pinacello" className="tx-win vs-proof-win vs-proof-page" onClick={() => trackEvent('case_viewed', { case: 'pinacello', placement: 'home_hero' })}>
+              <div className="tx-win-bar"><i /><i /><i /><b>promo.pinacello.com</b><em>{t.proofChip}</em></div>
+              <span className="vs-proof-shot"><ResponsiveImage src={pinacelloPage} alt={t.proofAlt} sizes="(max-width: 960px) 100vw, 640px" loading="eager" fetchPriority="high" /></span>
+              <span className="vs-proof-chip"><b>+120%</b><span>{t.proofRevenue} · Pinacello</span></span>
+            </Link>
           </motion.div>
         </div>
         <motion.span className="vs-scroll-cue" aria-hidden="true" {...arrive(1.2)}>
