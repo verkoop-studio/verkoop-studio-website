@@ -10,6 +10,7 @@ import HandNote from '../components/brand/HandNote'
 import ProcessLine from '../components/brand/ProcessLine'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline from '../components/brand/SplitHeadline'
+import { headlineFit } from '../lib/headline'
 import TextLink from '../components/brand/TextLink'
 import { Win } from '../components/service/ServiceScreens'
 import { AUDIT_SCOPE } from '../data/audit'
@@ -81,7 +82,7 @@ export default function FunnelAudit() {
       <Seo title={t.seoTitle} description={t.seoDescription} path="/funnel-audit" />
 
       <section className="vs-wrap sv-hero" aria-labelledby="audit-title">
-        <div className="sv-hero-copy">
+        <div className="sv-hero-copy" style={headlineFit(t.title)}>
           <motion.p className="vs-label" {...arrive(0)}>{t.label}</motion.p>
           <SplitHeadline as="h1" id="audit-title" className="vs-h1 sv-h1" parts={t.title} onMount />
           <motion.p className="vs-lead" {...arrive(0.55)}>{t.body}</motion.p>

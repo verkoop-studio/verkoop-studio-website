@@ -13,6 +13,7 @@ import Cta from '../components/brand/Cta'
 import HandNote from '../components/brand/HandNote'
 import Reveal from '../components/brand/Reveal'
 import SplitHeadline, { type HeadlinePart } from '../components/brand/SplitHeadline'
+import { headlineFit } from '../lib/headline'
 import TextLink from '../components/brand/TextLink'
 import CasePoster from '../components/home/CasePoster'
 import ApprovalCards from '../components/service/ApprovalCards'
@@ -244,7 +245,7 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
       <Seo title={service.title[lang]} description={service.summary[lang]} path={`/${service.slug}`} />
 
       <section className="vs-wrap sv-hero" aria-labelledby="service-title">
-        <div className="sv-hero-copy">
+        <div className="sv-hero-copy" style={headlineFit(parts)}>
           <Breadcrumbs items={[{ label: t.servicesCrumb, href: '/#expertise' }, { label: service.title[lang] }]} />
           <SplitHeadline as="h1" id="service-title" className="vs-h1 sv-h1" parts={parts} onMount />
           <motion.p className="vs-lead" {...arrive(0.55)}>{service.summary[lang]}</motion.p>

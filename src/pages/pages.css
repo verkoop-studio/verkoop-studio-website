@@ -57,6 +57,9 @@
 .sv-hero { overflow-x: clip; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); align-items: center; gap: clamp(28px, 5vw, 80px); min-height: 90svh; padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(40px, 6vw, 80px); }
 .sv-h1 { margin-top: 18px; line-height: 1; letter-spacing: -0.04em; }
 .sv-h1 .vs-mark { margin-top: 0.04em; }
+/* The marked phrase never breaks, so the headline is sized to fit its column: never under the hero object. */
+.sv-hero-copy { container-type: inline-size; }
+.sv-hero-copy .sv-h1 { font-size: min(clamp(42px, 6.4vw, 92px), calc(190cqi / var(--h1-n, 12))); }
 .sv-hero-copy .vs-lead { margin-top: 22px; max-width: 40ch; }
 .sv-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 0; padding: 0; list-style: none; }
 .sv-chips li { padding: 6px 12px; border: 1px solid var(--vs-line); border-radius: 999px; background: rgb(255 255 255 / 0.6); color: var(--vs-ink-2); font-size: 13.5px; }
@@ -210,9 +213,9 @@
 .sv-hero-object > div:first-child { width: min(100%, 460px); }
 /* On wide screens the hero window and the pinned window are drawn larger: they are the product moment of the page. */
 @media (min-width: 1100px) {
-  .sv-hero-object > div:first-child { width: min(calc(100% / 1.45), 440px); zoom: 1.45; }
+  .sv-hero-object > div:first-child { width: 100%; max-width: 390px; zoom: 1.45; }
   .sv-hero-object .sv-toast { zoom: 1.15; }
-  .sv-how-slot > .sv-win { width: calc(100% / 1.2); zoom: 1.2; }
+  .sv-how-slot > .sv-win { width: 100%; zoom: 1.2; }
 }
 .sv-hero-object .sv-toast { left: -4%; top: auto; bottom: 4%; }
 .sv-win li { transition: background-color 0.2s ease; }
