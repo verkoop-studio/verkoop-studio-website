@@ -216,7 +216,7 @@ export default function SalesCrm() {
         <div className="vs-wrap">
           <SplitHeadline id="start-titel" className="pp-final-title" parts={[{ text: c.final.title[lang], tone: 'accent' }]} />
           <p className="vs-lead pp-narrow">{c.final.body[lang]}</p>
-          <Signup placement="crm_final" label={c.cta[lang]} variant="paper" />
+          <Signup placement="crm_final" label={c.cta[lang]} />
         </div>
       </section>
 

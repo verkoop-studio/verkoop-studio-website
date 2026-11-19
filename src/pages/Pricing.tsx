@@ -109,7 +109,7 @@ function Builder({ lang }: { lang: 'nl' | 'en' }) {
             <h3>{tier.name[lang]}</h3>
             <p className="pr-aud">{tier.audience[lang]}</p>
             <TextLink href={`#plan-${tier.key}`}>{t.seePlan}</TextLink>
-            <Cta to={`/contact?pakket=${tier.key}`} onClick={() => trackEvent('audit_cta_clicked', { placement: 'pricing_builder', tier: tier.key })}>{t.cta}</Cta>
+            <Cta to={`/contact?pakket=${tier.key}`} variant="paper" onClick={() => trackEvent('audit_cta_clicked', { placement: 'pricing_builder', tier: tier.key })}>{t.cta}</Cta>
           </motion.div>
         </AnimatePresence>
       </div>
