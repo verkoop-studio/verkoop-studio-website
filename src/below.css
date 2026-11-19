@@ -1475,3 +1475,15 @@ a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate:
   .vs-plans > .is-other { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .vs-plan:target { animation: none; } }
+
+/* Case posters: under the pointer the case's real site slides up in a small browser frame. */
+.vs-poster-shot { position: absolute; left: 7%; right: 7%; bottom: 0; z-index: 3; overflow: hidden; border-radius: 12px 12px 0 0; background: #fff; box-shadow: 0 -18px 40px -18px rgb(17 17 16 / 0.5); translate: 0 105%; transition: translate 0.5s var(--vs-ease); pointer-events: none; }
+.vs-poster-shot img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; object-position: top; }
+.vs-poster-shot-bar { display: flex; gap: 4px; padding: 6px 8px; border-bottom: 1px solid var(--vs-line); background: #fff; }
+.vs-poster-shot-bar i { width: 6px; height: 6px; border-radius: 50%; background: #ff5f57; }
+.vs-poster-shot-bar i:nth-child(2) { background: #febc2e; }
+.vs-poster-shot-bar i:nth-child(3) { background: #28c840; }
+@media (hover: hover) { a:hover .vs-poster-shot, a:focus-visible .vs-poster-shot { translate: 0 18%; } }
+.vs-case-card-shot { display: block; overflow: hidden; margin-top: 10px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); }
+.vs-case-card-shot img { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; object-position: top; }
+@media (prefers-reduced-motion: reduce) { .vs-poster-shot { transition: none; } }

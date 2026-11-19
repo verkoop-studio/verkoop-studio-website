@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from 'react'
+import { CASE_SHOTS } from '../../data/caseShots'
 import type { CaseSlug, Lang } from '../../data/types'
 
 const W = 960
@@ -282,6 +283,8 @@ export default function CasePoster({ slug, name, caption, lang }: PosterProps & 
   return (
     <div className={`vs-poster vs-poster--${theme}`} aria-hidden="true">
       <Poster name={name} caption={caption} lang={lang} />
+      {/* Under the pointer, the case's real site slides up over its poster. */}
+      <span className="vs-poster-shot"><span className="vs-poster-shot-bar"><i /><i /><i /></span><img src={CASE_SHOTS[slug]} alt="" width={640} height={400} loading="lazy" decoding="async" /></span>
     </div>
   )
 }

@@ -12,6 +12,7 @@ import { EASE } from '../components/brand/motion'
 import CasePoster from '../components/home/CasePoster'
 import { caseHeadline, cases } from '../data/cases'
 import { trackEvent } from '../lib/analytics'
+import { CASE_SHOTS } from '../data/caseShots'
 import { useLang } from '../i18n/LanguageContext'
 
 const COPY = {
@@ -71,6 +72,7 @@ export default function CasesIndex() {
                 <div className="vs-case-card-frame">
                   <CasePoster slug={c.slug} name={c.name} caption={caseHeadline(c, lang)} lang={lang} />
                 </div>
+                <span className="vs-case-card-shot" aria-hidden="true"><span className="vs-poster-shot-bar"><i /><i /><i /></span><img src={CASE_SHOTS[c.slug]} alt="" width={640} height={400} loading="lazy" decoding="async" /></span>
                 <div className="vs-case-card-meta">
                   <div>
                     <h2 className="vs-case-card-name">{c.name}</h2>
