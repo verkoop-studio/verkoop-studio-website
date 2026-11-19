@@ -53,10 +53,12 @@ function Plan({ index }: { index: number }) {
       <ul>
         {featureRows.map((row) => {
           const included = row.values[index].type === 'check'
+          // What this plan adds over the one before it.
+          const added = included && index > 0 && row.values[index - 1].type !== 'check'
           return (
-            <li key={row.label.nl} className={included ? undefined : 'vs-plan-off'}>
-              {included ? <Check size={15} strokeWidth={2.2} aria-hidden="true" /> : <Minus size={15} strokeWidth={2} aria-hidden="true" />}
-              <span>{row.label[lang]}{!included && <span className="vs-visually-hidden">{lang === 'nl' ? ' (niet inbegrepen)' : ' (not included)'}</span>}</span>
+            <li key={row.label.nl} className={added ? 'vs-plan-add' : included ? undefined : 'vs-plan-off'}>
+              {added ? <span className="vs-plan-plus" aria-hidden="true">+</span> : included ? <Check size={15} strokeWidth={2.2} aria-hidden="true" /> : <Minus size={15} strokeWidth={2} aria-hidden="true" />}
+              <span>{row.label[lang]}{added && <span className="vs-visually-hidden">{lang === 'nl' ? ' (extra in dit pakket)' : ' (added in this plan)'}</span>}{!included && <span className="vs-visually-hidden">{lang === 'nl' ? ' (niet inbegrepen)' : ' (not included)'}</span>}</span>
             </li>
           )
         })}

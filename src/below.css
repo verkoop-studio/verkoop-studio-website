@@ -426,6 +426,11 @@
 .vs-plan li.vs-plan-off { color: var(--vs-mute); opacity: 0.6; }
 .vs-plan li.vs-plan-off svg { color: var(--vs-mute); }
 .vs-plan--dark li.vs-plan-off { color: #8f8c86; }
+/* The rows a plan adds over the previous one: a highlighted line with a plus. */
+.vs-plan li.vs-plan-add { margin-inline: -8px; padding: 6px 8px; border-radius: 10px; background: color-mix(in srgb, var(--vs-blue) 10%, transparent); color: var(--vs-ink); font-weight: 600; }
+.vs-plan--dark li.vs-plan-add { background: rgb(125 147 255 / 0.2); color: #fff; }
+.vs-plan-plus { flex: none; display: grid; place-items: center; width: 16px; height: 16px; margin-top: 1px; border-radius: 50%; background: var(--vs-blue); color: #fff; font-size: 13px; font-weight: 700; line-height: 1; }
+.vs-plan--dark .vs-plan-plus { background: #7d93ff; color: var(--vs-ink); }
 
 /* Bot avatars (open-bot-avatar) */
 /* The avatar library keeps a full-size helper canvas inside; clipping keeps it from widening the page. */
