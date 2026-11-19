@@ -207,13 +207,6 @@ export default function Academy() {
   }
 
   const exampleRef = useRef<HTMLDetailsElement>(null)
-  /** A link to the worked example opens it, instead of landing on a closed summary. */
-  function openExample(event: { preventDefault: () => void }) {
-    event.preventDefault()
-    if (exampleRef.current) exampleRef.current.open = true
-    scrollToId('testlog')
-  }
-
   function goToSignup() {
     scrollToId('academy-hero-signup', signedUp ? undefined : '#academy-hero-signup input[name="naam"]')
   }
@@ -249,9 +242,6 @@ export default function Academy() {
 
 
     <main id="academy-main">
-      <div className="ac-wrap ac-subnav">
-        <nav className="ac-pill-nav" aria-label={t("Academy navigatie")}><a href="#aanbod">{t("Aanbod")}</a><a href="#resultaten">{t("Resultaten")}</a><a href="#aanpak">{t("Aanpak")}</a><a href="#programma">{t("Programma")}</a><a href="#testlog" onClick={openExample}>{t("Voorbeeld")}</a><a href="#faq">FAQ</a></nav>
-      </div>
       <section className="ac-hero ac-wrap" aria-labelledby="academy-title">
         <div className="ac-hero-copy">
           <h1 id="academy-title">{t("Leer hoe je je merk schaalt") + " "}<span>{t("in 60 dagen.")}</span></h1>

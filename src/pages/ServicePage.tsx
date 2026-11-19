@@ -253,11 +253,6 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
             <Cta href="#audit-formulier-section" onClick={() => trackEvent('audit_cta_clicked', { placement: 'service_hero', service: slug })}>{t.cta}</Cta>
             <span className="sv-reply">{t.reply}</span>
           </motion.div>
-          {relatedCase?.result && (
-            <motion.p className="sv-hero-proof" {...arrive(1)}>
-              <Link to={`/cases/${relatedCase.slug}`} onClick={() => trackEvent('case_viewed', { case: relatedCase.slug, placement: 'service_hero' })}><b>{relatedCase.result[lang]}</b> · {relatedCase.name}</Link>
-            </motion.p>
-          )}
         </div>
         {slug === 'websites' ? <WebsiteStage lang={lang} /> : slug === 'meta-ads' ? <MetaHero lang={lang} /> : <HeroObject screen={story.hero} lang={lang} />}
       </section>

@@ -10,8 +10,7 @@ import Reveal from '../components/brand/Reveal'
 import { NoteCard } from '../components/brand/Playful'
 import RollingNumber from '../components/brand/RollingNumber'
 import BelgiumMap from '../components/brand/blocks/BelgiumMap'
-import { Link } from 'react-router-dom'
-import { cases, getCase } from '../data/cases'
+import { cases } from '../data/cases'
 import SplitHeadline from '../components/brand/SplitHeadline'
 import TextLink from '../components/brand/TextLink'
 import { workModes } from '../data/process'
@@ -76,7 +75,6 @@ const NOTE = {
   en: ['Tell us your goal', 'and what is holding you back.', 'We discuss your approach', 'and look together for', 'the biggest opportunity.'],
 }
 
-const pinacello = getCase('pinacello')
 
 export default function OverStef() {
   usePageStyles(PAGES_STYLES)
@@ -96,13 +94,8 @@ export default function OverStef() {
             <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'agency_hero' })}>{t.cta}</Cta>
             <TextLink to="/cases">{t.cases}</TextLink>
           </motion.div>
-          {pinacello?.result && (
-            <motion.p className="sv-hero-proof" {...arrive(0.9)}>
-              <Link to="/cases/pinacello" onClick={() => trackEvent('case_viewed', { case: 'pinacello', placement: 'agency_hero' })}><b>{pinacello.result[lang]}</b> · Pinacello</Link>
-            </motion.p>
-          )}
         </div>
-        <Polaroids photos={[{ src: stef, name: 'Stef' }, { src: tanguy, name: 'Tanguy' }]} note={t.note} />
+        <Polaroids photos={[{ src: stef, name: 'Stef' }, { src: tanguy, name: 'Tanguy' }]} />
       </section>
 
       <section className="vs-wrap vs-section ag-statement" aria-labelledby="agency-team">

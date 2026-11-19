@@ -360,6 +360,8 @@
 /* ---------- Case pages ---------- */
 
 .cs-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(28px, 4vw, 64px) clamp(28px, 5vw, 80px); padding-top: clamp(120px, 13vw, 160px); padding-bottom: clamp(48px, 6vw, 90px); }
+.cs-hero { min-height: min(100svh, 1000px); box-sizing: border-box; }
+.cs-stats-wrap { padding-top: clamp(32px, 5vw, 72px); }
 .cs-h1 { margin-top: 18px; font-size: clamp(40px, 5vw, 76px); }
 .cs-hero-copy .vs-lead { margin: 22px 0 26px; max-width: 38ch; }
 .cs-hero-poster { position: relative; aspect-ratio: 960 / 680; border-radius: 22px; overflow: hidden; background: var(--vs-stone); box-shadow: 0 50px 90px -50px rgb(17 17 16 / 0.55), 0 0 0 1px rgb(17 17 16 / 0.05); }
@@ -937,3 +939,4 @@
 .pr-team:focus-visible, .pr-result-tile:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
 @media (max-width: 760px) { .pr-proof { grid-template-columns: minmax(0, 1fr); } }
 @media (prefers-reduced-motion: reduce) { .pr-team, .pr-result-tile { transition: none; } }
+.vs-cases-cta { margin-top: 26px; }

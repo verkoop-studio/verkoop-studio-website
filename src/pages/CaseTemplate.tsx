@@ -261,23 +261,27 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
         >
           <span className="tx-win cs-hero-site"><span className="tx-win-bar"><i /><i /><i /><b>{domain(c.liveUrl) || c.name}</b></span><ResponsiveImage src={HERO_SITE[c.slug]} alt="" sizes="(max-width: 900px) 100vw, 640px" decoding="async" /></span>
         </motion.div>
-        <ul className="cs-stats" aria-label={t.result}>
-          {k.stats.map((stat, i) => (
-            <motion.li
-              key={stat.label.en}
-              className="cs-stat"
-              initial={reduce ? false : { opacity: 0, y: 40, rotate: 0 }}
-              animate={{ opacity: 1, y: 0, rotate: [-1.5, 1, -0.8][i % 3] }}
-              transition={{ type: 'spring', stiffness: 110, damping: 15, delay: 0.8 + i * 0.12 }}
-            >
-              <span className="cs-stat-value">
-                {stat.value !== undefined ? <RollingNumber value={stat.value} prefix={stat.prefix} suffix={stat.suffix} /> : stat.text?.[lang]}
-              </span>
-              <span className="cs-stat-label">{stat.label[lang]}</span>
-              <StatIcon icon={stat.icon} />
-            </motion.li>
-          ))}
-        </ul>
+      </section>
+
+      <section className="vs-wrap cs-stats-wrap" aria-label={t.result}>
+          <ul className="cs-stats">
+            {k.stats.map((stat, i) => (
+              <motion.li
+                key={stat.label.en}
+                className="cs-stat"
+                initial={reduce ? false : { opacity: 0, y: 40, rotate: 0 }}
+                whileInView={{ opacity: 1, y: 0, rotate: [-1.5, 1, -0.8][i % 3] }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ type: 'spring', stiffness: 110, damping: 15, delay: i * 0.12 }}
+              >
+                <span className="cs-stat-value">
+                  {stat.value !== undefined ? <RollingNumber value={stat.value} prefix={stat.prefix} suffix={stat.suffix} /> : stat.text?.[lang]}
+                </span>
+                <span className="cs-stat-label">{stat.label[lang]}</span>
+                <StatIcon icon={stat.icon} />
+              </motion.li>
+            ))}
+          </ul>
       </section>
 
       <section className="vs-wrap vs-section cs-challenge" aria-labelledby="case-challenge">
