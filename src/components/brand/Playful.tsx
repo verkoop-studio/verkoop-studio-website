@@ -70,15 +70,17 @@ export function Ribbon({ className = '' }: { className?: string }) {
   )
 }
 
-/** A note from Stef: paper, slightly turned, a strip of tape, the words written in line by line, then his name. */
+/** A note from Stef: paper, slightly turned, a strip of tape, the words written in line by line, then his name.
+ *  Writing starts while the card is still below the fold, so it reads complete once it is on screen. */
 export function NoteCard({ lines, sign, className = '' }: { lines: string[]; sign: string; className?: string }) {
   const reduce = useReducedMotion()
   return (
     <motion.figure
       className={`vs-notecard ${className}`.trim()}
-      initial={reduce ? false : { opacity: 0, y: 40, rotate: -6 }}
-      whileInView={{ opacity: 1, y: 0, rotate: -2 }}
-      viewport={{ once: true, margin: '-80px' }}
+      initial={reduce ? false : 'hidden'}
+      whileInView="shown"
+      viewport={{ once: true, margin: '0px 0px 35% 0px' }}
+      variants={{ hidden: { opacity: 0, y: 40, rotate: -6 }, shown: { opacity: 1, y: 0, rotate: -2 } }}
       transition={{ type: 'spring', stiffness: 90, damping: 14 }}
     >
       <span className="vs-notecard-tape" aria-hidden="true" />
@@ -87,10 +89,8 @@ export function NoteCard({ lines, sign, className = '' }: { lines: string[]; sig
           <motion.span
             key={line}
             className="vs-notecard-line"
-            initial={reduce ? false : { clipPath: 'inset(0 100% 0 0)' }}
-            whileInView={{ clipPath: 'inset(0 0% 0 0)' }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.9, delay: 0.4 + i * 0.75, ease: EASE }}
+            variants={{ hidden: { clipPath: 'inset(0 100% 0 0)' }, shown: { clipPath: 'inset(0 0% 0 0)' } }}
+            transition={{ duration: 0.5, delay: 0.15 + i * 0.3, ease: EASE }}
           >
             {line}
           </motion.span>
@@ -98,7 +98,7 @@ export function NoteCard({ lines, sign, className = '' }: { lines: string[]; sig
       </blockquote>
       <figcaption>
         <svg viewBox="0 0 120 40" className="vs-notecard-sign" aria-hidden="true">
-          <motion.path d="M6 28c8-14 14-20 18-14s-10 16-4 16 12-18 18-14-6 14 0 12 10-10 14-8 2 8 8 6 14-8 22-10" initial={reduce ? false : { pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 1.1, delay: 0.5 + lines.length * 0.75, ease: EASE }} />
+          <motion.path d="M6 28c8-14 14-20 18-14s-10 16-4 16 12-18 18-14-6 14 0 12 10-10 14-8 2 8 8 6 14-8 22-10" variants={{ hidden: { pathLength: 0 }, shown: { pathLength: 1 } }} transition={{ duration: 0.7, delay: 0.2 + lines.length * 0.3, ease: EASE }} />
         </svg>
         <span>{sign}</span>
       </figcaption>
