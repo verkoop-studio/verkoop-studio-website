@@ -29,7 +29,13 @@ export default function DockChat({ lang, onNavigate }: { lang: Lang; onNavigate:
   const lastAnswer = messages.at(-1)?.answers[0]
 
   useEffect(() => { if (previousLang.current !== lang) { setMessages([]); setQuery(''); previousLang.current = lang } }, [lang])
-  useEffect(() => { if (log.current) log.current.scrollTop = messages.length ? log.current.scrollHeight : 0 }, [messages])
+  // A new answer opens at its own question, so it reads from the first line instead of mid-sentence.
+  useEffect(() => {
+    const box = log.current
+    if (!box) return
+    const last = box.querySelector<HTMLElement>('.dc-exchange:last-of-type')
+    box.scrollTop = last ? box.scrollTop + last.getBoundingClientRect().top - box.getBoundingClientRect().top - 8 : 0
+  }, [messages])
 
   const add = (question: string, answers: ChatArticle[]) => { setMessages((previous) => [...previous.slice(-19), { question, answers }]); setQuery('') }
   const choose = (id: string) => { const article = articles.find((a) => a.id === id); if (article) add(article.title, [article]) }

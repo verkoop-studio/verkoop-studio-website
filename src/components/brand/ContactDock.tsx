@@ -1,4 +1,5 @@
 import { AnimatePresence, motion, useReducedMotion, useSpring, type Variants } from 'motion/react'
+import { usePhoneScrollingDown } from '../../lib/usePhoneScrollingDown'
 import { MessageCircle, Phone } from 'lucide-react'
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
 import stef from '../../assets/stef-desk-640.webp'
@@ -92,6 +93,7 @@ export default function ContactDock() {
 
   // On phones the button tucks in while a sample screen passes beneath it, so it never covers one.
   const [tucked, setTucked] = useState(false)
+  const away = usePhoneScrollingDown()
   useEffect(() => {
     let frame = 0
     const check = () => {
@@ -142,7 +144,7 @@ export default function ContactDock() {
     <AnimatePresence>
       {past && (
         <motion.div
-          className={`vs-dock${tucked && !open ? ' is-tucked' : ''}`}
+          className={`vs-dock${tucked && !open ? ' is-tucked' : ''}${away && !open ? ' is-away' : ''}`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -156,9 +158,10 @@ export default function ContactDock() {
                 role="dialog"
                 aria-label={t.title}
                 style={{ rotateX, rotateY, transformPerspective: 900, transformOrigin: '100% 100%' }}
-                initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: 'blur(8px)' }}
-                animate={reduce ? { opacity: 1 } : { opacity: 1, scale: [0.6, 1.04, 1], filter: 'blur(0px)', transition: { duration: 0.55, times: [0, 0.62, 1], ease: [0.34, 1.4, 0.64, 1] } }}
-                exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.6, filter: 'blur(8px)', transition: { duration: 0.22, ease: EASE } }}
+                // Visible from the first frame: the opacity is in by about 90 ms, the overshoot to 1.04 lands near 180 ms.
+                initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.8 }}
+                animate={reduce ? { opacity: 1 } : { opacity: 1, scale: [0.8, 1.04, 1], transition: { opacity: { duration: 0.09, ease: 'linear' }, scale: { duration: 0.36, times: [0, 0.5, 1], ease: ['easeOut', 'easeInOut'] } } }}
+                exit={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.85, transition: { duration: 0.18, ease: EASE } }}
                 onPointerMove={tab === 'talk' ? tilt : undefined}
                 onPointerLeave={untilt}
               >

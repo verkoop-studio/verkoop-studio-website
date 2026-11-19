@@ -14,7 +14,6 @@ import { Ribbon } from './brand/Playful'
 import Cta from './brand/Cta'
 import HandNote from './brand/HandNote'
 import ProductMini from './brand/ProductMini'
-import Watcher from './brand/Watcher'
 import NewsletterInline from './brand/forms/NewsletterInline'
 import { EASE } from './brand/motion'
 
@@ -77,7 +76,7 @@ function Wordmark() {
             <span ref={(el) => { letters.current[i] = el }}>{letter}</span>
           </motion.span>
         ))}
-        <span className="vs-footer-dot"><Watcher shape="Circle" size={200} poke={false} within=".vs-footer" /></span>
+        <span className="vs-footer-dot" aria-hidden="true" />
       </span>
     </div>
   )
