@@ -886,3 +886,7 @@
 .sv-problem .sv-problem-label { margin: 0; }
 .sv-problem .sv-problem-text { max-width: 30ch; }
 @media (max-width: 760px) { .sv-problem { grid-template-columns: minmax(0, 1fr); } }
+/* Case hero: the client's real site in a browser frame, and the filled call to action beside the approach link. */
+.cs-hero-site { display: flex; flex-direction: column; height: 100%; border: 0; border-radius: 0; }
+.cs-hero-site img { flex: 1; display: block; width: 100%; min-height: 0; object-fit: cover; object-position: top; }
+.cs-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin-top: 8px; }

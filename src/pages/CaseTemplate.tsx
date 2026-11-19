@@ -1,5 +1,9 @@
 import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react'
 import ekartSite from '../assets/cases/ekart-640.webp'
+import ekartFull from '../assets/cases/ekart.webp'
+import healthfactorFull from '../assets/cases/healthfactor-website.webp'
+import noomsFull from '../assets/cases/nooms.webp'
+import pinacelloFull from '../assets/cases/pinacello.webp'
 import healthfactorSite from '../assets/cases/healthfactor-website-640.webp'
 import noomsSite from '../assets/cases/nooms-640.webp'
 import pinacelloSite from '../assets/cases/pinacello-640.webp'
@@ -51,6 +55,8 @@ const ASSETS: Record<CaseSlug, { still?: string; site: string }> = {
   nooms: { site: noomsSite },
   healthfactor: { still: '/images/ads/healthfactor-personal.jpg', site: healthfactorSite },
 }
+/** The same sites at full size, for the hero. */
+const HERO_SITE: Record<CaseSlug, string> = { pinacello: pinacelloFull, 'e-kart': ekartFull, nooms: noomsFull, healthfactor: healthfactorFull }
 const domain = (url?: string) => (url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : '')
 
 /* The journey's screens, built from the case's own material and real labels, each marked as a sample. */
@@ -241,7 +247,10 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
           <Breadcrumbs items={[{ label: t.crumb, href: '/cases' }, { label: c.name }]} />
           <SplitHeadline as="h1" id="case-title" className="vs-h1 cs-h1" parts={[{ text: lead }, { text: accent, tone: 'accent' }]} onMount />
           <motion.p className="vs-lead" {...arrive(0.55)}>{k.lead[lang]}</motion.p>
-          <motion.div {...arrive(0.7)}><TextLink href="#case-steps">{t.approach}</TextLink></motion.div>
+          <motion.div className="cs-hero-actions" {...arrive(0.7)}>
+            <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: `case_${c.slug}_hero` })}>{k.closing.cta[lang]}</Cta>
+            <TextLink href="#case-steps">{t.approach}</TextLink>
+          </motion.div>
         </div>
         <motion.div
           className="cs-hero-poster vs-case-live"
@@ -250,7 +259,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
           transition={{ type: 'spring', stiffness: 80, damping: 15, delay: 0.35 }}
           aria-hidden="true"
         >
-          <CasePoster slug={c.slug} name={c.name} caption={caseHeadline(c, lang)} lang={lang} />
+          <span className="tx-win cs-hero-site"><span className="tx-win-bar"><i /><i /><i /><b>{domain(c.liveUrl) || c.name}</b></span><ResponsiveImage src={HERO_SITE[c.slug]} alt="" sizes="(max-width: 900px) 100vw, 640px" decoding="async" /></span>
         </motion.div>
         <ul className="cs-stats" aria-label={t.result}>
           {k.stats.map((stat, i) => (
