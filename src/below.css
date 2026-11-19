@@ -1431,7 +1431,6 @@ a:hover .pm-scan, a:focus-visible .pm-scan { animation: pm-scan 1.6s ease-in-out
 /* Text links inside a card react to the whole card: the underline draws, the text inks, the arrow swaps and turns. */
 a:hover .vs-textlink, a:focus-visible .vs-textlink { color: var(--vs-ink); background-size: 100% 1px; }
 a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate: -45deg; transition: rotate 0.25s var(--vs-ease) 0.22s; }
-.pb-go { position: absolute; right: 14px; top: 14px; z-index: 2; background: #fff; }
 @media (prefers-reduced-motion: reduce) { a:hover .vs-textlink .vs-arrow { rotate: none; } }
 
 /* One floating element per screen: on phones the dock and the footer language switch keep clear of the bottom pills. */
@@ -1495,8 +1494,6 @@ a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate:
 .vs-poster-shot-bar i:nth-child(2) { background: #febc2e; }
 .vs-poster-shot-bar i:nth-child(3) { background: #28c840; }
 @media (hover: hover) { a:hover .vs-poster-shot, a:focus-visible .vs-poster-shot { translate: 0 18%; } }
-.vs-case-card-shot { display: block; overflow: hidden; margin-top: 10px; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); }
-.vs-case-card-shot img { display: block; width: 100%; aspect-ratio: 16 / 7; object-fit: cover; object-position: top; }
 @media (prefers-reduced-motion: reduce) { .vs-poster-shot { transition: none; } }
 /* Home software cards: the live product minis at a size you can read. */
 .vs-product-mini { width: 100%; margin-bottom: 18px; zoom: 1.5; align-self: center; }
