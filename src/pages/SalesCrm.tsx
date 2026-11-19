@@ -6,6 +6,7 @@ import { useFooterInView } from '../lib/useFooterInView'
 import { usePhoneScrollingDown } from '../lib/usePhoneScrollingDown'
 import { Go } from '../components/brand/Arrow'
 import Cta from '../components/brand/Cta'
+import TextLink from '../components/brand/TextLink'
 import FaqList from '../components/brand/FaqList'
 import { faqItems } from '../data/faq'
 import HandNote from '../components/brand/HandNote'
@@ -78,10 +79,6 @@ function LivePipeline({ lang }: { lang: 'nl' | 'en' }) {
       <motion.p className="pp-toast" animate={stage === 0 ? { opacity: 1, y: 0, rotate: -3 } : { opacity: 0, y: -12, rotate: -3 }} transition={{ duration: 0.4 }}>
         <span />{t.toast}
       </motion.p>
-      <div className="pp-today">
-        <p>{t.today}</p>
-        <ul>{t.todayRows.map((row, i) => <li key={row} className={stage > i ? 'is-done' : ''}><i />{row}</li>)}</ul>
-      </div>
     </div>
   )
 }
@@ -147,7 +144,7 @@ export default function SalesCrm() {
             <p className="vs-lead pp-lead-text">{c.hero.lead[lang]}</p>
             <div className="vs-hero-actions">
               <Signup placement="crm_hero" label={c.cta[lang]} />
-              <Cta to="/crm#schermen" variant="line">{t.how}</Cta>
+              <TextLink to="/crm#schermen">{t.how}</TextLink>
             </div>
           </div>
           <div className="pp-hero-stage">

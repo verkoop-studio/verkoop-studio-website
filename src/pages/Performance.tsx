@@ -7,6 +7,7 @@ import WorksWith from '../components/brand/WorksWith'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
 import AudienceRows from '../components/brand/AudienceRows'
 import Cta from '../components/brand/Cta'
+import TextLink from '../components/brand/TextLink'
 import ShotViewer from '../components/product/ShotViewer'
 import FaqList from '../components/brand/FaqList'
 import { faqItems } from '../data/faq'
@@ -160,7 +161,7 @@ export default function Performance() {
             <p className="vs-lead pp-lead-text">{p.hero.lead[lang]}</p>
             <div className="vs-hero-actions">
               <Cta to="/performance#starten" onClick={start('performance_hero')}>{p.hero.cta[lang]}</Cta>
-              <Cta to="/performance#prijzen" variant="line">{t.prices}</Cta>
+              <TextLink to="/performance#prijzen">{t.prices}</TextLink>
             </div>
           </div>
           <div className="pp-hero-stage">
