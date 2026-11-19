@@ -740,7 +740,8 @@
 .fa-proof { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 22px; padding: 22px 26px; border-radius: 24px; background: var(--vs-blue); background-image: var(--vs-grain); color: var(--vs-paper); text-decoration: none; transition: translate 0.35s var(--vs-ease); }
 .fa-proof:hover, .fa-proof:focus-visible { translate: 0 -3px; }
 .fa-proof:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
-.fa-proof-figure { font: 500 clamp(40px, 5vw, 72px)/1 var(--font-display); letter-spacing: -0.04em; }
+.fa-proof-work { display: block; width: min(320px, 100%); }
+.fa-proof-work .wk-result { box-shadow: none; }
 .fa-proof-text { display: grid; gap: 4px; max-width: 60ch; color: rgb(255 255 255 / 0.85); line-height: 1.5; }
 .fa-proof-text b { color: #fff; font-size: 17px; }
 .fa-proof .vs-go { background: rgb(255 255 255 / 0.14); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.3); color: #fff; }

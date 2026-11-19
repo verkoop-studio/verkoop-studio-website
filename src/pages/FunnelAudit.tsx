@@ -18,6 +18,7 @@ import { getCase } from '../data/cases'
 import { trackEvent } from '../lib/analytics'
 import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
+import { WorkResult } from '../components/work/Work'
 
 const COPY = {
   nl: {
@@ -108,7 +109,7 @@ export default function FunnelAudit() {
 
       <section className="vs-wrap vs-section fa-scope" aria-label={t.deliverablesLabel}>
         <Link to="/cases/pinacello" className="fa-proof" onClick={() => trackEvent('case_viewed', { case: 'pinacello', placement: 'audit_proof' })}>
-          <span className="fa-proof-figure">{pinacello?.result?.[lang]}</span>
+          <span className="fa-proof-work"><WorkResult slug="pinacello" lang={lang} link={false} /></span>
           <span className="fa-proof-text"><b>Pinacello</b>{pinacello?.summary[lang]}</span>
           <Go />
         </Link>
