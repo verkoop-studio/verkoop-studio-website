@@ -735,6 +735,14 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 .ac-pill-nav a:hover { background: var(--vs-ink); color: var(--vs-paper); }
 .ac-slide-visual, .ac-promise, .ac-student-proof, .ac-tracking-visual, .ac-offer-coaching { background-image: none; background-color: var(--vs-card); }
 .ac-tracking-visual::before { display: none; }
+/* The tracking card's top half is cream too: its text, marks and value in ink and blue. */
+.ac-tracking-visual { color: var(--vs-ink); box-shadow: inset 0 -1px 0 var(--vs-line); }
+.ac-tracking-symbol { border-color: var(--vs-line); color: var(--vs-blue); }
+.ac-tracking-wordmark-dot, .ac-tracking-spark { color: var(--vs-blue); }
+.ac-tracking-value > span { color: var(--vs-ink-2); }
+.ac-tracking-window { border-color: var(--vs-line); box-shadow: 0 14px 24px -12px rgb(17 17 16 / 0.25); }
+/* The video's own frame carries a caption card at its left edge; the poster shows the right part of the frame, without it. */
+.ac-hero .vs-vc-media img { object-position: 100% 0; scale: 1.35; transform-origin: 100% 20%; }
 /* Cream cards carry ink text: the white text was written for the blue gradient. */
 .ac-promise, .ac-offer-coaching { color: var(--vs-ink); box-shadow: inset 0 0 0 1px var(--vs-line); }
 .ac-offer-coaching h3, .ac-promise > p b, p.ac-promise-done { color: var(--vs-ink); }
@@ -757,5 +765,4 @@ p.ac-promise-done { margin-top: 0; color: #fff; font-weight: 600; text-align: ce
 /* Same as the homepage: the video plays muted with burned-in subtitles, without a sound toggle. */
 .ac-hero > .ac-hero-video { position: relative; grid-area: video; align-self: start; width: min(100%, 900px); }
 .ac-hero-video > .hero-video { width: 100%; }
-.ac-hero-note { position: absolute; right: 4%; top: -38px; z-index: 2; }
 @media (max-width: 767px) { .ac-pill-nav { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; max-width: 100%; border-radius: 22px; -webkit-mask-image: linear-gradient(90deg, #000 85%, transparent); mask-image: linear-gradient(90deg, #000 85%, transparent); } .ac-pill-nav a { flex: none; } }

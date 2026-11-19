@@ -7,7 +7,6 @@ import BrandMark from '../components/BrandMark'
 import ResponsiveImage from '../components/ResponsiveImage'
 import Seo from '../components/Seo'
 import HeroVideo from '../components/HeroVideo'
-import HandNote from '../components/brand/HandNote'
 import HeroRequestForm from '../components/HeroRequestForm'
 import { academyFaq as sourceFaq, academyModules as sourceModules, academyTests as sourceTests } from '../data/academy'
 import { cases } from '../data/cases'
@@ -260,7 +259,6 @@ export default function Academy() {
           <div className="ac-hero-cta"><button className="ac-button" onClick={goToSignup}>{t('Vraag je gratis les aan')}<span aria-hidden="true">↗</span></button></div>
         </div>
         <div className="ac-hero-video">
-          <HandNote point="down-left" className="ac-hero-note">{lang === 'nl' ? '1-op-1, met Stef :)' : '1-to-1, with Stef :)'}</HandNote>
           <HeroVideo lang={lang} videoId="pXlZ6lWWg68" title="Verkoop Studio Academy — VSL" heading={t('Zo werkt de Academy')} />
         </div>
       </section>
