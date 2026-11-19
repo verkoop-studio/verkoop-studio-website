@@ -1112,7 +1112,8 @@
 
 /* 05 Optimalisatie */
 .st-big { display: grid; margin: 0; }
-.st-big span { color: var(--vs-mute); font-size: 12.5px; }
+.st-big > span { color: var(--vs-mute); font-size: 12.5px; }
+.st-big b .tx-num { font: inherit; letter-spacing: -0.03em; }
 .st-big b { font: 500 clamp(44px, 4.6vw, 64px)/1 var(--font-display); letter-spacing: -0.04em; color: var(--vs-ink); }
 .st-dots { display: grid; grid-template-columns: repeat(11, 1fr); gap: 6px; align-items: end; }
 .st-dots span { display: flex; flex-direction: column-reverse; gap: 5px; }
