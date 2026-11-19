@@ -45,7 +45,7 @@ const NO_BAND = /^\/(contact|crm|performance|academy|gratis-website|funnel-audit
 
 const LETTERS = 'verkoop'.split('')
 
-/** The wordmark: letters rise one by one, then lift and lean toward the pointer like a magnetic wave. */
+/** The wordmark: always drawn; the letters settle one by one as it arrives, then lift and lean toward the pointer. */
 function Wordmark() {
   const reduce = useReducedMotion()
   const letters = useRef<(HTMLSpanElement | null)[]>([])
@@ -68,9 +68,9 @@ function Wordmark() {
           <motion.span
             key={i}
             className="vs-footer-letter"
-            initial={reduce ? false : { y: '70%', opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true, margin: '0px 0px -10% 0px' }}
+            initial={reduce ? false : { y: '24%' }}
+            whileInView={{ y: 0 }}
+            viewport={{ once: true }}
             transition={{ type: 'spring', stiffness: 160, damping: 18, delay: i * 0.06 }}
           >
             <span ref={(el) => { letters.current[i] = el }}>{letter}</span>
