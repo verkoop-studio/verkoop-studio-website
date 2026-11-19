@@ -244,7 +244,7 @@ export default function CaseTemplate({ c, content: k }: { c: CaseStudy; content:
           transition={{ type: 'spring', stiffness: 80, damping: 15, delay: 0.35 }}
           aria-hidden="true"
         >
-          <span className="tx-win cs-hero-site"><span className="tx-win-bar"><i /><i /><i /><b>{domain(c.liveUrl) || c.name}</b></span><ResponsiveImage src={HERO_SITE[c.slug]} alt="" sizes="(max-width: 900px) 100vw, 640px" decoding="async" /></span>
+          <span className="tx-win cs-hero-site"><span className="tx-win-bar"><i /><i /><i /><b>{domain(c.liveUrl) || c.name}</b></span><img src={HERO_SITE[c.slug]} alt="" width={1440} height={c.slug === 'e-kart' ? 1080 : 780} decoding="async" fetchPriority="high" /></span>
         </motion.div>
       </section>
 
