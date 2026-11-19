@@ -1533,3 +1533,13 @@ a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate:
   .tx-win-bar { flex-wrap: wrap; row-gap: 6px; }
   .tx-crm { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+/* Home: the two ways to work with us, as one line under the software tiles */
+.vs-split-line { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-block: 8px clamp(20px, 3vw, 36px); }
+.vs-split-line-title { margin: 0 8px 0 0; font: 600 clamp(20px, 2vw, 26px)/1.2 var(--font-display); letter-spacing: -0.02em; }
+.vs-split-line-link { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 18px; border-radius: 99px; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); text-decoration: none; transition: box-shadow 0.25s ease, background-color 0.25s ease; }
+.vs-split-line-link b { font-weight: 600; font-size: 15px; }
+.vs-split-line-link span { color: var(--vs-mute); font-size: 14px; }
+.vs-split-line-link:hover { box-shadow: inset 0 0 0 1px var(--vs-ink); background: #fff; }
+.vs-split-line-link:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
+@media (max-width: 640px) { .vs-split-line-link { width: 100%; justify-content: space-between; } .vs-split-line-link span { margin-right: auto; } }
