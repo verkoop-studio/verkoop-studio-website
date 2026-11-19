@@ -28,8 +28,8 @@ function localized(article: Article, lang: 'nl' | 'en'): Article & { en: boolean
   return t ? { ...article, ...t, en: true } : { ...article, en: false }
 }
 const COPY = {
-  nl: { title: 'Inzichten voor ondernemers in Gent en omgeving', description: 'Praktische artikelen over marketing, Google Ads en websites voor bedrijven in Gent en omgeving. Vanuit Verkoop Studio in Lochristi.', by: 'Door', updated: 'Bijgewerkt op', from: 'Vanuit Lochristi', toc: 'In dit artikel', apply: 'Van lezen naar toepassen', cta: 'Bespreek jouw groeivraag', all: 'Alle artikelen', read: 'Lees het artikel', dutchOnly: '', headline: [{ text: 'Inzichten voor ondernemers' }, { text: 'in Gent.', tone: 'accent' as const }], note: 'gratis te lezen :)' },
-  en: { title: 'Insights for businesses in and around Ghent', description: 'Practical articles on marketing, Google Ads and websites for businesses in and around Ghent. From Verkoop Studio in Lochristi.', by: 'By', updated: 'Updated', from: 'From Lochristi', toc: 'In this article', apply: 'Putting it into practice', cta: 'Talk to us about your growth', all: 'All articles', read: 'Read the article', dutchOnly: 'This article is only available in Dutch for now.', headline: [{ text: 'Insights for businesses' }, { text: 'in Ghent.', tone: 'accent' as const }], note: 'free to read :)' },
+  nl: { checklist: 'Checklist', points: 'punten', title: 'Inzichten voor ondernemers in Gent en omgeving', description: 'Praktische artikelen over marketing, Google Ads en websites voor bedrijven in Gent en omgeving. Vanuit Verkoop Studio in Lochristi.', by: 'Door', updated: 'Bijgewerkt op', from: 'Vanuit Lochristi', toc: 'In dit artikel', apply: 'Van lezen naar toepassen', cta: 'Bespreek jouw groeivraag', all: 'Alle artikelen', read: 'Lees het artikel', dutchOnly: '', headline: [{ text: 'Inzichten voor ondernemers' }, { text: 'in Gent.', tone: 'accent' as const }], note: 'gratis te lezen :)' },
+  en: { checklist: 'Checklist', points: 'points', title: 'Insights for businesses in and around Ghent', description: 'Practical articles on marketing, Google Ads and websites for businesses in and around Ghent. From Verkoop Studio in Lochristi.', by: 'By', updated: 'Updated', from: 'From Lochristi', toc: 'In this article', apply: 'Putting it into practice', cta: 'Talk to us about your growth', all: 'All articles', read: 'Read the article', dutchOnly: 'This article is only available in Dutch for now.', headline: [{ text: 'Insights for businesses' }, { text: 'in Ghent.', tone: 'accent' as const }], note: 'free to read :)' },
 }
 
 /** A real page per article, annotated with lines from the article's own checklist (first checklist, by position). */
@@ -106,6 +106,10 @@ export default function Blog() {
      <ArticleCover article={article} />
     </header>
     <div className="bl-layout">
+     <details className="bl-toc-chip">
+      <summary><span>{c.toc}</span><b><i>0{current + 1}</i>{article.sections[current]?.title}</b></summary>
+      <ol>{article.sections.map((s, i) => <li key={s.title}><a href={`#deel-${i + 1}`} className={current === i ? 'is-on' : undefined} onClick={(e) => e.currentTarget.closest('details')?.removeAttribute('open')}><span>0{i + 1}</span>{s.title}</a></li>)}</ol>
+     </details>
      <nav aria-label={c.toc} className="bl-toc"><p>{c.toc}</p><ol>{article.sections.map((s, i) => <li key={s.title}><a href={`#deel-${i + 1}`} className={current === i ? 'is-on' : undefined} aria-current={current === i ? 'location' : undefined}><span>0{i + 1}</span>{s.title}</a></li>)}</ol></nav>
      <div>
       <article className="bl-body">{article.sections.map((s, i) => (
@@ -117,7 +121,10 @@ export default function Blog() {
          </div>
         )}
         {s.paragraphs.map((para) => <p key={para}>{para}</p>)}
-        {s.checklist && <ul className="bl-check">{s.checklist.map((item) => <li key={item}><span className="sv-tick" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7.5 6 10.5 11 4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg></span>{item}</li>)}</ul>}
+        {s.checklist && <figure className="bl-checkcard">
+         <figcaption><span className="bl-checkcard-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="1.5" width="11" height="13" rx="2.5" stroke="currentColor" strokeWidth="1.5" /><path d="M5.5 6 7 7.5 10.5 4M5.5 11h5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg></span><b>{c.checklist}</b><small>{s.checklist.length} {c.points}</small></figcaption>
+         <ul className="bl-check">{s.checklist.map((item, k) => <li key={item}><span className="bl-check-n" aria-hidden="true">{k + 1}</span><span className="sv-tick" aria-hidden="true"><svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7.5 6 10.5 11 4" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg></span>{item}</li>)}</ul>
+        </figure>}
        </section>
       ))}</article>
       <aside className="bl-apply">
