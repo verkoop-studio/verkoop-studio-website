@@ -1279,7 +1279,7 @@
 .vs-mega-dark .vs-cta-circle { width: 34px; height: 34px; }
 .vs-mega-dark .vs-cta-bed { width: calc(100% - 5px - 5px - 34px - 6px); }
 .vs-mega-dark .vs-cta:hover .vs-cta-bed { width: calc(100% - 10px); }
-.vs-mega-dark-note { position: absolute; right: 12px; bottom: 62px; color: #ffd23f; font-size: 19px; }
+.vs-mega-dark-note { position: relative; justify-self: start; margin: 2px 0 0 54px; color: #ffd23f; font-size: 19px; rotate: -3deg; }
 
 .vs-mega-product { --tint: #eef1ff; display: grid; gap: 8px; padding: 10px 10px 14px; border: 1px solid var(--vs-line); border-radius: 16px; background: linear-gradient(180deg, var(--tint), var(--vs-card) 60%); color: var(--vs-ink); text-decoration: none; transition: translate 0.35s var(--vs-ease), box-shadow 0.35s var(--vs-ease), border-color 0.25s; }
 .vs-mega-product--performance { --tint: #eef8e4; }
