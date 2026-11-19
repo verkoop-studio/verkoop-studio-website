@@ -1,6 +1,8 @@
 import { Check } from 'lucide-react'
 import noomsShop from '../../assets/cases/nooms-640.webp'
 import pinacelloShop from '../../assets/cases/pinacello-640.webp'
+import ekartShop from '../../assets/cases/ekart-640.webp'
+import healthfactorShop from '../../assets/cases/healthfactor-website-640.webp'
 import type { CSSProperties, ReactNode } from 'react'
 import type { ServiceScreen } from '../../data/serviceSteps'
 import type { Lang } from '../../data/types'
@@ -35,16 +37,25 @@ const ADS = {
   en: [{ stage: 'Cold', text: 'Meet us in 20 seconds.', cta: 'Learn more', tone: 'video' }, { stage: 'Warm', text: 'How it works, step by step.', cta: 'Watch', tone: 'steps' }, { stage: 'Retargeting', text: 'Your cart is still waiting.', cta: 'Check out', tone: 'cart' }],
 }
 
-/** Real material from the cases: the two published ad videos' stills and a client's shop. */
-const AD_IMAGES = ['/images/ads/pinacello-personal.jpg', '/images/ads/healthfactor-personal.jpg', noomsShop]
+/** Real material from the cases: the two published ad stills and the clients' sites. Each page uses each one once. */
+const ART = {
+  'pinacello-still': '/images/ads/pinacello-personal.jpg',
+  'healthfactor-still': '/images/ads/healthfactor-personal.jpg',
+  nooms: noomsShop,
+  ekart: ekartShop,
+  'pinacello-site': pinacelloShop,
+  'healthfactor-site': healthfactorShop,
+} as const
+export type AdArt = keyof typeof ART | 'none'
+const DEFAULT_ART: AdArt[] = ['pinacello-still', 'healthfactor-still', 'nooms']
 
-export function AdCard({ index, lang }: { index: number; lang: Lang }) {
+export function AdCard({ index, lang, art = DEFAULT_ART[index] }: { index: number; lang: Lang; art?: AdArt }) {
   const ad = ADS[lang][index]
   return (
     <div className="sv-ad">
       <div className="sv-ad-head"><span className="sv-ava">v.</span><p><b>{lang === 'nl' ? 'Jouw merk' : 'Your brand'}</b><span>{lang === 'nl' ? 'Gesponsord' : 'Sponsored'}</span></p><span className="sv-stage">{ad.stage}</span></div>
-      <div className={`sv-ad-img sv-ad-img--${ad.tone}`} aria-hidden="true">
-        <img src={AD_IMAGES[index]} alt="" width={360} height={360} loading="lazy" decoding="async" />
+      <div className={`sv-ad-img sv-ad-img--${ad.tone}${art === 'none' ? ' sv-ad-img--plain' : ''}`} aria-hidden="true">
+        {art !== 'none' && <img src={ART[art]} alt="" width={360} height={360} loading="lazy" decoding="async" />}
         {ad.tone === 'video' && <span className="sv-play"><svg width="16" height="16" viewBox="0 0 14 14"><path d="M4 2.5v9l7.5-4.5Z" fill="currentColor" /></svg></span>}
         {ad.tone === 'steps' && <span className="sv-ad-steps"><i>1</i><i>2</i><i>3</i></span>}
         {ad.tone === 'cart' && <span className="sv-ad-cart-badge">1</span>}
@@ -70,7 +81,7 @@ function Campaigns({ lang }: ScreenProps) {
 }
 
 function Creatives({ lang }: ScreenProps) {
-  return <Win title="Instagram · Facebook" lang={lang}><div className="sv-ads">{[0, 1, 2].map((i) => <AdCard key={i} index={i} lang={lang} />)}</div></Win>
+  return <Win title="Instagram · Facebook" lang={lang}><div className="sv-ads">{([['nooms', 0], ['none', 1], ['ekart', 2]] as [AdArt, number][]).map(([art, i]) => <AdCard key={i} index={i} lang={lang} art={art} />)}</div></Win>
 }
 
 function Table({ title, head, rows, advice, lang }: { title: string; head: string[]; rows: string[][]; advice?: string; lang: Lang }) {

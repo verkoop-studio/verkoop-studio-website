@@ -2,7 +2,10 @@ import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 import type { Lang } from '../../data/types'
 import Reveal from '../brand/Reveal'
-import { AdCard } from './ServiceScreens'
+import { AdCard, type AdArt } from './ServiceScreens'
+
+/** Different real material than the hero and the steps above, so nothing repeats on the page. */
+const APPROVAL_ART: AdArt[] = ['pinacello-site', 'healthfactor-site', 'none']
 
 const COPY = {
   nl: { title: 'Een creative-ronde, in het klein.', body: 'Een voorbeeld van creatives per fase. Druk maar op Goedkeuren.', approve: 'Goedkeuren', waiting: 'Ter goedkeuring', live: 'Live', sample: 'Voorbeeld' },
@@ -37,7 +40,7 @@ export default function ApprovalCards({ lang, platforms = 'meta' }: { lang: Lang
                   </span>
                   <em className="sv-approve-sample">{t.sample}</em>
                 </header>
-                <AdCard index={i} lang={lang} />
+                <AdCard index={i} lang={lang} art={APPROVAL_ART[i]} />
                 <button type="button" className="sv-approve-btn" aria-pressed={done} onClick={() => setApproved((prev) => prev.map((v, j) => (j === i ? !v : v)))}>
                   <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true"><path d="M3.5 9.5 7.5 13.5 14.5 5" pathLength={1} /></svg>
                   {done ? t.live : t.approve}

@@ -79,7 +79,6 @@
 
 /* Meta hero: a phone with one sample ad and a sale arriving. */
 .sv-phone-stage { display: grid; place-items: center; min-height: 540px; }
-.sv-feed-next { height: 92px; margin-top: 12px; overflow: hidden; border-radius: 14px; -webkit-mask-image: linear-gradient(#000 40%, transparent); mask-image: linear-gradient(#000 40%, transparent); }
 .sv-phone { position: relative; width: min(300px, 78%); padding: 46px 12px 18px; border: 9px solid #151514; border-radius: 44px; background: #f6f5f1; box-shadow: 0 50px 90px -40px rgb(17 17 16 / 0.55); }
 .sv-phone-notch { position: absolute; left: 50%; top: 10px; width: 84px; height: 22px; margin-left: -42px; border-radius: 99px; background: #151514; }
 .sv-phone-chip { position: absolute; right: 14px; top: 13px; padding: 2px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-size: 10.5px; }
@@ -890,3 +889,12 @@
 .cs-hero-site { display: flex; flex-direction: column; height: 100%; border: 0; border-radius: 0; }
 .cs-hero-site img { flex: 1; display: block; width: 100%; min-height: 0; object-fit: cover; object-position: top; }
 .cs-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; margin-top: 8px; }
+/* Ad tiles without a photo keep a flat brand ground; the service hero closes on one real result. */
+.sv-ad-img--plain.sv-ad-img--video { background: var(--vs-blue); }
+.sv-ad-img--plain.sv-ad-img--steps { background: #ffd23f; }
+.sv-ad-img--plain.sv-ad-img--cart { background: #ff9fd0; }
+.sv-ad-img--plain.sv-ad-img--steps::after { display: none; }
+.sv-hero-proof { margin: 18px 0 0; padding-top: 16px; border-top: 1px solid var(--vs-line); color: var(--vs-ink-2); font-size: 15px; }
+.sv-hero-proof a { color: inherit; text-decoration: none; }
+.sv-hero-proof b { color: var(--vs-blue); font-weight: 700; }
+.sv-hero-proof a:hover { color: var(--vs-ink); }

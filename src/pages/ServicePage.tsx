@@ -115,8 +115,7 @@ function MetaHero({ lang }: { lang: Lang }) {
       <motion.div className="sv-phone" initial={reduce ? false : { opacity: 0, y: 50, rotate: 6 }} animate={{ opacity: 1, y: 0, rotate: 2.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
         <span className="sv-phone-notch" />
         <span className="sv-phone-chip">{COPY[lang].sample}</span>
-        <AdCard index={0} lang={lang} />
-        <div className="sv-feed-next"><AdCard index={2} lang={lang} /></div>
+        <AdCard index={0} lang={lang} art="healthfactor-still" />
       </motion.div>
     </div>
   )
@@ -253,6 +252,11 @@ export default function ServicePage({ slug }: { slug: ServiceSlug }) {
             <Cta href="#audit-formulier-section" onClick={() => trackEvent('audit_cta_clicked', { placement: 'service_hero', service: slug })}>{t.cta}</Cta>
             <span className="sv-reply">{t.reply}</span>
           </motion.div>
+          {relatedCase?.result && (
+            <motion.p className="sv-hero-proof" {...arrive(1)}>
+              <Link to={`/cases/${relatedCase.slug}`} onClick={() => trackEvent('case_viewed', { case: relatedCase.slug, placement: 'service_hero' })}><b>{relatedCase.result[lang]}</b> · {relatedCase.name}</Link>
+            </motion.p>
+          )}
         </div>
         {slug === 'websites' ? <WebsiteStage lang={lang} /> : slug === 'meta-ads' ? <MetaHero lang={lang} /> : <HeroObject screen={story.hero} lang={lang} />}
       </section>
