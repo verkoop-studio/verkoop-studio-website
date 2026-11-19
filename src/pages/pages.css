@@ -146,6 +146,8 @@
 .sv-table :is(th, td):first-child { text-align: left; }
 .sv-table tbody th { font-weight: 600; }
 .sv-table tbody tr:last-child td:last-child { color: var(--vs-blue); font-weight: 700; }
+/* A sample table on a phone keeps every column inside its window. */
+@media (max-width: 520px) { .sv-win .sv-table :is(th, td) { padding-inline: 4px; font-size: 12.5px; } .sv-win .sv-table :is(th, td):first-child { padding-left: 0; } }
 .sv-advice { display: flex; align-items: center; gap: 8px; margin: 16px 0 0; padding: 10px 12px; border-radius: 10px; background: rgb(43 75 242 / 0.08); color: var(--vs-ink); font-weight: 600; }
 .sv-advice span { color: var(--vs-blue); }
 
@@ -204,6 +206,8 @@
 .sv-how-lead { margin: 10px 0 0; color: var(--vs-ink-2); font-size: 17px; }
 .sv-hero-object { position: relative; display: grid; justify-items: center; padding: 20px 0 40px; }
 .sv-hero-object > div:first-child { width: min(100%, 460px); }
+/* On a phone the window fades in where it sits: sliding in from the right it would start past the screen edge. */
+@media (max-width: 860px) { .sv-hero-object > div:first-child { transform: rotate(1.5deg) !important; } .sv-hero-object.sv-hero-visual { transform: none !important; } }
 /* On wide screens the hero window and the pinned window are drawn larger: they are the product moment of the page. */
 @media (min-width: 1100px) {
   .sv-hero-object > div:first-child { width: 100%; max-width: 390px; zoom: 1.45; }
