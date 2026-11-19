@@ -265,6 +265,8 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
   const total = Object.keys(required).length
   // The preview counts steps, like the rail above the form: a step with no required fields counts once it is reached.
   const stepsTotal = lastStep + 1
+  // The preview stays folded away until the visitor starts typing, so the form alone leads.
+  const typed = Object.values(values).some((v) => typeof v === 'string' && v.trim().length > 0)
   const stepsDone = Array.from({ length: stepsTotal }, (_, i) => i).filter((i) => (STEP_FIELDS[i].length ? stepValid(i) : step >= i)).length
   const busy = status === 'submitting'
   const shown = (index: number) => Boolean(tried[index]) || Object.keys(errors).length > 0
@@ -390,7 +392,7 @@ export default function QualificationForm({ id = 'audit-formulier', compact = fa
   return (
     <div className="vs-form-duo">
       {body}
-      <aside className="vs-form-side" aria-label={c.band}>
+      <aside className={`vs-form-side${typed || status === 'done' ? '' : ' is-waiting'}`} aria-label={c.band}>
         <PreviewCard
           band={c.band}
           title={firstName ? c.title(firstName) : ''}

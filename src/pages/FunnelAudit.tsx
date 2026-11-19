@@ -32,6 +32,7 @@ const COPY = {
     deliverablesLabel: 'Mogelijke opleverpunten',
     report: 'Groeianalyse · rapport',
     levels: { pink: 'Eerst', blue: 'Daarna', grey: 'Later' },
+    finding: { area: 'Leadflow', notes: [['Conversieprobleem', 'Het aanvraagformulier staat op mobiel onder de vouw.'], ['Aanbeveling', 'Zet de aanvraag boven de vouw, met één duidelijke knop.'], ['Vervolgstap', 'Meet de aanvragen per campagne na twee weken opnieuw.']] as [string, string][] },
     deliverables: ['Belangrijkste conversieproblemen', 'Screenshots en observaties', 'Geprioriteerde aanbevelingen', 'Voorgestelde nieuwe funnel', 'Voorgestelde landingspagina’s', 'Trackinghiaten', 'Automatiseringskansen', 'Aanbevolen vervolgstappen'],
     packagesNote: 'De opstart die hieruit volgt zit altijd inbegrepen in een groeipakket.',
     packagesLink: 'Bekijk de groeipakketten',
@@ -53,6 +54,7 @@ const COPY = {
     deliverablesLabel: 'Possible deliverables',
     report: 'Growth analysis · report',
     levels: { pink: 'First', blue: 'Next', grey: 'Later' },
+    finding: { area: 'Lead flow', notes: [['Conversion problem', 'On mobile, the enquiry form sits below the fold.'], ['Recommendation', 'Move the enquiry above the fold, with one clear button.'], ['Next step', 'Measure enquiries per campaign again after two weeks.']] as [string, string][] },
     deliverables: ['Key conversion problems', 'Screenshots and observations', 'Prioritised recommendations', 'Proposed new funnel', 'Suggested landing pages', 'Tracking gaps', 'Automation opportunities', 'Recommended next steps'],
     packagesNote: 'The setup that follows from this is always included in a growth package.',
     packagesLink: 'See the growth packages',
@@ -66,7 +68,6 @@ const COPY = {
 /** Sample priorities for the report mock; the window says Voorbeeld. */
 const pinacello = getCase('pinacello')
 
-const REPORT_LEVELS = ['pink', 'blue', 'grey', 'blue', 'pink', 'grey'] as const
 
 export default function FunnelAudit() {
   usePageStyles(PAGES_STYLES)
@@ -93,12 +94,12 @@ export default function FunnelAudit() {
         <motion.div className="sv-hero-visual sv-hero-object" aria-hidden="true" initial={reduce ? false : { opacity: 0, x: 50, rotate: 5 }} animate={{ opacity: 1, x: 0, rotate: 1.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
           <div>
             <Win title={t.report} lang={lang}>
-              <ul className="fa-report">
-                {t.scope.map((item, i) => {
-                  const level = REPORT_LEVELS[i % REPORT_LEVELS.length]
-                  return <li key={item} style={{ animationDelay: `${0.7 + i * 0.12}s` }}><span className="sv-tick"><Check size={12} strokeWidth={2.6} /></span><b>{item}</b><span className={`sv-tag sv-tag--${level}`}>{t.levels[level]}</span></li>
-                })}
-              </ul>
+              <div className="fa-finding">
+                <p className="fa-finding-head"><b>{t.finding.area}</b><span className="sv-tag sv-tag--pink">{t.levels.pink}</span></p>
+                {t.finding.notes.map(([label, note], i) => (
+                  <p key={label} className="fa-finding-note" style={{ animationDelay: `${0.7 + i * 0.18}s` }}><span className="fa-finding-n">{i + 1}</span><span><em>{label}</em>{note}</span></p>
+                ))}
+              </div>
             </Win>
           </div>
         </motion.div>

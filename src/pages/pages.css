@@ -712,14 +712,10 @@
 
 .fa-scope { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(28px, 5vw, 72px); }
 .fa-scope .sv-win { margin-top: 24px; }
-.fa-report { display: grid; gap: 6px; margin: 0; padding: 14px; list-style: none; }
-.fa-report li { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: #f7f6f2; font-size: 13.5px; }
-.fa-report b { font-weight: 600; }
 .fa-deliver { grid-template-columns: minmax(0, 1fr); margin-top: 24px; }
 .fa-packages { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; margin: 0; padding: 18px 22px; border-radius: 18px; background: var(--vs-stone); color: var(--vs-ink-2); }
 @media (max-width: 860px) { .fa-scope { grid-template-columns: minmax(0, 1fr); } }
-@media (prefers-reduced-motion: reduce) { .sv-hero-object .fa-report li { animation: none; } }
-.sv-hero-object .fa-report li { animation: sv-row-in 0.45s var(--vs-ease) both; }
+
 .fa-proof { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 22px; padding: 22px 26px; border-radius: 24px; background: var(--vs-blue); background-image: var(--vs-grain); color: var(--vs-paper); text-decoration: none; transition: translate 0.35s var(--vs-ease); }
 .fa-proof:hover, .fa-proof:focus-visible { translate: 0 -3px; }
 .fa-proof:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
@@ -898,3 +894,13 @@
 .sv-hero-proof a { color: inherit; text-decoration: none; }
 .sv-hero-proof b { color: var(--vs-blue); font-weight: 700; }
 .sv-hero-proof a:hover { color: var(--vs-ink); }
+/* Contact: the request preview appears once the visitor types. */
+.vs-form-side.is-waiting { display: none; }
+.vs-form-side:not(.is-waiting) { animation: sv-row-in 0.45s var(--vs-ease) both; }
+/* Growth analysis hero: one annotated sample finding, in place of a long ticked list. */
+.fa-finding { display: grid; gap: 10px; padding: 16px; }
+.fa-finding-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 4px; font: 500 20px/1.2 var(--font-display); }
+.fa-finding-note { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 12px; margin: 0; padding: 12px; border-radius: 12px; background: #f7f6f2; font-size: 14px; line-height: 1.45; animation: sv-row-in 0.45s var(--vs-ease) both; }
+.fa-finding-note em { display: block; margin-bottom: 2px; color: var(--vs-mute); font-style: normal; font-size: 12px; font-weight: 600; }
+.fa-finding-n { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--vs-blue); color: #fff; font-size: 12px; font-weight: 700; }
+@media (prefers-reduced-motion: reduce) { .fa-finding-note { animation: none; } }
