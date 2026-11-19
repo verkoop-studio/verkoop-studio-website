@@ -13,17 +13,13 @@
 .pina-result-summary { display: grid; grid-template-columns: 1fr 1fr 1.2fr; margin-top: 40px; border-top: 1px solid #685740; padding-top: 28px; gap: 30px; }
 .pina-result-summary > span { display: flex; flex-direction: column; font-size: 12px; line-height: 1.7; color: #d7c9b2; }
 .pina-result-summary strong { display: block; color: #ffce77; font-size: clamp(26px,3.5vw,48px); font-weight: 500; letter-spacing: -.04em; margin-bottom: 5px; }
-.pina-case-cta { padding-block: 85px; text-align: center; }
-.pina-case-cta h2 { max-width: 740px; margin: 0 auto 20px; }
-.pina-case-cta > p { max-width: 580px; margin: auto; font-size: 15px; line-height: 1.8; color: #6b604c; }
-.pina-case-cta > div { display: flex; align-items: center; justify-content: center; gap: 25px; flex-wrap: wrap; margin-top: 30px; }
 @media (max-width: 850px) {
   .pina-context { gap: 40px; }
   .pina-step h3 { margin-top: 14px; }
 }
 @media (max-width: 600px) {
   .pina-context { grid-template-columns: 1fr; gap: 32px; }
-  .pina-context,.pina-case-cta { padding-block: 52px; }
+  .pina-context { padding-block: 52px; }
   .pina-step { padding: 25px; }
   .pina-result-summary { grid-template-columns: 1fr; gap: 24px; }
   .pina-result-summary > span + span { border-top: 1px solid #685740; padding-top: 20px; }

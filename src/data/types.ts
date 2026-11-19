@@ -53,29 +53,6 @@ export interface CaseStudy {
   liveUrl?: string
 }
 
-export interface Client {
-  name: string
-  description: Bi<string>
-  image?: string
-}
-
-export interface PortfolioItem {
-  id: string
-  project: string
-  caseSlug: CaseSlug
-  category: 'B2B' | 'B2C' | 'ecommerce' | 'lokaal' | 'launch'
-  audience: Bi<string>
-  objective: Bi<string>
-  conversion: Bi<string>
-  description: Bi<string>
-  liveUrl?: string
-}
-
-export interface AIFlow {
-  title: Bi<string>
-  steps: Bi<string[]>
-}
-
 export interface ProcessStep {
   number: string
   title: Bi<string>

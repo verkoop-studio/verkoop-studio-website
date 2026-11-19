@@ -10,27 +10,6 @@ export interface PricingTier {
   highlights: Bi<string[]>
 }
 
-export interface AddOn {
-  key: string
-  name: Bi<string>
-  price?: Bi<string>
-  description: Bi<string>
-  href?: string
-}
-
-export const addOns: AddOn[] = [
-  {
-    key: 'learning-track',
-    name: { nl: 'Meta Ads Academy', en: 'Meta Ads Academy' },
-    price: { nl: 'Bekijk de lessen', en: 'Explore the lessons' },
-    description: {
-      nl: 'Leer zelf Meta ads beheren, 1-op-1 met Stef.',
-      en: 'Learn to manage Meta ads yourself, one-to-one with Stef.',
-    },
-    href: '/academy',
-  },
-]
-
 export const pricingTiers: PricingTier[] = [
   {
     key: 'foundation',

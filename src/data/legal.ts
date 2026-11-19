@@ -203,9 +203,3 @@ export const legalDocuments = {
 } satisfies Record<string, LegalDocument>
 
 export type LegalSlug = keyof typeof legalDocuments
-
-export const legalPaths = Object.values(legalDocuments).map((document) => document.path)
-
-export function isLegalPath(pathname: string) {
-  return (legalPaths as readonly string[]).includes(pathname)
-}

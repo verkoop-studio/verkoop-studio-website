@@ -207,7 +207,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-page .studio-hero.vs-hero { display: block; min-height: 0; margin: 0; gap: 0; background: none; border: 0; border-radius: 0; box-shadow: none; overflow: visible; padding: clamp(140px, 18vw, 200px) 0 clamp(56px, 8vw, 96px); }
 .vs-hero .vs-label { display: block; margin-bottom: 28px; }
 .vs-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; margin-top: 44px; }
-.vs-hero-note { font-size: 14px; color: var(--vs-mute); margin-left: 6px; }
 .vs-hero-form { min-width: 0; display: flex; }
 
 /* Letter-slide headline: words in clipped masks, letters counter-slide */
@@ -347,7 +346,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 /* ---------- Hero video: no sound toggle on the homepage ---------- */
 
-
 @media (prefers-reduced-motion: reduce) {
   .vs-slide .vs-poster { animation: none !important; transition: none; }
 }
@@ -365,7 +363,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-proof ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
 
 /* ---------- Hero video: still frame until the first frame plays ---------- */
-
 
 /* ---------- Touch: every control at least 44px ---------- */
 
@@ -425,7 +422,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .tx-win-bar b { font-weight: 600; }
 .tx-win-bar em { margin-left: auto; margin-right: 14px; padding: 3px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-style: normal; font-size: 11px; }
 .tx-win > :last-child { flex: 1; padding: 12px 18px 50px; min-height: 0; overflow: hidden; }
-.tx-dim { margin: 0 0 8px; color: var(--vs-mute); font-size: 12px; }
 .tx-info { padding: clamp(18px, 2.4vw, 28px) clamp(20px, 2.6vw, 32px) clamp(20px, 2.6vw, 30px); }
 .tx-step { margin: 0 0 6px; color: var(--vs-blue); font: 400 20px/1 var(--font-condensed); letter-spacing: 0.03em; }
 .tx-title { margin: 0 0 8px; font: 500 clamp(30px, 3vw, 44px)/1 var(--font-display); letter-spacing: -0.035em; }
@@ -463,13 +459,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-hero-split .vs-h1 { font-size: clamp(48px, 6.4vw, 116px); }
 .vs-hero-proof { position: relative; }
 .vs-hero-proof-note { position: absolute; left: 18px; bottom: calc(100% + 4px); }
-.vs-hero-notice { position: absolute; right: -14px; top: -22px; z-index: 3; }
-.vs-hero-notice p { display: flex; align-items: center; gap: 10px; margin: 0; padding: 9px 12px; border-radius: 14px; background: #fff; box-shadow: 0 18px 36px -18px rgb(17 17 16 / 0.45), 0 1px 2px rgb(17 17 16 / 0.06); font-size: 13px; }
-.vs-hero-notice b { display: grid; font-weight: 600; line-height: 1.3; }
-.vs-hero-notice em { color: var(--vs-mute); font-style: normal; font-weight: 400; font-size: 11.5px; }
-.vs-hero-notice small { align-self: start; padding: 2px 7px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-size: 10px; }
-.vs-hero-notice-dot { width: 8px; height: 8px; border-radius: 50%; background: #2fbf71; box-shadow: 0 0 0 4px rgb(47 191 113 / 0.18); }
-@media (max-width: 960px) { .vs-hero-notice { right: 6px; } }
 .vs-proof-win { border-radius: 16px; border-width: 1px; box-shadow: 0 40px 80px -40px rgb(17 17 16 / 0.35); }
 .vs-proof-body { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px 22px; }
 .vs-proof-figure { font: 500 clamp(56px, 5vw, 84px)/0.9 var(--font-display); letter-spacing: -0.05em; color: var(--vs-ink); }
@@ -511,7 +500,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 @media (max-width: 767px) {
   .vs-hero-split .vs-h1 { font-size: clamp(40px, 11.5vw, 60px); }
   .vs-hero-proof { max-width: none; margin-top: 36px; padding-bottom: 72px; }
-  .vs-hero-notice { display: none; }
   .vs-proof-video { left: 0; width: min(88%, 330px); }
   .vs-hero-copy { display: contents; }
   .vs-hero-split > .vs-hero-proof { order: 1; margin-top: 20px; }
@@ -533,9 +521,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 @keyframes eyt-blink { 50% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .eyt-ball, .eyt-say { transition: none; } .eyt-caret { animation: none; } }
 
-/* The Verkoop dot beside the home hero proof card, watching the pointer inside the hero. */
-.vs-hero-watcher { position: absolute; right: -26px; top: 38%; z-index: 3; }
-@media (max-width: 960px) { .vs-hero-watcher { right: -6px; top: 44%; } }
 @media (prefers-reduced-motion: reduce) {
   :is(a, button):hover .vs-go .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-go .vs-arrow > span:first-child, .vs-textlink:hover .vs-arrow > span:first-child { transform: none; }
   :is(a, button):hover .vs-go .vs-arrow > span + span, :is(a, button):focus-visible .vs-go .vs-arrow > span + span, .vs-textlink:hover .vs-arrow > span + span { transform: translateX(-110%); }

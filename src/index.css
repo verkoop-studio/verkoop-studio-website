@@ -96,10 +96,6 @@ body {
   outline-offset: 2px;
 }
 
-.pb-safe {
-  padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -270,12 +266,6 @@ body {
   border-radius: 0 0 24px 24px;
   background: #f8f8ff;
 }
-.hero-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 27px;
-}
 .hero-art {
   position: relative;
   min-width: 0;
@@ -347,9 +337,6 @@ body {
 #agency {
   background: #fbfbff !important;
 }
-.site-shell .rounded-full.bg-accent {
-  border-radius: 8px;
-}
 a:focus-visible,
 button:focus-visible {
   outline: 3px solid #6485ff;
@@ -385,15 +372,6 @@ button:focus-visible {
     padding-left: 8px;
     padding-right: 8px;
   }
-  .hero-actions {
-    gap: 8px;
-  }
-  .hero-actions > a {
-    padding: 14px 18px;
-    gap: 10px;
-    min-height: 48px;
-    font-size: 15px;
-  }
   .hero-art {
     min-height: 375px;
   }
@@ -418,24 +396,6 @@ button:focus-visible {
   border-radius: 20px;
   box-shadow: 0 10px 30px #10131c14;
 }
-.closing-cta {
-  background: #10131c;
-  color: #fff;
-}
-.closing-cta h2 {
-  color: #fff;
-  font-size: clamp(32px, 4vw, 52px);
-  letter-spacing: -0.05em;
-  line-height: 1.08;
-}
-.closing-cta p {
-  margin: 18px auto 0;
-  max-width: 540px;
-  color: #dde0ed;
-  font-size: 16px;
-  line-height: 1.6;
-}
-.closing-cta .hero-actions { justify-content: center; }
 .case-proof {
   background: #10131c;
   color: #fff;
