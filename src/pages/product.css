@@ -182,7 +182,7 @@ body:has(.pp) .back-to-top { display: none; }
 /* Performance screens: one large panel, tabs to switch, zoom where the pointer rests. */
 .pp-viewer { display: grid; gap: 18px; margin-top: clamp(28px, 4vw, 48px); }
 .pp-viewer-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
-.pp-viewer-tabs button { display: inline-flex; align-items: baseline; gap: 8px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink-2); font: 600 14.5px/1 var(--font-sans); cursor: pointer; transition: background-color 0.25s, color 0.25s, box-shadow 0.25s; }
+.pp-viewer-tabs button { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 0; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink-2); font: 600 14.5px/1 var(--font-sans); cursor: pointer; transition: background-color 0.25s, color 0.25s, box-shadow 0.25s; }
 .pp-viewer-tabs button span { color: var(--vs-mute); font-size: 12px; font-variant-numeric: tabular-nums; }
 .pp-viewer-tabs button:hover { box-shadow: inset 0 0 0 1px var(--vs-ink); color: var(--vs-ink); }
 .pp-viewer-tabs button.is-on { background: var(--vs-ink); box-shadow: none; color: var(--vs-paper); }
