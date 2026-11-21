@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react'
-import { useEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import TextLink from '../brand/TextLink'
 import type { Bi, Lang } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
@@ -477,6 +477,72 @@ const PHASE_END = 0.9
  * index on the left jumps between them. Phones and reduced motion get the same
  * cards as a plain list.
  */
+/**
+ * Phones: the seven parts side by side in one swipeable row, one part to a screen, with the
+ * next one peeking in. A numbered strip above names every part, follows the swipe and jumps
+ * to a part when pressed. All seven stay in the page for search engines and screen readers.
+ */
+function Swipe({ lang, cta }: { lang: Lang; cta: ReactNode }) {
+  const t = COPY[lang]
+  const track = useRef<HTMLDivElement>(null)
+  const strip = useRef<HTMLDivElement>(null)
+  const [at, setAt] = useState(0)
+
+  useEffect(() => {
+    const el = track.current
+    if (!el) return
+    let frame = 0
+    const read = () => {
+      frame = 0
+      const cards = [...el.children] as HTMLElement[]
+      const mid = el.scrollLeft + el.clientWidth / 2
+      let best = 0
+      cards.forEach((card, i) => { if (Math.abs(card.offsetLeft + card.offsetWidth / 2 - mid) < Math.abs(cards[best].offsetLeft + cards[best].offsetWidth / 2 - mid)) best = i })
+      setAt(best)
+    }
+    const onScroll = () => { if (!frame) frame = requestAnimationFrame(read) }
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => { el.removeEventListener('scroll', onScroll); cancelAnimationFrame(frame) }
+  }, [])
+
+  /* keep the current part's name in view in the strip */
+  useEffect(() => {
+    const row = strip.current
+    const chip = row?.children[at] as HTMLElement | undefined
+    if (row && chip) row.scrollTo({ left: chip.offsetLeft - (row.clientWidth - chip.offsetWidth) / 2, behavior: 'smooth' })
+  }, [at])
+
+  const go = (i: number) => {
+    const el = track.current
+    const card = el?.children[i] as HTMLElement | undefined
+    if (el && card) el.scrollTo({ left: card.offsetLeft - (el.clientWidth - card.offsetWidth) / 2, behavior: 'smooth' })
+  }
+
+  return (
+    <section className="tx tx--swipe" aria-labelledby="td-title">
+      <div className="vs-wrap">
+        <p className="vs-label">{t.label}</p>
+        <h2 id="td-title" className="vs-h2">{t.intro}</h2>
+      </div>
+      <div ref={strip} className="tx-strip" role="tablist" aria-label={t.label}>
+        {LAYERS.map((layer, i) => (
+          <button key={layer.key} type="button" role="tab" aria-selected={at === i} className="tx-chip" onClick={() => go(i)}>
+            {at === i && <motion.span layoutId="tx-chip" className="tx-chip-on" transition={{ type: 'spring', stiffness: 420, damping: 34 }} />}
+            <span className="tx-chip-n">{i + 1}</span><span>{layer.title[lang]}</span>
+          </button>
+        ))}
+      </div>
+      <div ref={track} className="tx-track">
+        {LAYERS.map((layer, i) => <Card key={layer.key} layer={layer} index={i} lang={lang} active={at === i} />)}
+      </div>
+      <div className="vs-wrap tx-swipe-foot">
+        <span className="tx-pips" aria-hidden="true">{LAYERS.map((layer, i) => <i key={layer.key} data-on={at === i || undefined} />)}</span>
+        {cta}
+      </div>
+    </section>
+  )
+}
+
 export default function SystemTeardown() {
   const { lang } = useLang()
   const t = COPY[lang]
@@ -494,7 +560,9 @@ export default function SystemTeardown() {
 
   const cta = <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_teardown' })}>{t.cta}</Cta>
 
-  if (reduce || !wide) {
+  if (!wide) return <Swipe lang={lang} cta={cta} />
+
+  if (reduce) {
     return (
       <section className="tx tx--list" aria-labelledby="td-title">
         <div className="vs-wrap">

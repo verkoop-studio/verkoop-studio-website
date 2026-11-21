@@ -1555,3 +1555,46 @@ a:hover .vs-poster-shot--work .wk-site-page { translate: 0 min(0px, calc(100cqw 
 a:hover .vs-poster-shot--work .wk-cursor { animation: wk-cursor 2.6s cubic-bezier(0.45, 0, 0.2, 1) 0.6s forwards; }
 a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3.15s forwards; }
 @media (prefers-reduced-motion: reduce) { a:hover .vs-poster-shot--work .wk-site-page { translate: none; } a:hover .vs-poster-shot--work .wk-cursor, a:hover .vs-poster-shot--work .wk-cursor i { animation: none; } }
+
+/* ---------- The system on phones: one part to a screen, swiped sideways ---------- */
+.tx--swipe { padding-block: clamp(64px, 10vw, 110px); overflow: hidden; }
+.tx-strip { display: flex; gap: 6px; margin-top: 22px; padding: 4px var(--vs-gutter); overflow-x: auto; scrollbar-width: none; }
+.tx-strip::-webkit-scrollbar, .tx-track::-webkit-scrollbar { display: none; }
+.tx-chip { position: relative; isolation: isolate; flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px 0 8px; border: 0; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink-2); font: 500 14px/1 var(--font-sans); cursor: pointer; transition: color 0.25s ease; }
+.tx-chip[aria-selected='true'] { color: var(--vs-paper); }
+.tx-chip:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
+.tx-chip-on { position: absolute; inset: 0; z-index: -1; border-radius: 99px; background: var(--vs-ink); }
+.tx-chip-n { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--vs-stone); color: var(--vs-ink); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; transition: background-color 0.25s ease, color 0.25s ease; }
+.tx-chip[aria-selected='true'] .tx-chip-n { background: var(--vs-blue); color: #fff; }
+.tx-track { display: flex; align-items: flex-start; gap: 12px; margin-top: 12px; padding: 8px var(--vs-gutter) 20px; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding-inline: var(--vs-gutter); overscroll-behavior-x: contain; scrollbar-width: none; }
+.tx-track .tx-card { flex: none; width: min(86vw, 440px); scroll-snap-align: center; scroll-snap-stop: always; transition: opacity 0.4s ease, scale 0.5s var(--vs-ease); }
+.tx-track .tx-card:not(.is-on) { opacity: 0.6; scale: 0.97; }
+.tx--swipe .tx-step { display: none; }
+.tx-swipe-foot { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; margin-top: 4px; }
+.tx-pips { display: flex; gap: 6px; }
+.tx-pips i { width: 6px; height: 6px; border-radius: 99px; background: rgb(17 17 16 / 0.2); transition: width 0.35s var(--vs-ease), background-color 0.3s ease; }
+.tx-pips i[data-on] { width: 22px; background: var(--vs-ink); }
+@media (prefers-reduced-motion: reduce) { .tx-track .tx-card, .tx-pips i { transition: none; } .tx-track .tx-card:not(.is-on) { scale: none; } }
+
+/* ---------- Phones: fewer things, said plainly ---------- */
+@media (max-width: 640px) {
+  /* the form is the thing to do; its live preview is a desktop companion */
+  .vs-form-side { display: none; }
+
+  /* where growth gets stuck: six lines to read, without six sample windows */
+  .vs-pains-grid { grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 22px; counter-reset: pain; border-top: 1px solid var(--vs-line); }
+  .vs-pains-grid > li { counter-increment: pain; border-bottom: 1px solid var(--vs-line); }
+  .vs-pain { display: grid; grid-template-columns: 34px minmax(0, 1fr); column-gap: 14px; row-gap: 4px; height: auto; padding: 18px 0; border-radius: 0; background: none; box-shadow: none; transform: none !important; rotate: none !important; }
+  .vs-pain::before { content: counter(pain); grid-row: span 2; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--tint); color: var(--vs-ink); font: 600 14px/1 var(--font-sans); font-variant-numeric: tabular-nums; }
+  .vs-pain-win { display: none; }
+  .vs-pain h3 { margin: 0; font-size: 19px; align-self: center; }
+  .vs-pain > p { grid-column: 2; margin: 0; }
+
+  /* how we start: five numbered steps, without five sample windows */
+  .st-stack { gap: 0; margin-top: 22px; border-top: 1px solid var(--vs-line); }
+  .st-stack > li { display: grid; grid-template-columns: 44px minmax(0, 1fr); column-gap: 12px; padding: 18px 0; border-bottom: 1px solid var(--vs-line); }
+  .st-stack .st-num { grid-row: span 2; margin: 0; font-size: 26px; line-height: 1.15; }
+  .st-stack .st-step-title { margin: 0; font-size: 20px; }
+  .st-stack .st-step-body { grid-column: 2; margin: 4px 0 0; }
+  .st-stack .st-win { display: none; }
+}
