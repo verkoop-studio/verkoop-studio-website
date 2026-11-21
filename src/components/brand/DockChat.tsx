@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { ArrowUp, ChevronRight, MessageCircleQuestion } from 'lucide-react'
 import type { Lang } from '../../data/types'
 import { findChatAnswers, getChatArticles, type ChatArticle } from '../../lib/chatKnowledge'
 
@@ -46,8 +47,9 @@ export default function DockChat({ lang, onNavigate }: { lang: Lang; onNavigate:
       <div className="dc-log" ref={log} role="log" aria-live="polite" aria-relevant="additions">
         {!messages.length && (
           <div className="dc-welcome">
-            <p>{nl ? 'Ontdek onze diensten, prijzen en projecten. Ik zoek het antwoord in de informatie van onze studio.' : 'Explore our services, pricing and projects. I find answers in our studio information.'}</p>
-            <div className="dc-chips">{STARTERS(nl).map(([id, label]) => <button type="button" key={id} onClick={() => choose(id)}>{label}</button>)}</div>
+            <p className="dc-bubble">{nl ? 'Hoi! Vraag me iets over onze diensten, prijzen of projecten. Ik zoek het antwoord in de informatie van onze studio.' : 'Hi! Ask me about our services, pricing or projects. I find the answer in our studio information.'}</p>
+            <p className="dc-pick">{nl ? 'Of kies een vraag' : 'Or pick a question'}</p>
+            <div className="dc-starters">{STARTERS(nl).map(([id, label], i) => <button type="button" key={id} onClick={() => choose(id)} style={{ '--i': i } as React.CSSProperties}><MessageCircleQuestion size={16} aria-hidden="true" /><span>{label}</span><ChevronRight size={16} aria-hidden="true" className="dc-go" /></button>)}</div>
           </div>
         )}
         {messages.map((message, index) => (
@@ -58,13 +60,13 @@ export default function DockChat({ lang, onNavigate }: { lang: Lang; onNavigate:
                 <h3>{answer.title}</h3>
                 <p>{answer.text}</p>
                 {answer.bullets && <ul>{answer.bullets.map((bullet) => <li key={bullet}>{bullet}</li>)}</ul>}
-                <Link className="dc-source" to={answer.href} onClick={onNavigate}>{nl ? 'Bekijk op de website' : 'View on the website'}</Link>
+                <Link className="dc-source" to={answer.href} onClick={onNavigate}>{nl ? 'Bekijk op de website' : 'View on the website'}<ChevronRight size={15} aria-hidden="true" /></Link>
               </article>
             )) : (
               <div className="dc-answer">
                 <h3>{nl ? 'Dat bespreken we graag persoonlijk.' : 'Let’s discuss that personally.'}</h3>
                 <p>{nl ? 'Ik vind hiervoor geen betrouwbaar antwoord in onze website-informatie. Ons team kan je verder helpen.' : 'I can’t find a reliable answer in our website information. Our team can help you further.'}</p>
-                <Link className="dc-source" to="/contact" onClick={onNavigate}>{nl ? 'Stel je vraag aan ons team' : 'Ask our team'}</Link>
+                <Link className="dc-source" to="/contact" onClick={onNavigate}>{nl ? 'Stel je vraag aan ons team' : 'Ask our team'}<ChevronRight size={15} aria-hidden="true" /></Link>
               </div>
             )}
           </div>
@@ -78,9 +80,9 @@ export default function DockChat({ lang, onNavigate }: { lang: Lang; onNavigate:
       <form className="dc-composer" onSubmit={(event) => { event.preventDefault(); send() }}>
         <label className="sr-only" htmlFor="dock-chat-query">{nl ? 'Je vraag' : 'Your question'}</label>
         <input id="dock-chat-query" ref={input} value={query} onChange={(event) => setQuery(event.target.value)} placeholder={nl ? 'Waar wil je meer over weten?' : 'What would you like to know?'} maxLength={400} autoComplete="off" data-clarity-mask="true" />
-        <button type="submit" disabled={!query.trim()} aria-label={nl ? 'Vraag versturen' : 'Send question'}>↑</button>
+        <button type="submit" disabled={!query.trim()} aria-label={nl ? 'Vraag versturen' : 'Send question'}><ArrowUp size={18} strokeWidth={2.4} aria-hidden="true" /></button>
       </form>
-      <p className="dc-foot">{nl ? 'Antwoorden uit onze website' : 'Answers from our website'}</p>
+      <p className="dc-foot"><i aria-hidden="true" />{nl ? 'Antwoorden uit onze eigen website' : 'Answers from our own website'}</p>
     </div>
   )
 }

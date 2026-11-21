@@ -163,6 +163,10 @@ export default function ContactDock() {
                 onPointerMove={tab === 'talk' ? tilt : undefined}
                 onPointerLeave={untilt}
               >
+                <div className="vs-dock-top">
+                  <span className="vs-dock-top-ava" aria-hidden="true"><Watcher shape="Ball" size={30} poke={false} within=".vs-dock-card" /></span>
+                  <span className="vs-dock-top-text"><b>Verkoop Studio</b><em><i aria-hidden="true" />{t.reply}</em></span>
+                </div>
                 <motion.div className="vs-dock-tabs" role="tablist" variants={lines} custom={0} initial="hidden" animate="shown">
                   {(['ask', 'talk'] as const).map((key) => (
                     <button key={key} type="button" role="tab" aria-selected={tab === key} className={tab === key ? 'is-on' : ''} onClick={() => setTab(key)}>

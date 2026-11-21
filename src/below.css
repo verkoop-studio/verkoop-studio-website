@@ -1668,3 +1668,57 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
 /* rows that open a card say so with a pointer, and keep their hover look while it is open */
 [data-detail] { cursor: help; }
 
+/* ---------- Chat box: a white card that stands off the page, with a dark header ---------- */
+.vs-dock-card { gap: 12px; padding: 0 14px 14px; overflow: hidden; border: 0; border-radius: 24px; background: #fff; box-shadow: 0 0 0 1px rgb(17 17 16 / 0.1), 0 30px 70px -24px rgb(17 17 16 / 0.45), 0 10px 24px -12px rgb(17 17 16 / 0.2); }
+.vs-dock-top { display: flex; align-items: center; gap: 12px; margin: 0 -14px; padding: 14px 16px; background: var(--vs-ink); color: var(--vs-paper); }
+.vs-dock-top-ava { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--vs-blue); box-shadow: 0 0 0 3px rgb(255 255 255 / 0.12); }
+.vs-dock-top-text { display: grid; line-height: 1.25; }
+.vs-dock-top-text b { font: 600 15px/1.2 var(--font-display); letter-spacing: -0.01em; }
+.vs-dock-top-text em { display: inline-flex; align-items: center; gap: 6px; color: #b9b5ac; font-style: normal; font-size: 12.5px; }
+.vs-dock-top-text em i { flex: none; width: 7px; height: 7px; border-radius: 50%; background: #2fbf71; }
+.vs-dock-tabs { background: #f1efe9; }
+.vs-dock-tabs button { color: var(--vs-ink-2); font-weight: 500; }
+.vs-dock-tabs button.is-on { color: var(--vs-ink); font-weight: 600; }
+.vs-dock-tab-bed { box-shadow: 0 0 0 1px rgb(17 17 16 / 0.08), 0 2px 6px -2px rgb(17 17 16 / 0.2); }
+
+/* the welcome, as a message from the studio */
+.dc-bubble { position: relative; margin: 2px 0 12px; padding: 12px 14px; border-radius: 16px 16px 16px 4px; background: #f1efe9; color: var(--vs-ink); font-size: 14px; line-height: 1.5; }
+.dc-pick { margin: 0 2px 6px; color: var(--vs-mute); font-size: 12.5px; font-weight: 500; }
+.dc-starters { display: grid; gap: 6px; }
+.dc-starters button { display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 12px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); font: 500 14px/1.25 var(--font-sans); text-align: left; cursor: pointer; transition: background-color 0.25s var(--vs-ease), box-shadow 0.25s var(--vs-ease), color 0.25s var(--vs-ease), translate 0.25s var(--vs-ease); animation: dc-in 0.35s var(--vs-ease) both; animation-delay: calc(0.08s + var(--i, 0) * 0.05s); }
+.dc-starters button > svg:first-child { flex: none; color: var(--vs-blue); transition: color 0.25s; }
+.dc-starters button > span { flex: 1; }
+.dc-go { flex: none; color: var(--vs-mute); transition: translate 0.25s var(--vs-ease), color 0.25s; }
+.dc-starters button:hover, .dc-starters button:focus-visible { background: var(--vs-ink); box-shadow: none; color: var(--vs-paper); translate: 0 -1px; }
+.dc-starters button:hover > svg:first-child, .dc-starters button:focus-visible > svg:first-child { color: #9db0ff; }
+.dc-starters button:hover .dc-go, .dc-starters button:focus-visible .dc-go { color: var(--vs-paper); translate: 3px 0; }
+.dc-starters button:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
+.dc-starters button:active { scale: 0.98; }
+
+/* follow-up questions and answers */
+.dc-chips button { background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); font-weight: 500; transition: background-color 0.25s var(--vs-ease), color 0.25s var(--vs-ease), box-shadow 0.25s, translate 0.25s var(--vs-ease); }
+.dc-chips button:hover, .dc-chips button:focus-visible { background: var(--vs-ink); box-shadow: none; color: var(--vs-paper); }
+.dc-answer { background: #f1efe9; color: var(--vs-ink-2); }
+.dc-source { display: inline-flex; align-items: center; gap: 4px; min-height: 34px; margin-top: 10px; padding: 0 8px 0 12px; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); font-size: 13px; text-decoration: none; transition: background-color 0.25s var(--vs-ease), color 0.25s var(--vs-ease), box-shadow 0.25s; }
+.dc-source svg { transition: translate 0.25s var(--vs-ease); }
+.dc-source:hover, .dc-source:focus-visible { background: var(--vs-blue); box-shadow: none; color: #fff; }
+.dc-source:hover svg, .dc-source:focus-visible svg { translate: 2px 0; }
+
+/* the question box: a clear field, and a send button that wakes up when there is something to send */
+.dc-composer { padding: 5px; border-radius: 16px; background: #f7f6f2; box-shadow: inset 0 0 0 1px var(--vs-line); transition: box-shadow 0.2s, background-color 0.2s; }
+.dc-composer:focus-within { background: #fff; box-shadow: inset 0 0 0 2px var(--vs-blue), 0 0 0 4px rgb(43 75 242 / 0.12); }
+.dc-composer input { font-size: 14.5px; }
+.dc-composer input::placeholder { color: #8a867e; }
+.dc-composer button { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: var(--vs-blue); color: #fff; transition: background-color 0.25s, scale 0.25s var(--vs-ease-bounce, ease), opacity 0.25s; }
+.dc-composer button:not(:disabled):hover { background: #2240dc; scale: 1.06; }
+.dc-composer button:not(:disabled):active { scale: 0.94; }
+.dc-composer button:disabled { background: #e2ded3; color: #8a867e; opacity: 1; }
+.dc-foot { display: inline-flex; align-items: center; gap: 6px; color: var(--vs-mute); font-size: 12px; }
+.dc-foot i { width: 6px; height: 6px; border-radius: 50%; background: var(--vs-blue); }
+
+/* talk to Stef: the same white card, the buttons keep their own colours */
+.vs-dock-title { font: 600 17px/1.25 var(--font-display); letter-spacing: -0.01em; }
+@media (prefers-reduced-motion: reduce) {
+  .dc-starters button { animation: none; transition: none; }
+  .vs-dock-top-text em i { animation: none; }
+}
