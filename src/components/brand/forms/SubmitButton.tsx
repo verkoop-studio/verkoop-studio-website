@@ -1,5 +1,5 @@
 import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react'
-import { ArrowRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
 type State = 'locked' | 'ready' | 'pending'
@@ -60,7 +60,7 @@ function SlideToConfirm({ label, state }: { label: string; state: State }) {
         onDragEnd={release}
         onClick={(event) => { if (event.detail !== 0) event.preventDefault() }}
       >
-        {state === 'pending' ? <span className="vs-submit-spinner" aria-hidden="true" /> : <ArrowRight size={20} aria-hidden="true" />}
+        {state === 'pending' ? <span className="vs-submit-spinner" aria-hidden="true" /> : <ChevronRight size={22} strokeWidth={2.4} aria-hidden="true" />}
       </motion.button>
     </div>
   )
@@ -88,7 +88,7 @@ export default function SubmitButton({ label, pendingLabel, state, confirm = tru
     >
       <span className="vs-submit-label">{pending ? pendingLabel : label}</span>
       <span className="vs-submit-icon" aria-hidden="true">
-        {pending ? <span className="vs-submit-spinner" /> : <ArrowRight size={18} />}
+        {pending ? <span className="vs-submit-spinner" /> : <ChevronRight size={19} strokeWidth={2.4} />}
       </span>
     </motion.button>
   )

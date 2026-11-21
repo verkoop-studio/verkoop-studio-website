@@ -1,8 +1,9 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 
 type Direction = 'right' | 'left' | 'up-right'
 
-const ICONS = { right: ArrowRight, left: ArrowLeft, 'up-right': ArrowUpRight }
+/* A chevron points the way inside the site; the up-and-right arrow is kept for links that leave it. */
+const ICONS = { right: ChevronRight, left: ChevronLeft, 'up-right': ArrowUpRight }
 
 /**
  * Arrow that leaves on hover while a copy arrives from the other side.
@@ -12,15 +13,15 @@ export default function Arrow({ direction = 'right', size = 17 }: { direction?: 
   const Icon = ICONS[direction]
   return (
     <span className={`vs-arrow vs-arrow--${direction}`} style={{ width: size, height: size }} aria-hidden="true">
-      <span><Icon size={size} strokeWidth={2} /></span>
-      <span><Icon size={size} strokeWidth={2} /></span>
+      <span><Icon size={size} strokeWidth={direction === 'up-right' ? 2 : 2.4} /></span>
+      <span><Icon size={size} strokeWidth={direction === 'up-right' ? 2 : 2.4} /></span>
     </span>
   )
 }
 
 /**
  * The site's round arrow button: at rest a quiet ring, under the hovered or focused link it
- * fills with the accent, the arrow swaps through and then turns to point up and right.
+ * fills with the accent, and the chevron swaps through and nudges forward.
  */
 export function Go({ size = 15, className = '' }: { size?: number; className?: string }) {
   return <span className={`vs-go ${className}`.trim()} aria-hidden="true"><Arrow size={size} /></span>

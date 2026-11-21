@@ -143,7 +143,7 @@ function Page({ lang }: ScreenProps) {
         <span className="sv-page-chip">{nl ? '1 boodschap · 1 actie' : '1 message · 1 action'}</span>
         <p className="sv-page-h">{nl ? 'Meer klanten uit je advertenties' : 'More customers from your ads'}</p>
         <Copy>{nl ? 'Gratis plan op maat · Antwoord binnen 1 werkdag · Geen contract' : 'A free plan for you · An answer within 1 working day · No contract'}</Copy>
-        <span className="sv-page-cta">{nl ? 'Vraag je plan aan' : 'Ask for your plan'} →</span>
+        <span className="sv-page-cta">{nl ? 'Vraag je plan aan' : 'Ask for your plan'} ›</span>
         <span className="sv-cursor" aria-hidden="true" />
       </div>
     </Win>
@@ -318,7 +318,7 @@ function Mail({ lang }: ScreenProps) {
     <Win title={nl ? 'Inbox' : 'Inbox'} lang={lang}>
       <div className="sv-person"><BotAvatar shape="verkoop" size={34} /><p><b>{nl ? 'Jouw merk' : 'Your brand'}</b><span>{nl ? 'Fijn dat je er bent' : 'Good to have you here'}</span></p></div>
       <div className="sv-draft"><Copy>{nl ? 'Welkom! Elke week krijg je één korte tip om meer uit je advertenties te halen. Hier is de eerste.' : 'Welcome! Every week you get one short tip to get more from your ads. Here is the first.'}</Copy></div>
-      <span className="sv-page-cta">{nl ? 'Ontdek je eerste tip' : 'See your first tip'} →</span>
+      <span className="sv-page-cta">{nl ? 'Ontdek je eerste tip' : 'See your first tip'} ›</span>
     </Win>
   )
 }

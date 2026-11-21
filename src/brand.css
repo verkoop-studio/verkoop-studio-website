@@ -470,9 +470,9 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-textlink--arrow { display: inline-flex; align-items: center; gap: 6px; }
 /* The round arrow button: a quiet ring at rest; under the hovered link it fills, the arrow swaps through, then turns to point up and right. */
 .vs-go { display: inline-grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease; }
-.vs-go .vs-arrow { transition: rotate 0.25s var(--vs-ease); }
+.vs-go .vs-arrow { transition: translate 0.25s var(--vs-ease); }
 :is(a, button):hover .vs-go, :is(a, button):focus-visible .vs-go { background: var(--vs-blue); box-shadow: none; color: #fff; }
-:is(a, button):hover .vs-go .vs-arrow, :is(a, button):focus-visible .vs-go .vs-arrow, .vs-textlink:hover .vs-arrow, .vs-textlink:focus-visible .vs-arrow { rotate: -45deg; transition: rotate 0.25s var(--vs-ease) 0.22s; }
+:is(a, button):hover .vs-go .vs-arrow, :is(a, button):focus-visible .vs-go .vs-arrow, .vs-textlink:hover .vs-arrow, .vs-textlink:focus-visible .vs-arrow { translate: 2px 0; transition: translate 0.25s var(--vs-ease) 0.22s; }
 :is(.vs-dark, .vs-footer, .vs-split-panel--dark, .pp-pricing, .vs-mega-dark) .vs-go { background: rgb(255 255 255 / 0.08); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); color: var(--vs-paper); }
 .vs-textlink:focus-visible { color: var(--vs-ink); background-size: 100% 1px; outline: 2px solid var(--vs-blue); outline-offset: 4px; border-radius: 4px; }
 .vs-textlink:active { scale: 0.98; }

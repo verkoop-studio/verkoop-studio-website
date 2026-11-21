@@ -132,7 +132,7 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
           <p className="tx-live"><i />{pg.live}</p>
           <p className="tx-page-h">{pg.h}</p>
           <ul>{pg.ticks.map((t, i) => <li key={t}><Tick delay={0.3 + i * 0.15} />{t}</li>)}</ul>
-          <span className="tx-btn tx-btn--ink tx-magnet">{pg.cta} →</span>
+          <span className="tx-btn tx-btn--ink tx-magnet">{pg.cta} ›</span>
         </div>
         <div className="tx-page-side">
           <p className="tx-stars">★★★★★ <span>4,9</span></p>
@@ -209,7 +209,7 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
         ))}
       </ul>
       <p className="tx-advice"><span>★</span>{r.advice}</p>
-      <span className="tx-btn">{r.open} →</span>
+      <span className="tx-btn">{r.open} ›</span>
     </div>
   )
 }

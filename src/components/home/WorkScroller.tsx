@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'motion/react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -146,7 +146,7 @@ export default function WorkScroller() {
           animate={{ opacity: cursor ? 1 : 0, scale: cursor ? (dragging ? 0.86 : 1) : 0.5 }}
           transition={{ duration: 0.25 }}
         >
-          <ArrowLeft size={13} />{dragging ? t.dragging : t.drag}<ArrowRight size={13} />
+          <ChevronLeft size={14} />{dragging ? t.dragging : t.drag}<ChevronRight size={14} />
         </motion.span>
       )}
       <div className="vs-wrap" style={{ marginTop: 28 }}>
