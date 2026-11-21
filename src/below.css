@@ -1601,3 +1601,9 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
   .st-stack .st-step-body { grid-column: 2; margin: 4px 0 0; }
   .st-stack .st-win { display: none; }
 }
+
+/* ---------- Phones: a shorter footer on every page ---------- */
+@media (max-width: 640px) {
+  /* the products and the blog are one tap away in the menu and in the links below */
+  .vs-footer .vs-bento-card[aria-labelledby='footer-software'], .vs-footer .vs-bento-blog { display: none; }
+}
