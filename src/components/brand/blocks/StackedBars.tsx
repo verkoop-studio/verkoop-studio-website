@@ -18,7 +18,7 @@ import { animate, motion, useMotionValue } from 'motion/react'
 const PAD = 16
 const SEG_GAP = 2
 const LIFT = 2
-const TIP_W = 136
+const TIP_W = 156
 const SPRING = { type: 'spring' as const, stiffness: 380, damping: 34 }
 const DAY_MS = 86400000
 const LAST = Date.UTC(2026, 9, 11)
@@ -277,7 +277,7 @@ export function StackedBars({
 
         <motion.span className="stb-ring" aria-hidden style={{ x: ringX, y: ringY, height: ringH, width: bw + 6 }} />
 
-        <motion.div className="stb-tip" style={{ x: tipX, width: TIP_W }} aria-hidden={!cur}>
+        <motion.div className="stb-tip" style={{ x: tipX, minWidth: TIP_W }} aria-hidden={!cur}>
           {cur && (
             <>
               <div className="stb-tip-head"><span>{cur.label}</span><b>{fmt(totals[at!])}</b></div>
