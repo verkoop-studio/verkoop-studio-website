@@ -26,6 +26,8 @@
   .revenue-proof { min-width: 0; }
   form { min-width: 0; }
   div:has(> form) { padding: 22px 16px; }
+  /* the brand form card pads itself */
+  .hero-request div:has(> form) { padding: 0; }
   .service-hero .button-dark { width: 100%; justify-content: center; }
   .service-problem p { font-size: 18px; }
   .site-shell footer a { min-height: 44px; display: inline-flex; align-items: center; overflow-wrap: anywhere; }

@@ -21,6 +21,8 @@ function SlideToConfirm({ label, state }: { label: string; state: State }) {
   const track = useRef<HTMLDivElement>(null)
   const x = useMotionValue(0)
   const fill = useTransform(x, (value) => `${value + 52}px`)
+  /* the trail only shows once the thumb moves, so at rest there is no dark ring around it */
+  const fillOpacity = useTransform(x, [0, 12], [0, 1])
   const textOpacity = useTransform(x, [0, 120], [1, 0])
   const [max, setMax] = useState(0)
 
@@ -43,7 +45,7 @@ function SlideToConfirm({ label, state }: { label: string; state: State }) {
 
   return (
     <div ref={track} className="vs-slide-confirm" data-state={state}>
-      <motion.span className="vs-slide-fill" style={{ width: fill }} aria-hidden="true" />
+      <motion.span className="vs-slide-fill" style={{ width: fill, opacity: fillOpacity }} aria-hidden="true" />
       <motion.span className="vs-slide-text" style={{ opacity: textOpacity }} aria-hidden="true">{label}</motion.span>
       <motion.button
         type="submit"
