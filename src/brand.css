@@ -447,7 +447,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .tx-win-bar i:nth-child(2) { background: #febc2e; }
 .tx-win-bar i:nth-child(3) { background: #28c840; margin-right: 8px; }
 .tx-win-bar b { font-weight: 600; }
-.tx-win-bar em { margin-left: auto; margin-right: 14px; padding: 3px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-style: normal; font-size: 11px; }
+.tx-win-bar em { margin-left: auto; margin-right: 14px; padding: 3px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-style: normal; font-size: 12px; }
 .tx-win > :last-child { flex: 1; padding: 12px 18px 50px; min-height: 0; overflow: hidden; }
 .tx-info { padding: clamp(18px, 2.4vw, 28px) clamp(20px, 2.6vw, 32px) clamp(20px, 2.6vw, 30px); }
 .tx-step { margin: 0 0 6px; color: var(--vs-blue); font: 400 20px/1 var(--font-condensed); letter-spacing: 0.03em; }
