@@ -1639,3 +1639,32 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
   /* the products and the blog are one tap away in the menu and in the links below */
   .vs-footer .vs-bento-card[aria-labelledby='footer-software'], .vs-footer .vs-bento-blog { display: none; }
 }
+
+/* ---------- Detail card: a row in full, on pointing or tapping ---------- */
+.dv { position: fixed; z-index: 90; width: max-content; max-width: min(320px, calc(100vw - 20px)); pointer-events: none; }
+.dv-card { display: grid; gap: 10px; padding: 14px; border-radius: 18px; background: #fff; color: var(--vs-ink); box-shadow: 0 0 0 1px rgb(17 17 16 / 0.08), 0 24px 44px -18px rgb(17 17 16 / 0.5); font: 400 13px/1.4 var(--font-sans); }
+.dv-head { display: flex; align-items: center; gap: 10px; min-width: 220px; }
+.dv-title { display: grid; flex: 1; min-width: 0; line-height: 1.25; }
+.dv-title b { font: 600 15px/1.25 var(--font-display); letter-spacing: -0.01em; }
+.dv-title small { color: var(--vs-mute); font-size: 12.5px; }
+.dv-sample { flex: none; align-self: start; padding: 3px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-style: normal; font-size: 12px; }
+.dv-dot { flex: none; width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 4px rgb(17 17 16 / 0.06); }
+.dv-rows { display: grid; gap: 0; margin: 0; border-top: 1px solid var(--vs-line); }
+.dv-rows > div { display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 34px; border-bottom: 1px solid var(--vs-line); }
+.dv-rows dt { color: var(--vs-mute); font-size: 12.5px; white-space: nowrap; }
+.dv-rows dd { display: flex; align-items: center; gap: 7px; margin: 0; min-width: 0; text-align: right; }
+.dv-rows dd b { font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-big { font: 600 22px/1.1 var(--font-display); letter-spacing: -0.02em; }
+.dv-who { display: inline-flex; align-items: center; gap: 6px; }
+.dv-src { font-size: 10px; }
+.dv-odds, .dv-trend, .dv-date { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.dv-meter { display: block; width: 72px; height: 7px; overflow: hidden; border-radius: 99px; background: var(--vs-stone); }
+.dv-meter i { display: block; height: 100%; border-radius: inherit; background: #1f9d55; }
+.dv-meter i[data-tone='mid'] { background: #f5a524; }
+.dv-meter i[data-tone='lo'] { background: #e5484d; }
+.dv-trend .tx-spk { height: 18px; }
+.dv-foot { display: flex; flex-wrap: wrap; gap: 4px 8px; margin: 0; color: var(--vs-ink-2); font-size: 12.5px; }
+.dv-foot b { color: var(--vs-mute); font-weight: 500; }
+/* rows that open a card say so with a pointer, and keep their hover look while it is open */
+[data-detail] { cursor: help; }
+

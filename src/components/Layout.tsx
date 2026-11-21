@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import SiteHeader from './brand/SiteHeader'
+import { DetailLayer } from './brand/Detail'
 import ContactDock from './brand/ContactDock'
 import Footer from './Footer'
 import BackToTop from './BackToTop'
@@ -30,14 +31,16 @@ export default function Layout() {
   }, [location.pathname, location.hash, location.key])
 
   return (
-    <div ref={motionRef} className="site-shell min-h-screen">
-      <SiteHeader />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
-      {location.pathname !== '/' && <BackToTop />}
-      <ContactDock />
-    </div>
+    <DetailLayer>
+      <div ref={motionRef} className="site-shell min-h-screen">
+        <SiteHeader />
+        <main>
+          <Outlet />
+        </main>
+        <Footer />
+        {location.pathname !== '/' && <BackToTop />}
+        <ContactDock />
+      </div>
+    </DetailLayer>
   )
 }

@@ -6,10 +6,11 @@ import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import BotAvatar from '../brand/BotAvatar'
 import { StackedBars } from '../brand/blocks/StackedBars'
-import { DEALS, PEOPLE, SOURCE } from '../../data/samples'
+import { COMPANY, DEALS, PEOPLE, SOURCE } from '../../data/samples'
 import { useBeat } from '../../lib/useBeat'
 import { Num, Odds, Spark } from '../brand/samples'
 import Cta from '../brand/Cta'
+import { useDetail } from '../brand/Detail'
 import { EASE } from '../brand/motion'
 import { useWide } from '../../lib/useWide'
 
@@ -99,6 +100,12 @@ const UI = {
   },
 }
 
+/** Words in the detail cards. Every value in them comes from the row itself. */
+const DETAIL = {
+  nl: { sample: 'Voorbeeld', view: 'Weergave', source: 'Bron', detail: 'Detail', time: 'Tijd', consent: 'Toestemming', value: 'Waarde', stage: 'Fase', next: 'Opvolgen', company: 'Bedrijf', result: 'Resultaat', good: 'Gaat de goede kant op', bad: 'Vraagt aandacht', advice: 'Advies', up: 'stijgt', down: 'daalt', flat: 'blijft gelijk', of10: 'op 10', sale: 'Telt als verkoop', event: 'Meetpunt' },
+  en: { sample: 'Sample', view: 'View', source: 'Source', detail: 'Detail', time: 'Time', consent: 'Consent', value: 'Value', stage: 'Stage', next: 'Follow up', company: 'Company', result: 'Result', good: 'Moving the right way', bad: 'Needs attention', advice: 'Advice', up: 'rising', down: 'falling', flat: 'steady', of10: 'out of 10', sale: 'Counts as a sale', event: 'Event' },
+}
+
 /** Rows in the pixel feed: it is always this full, so the window never starts empty. */
 const FEED_ROWS = 4
 
@@ -108,6 +115,7 @@ const BUDDY: Record<LayerKey, [string, string]> = { ad: ['rocket', '#2b4bf2'], p
 /** What sits inside the app window for one layer. Flat HTML, so every word stays readable, with hover life inside. */
 function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
   const u = UI[lang]
+  const more = useDetail()
   const beat = useBeat(on, k === 'pixel' ? 1400 : 1700)
   const [liked, setLiked] = useState(false)
 
@@ -172,9 +180,9 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
           <div key={name} className="tx-col">
             <p className="tx-col-head" title={total}><b>{name}</b><span>{c.cards.filter((_, i) => i % 4 === col && i !== 0).length + (move === col ? 1 : 0)}</span></p>
             {c.cards.filter((_, i) => i % 4 === col && i !== 0).map(([ini, who, value, src, due]) => (
-              <span key={who} className="tx-deal"><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></span>
+              <span key={who} className="tx-deal" {...more(() => <DealDetail deal={[ini, who, value, src, due]} stage={name} lang={lang} />)}><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></span>
             ))}
-            {move === col && (() => { const [ini, who, value, src, due] = c.cards[0]; return <motion.span layoutId={`deal-${lang}`} className="tx-deal tx-deal--hot" transition={{ type: 'spring', stiffness: 240, damping: 24 }}><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></motion.span> })()}
+            {move === col && (() => { const [ini, who, value, src, due] = c.cards[0]; return <motion.span layoutId={`deal-${lang}`} className="tx-deal tx-deal--hot" transition={{ type: 'spring', stiffness: 240, damping: 24 }} {...more(() => <DealDetail deal={[ini, who, value, src, due]} stage={name} lang={lang} />)}><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></motion.span> })()}
           </div>
         ))}
         <p className="tx-meter"><span><b style={{ width: `${((38 + move) / 500) * 100 + 3}%` }} /></span><Num v={String(38 + move)} suf=" / 500" /> {c.meter}</p>
@@ -194,7 +202,7 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
             {serials.map((n, i) => {
               const [what, detail, src] = p.events[n % p.events.length]
               return (
-                <motion.li key={n} layout initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ type: 'spring', stiffness: 360, damping: 30 }} className={what.startsWith('Aankoop') || what.startsWith('Purchase') ? 'is-sale' : ''}>
+                <motion.li key={n} layout initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ type: 'spring', stiffness: 360, damping: 30 }} className={what.startsWith('Aankoop') || what.startsWith('Purchase') ? 'is-sale' : ''} {...more(() => <EventDetail event={p.events[n % p.events.length]} time={clock(n)} consent={p.consent} lang={lang} />)}>
                   <span className="tx-ev" style={{ background: SOURCE[src] }} /><b>{what}</b><em>{detail}</em><i>{src}</i><small>{clock(n)}</small>
                   {i === 0 && on && <span className="tx-new">{lang === 'nl' ? 'nieuw' : 'new'}</span>}
                 </motion.li>
@@ -219,7 +227,7 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
       <div className="tx-post-head"><BotAvatar shape="verkoop" size={26} eyeColor="#ffffff" className="tx-ava-bot" /><p><b>{r.from}</b><span>{r.to}</span></p><i>09:00</i></div>
       <ul className="tx-report">
         {r.rows.map(([dir, label, value], i) => (
-          <li key={label} style={{ animationDelay: `${0.3 + i * 0.2}s` }}><span className={`tx-dir tx-dir--${dir}`}>{dir === 'up' ? '↑' : '↓'}</span>{label}<b>{value}</b></li>
+          <li key={label} style={{ animationDelay: `${0.3 + i * 0.2}s` }} {...more(() => <ReportDetail row={[dir, label, value]} advice={i === 1 ? r.advice : undefined} lang={lang} />)}><span className={`tx-dir tx-dir--${dir}`}>{dir === 'up' ? '↑' : '↓'}</span>{label}<b>{value}</b></li>
         ))}
       </ul>
       <p className="tx-advice"><span>★</span>{r.advice}</p>
@@ -351,14 +359,96 @@ function CellView({ c }: { c: Cell }) {
   return <span className="tx-cell-text">{c.v}</span>
 }
 
+/* ── Detail cards: what a row says in full, opened by pointing at it or tapping it ── */
+
+function DetailShell({ head, lang, children, foot }: { head: ReactNode; lang: Lang; children: ReactNode; foot?: ReactNode }) {
+  return (
+    <div className="dv-card">
+      <div className="dv-head">{head}<em className="dv-sample">{DETAIL[lang].sample}</em></div>
+      {children}
+      {foot && <p className="dv-foot">{foot}</p>}
+    </div>
+  )
+}
+
+/** One table row, every column named and written out. */
+function RowDetail({ table, row, lang }: { table: Table; row: Cell[]; lang: Lang }) {
+  const d = DETAIL[lang]
+  const lead = row.findIndex((c) => c.t === 'who' || c.t === 'text')
+  const first = row[lead]
+  const title = first.t === 'who' ? first.name : first.t === 'text' ? first.v : ''
+  const value = (c: Cell) => {
+    if (c.t === 'who') return <span className="dv-who"><BotAvatar shape={c.shape} color={c.color} eyeColor={c.color === '#111110' || c.color === '#2b4bf2' ? '#ffffff' : undefined} size={18} /><b>{c.name}</b></span>
+    if (c.t === 'pill') return <span className={`tx-pill tx-pill--${c.tone}`}>{c.v}</span>
+    if (c.t === 'pills') return <span className="tx-pills">{c.v.map(([v, tone]) => <span key={v} className={`tx-pill tx-pill--${tone}`}>{v}</span>)}</span>
+    if (c.t === 'odds') return <span className="dv-odds"><span className="dv-meter"><i data-tone={c.v >= 7 ? 'hi' : c.v >= 4 ? 'mid' : 'lo'} style={{ width: `${c.v * 10}%` }} /></span><b>{c.v}</b> {d.of10}</span>
+    if (c.t === 'spark') { const delta = c.v[c.v.length - 1] - c.v[0]; return <span className="dv-trend"><Spark v={c.v} /><b>{delta > 0 ? d.up : delta < 0 ? d.down : d.flat}</b></span> }
+    if (c.t === 'date') return <span className="dv-date"><b>{c.v}</b>{c.tag && <span className="tx-pill tx-pill--grey">{c.tag}</span>}</span>
+    return <b>{c.v}</b>
+  }
+  return (
+    <DetailShell lang={lang} head={<>{first.t === 'who' && <BotAvatar shape={first.shape} color={first.color} eyeColor={first.color === '#111110' || first.color === '#2b4bf2' ? '#ffffff' : undefined} size={26} />}<span className="dv-title"><b>{title}</b>{first.t === 'who' && first.sub && <small>{first.sub}</small>}</span></>} foot={<><b>{d.view}</b>{table.chips.join(' · ')}</>}>
+      <dl className="dv-rows">
+        {row.map((c, j) => j === lead ? null : <div key={j}><dt>{table.cols[j]}</dt><dd>{value(c)}</dd></div>)}
+      </dl>
+    </DetailShell>
+  )
+}
+
+/** One event from the pixel feed. */
+function EventDetail({ event, time, consent, lang }: { event: string[]; time: string; consent: string; lang: Lang }) {
+  const d = DETAIL[lang]
+  const [what, detail, src] = event
+  const sale = what.startsWith('Aankoop') || what.startsWith('Purchase')
+  const [, yes] = consent.split(': ')
+  return (
+    <DetailShell lang={lang} head={<><span className="dv-dot" style={{ background: SOURCE[src] }} /><span className="dv-title"><b>{what}</b><small>{d.event}</small></span></>} foot={sale ? <><b>{d.sale}</b>{detail}</> : undefined}>
+      <dl className="dv-rows">
+        <div><dt>{d.detail}</dt><dd><b>{detail}</b></dd></div>
+        <div><dt>{d.source}</dt><dd><span className="dv-src" style={{ color: SOURCE[src] }}>●</span><b>{src}</b></dd></div>
+        <div><dt>{d.time}</dt><dd><b>{time}</b></dd></div>
+        <div><dt>{d.consent}</dt><dd><span className="tx-pill tx-pill--green">{yes ?? consent}</span></dd></div>
+      </dl>
+    </DetailShell>
+  )
+}
+
+/** One deal on the pipeline board. */
+function DealDetail({ deal, stage, lang }: { deal: string[]; stage: string; lang: Lang }) {
+  const d = DETAIL[lang]
+  const [ini, name, value, src, due] = deal
+  return (
+    <DetailShell lang={lang} head={<><BotAvatar shape={PEOPLE[ini]?.[0] ?? 'chat'} color={PEOPLE[ini]?.[1] ?? '#7d93ff'} size={26} /><span className="dv-title"><b>{name}</b><small>{COMPANY[lang][ini]}</small></span></>}>
+      <dl className="dv-rows">
+        <div><dt>{d.value}</dt><dd><b>{value}</b></dd></div>
+        <div><dt>{d.stage}</dt><dd><span className="tx-pill tx-pill--blue">{stage}</span></dd></div>
+        <div><dt>{d.source}</dt><dd><span className="dv-src" style={{ color: SOURCE[src] }}>●</span><b>{src}</b></dd></div>
+        <div><dt>{d.next}</dt><dd><b>{due}</b></dd></div>
+      </dl>
+    </DetailShell>
+  )
+}
+
+/** One line of the monthly report. */
+function ReportDetail({ row, advice, lang }: { row: string[]; advice?: string; lang: Lang }) {
+  const d = DETAIL[lang]
+  const [dir, label, value] = row
+  return (
+    <DetailShell lang={lang} head={<><span className={`tx-dir tx-dir--${dir}`}>{dir === 'up' ? '↑' : '↓'}</span><span className="dv-title"><b>{label}</b><small>{dir === 'up' ? d.good : d.bad}</small></span></>} foot={advice ? <><b>{d.advice}</b>{advice.replace(/^[^:]+:\s*/, '')}</> : undefined}>
+      <dl className="dv-rows"><div><dt>{d.result}</dt><dd><b className="dv-big">{value}</b></dd></div></dl>
+    </DetailShell>
+  )
+}
+
 /** The second tab: filter chips, then the rows. Rows lift under the pointer and the hovered one gets a ring. */
-function TableView({ table }: { table: Table }) {
+function TableView({ table, lang }: { table: Table; lang: Lang }) {
+  const detail = useDetail()
   return (
     <div className="tx-tbl" style={{ '--cols': table.widths } as CSSProperties}>
       <p className="tx-chips">{table.chips.map((chip) => { const [k, v] = chip.split(': '); return <span key={chip}>{v ? <><em>{k}</em>{v}</> : k}<i>▾</i></span> })}</p>
       <div className="tx-tr tx-th">{table.cols.map((col) => <span key={col}>{col}</span>)}</div>
       {table.rows.map((row, i) => (
-        <motion.div key={i} className="tx-tr" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 + i * 0.06, duration: 0.35 }}>
+        <motion.div key={i} className="tx-tr" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 + i * 0.06, duration: 0.35 }} {...detail(() => <RowDetail table={table} row={row} lang={lang} />)}>
           {row.map((cell, j) => <CellView key={j} c={cell} />)}
         </motion.div>
       ))}
@@ -404,7 +494,7 @@ function Card({ layer, index, lang, active }: { layer: Layer; index: number; lan
           <WinTabs tabs={table.tabs} count={table.count} tab={tab} setTab={(n) => { setTouched(true); setTab(n) }} sample={COPY[lang].sample} id={layer.key} />
           <AnimatePresence mode="wait" initial={false}>
             <motion.div key={tab} className="tx-view" initial={{ opacity: 0, x: tab ? 18 : -18 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: tab ? -18 : 18 }} transition={{ duration: 0.28, ease: EASE }}>
-              {tab === 0 ? <Screen k={layer.key} lang={lang} on={active} /> : <TableView table={table} />}
+              {tab === 0 ? <Screen k={layer.key} lang={lang} on={active} /> : <TableView table={table} lang={lang} />}
             </motion.div>
           </AnimatePresence>
         </div>
