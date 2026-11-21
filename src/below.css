@@ -355,6 +355,24 @@
 .tx-select { grid-column: 1 / -1; }
 .tx-select::after { content: '▾'; position: absolute; right: 10px; top: 50%; translate: 0 -50%; color: var(--vs-mute); font-size: 11px; }
 .tx-type { font-weight: 500; font-size: 12px; white-space: nowrap; overflow: hidden; max-width: 34ch; }
+/* each value is there from the start as a pale hint, and is typed over in ink */
+.tx-field { position: relative; display: block; min-width: 0; overflow: hidden; }
+.tx-form label:has(svg) { padding-right: 28px; }
+.tx-ghost { display: block; overflow: hidden; color: #c9c4b9; font-style: normal; font-weight: 500; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+.tx-field .tx-type { position: absolute; left: 0; top: 0; background: #fff; }
+/* what happens after sending: three stops that wait, then tick one after the other */
+.tx-sendrow { grid-column: 1 / -1; display: flex; align-items: center; gap: 2px; min-width: 0; }
+.tx-sendrow .tx-send { flex: none; }
+.tx-next { flex: 1; min-width: 0; display: flex; align-items: center; margin: 0; padding: 0; list-style: none; color: var(--vs-mute); font-size: 11px; font-weight: 500; }
+.tx-next li { display: flex; align-items: center; gap: 6px; white-space: nowrap; transition: color 0.3s ease calc(var(--i) * 0.4s); }
+.tx-next li:last-child { flex: 1; min-width: 0; }
+.tx-next-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.tx-next li::before { content: ''; flex: 1; min-width: 8px; height: 2px; margin-inline: 2px; border-radius: 2px; background: linear-gradient(90deg, #1f9d55 50%, var(--vs-line) 50%) 100% 0 / 200% 100%; transition: background-position 0.4s ease calc(var(--i) * 0.4s - 0.2s); }
+.tx-next-dot { flex: none; display: grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--vs-line); color: transparent; font-size: 10px; font-weight: 700; line-height: 1; transition: background-color 0.3s ease calc(var(--i) * 0.4s), box-shadow 0.3s ease calc(var(--i) * 0.4s), color 0.3s ease calc(var(--i) * 0.4s), scale 0.4s var(--vs-ease-bounce, ease) calc(var(--i) * 0.4s); }
+.tx-next.is-on li { color: var(--vs-ink); }
+.tx-next.is-on li::before { background-position: 0 0; }
+.tx-next.is-on .tx-next-dot { background: #1f9d55; box-shadow: none; color: #fff; scale: 1.08; }
+.tx-next:not(.is-on) li, .tx-next:not(.is-on) li::before, .tx-next:not(.is-on) .tx-next-dot { transition-delay: 0s; }
 .tx-card.is-on .tx-type { animation: tx-typein 0.8s steps(16) 0.3s both; }
 .tx-card.is-on .tx-type--2 { animation-delay: 1.2s; }
 .tx-card.is-on .tx-type--3 { animation-delay: 2.1s; }
@@ -362,7 +380,7 @@
 .tx-box { display: grid; place-items: center; width: 14px; height: 14px; border-radius: 4px; background: var(--vs-blue); color: #fff; }
 .tx-send { justify-self: start; min-width: 74px; justify-content: center; transition: background 0.3s, min-width 0.4s var(--vs-ease); }
 .tx-send.is-sent { background: #1f9d55; min-width: 28px; }
-.tx-toast { position: absolute; right: 12px; bottom: -4px; display: flex; align-items: center; gap: 8px; margin: 0; padding: 8px 12px; border-radius: 11px; background: var(--vs-ink); color: #fff; box-shadow: 0 14px 24px -12px rgb(17 17 16 / 0.6); opacity: 0; translate: 0 10px; transition: opacity 0.35s, translate 0.45s var(--vs-ease); }
+.tx-toast { position: absolute; right: 12px; bottom: -14px; display: flex; align-items: center; gap: 8px; margin: 0; padding: 8px 12px; border-radius: 11px; background: var(--vs-ink); color: #fff; box-shadow: 0 14px 24px -12px rgb(17 17 16 / 0.6); opacity: 0; translate: 0 10px; transition: opacity 0.35s, translate 0.45s var(--vs-ease); }
 .tx-toast.is-on { opacity: 1; translate: 0 0; }
 .tx-toast b { display: grid; font-size: 11.5px; line-height: 1.25; }
 .tx-toast em { font-style: normal; font-weight: 400; color: #b9b6af; font-size: 10.5px; }
@@ -384,7 +402,7 @@
 .tx-meter .tx-num { color: var(--vs-ink); font-size: 13px; }
 .tx-pixel-top { display: flex; align-items: center; gap: 7px; margin: 0 0 8px; font-size: 11px; }
 .tx-pixel-top em { margin-left: auto; padding: 3px 8px; border-radius: 99px; background: #e8f7ee; color: #1f7a45; font-style: normal; font-weight: 600; font-size: 10.5px; }
-.tx-feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
+.tx-feed { position: relative; list-style: none; margin: 0; padding: 0; display: grid; gap: 5px; }
 .tx-feed li { position: relative; display: grid; grid-template-columns: auto 1fr auto auto auto; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px; background: var(--vs-stone); font-size: 11.5px; transition: background 0.25s, translate 0.25s var(--vs-ease); }
 .tx-feed li:hover { background: #e7e3da; translate: 3px 0; }
 .tx-feed li.is-sale { background: var(--vs-ink); color: #fff; }
@@ -398,7 +416,7 @@
 .tx-report { list-style: none; margin: 0 0 8px; padding: 0; display: grid; gap: 5px; }
 .tx-report li { display: flex; align-items: center; gap: 8px; font-size: 11.5px; padding: 3px 4px; border-radius: 6px; transition: background 0.2s; }
 .tx-report li:hover { background: var(--vs-stone); }
-.tx-card.is-on .tx-report li { animation: tx-in 0.45s var(--vs-ease) both; }
+.tx-card.is-on .tx-report li :is(b, .tx-dir) { animation: tx-in 0.45s var(--vs-ease) both; animation-delay: inherit; }
 .tx-report b { margin-left: auto; font: 600 12px/1 var(--font-sans); font-variant-numeric: tabular-nums; }
 .tx-dir { display: grid; place-items: center; width: 16px; height: 16px; border-radius: 5px; font-size: 10px; font-weight: 700; }
 .tx-dir--up { background: #e8f7ee; color: #1f7a45; }
@@ -1437,6 +1455,11 @@ a:hover .vs-textlink .vs-arrow, a:focus-visible .vs-textlink .vs-arrow { rotate:
   .tx-ad-stats { flex-wrap: wrap; row-gap: 4px; }
   .sk-pipe--columns { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .tx-win-bar { flex-wrap: wrap; row-gap: 6px; }
+  /* tabbed windows keep one line: the three dots give way to the tabs and the tag */
+  .tx-win-bar--tabs { flex-wrap: nowrap; }
+  .tx-win-bar--tabs > i { display: none; }
+  .tx-win-bar--tabs em { margin-right: 0; }
+  .tx-tabs { margin-left: -6px; min-width: 0; }
   .tx-crm { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 

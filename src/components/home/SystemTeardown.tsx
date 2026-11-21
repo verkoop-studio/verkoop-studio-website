@@ -82,7 +82,7 @@ const UI = {
   nl: {
     ad: { win: 'Facebook', note: 'Budget volgt wat verkoopt', page: 'Verkoop Studio', meta: 'Gesponsord · 2 min', text: 'Meer klanten uit je advertenties? Vraag je gratis groeiplan aan.', head: 'Gratis groeiplan voor je webshop', site: 'verkoop.studio', cta: 'Meer info', reacts: '128', comments: '14 reacties', stats: [['Bereik', '', '12.480', ''], ['Kliks', '', '342', ''], ['Per klik', '€ ', '0,41', '']] },
     page: { win: 'jouwsite.be/actie', note: 'Eén pagina, één actie', h: 'Meer klanten uit je advertenties', ticks: ['Gratis plan op maat', 'Antwoord binnen 1 werkdag', 'Geen contract'], cta: 'Vraag je gratis plan aan', live: '3 mensen bekijken dit nu', rate: ['Conversie', '', '6,2', '%'] },
-    form: { win: 'Aanvraag', note: 'Lead ontvangen', fields: [['Naam', 'Sarah Peeters'], ['E-mail', 'sarah@bakkerijpeeters.be'], ['Budget per maand', '€ 1.000 – € 5.000']], consent: 'Ik ga akkoord met de privacyverklaring', send: 'Verstuur', toast: 'Nieuwe lead in je CRM', src: 'via Facebook-advertentie' },
+    form: { win: 'Aanvraag', note: 'Lead ontvangen', fields: [['Naam', 'Sarah Peeters'], ['E-mail', 'sarah@bakkerijpeeters.be'], ['Budget per maand', '€ 1.000 – € 5.000']], consent: 'Ik ga akkoord met de privacyverklaring', send: 'Verstuur', toast: 'Nieuwe lead in je CRM', src: 'via Facebook-advertentie', next: ['In je CRM', 'Bevestiging per e-mail'] },
     crm: { win: 'Sales CRM', note: '38 van 500 gratis leads', cols: [['Nieuw', '€ 4.800'], ['Gecontacteerd', '€ 7.200'], ['Afspraak', '€ 3.100'], ['Voorstel', '€ 9.600']], cards: DEALS.nl, meter: 'gratis leads' },
     pixel: { win: 'Metingen · live', note: 'Cookiekeuze gerespecteerd', events: [['Pagina bekeken', '/actie', 'Meta', '14:02'], ['Knop geklikt', 'Plan aanvragen', 'Meta', '14:03'], ['Formulier verstuurd', 'Sarah P.', 'Meta', '14:04'], ['Pagina bekeken', '/prijzen', 'Google', '14:06'], ['Aankoop', '€ 84', 'Google', '14:09']], consent: 'Toestemming: ja' },
     dashboard: { win: 'Performance', note: 'Beste advertentie: video 2', kpis: [['Uitgaven', '€ ', '1.240', '', '+4%'], ['Omzet', '€ ', '5.890', '', '+18%'], ['Per euro', '', '4,7', '×', '+0,6']], channels: [['Meta', 62, '5,1×'], ['Google', 48, '4,4×'], ['TikTok', 21, '2,3×'], ['E-mail', 14, '8,0×']] },
@@ -91,13 +91,16 @@ const UI = {
   en: {
     ad: { win: 'Facebook', note: 'Budget follows what sells', page: 'Verkoop Studio', meta: 'Sponsored · 2 min', text: 'More customers from your ads? Ask for your free growth plan.', head: 'A free growth plan for your shop', site: 'verkoop.studio', cta: 'Learn more', reacts: '128', comments: '14 comments', stats: [['Reach', '', '12,480', ''], ['Clicks', '', '342', ''], ['Per click', '€ ', '0.41', '']] },
     page: { win: 'yoursite.com/offer', note: 'One page, one action', h: 'More customers from your ads', ticks: ['A free plan for you', 'An answer within 1 working day', 'No contract'], cta: 'Ask for your free plan', live: '3 people are looking now', rate: ['Conversion', '', '6.2', '%'] },
-    form: { win: 'Enquiry', note: 'Lead received', fields: [['Name', 'Sarah Peeters'], ['Email', 'sarah@peetersbakery.com'], ['Budget per month', '€ 1,000 – € 5,000']], consent: 'I agree to the privacy policy', send: 'Send', toast: 'New lead in your CRM', src: 'from a Facebook ad' },
+    form: { win: 'Enquiry', note: 'Lead received', fields: [['Name', 'Sarah Peeters'], ['Email', 'sarah@peetersbakery.com'], ['Budget per month', '€ 1,000 – € 5,000']], consent: 'I agree to the privacy policy', send: 'Send', toast: 'New lead in your CRM', src: 'from a Facebook ad', next: ['In your CRM', 'Confirmation by email'] },
     crm: { win: 'Sales CRM', note: '38 of 500 free leads', cols: [['New', '€ 4,800'], ['Contacted', '€ 7,200'], ['Meeting', '€ 3,100'], ['Proposal', '€ 9,600']], cards: DEALS.en, meter: 'free leads' },
     pixel: { win: 'Events · live', note: 'Cookie choice respected', events: [['Page viewed', '/offer', 'Meta', '14:02'], ['Button clicked', 'Ask for plan', 'Meta', '14:03'], ['Form sent', 'Sarah P.', 'Meta', '14:04'], ['Page viewed', '/pricing', 'Google', '14:06'], ['Purchase', '€ 84', 'Google', '14:09']], consent: 'Consent: yes' },
     dashboard: { win: 'Performance', note: 'Best ad: video 2', kpis: [['Spend', '€ ', '1,240', '', '+4%'], ['Revenue', '€ ', '5,890', '', '+18%'], ['Per euro', '', '4.7', '×', '+0.6']], channels: [['Meta', 62, '5.1×'], ['Google', 48, '4.4×'], ['TikTok', 21, '2.3×'], ['Email', 14, '8.0×']] },
     report: { win: 'Monthly report · October', note: 'In your inbox every month', from: 'Verkoop Studio', to: 'to you', rows: [['up', 'Revenue from ads', '+18%'], ['up', 'Most revenue through Google', '€ 2,910'], ['down', 'Facebook: dearer leads', '+€ 3.20']], advice: 'Advice: put € 300 more on Google', open: 'Open the report' },
   },
 }
+
+/** Rows in the pixel feed: it is always this full, so the window never starts empty. */
+const FEED_ROWS = 4
 
 /** The character that runs each part of the system. */
 const BUDDY: Record<LayerKey, [string, string]> = { ad: ['rocket', '#2b4bf2'], page: ['magnifier', '#ffd23f'], form: ['book', '#ff9fd0'], crm: ['brain', '#9be15d'], pixel: ['camera', '#7d93ff'], dashboard: ['bull', '#ff7a59'], report: ['cat', '#111110'] }
@@ -148,11 +151,15 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
     return (
       <div className="tx-form">
         {f.fields.map(([label, value], i) => (
-          <label key={label} className={i === 2 ? 'tx-select' : ''}><span>{label}</span><b className={`tx-type tx-type--${i + 1}`}>{value}</b>{i < 2 && <Tick delay={1 + i * 0.9} />}</label>
+          <label key={label} className={i === 2 ? 'tx-select' : ''}><span>{label}</span><b className="tx-field"><i className="tx-ghost">{value}</i><b className={`tx-type tx-type--${i + 1}`}>{value}</b></b>{i < 2 && <Tick delay={1 + i * 0.9} />}</label>
         ))}
         <p className="tx-consent"><span className="tx-box"><Tick delay={2.4} /></span>{f.consent}</p>
-        <span className={`tx-btn tx-btn--ink tx-send${sent ? ' is-sent' : ''}`}>{sent ? '✓' : f.send}</span>
-        <p className={`tx-toast${sent ? ' is-on' : ''}`}><BotAvatar shape="mug" size={24} color="#ff9fd0" className="tx-ava-bot" /><b>{f.toast}<em>{f.src}</em></b></p>
+        <div className="tx-sendrow">
+          <span className={`tx-btn tx-btn--ink tx-send${sent ? ' is-sent' : ''}`}>{sent ? '✓' : f.send}</span>
+          <ol className={`tx-next${sent ? ' is-on' : ''}`}>
+            {f.next.map((step, i) => <li key={step} style={{ '--i': i } as CSSProperties}><span className="tx-next-dot">✓</span><span className="tx-next-t">{step}</span></li>)}
+          </ol>
+        </div>
       </div>
     )
   }
@@ -176,17 +183,24 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
   }
   if (k === 'pixel') {
     const p = u.pixel
-    const shown = on ? 2 + (beat % 4) : 3
+    const first = on ? beat : 0
+    const serials = Array.from({ length: FEED_ROWS }, (_, j) => first + FEED_ROWS - 1 - j)
+    const clock = (n: number) => `${14 + Math.floor((2 + n) / 60)}:${String((2 + n) % 60).padStart(2, '0')}`
     return (
       <div className="tx-pixel">
-        <p className="tx-pixel-top"><span className="tx-pulse" /><b>{lang === 'nl' ? 'Vandaag' : 'Today'} · <Num v="5" /> {lang === 'nl' ? 'meetpunten' : 'events'}</b><em>✓ {p.consent}</em></p>
+        <p className="tx-pixel-top"><span className="tx-pulse" /><b>{lang === 'nl' ? 'Vandaag' : 'Today'} · <Num v={String(Math.min(99, FEED_ROWS + first))} /> {lang === 'nl' ? 'meetpunten' : 'events'}</b><em>✓ {p.consent}</em></p>
         <ul className="tx-feed">
-          {p.events.slice(0, shown).reverse().map(([what, detail, src, time], i) => (
-            <motion.li key={what + time} layout initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} className={what.startsWith('Aankoop') || what.startsWith('Purchase') ? 'is-sale' : ''}>
-              <span className="tx-ev" style={{ background: SOURCE[src] }} /><b>{what}</b><em>{detail}</em><i>{src}</i><small>{time}</small>
-              {i === 0 && <span className="tx-new">{lang === 'nl' ? 'nieuw' : 'new'}</span>}
-            </motion.li>
-          ))}
+          <AnimatePresence initial={false} mode="popLayout">
+            {serials.map((n, i) => {
+              const [what, detail, src] = p.events[n % p.events.length]
+              return (
+                <motion.li key={n} layout initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ type: 'spring', stiffness: 360, damping: 30 }} className={what.startsWith('Aankoop') || what.startsWith('Purchase') ? 'is-sale' : ''}>
+                  <span className="tx-ev" style={{ background: SOURCE[src] }} /><b>{what}</b><em>{detail}</em><i>{src}</i><small>{clock(n)}</small>
+                  {i === 0 && on && <span className="tx-new">{lang === 'nl' ? 'nieuw' : 'new'}</span>}
+                </motion.li>
+              )
+            })}
+          </AnimatePresence>
         </ul>
       </div>
     )
