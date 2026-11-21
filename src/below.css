@@ -472,7 +472,7 @@
 .stb[data-scrub] .stb-col:not([data-on]) .stb-esc { background-color: color-mix(in srgb, var(--stb-alert) 38%, var(--stb-slab)); }
 .stb-ring { position: absolute; top: 0; left: 0; box-sizing: border-box; border: 1.5px solid var(--stb-mute); border-radius: var(--stb-rr); pointer-events: none; opacity: 0; transition: opacity 160ms ease; }
 .stb[data-scrub] .stb-ring { opacity: 1; }
-.stb-tip { position: absolute; top: 0; left: 0; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; border-radius: 10px; background: var(--stb-slab); border: 1px solid color-mix(in srgb, var(--stb-ink) 10%, var(--stb-slab)); box-shadow: 0 10px 20px -12px rgb(17 17 16 / 0.4); font-size: 12px; line-height: 16px; pointer-events: none; opacity: 0; transition: opacity 160ms ease; }
+.stb-tip { position: absolute; top: auto; bottom: 0; left: 0; z-index: 2; box-sizing: border-box; display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; border-radius: 10px; background: var(--stb-slab); border: 1px solid color-mix(in srgb, var(--stb-ink) 10%, var(--stb-slab)); box-shadow: 0 10px 20px -12px rgb(17 17 16 / 0.4); font-size: 12px; line-height: 16px; pointer-events: none; opacity: 0; transition: opacity 160ms ease; }
 .stb[data-scrub] .stb-tip { opacity: 1; }
 .stb-tip-head, .stb-tip-row { display: flex; align-items: center; gap: 6px; white-space: nowrap; }
 .stb-tip-head { justify-content: space-between; color: var(--stb-mute); margin-bottom: 2px; }
