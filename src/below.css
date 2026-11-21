@@ -729,10 +729,6 @@
 .vs-footer-base > * { display: inline-flex; align-items: center; min-height: 36px; }
 .vs-footer-hand { color: #e9e6df; font: 500 21px/36px var(--font-hand); }
 .vs-footer-legal { gap: 18px; }
-.vs-footer-lang { padding: 2px; border-radius: 99px; background: rgb(255 255 255 / 0.08); }
-.vs-footer-lang button { min-width: 44px; height: 32px; padding: 0 12px; border: 0; border-radius: 99px; background: none; color: #b9b5ac; font: 600 13px/1 var(--font-sans); cursor: pointer; }
-.vs-footer-lang button[aria-pressed='true'] { background: #fff; color: var(--vs-ink); }
-.vs-footer-lang button:focus-visible { outline: 2px solid #839bff; outline-offset: 2px; }
 
 @media (max-width: 1200px) {
   .vs-bento { grid-template-columns: repeat(2, minmax(0, 1fr)); }

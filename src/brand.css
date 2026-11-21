@@ -170,9 +170,33 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-mi:hover .vs-mi-t, .vs-mi:focus-visible .vs-mi-t { transform: translateX(4px); }
 
 .vs-header-end { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
-.vs-lang { display: inline-flex; border-radius: 9999px; padding: 3px; box-shadow: inset 0 0 0 1px var(--vs-line); }
-.vs-lang button { min-height: 32px; min-width: 38px; border: 0; border-radius: 9999px; background: transparent; color: var(--vs-mute); font: 500 12px/1 var(--font-sans); letter-spacing: 0; cursor: pointer; transition: background 0.25s, color 0.25s; }
-.vs-lang button[aria-pressed='true'] { background: var(--vs-ink); color: var(--vs-paper); }
+/* Language picker: a pill that opens a short list */
+.vs-lang { position: relative; display: inline-flex; }
+.vs-lang-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 10px 0 11px; border: 0; border-radius: 9999px; background: transparent; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); font: 500 13px/1 var(--font-sans); letter-spacing: 0; cursor: pointer; }
+.vs-lang-btn:hover, .vs-lang-btn[aria-expanded='true'] { box-shadow: inset 0 0 0 1px var(--vs-ink); }
+.vs-lang-btn:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
+.vs-lang-globe { color: var(--vs-ink-2); transition: rotate 0.6s var(--vs-ease); }
+.vs-lang-btn:hover .vs-lang-globe, .vs-lang-btn[aria-expanded='true'] .vs-lang-globe { rotate: 30deg; }
+.vs-lang-code { position: relative; display: inline-grid; overflow: hidden; padding-block: 3px; line-height: 1.1; }
+.vs-lang-code > span { display: block; }
+.vs-lang-chev { color: var(--vs-mute); transition: rotate 0.3s var(--vs-ease); }
+.vs-lang-btn[aria-expanded='true'] .vs-lang-chev { rotate: 180deg; }
+.vs-lang-menu { position: absolute; left: 0; top: calc(100% + 12px); z-index: 60; min-width: 216px; padding: 6px; border-radius: 18px; background: #fff; box-shadow: 0 0 0 1px var(--vs-line), 0 28px 50px -26px rgb(17 17 16 / 0.5); transform-origin: 0 0; }
+.vs-lang-menu[data-open='false'] { visibility: hidden; pointer-events: none; transition: visibility 0s linear 0.16s; }
+.vs-lang--up .vs-lang-menu { top: auto; bottom: calc(100% + 10px); transform-origin: 0 100%; }
+.vs-lang-title { margin: 0; padding: 8px 12px 6px; color: var(--vs-mute); font-size: 13px; }
+.vs-lang-list { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.vs-lang-opt { position: relative; isolation: isolate; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; padding: 0 12px; border-radius: 12px; color: var(--vs-ink); font-size: 15px; font-weight: 500; cursor: pointer; }
+.vs-lang-hl { position: absolute; inset: 0; z-index: -1; border-radius: 12px; background: var(--vs-stone); }
+.vs-lang-hello { color: var(--vs-mute); font: 500 15px/1 var(--font-display); letter-spacing: -0.01em; transition: color 0.25s, translate 0.35s var(--vs-ease); }
+.vs-lang-opt[data-at] .vs-lang-hello { color: var(--vs-blue); translate: -2px 0; }
+.vs-lang-tick { flex: none; color: var(--vs-blue); }
+.vs-lang--up .vs-lang-btn { min-height: 46px; padding: 0 14px 0 15px; font-size: 15px; }
+.vs-lang--end .vs-lang-menu { left: auto; right: 0; transform-origin: 100% 0; }
+.vs-lang--up.vs-lang--end .vs-lang-menu { transform-origin: 100% 100%; }
+.vs-lang--dark .vs-lang-btn { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); color: #fff; min-height: 44px; font-size: 14px; }
+.vs-lang--dark .vs-lang-btn:hover, .vs-lang--dark .vs-lang-btn[aria-expanded='true'] { box-shadow: inset 0 0 0 1px #fff; }
+.vs-lang--dark .vs-lang-globe, .vs-lang--dark .vs-lang-chev { color: #b9b5ac; }
 .vs-header .vs-cta { min-height: 44px; }
 .vs-header .vs-cta-text { font-size: 14px; padding: 6px 17px; }
 .vs-header .vs-cta-circle { width: 34px; height: 34px; }
@@ -310,7 +334,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 /* ---------- Press feedback on plain controls ---------- */
 
-.vs-round-btn, .vs-menu-btn, .vs-drawer-close, .vs-dock-trigger, .vs-lang button { transition-property: transform, background, color, box-shadow; transition-duration: var(--vs-dur-fast); transition-timing-function: var(--vs-ease); }
+.vs-round-btn, .vs-menu-btn, .vs-drawer-close, .vs-dock-trigger, .vs-lang-btn { transition-property: transform, background, color, box-shadow; transition-duration: var(--vs-dur-fast); transition-timing-function: var(--vs-ease); }
 .vs-round-btn:active, .vs-menu-btn:active, .vs-drawer-close:active, .vs-dock-trigger:active { transform: scale(0.9); }
 .vs-round-btn:disabled { opacity: 0.35; cursor: default; }
 .vs-round-btn:disabled:hover { background: transparent; color: var(--vs-ink); box-shadow: inset 0 0 0 1px var(--vs-line); }
@@ -322,11 +346,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-roll > span + span { position: absolute; inset: 100% auto auto 0; }
 :is(a, button):hover > .vs-roll > span, :is(a, button):focus-visible > .vs-roll > span { transform: translateY(-100%); }
 
-/* ---------- Language switch thumb ---------- */
-
-.vs-lang button { position: relative; isolation: isolate; }
-.vs-lang button[aria-pressed='true'] { background: transparent; }
-.vs-lang-thumb { position: absolute; inset: 0; z-index: -1; border-radius: 9999px; background: var(--vs-ink); }
 
 /* ---------- Form feedback: error shake, success check ---------- */
 
@@ -376,8 +395,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 /* ---------- Touch: every control at least 44px ---------- */
 
 @media (pointer: coarse) {
-  .vs-tab, .vs-lang button, .vs-dock-actions a { min-height: 44px; }
-  .vs-lang button { min-width: 44px; }
+  .vs-tab, .vs-lang-btn, .vs-dock-actions a { min-height: 44px; }
   .vs-textlink { display: inline-flex; align-items: center; min-height: 44px; }
   .vs-round-btn, .vs-menu-btn, .vs-drawer-close { min-width: 44px; min-height: 44px; }
   .site-shell footer a, .site-shell footer button { display: inline-flex; align-items: center; min-height: 44px; }
@@ -539,6 +557,5 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 /* Every control answers a press, even without its own rule; specific rules win over this. */
 :where(a[class]:not(.vs-cta), button:not(:disabled)):active { scale: 0.98; }
-.vs-lang button[aria-pressed='false']:hover { color: var(--vs-ink); background: rgb(17 17 16 / 0.06); }
 .vs-dock-trigger:hover { box-shadow: 0 18px 34px -12px rgb(17 17 16 / 0.55), 0 0 0 4px rgb(43 75 242 / 0.18); }
 @media (prefers-reduced-motion: reduce) { :where(a[class]:not(.vs-cta), button:not(:disabled)):active { scale: none; } }

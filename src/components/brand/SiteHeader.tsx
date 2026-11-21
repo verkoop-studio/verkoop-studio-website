@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { Menu, X } from 'lucide-react'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import NavMenu, { DrawerMenu } from './NavMenu'
 import ScrollProgress from './ScrollProgress'
@@ -9,6 +9,7 @@ import type { Bi } from '../../data/types'
 import { trackEvent } from '../../lib/analytics'
 import { useLang } from '../../i18n/LanguageContext'
 import Cta from './Cta'
+import LangPicker from './LangPicker'
 
 const cta: Bi<string> = { nl: 'Plan een gesprek', en: 'Plan a call' }
 
@@ -18,25 +19,6 @@ export function Logo() {
       <span className="vs-logo-word">verkoop<span className="vs-logo-dot">.</span></span>
       <span className="vs-logo-sub">studio</span>
     </Link>
-  )
-}
-
-function LangSwitch() {
-  const { lang, setLang } = useLang()
-  const thumb = useId()
-  const options = [
-    { code: 'nl', label: 'Nederlands' },
-    { code: 'en', label: 'English' },
-  ] as const
-  return (
-    <div className="vs-lang" role="group" aria-label={lang === 'nl' ? 'Taal' : 'Language'}>
-      {options.map((option) => (
-        <button key={option.code} type="button" lang={option.code} aria-label={option.label} aria-pressed={lang === option.code} onClick={() => setLang(option.code)}>
-          {lang === option.code && <motion.span layoutId={thumb} className="vs-lang-thumb" transition={{ type: 'spring', bounce: 0.2, duration: 0.45 }} />}
-          <span>{option.code.toUpperCase()}</span>
-        </button>
-      ))}
-    </div>
   )
 }
 
@@ -85,7 +67,7 @@ export default function SiteHeader() {
           <Logo />
           <NavMenu compact={scrolled} />
           <div className="vs-header-end">
-            <LangSwitch />
+            <LangPicker />
             <Cta to={persistentCtaHref} className={past ? '' : 'is-quiet'} onClick={onCta('nav')}>{cta[lang]}</Cta>
             <button
               ref={menuButton}
@@ -131,7 +113,7 @@ export default function SiteHeader() {
               </div>
               <DrawerMenu onNavigate={() => setOpen(false)} />
               <div className="vs-drawer-foot">
-                <LangSwitch />
+                <LangPicker up />
                 <Cta to={persistentCtaHref} onClick={onCta('nav_mobile')}>{cta[lang]}</Cta>
               </div>
             </motion.nav>

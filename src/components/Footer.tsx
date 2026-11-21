@@ -13,6 +13,7 @@ import Arrow, { Go } from './brand/Arrow'
 import { Ribbon } from './brand/Playful'
 import Cta from './brand/Cta'
 import HandNote from './brand/HandNote'
+import LangPicker from './brand/LangPicker'
 import ProductMini from './brand/ProductMini'
 import NewsletterInline from './brand/forms/NewsletterInline'
 import { EASE } from './brand/motion'
@@ -125,7 +126,7 @@ const card = (i: number, reduce: boolean | null) => (reduce ? {} : {
  * giant wordmark with the watching dot, and one base row.
  */
 export default function Footer() {
-  const { lang, setLang } = useLang()
+  const { lang } = useLang()
   const t = COPY[lang]
   const reduce = useReducedMotion()
   const { pathname } = useLocation()
@@ -202,10 +203,7 @@ export default function Footer() {
             <Link to="/privacy">{t.privacy}</Link>
             <Link to="/voorwaarden">{t.terms}</Link>
           </nav>
-          <div className="vs-footer-lang" role="group" aria-label={t.lang}>
-            <button type="button" aria-pressed={lang === 'nl'} onClick={() => setLang('nl')}>NL</button>
-            <button type="button" aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
-          </div>
+          <LangPicker up dark />
         </div>
       </footer>
     </>
