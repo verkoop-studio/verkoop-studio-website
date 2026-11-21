@@ -1271,10 +1271,9 @@
 @keyframes vs-icon-wiggle { 25% { rotate: -10deg; } 55% { rotate: 8deg; } 80% { rotate: -3deg; } }
 .vs-mega-dark-eyes { position: absolute; right: 12px; top: 12px; }
 .vs-mega-dark .vs-cta { justify-self: start; margin-top: 6px; }
-.vs-mega-dark .vs-cta-text { font-size: 14px; padding: 7px 14px 7px 16px; }
+.vs-mega-dark .vs-cta-text { font-size: 14px; padding: 7px 15px; }
 .vs-mega-dark .vs-cta-circle { width: 34px; height: 34px; }
 .vs-mega-dark .vs-cta-bed { width: calc(100% - 5px - 5px - 34px - 6px); }
-.vs-mega-dark .vs-cta:hover .vs-cta-bed { width: calc(100% - 10px); }
 .vs-mega-dark-note { position: relative; justify-self: start; margin: 2px 0 0 54px; color: #ffd23f; font-size: 19px; rotate: -3deg; }
 
 .vs-mega-product { --tint: #eef1ff; display: grid; gap: 8px; padding: 10px 10px 14px; border: 1px solid var(--vs-line); border-radius: 16px; background: linear-gradient(180deg, var(--tint), var(--vs-card) 60%); color: var(--vs-ink); text-decoration: none; transition: translate 0.35s var(--vs-ease), box-shadow 0.35s var(--vs-ease), border-color 0.25s; }
@@ -1288,10 +1287,9 @@
 
 /* The strip: the main call as the site's CTA, WhatsApp as a ghost pill, the overview as a text link with a count. */
 .vs-mega-strip .vs-cta { min-height: 40px; }
-.vs-mega-strip .vs-cta-text { font-size: 13.5px; padding: 6px 14px 6px 16px; }
+.vs-mega-strip .vs-cta-text { font-size: 13.5px; padding: 6px 15px; }
 .vs-mega-strip .vs-cta-circle { width: 32px; height: 32px; }
 .vs-mega-strip .vs-cta-bed { width: calc(100% - 5px - 5px - 32px - 6px); }
-.vs-mega-strip .vs-cta:hover .vs-cta-bed { width: calc(100% - 10px); }
 @property --vs-draw { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 .vs-mega-strip-link { position: relative; display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 0 16px; border-radius: 99px; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink-2); font: 500 13.5px/1 var(--font-sans); text-decoration: none; transition: color 0.2s, scale 0.2s var(--vs-ease); }
 .vs-mega-strip-link::before { content: ''; position: absolute; inset: 0; padding: 1.5px; border-radius: inherit; background: conic-gradient(from 180deg, #25d366 var(--vs-draw), transparent 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; transition: --vs-draw 0.55s ease; pointer-events: none; }
