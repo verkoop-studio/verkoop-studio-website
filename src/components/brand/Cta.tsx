@@ -9,8 +9,9 @@ const MotionLink = motion.create(Link)
 const PULL = 0.22
 
 /**
- * Pill button with a sliding bed: the bed stops short of the icon circle and
- * grows to full width on hover while the circle slides back to meet it.
+ * Pill button with the words in a pill and an icon circle beside it. On hover
+ * the circle slides back to meet the pill, which keeps its width so the words
+ * stay centred in it.
  * On a mouse it leans toward the cursor, and a press sends a ripple out from
  * the point that was clicked.
  */

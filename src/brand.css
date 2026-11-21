@@ -78,17 +78,19 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
   position: absolute; top: 5px; bottom: 5px; left: 5px;
   width: calc(100% - 5px - 5px - 38px - 6px);
   border-radius: 9999px; z-index: -1;
-  transition: width 0.45s var(--vs-ease);
+  transition: width 0.45s var(--vs-ease), background-color 0.3s ease, box-shadow 0.3s ease;
 }
-.vs-cta:hover .vs-cta-bed, .vs-cta:focus-visible .vs-cta-bed { width: calc(100% - 10px); }
+/* on hover the pill keeps its width, so the words stay centred in it; the circle slides over to meet it */
+.vs-cta--ink:hover .vs-cta-bed, .vs-cta--ink:focus-visible .vs-cta-bed { background: #2b2a27; }
+.vs-cta--paper:hover .vs-cta-bed, .vs-cta--paper:focus-visible .vs-cta-bed { background: #e9e5dc; }
 .vs-cta-bed--full { width: calc(100% - 10px); }
-.vs-cta-text { position: relative; font-weight: 500; font-size: 15px; padding: 8px 20px 8px 22px; white-space: nowrap; transition: color 0.3s ease; }
+.vs-cta-text { position: relative; font-weight: 500; font-size: 15px; padding: 8px 21px; margin-right: 6px; white-space: nowrap; transition: color 0.3s ease; }
 .vs-cta-circle {
   position: relative; display: flex; align-items: center; justify-content: center;
   width: 38px; height: 38px; border-radius: 9999px; flex-shrink: 0;
   transition: transform 0.35s var(--vs-ease), background-color 0.3s ease, color 0.3s ease;
 }
-.vs-cta:hover .vs-cta-circle { transform: translateX(-4px); }
+.vs-cta:hover .vs-cta-circle, .vs-cta:focus-visible .vs-cta-circle { transform: translateX(-6px); }
 
 .vs-cta--ink { background: transparent; }
 .vs-cta--ink .vs-cta-bed { background: var(--vs-ink); }
@@ -102,6 +104,8 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-cta--line { box-shadow: inset 0 0 0 1px var(--vs-line); transition: box-shadow 0.3s ease; }
 .vs-cta--line:hover { box-shadow: inset 0 0 0 1px var(--vs-ink); }
 .vs-cta--line .vs-cta-text { color: var(--vs-ink); padding-inline: 20px; }
+/* the words fill the pill exactly; the 6px after them is the gap before the circle */
+.vs-cta--line .vs-cta-text, .vs-cta-bed--full ~ .vs-cta-text { margin-right: 0; }
 
 .vs-cta:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
 
@@ -170,10 +174,9 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-lang button { min-height: 32px; min-width: 38px; border: 0; border-radius: 9999px; background: transparent; color: var(--vs-mute); font: 500 12px/1 var(--font-sans); letter-spacing: 0; cursor: pointer; transition: background 0.25s, color 0.25s; }
 .vs-lang button[aria-pressed='true'] { background: var(--vs-ink); color: var(--vs-paper); }
 .vs-header .vs-cta { min-height: 44px; }
-.vs-header .vs-cta-text { font-size: 14px; padding: 6px 16px 6px 18px; }
+.vs-header .vs-cta-text { font-size: 14px; padding: 6px 17px; }
 .vs-header .vs-cta-circle { width: 34px; height: 34px; }
 .vs-header .vs-cta-bed { width: calc(100% - 5px - 5px - 34px - 6px); }
-.vs-header .vs-cta:hover .vs-cta-bed { width: calc(100% - 10px); }
 .vs-header .vs-cta.is-quiet .vs-cta-bed { background: transparent; box-shadow: inset 0 0 0 1.5px var(--vs-ink); }
 .vs-header .vs-cta.is-quiet .vs-cta-text { color: var(--vs-ink); }
 .vs-header .vs-cta.is-quiet .vs-cta-circle { background: transparent; color: var(--vs-ink); box-shadow: inset 0 0 0 1.5px var(--vs-ink); }
