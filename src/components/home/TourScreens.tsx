@@ -148,7 +148,8 @@ export function LaunchScreen({ lang, on }: ScreenProps) {
   )
 }
 
-/* 05 Optimalisatie: revenue ticks up, the dots fill in, the pointer drags the budget and sales land. */
+/* 05 Optimalisatie: revenue ticks up, the dots fill in, the pointer drags the budget and sales land.
+   The two sales rows are there from the start, waiting, so the window never opens half empty. */
 const GROW_T = [2200, 1700, 2600, 1300]
 const HEIGHTS = [3, 4, 3, 5, 4, 6, 5, 7, 6, 8, 9]
 export function GrowScreen({ lang, on }: ScreenProps) {
@@ -169,13 +170,11 @@ export function GrowScreen({ lang, on }: ScreenProps) {
         <span className="st-track"><i style={{ width: drag ? '62%' : '8%' }} /><b style={{ left: drag ? '62%' : '8%' }} /></span>
       </div>
       <div className="st-feeds">
-        <AnimatePresence initial={false}>
-          {p >= 2 && t.feed.map(([what, detail, src], i) => (
-            <motion.p key={what} className="st-feed" initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0 }} transition={{ delay: i * 0.6, type: 'spring', stiffness: 220, damping: 22 }}>
-              <span className="st-feed-dot" /><b>{what}</b><em>{detail}</em><i className={src === 'Meta' ? 'is-meta' : ''}>{src}</i><small>{t.now}</small>
-            </motion.p>
-          ))}
-        </AnimatePresence>
+        {t.feed.map(([what, detail, src], i) => (
+          <motion.p key={what} className="st-feed" data-on={p >= 2 || undefined} style={{ '--i': i } as CSSProperties} animate={{ scale: p >= 2 ? [1, 1.03, 1] : 1 }} transition={{ delay: i * 0.6, duration: 0.45 }}>
+            <span className="st-feed-dot" /><b>{what}</b><em>{detail}</em><i className={src === 'Meta' ? 'is-meta' : ''}>{src}</i><small>{t.now}</small>
+          </motion.p>
+        ))}
       </div>
       <Pointer x={drag ? 62 : 8} y={64} click={p === 1 ? 'drag' : false} hidden={p === 0 || p >= 2} />
     </Win>

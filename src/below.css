@@ -1209,6 +1209,15 @@
 .st-track b { position: absolute; top: 50%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: #fff; box-shadow: 0 0 0 2px var(--vs-blue), 0 4px 8px -2px rgb(17 17 16 / 0.3); transition: left 1.3s cubic-bezier(0.22, 1, 0.36, 1); }
 .st-feeds { display: grid; gap: 6px; min-height: 84px; align-content: start; }
 .st-feed i.is-meta { color: #1877f2; }
+/* waiting: the row is listed, its details are a pale bar; landed: it turns green and fills in */
+.st-feed { transition: background-color 0.4s ease calc(var(--i, 0) * 0.6s); }
+.st-feed:not([data-on]) { background: #f4f2ec; }
+.st-feed:not([data-on]) > b { color: var(--vs-mute); font-weight: 500; }
+.st-feed:not([data-on]) .st-feed-dot { background: none; box-shadow: inset 0 0 0 1.5px #cfcabd; }
+.st-feed > :is(em, i, small) { transition: opacity 0.35s ease calc(var(--i, 0) * 0.6s + 0.1s); }
+.st-feed:not([data-on]) > :is(em, i, small) { opacity: 0; transition-delay: 0s; }
+.st-feed:not([data-on]) > b::after { content: ''; display: inline-block; width: 64px; height: 6px; margin-left: 12px; border-radius: 3px; background: #e2ded3; vertical-align: middle; }
+.st-feed-dot { transition: background-color 0.4s ease calc(var(--i, 0) * 0.6s), box-shadow 0.4s ease calc(var(--i, 0) * 0.6s); }
 @media (prefers-reduced-motion: reduce) {
   .dm-pointer, .dm-caret { display: none; }
   .st-chips li { color: var(--vs-ink); }
