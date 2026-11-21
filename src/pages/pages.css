@@ -801,6 +801,9 @@
 .ct-routes li { padding: 8px 14px; border: 1px solid var(--vs-line); border-radius: 99px; background: #fff; color: var(--vs-ink-2); font-size: 14px; }
 .ct-routes a { color: var(--vs-ink); text-decoration: none; }
 .ct-routes li:has(a):hover { border-color: var(--vs-ink-2); }
+/* the whole pill is the link, not only its words */
+.ct-routes li:has(a) { padding: 0; }
+.ct-routes li a { min-height: 44px; padding: 0 16px; border-radius: 99px; }
 
 /* Agency statement: the words ink in as the paragraph scrolls past; people sit inline as photo pills. */
 .ag-statement { padding-block: clamp(48px, 8vw, 120px); }

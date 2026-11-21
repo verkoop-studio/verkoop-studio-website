@@ -24,7 +24,7 @@ export default function Breadcrumbs({ items }: { items: Crumb[] }) {
               </span>
             )}
             {crumb.href && !isLast ? (
-              <Link to={crumb.href} className="transition hover:text-paper">
+              <Link to={crumb.href} className="-my-3 inline-flex min-h-11 items-center transition hover:text-paper">
                 {crumb.label}
               </Link>
             ) : (

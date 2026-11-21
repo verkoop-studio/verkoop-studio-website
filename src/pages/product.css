@@ -71,7 +71,7 @@ body:has(.pp) .back-to-top { display: none; }
 /* On to Performance */
 .pp-next { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; padding: clamp(28px, 4vw, 52px); border-radius: 26px; background: var(--vs-blue); color: #fff; text-decoration: none; rotate: -0.7deg; transition: rotate 0.5s var(--vs-ease), translate 0.5s var(--vs-ease), box-shadow 0.5s; }
 .pp-next:hover { rotate: 0deg; translate: 0 -6px; box-shadow: 0 34px 54px -30px rgb(43 75 242 / 0.8); }
-.pp-next .vs-label { color: rgb(255 255 255 / 0.75); }
+.pp-next .vs-label { color: rgb(255 255 255 / 0.88); }
 .pp-next-title { margin: 12px 0 14px; font: 500 clamp(30px, 3.8vw, 56px)/1.04 var(--font-display); letter-spacing: -0.035em; max-width: 16ch; }
 .pp-next p:not(.vs-label) { margin: 0; max-width: 34em; font-size: 17px; line-height: 1.5; color: rgb(255 255 255 / 0.88); }
 .pp-next-go { display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 6px 0 22px; border-radius: 99px; background: #fff; color: var(--vs-ink); font-weight: 600; white-space: nowrap; }
