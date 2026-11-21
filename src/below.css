@@ -1155,16 +1155,17 @@
 @keyframes dm-press { 40% { scale: 0.95; } }
 @keyframes dm-ripple { from { scale: 0; opacity: 1; } to { scale: 8; opacity: 0; } }
 
-/* 01: the field, the chips popping in ticked. */
+/* 01: the field, and the checks: listed from the start, waiting, then ticked one by one. */
 .st-field { display: flex; gap: 8px; margin: 0; }
 .st-input { flex: 1; display: flex; align-items: center; height: 36px; padding: 0 12px; border-radius: 10px; box-shadow: inset 0 0 0 1px var(--vs-line); background: #f7f6f2; color: var(--vs-ink); transition: box-shadow 0.25s; }
 .st-input.is-focus { box-shadow: inset 0 0 0 2px var(--vs-blue); }
 .st-chips { display: flex; flex-wrap: wrap; gap: 8px; min-height: 92px; margin: 0; padding: 0; list-style: none; align-content: start; }
-.st-chips li { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px 6px 7px; border-radius: 99px; background: #f7f6f2; font-size: 12.5px; font-weight: 500; opacity: 0; scale: 0.6; }
+.st-chips li { display: inline-flex; align-items: center; gap: 7px; padding: 6px 11px 6px 7px; border-radius: 99px; background: #f7f6f2; color: var(--vs-mute); font-size: 12.5px; font-weight: 500; }
 .st-chips.is-on li { animation: st-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) calc(var(--i) * 0.32s) forwards; }
+.st-chips:not(.is-on) li { transition: color 0.3s ease; }
 .st-chips.is-on .st-check { animation: st-check-bg 0.3s ease calc(0.15s + var(--i) * 0.32s) forwards; }
 .st-chips.is-on .st-check path { animation: st-draw 0.3s ease calc(0.25s + var(--i) * 0.32s) forwards; }
-@keyframes st-pop { to { opacity: 1; scale: 1; } }
+@keyframes st-pop { 0% { scale: 1; } 45% { scale: 1.08; } 100% { scale: 1; color: var(--vs-ink); background: #eef1ff; } }
 .st-chips .st-check { width: 18px; height: 18px; }
 
 /* 02: the sort chip. */
@@ -1192,7 +1193,7 @@
 .st-feed i.is-meta { color: #1877f2; }
 @media (prefers-reduced-motion: reduce) {
   .dm-pointer, .dm-caret { display: none; }
-  .st-chips li { opacity: 1; scale: 1; }
+  .st-chips li { color: var(--vs-ink); }
   .st-chips .st-check { background: var(--vs-blue); box-shadow: none; }
   .st-chips.is-on li, .st-chips.is-on .st-check, .st-chips.is-on .st-check path, .st-flow.is-run span, .st-btn.is-press, .st-approve.is-press, .st-sort.is-press { animation: none; }
   .st-btn.is-press::after, .st-approve.is-press::after { display: none; }
