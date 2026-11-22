@@ -312,11 +312,38 @@
 .sv-switch[data-on] { background: #28c840; }
 .sv-switch[data-on]::after { translate: 14px 0; }
 
-.sv-sitemap { display: grid; justify-items: center; gap: 14px; }
-.sv-node { padding: 7px 12px; border: 1px solid var(--vs-line); border-radius: 10px; background: #fff; font-size: 12.5px; font-weight: 600; }
-.sv-node--root { background: var(--vs-ink); color: #fff; }
-.sv-node--goal { border-color: var(--vs-blue); background: rgb(43 75 242 / 0.08); color: var(--vs-blue); animation: sv-cta-pulse 2.4s ease-in-out infinite; }
-.sv-node-row { display: flex; gap: 8px; }
+/* Site structure: who visits and the one action, then the pages as a tree whose branches all end on that one button. */
+.sv-brief { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 0 0 16px; }
+.sv-brief div { padding: 9px 12px 10px; border-radius: 12px; background: var(--vs-stone); animation: sv-row-in 0.5s var(--vs-ease) both; }
+.sv-brief .is-goal { background: rgb(43 75 242 / 0.08); animation-delay: 0.08s; }
+.sv-brief dt { color: var(--vs-mute); font-size: 11.5px; line-height: 1.3; }
+.sv-brief dd { margin: 3px 0 0; font-size: 13px; font-weight: 600; line-height: 1.3; }
+.sv-brief .is-goal dd { color: var(--vs-blue); }
+.sv-map { --sv-branch: rgb(17 17 16 / 0.2); display: grid; justify-items: center; }
+.sv-node { position: relative; padding: 7px 14px; border: 1px solid var(--vs-line); border-radius: 10px; background: #fff; font-size: 12.5px; font-weight: 600; }
+.sv-node--root { border-color: var(--vs-ink); background: var(--vs-ink); color: #fff; animation: sv-row-in 0.5s var(--vs-ease) 0.16s both; }
+.sv-node--root::after, .sv-node--goal::before { content: ''; position: absolute; left: 50%; width: 1.5px; height: 14px; margin-left: -0.75px; background: var(--sv-branch); }
+.sv-node--root::after { top: 100%; }
+.sv-node--goal::before { bottom: 100%; }
+.sv-map-pages { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; margin: 14px 0; padding: 0; list-style: none; }
+.sv-map-pages::before, .sv-map-pages::after { content: ''; position: absolute; left: 16.667%; right: 16.667%; height: 1.5px; background: var(--sv-branch); }
+.sv-map-pages::before { top: 0; }
+.sv-map-pages::after { bottom: 0; }
+.sv-map-pages li { position: relative; display: grid; padding: 15px 5px; animation: sv-row-in 0.5s var(--vs-ease) var(--d, 0s) both; }
+.sv-win .sv-map-pages li:hover { background-color: transparent; }
+.sv-map-pages li::before, .sv-map-pages li::after { content: ''; position: absolute; left: 50%; width: 1.5px; height: 15px; margin-left: -0.75px; background: var(--sv-branch); }
+.sv-map-pages li::before { top: 0; }
+.sv-map-pages li::after { bottom: 0; }
+/* A visitor on the way down each branch. */
+.sv-map-dot { position: absolute; left: 50%; top: 0; z-index: 0; width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px; border-radius: 50%; background: var(--vs-blue); animation: sv-map-run 3s var(--f, 0s) ease-in-out infinite both; }
+@keyframes sv-map-run { 0% { top: 0; opacity: 0; } 12% { opacity: 1; } 88% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+.sv-leaf { position: relative; z-index: 1; display: grid; align-content: start; gap: 2px; padding: 10px 10px 9px; border: 1px solid var(--vs-line); border-radius: 12px; background: #fff; text-align: left; transition: border-color 0.25s ease, translate 0.3s var(--vs-ease); }
+.sv-map-pages li:hover .sv-leaf { border-color: rgb(43 75 242 / 0.5); translate: 0 -2px; }
+.sv-leaf b { font-size: 13px; font-weight: 600; }
+.sv-leaf > span { color: var(--vs-mute); font-size: 11.5px; line-height: 1.3; }
+.sv-leaf i { justify-self: start; margin-top: 7px; padding: 3px 9px; border-radius: 99px; background: rgb(43 75 242 / 0.1); color: var(--vs-blue); font-style: normal; font-size: 11px; font-weight: 600; white-space: nowrap; }
+.sv-node--goal { padding: 9px 18px; border-color: var(--vs-blue); border-radius: 99px; background: var(--vs-blue); color: #fff; font-size: 13px; animation: sv-row-in 0.5s var(--vs-ease) 0.55s backwards, sv-cta-pulse 2.4s ease-in-out 1.1s infinite; }
+.sv-map-note { margin: 10px 0 0; color: var(--vs-mute); font-size: 11.5px; }
 .sv-devices { display: flex; align-items: flex-end; gap: 12px; }
 .sv-device { display: block; overflow: hidden; border: 6px solid #151514; border-radius: 12px; background: #fff; }
 .sv-device img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top left; }
@@ -340,7 +367,9 @@
 .sv-app em { color: var(--vs-mute); font-style: normal; font-size: 11.5px; font-variant-numeric: tabular-nums; }
 .sv-app-chip { position: absolute; right: 14px; top: 12px; padding: 2px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-size: 10.5px; }
 @media (prefers-reduced-motion: reduce) {
-  .sv-caret, .sv-events li, .sv-page-cta, .sv-cursor, .sv-sources li, .sv-funnel li, .sv-flow li, .sv-node--goal { animation: none; }
+  .sv-caret, .sv-events li, .sv-page-cta, .sv-cursor, .sv-sources li, .sv-funnel li, .sv-flow li, .sv-node--goal, .sv-node--root, .sv-brief div, .sv-map-pages li { animation: none; }
+  .sv-map-dot { display: none; }
+  .sv-leaf { transition: none; }
 }
 
 /* ---------- Case pages ---------- */

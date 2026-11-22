@@ -343,13 +343,29 @@ function Audit({ lang }: ScreenProps) {
 
 function Sitemap({ lang }: ScreenProps) {
   const nl = lang === 'nl'
-  const pages = nl ? ['Diensten', 'Cases', 'Over ons'] : ['Services', 'Cases', 'About']
+  const pages = nl
+    ? [['Diensten', 'Wat je aanbiedt'], ['Cases', 'Bewijs dat het werkt'], ['Over ons', 'Wie het doet']]
+    : [['Services', 'What you offer'], ['Cases', 'Proof that it works'], ['About', 'Who does it']]
+  const goal = nl ? 'Offerte aanvragen' : 'Request a quote'
+  const button = nl ? 'Offerte' : 'Quote'
   return (
-    <Win title={nl ? 'Structuur' : 'Structure'} lang={lang}>
-      <div className="sv-sitemap">
+    <Win title={nl ? 'Structuur van de site' : 'Site structure'} lang={lang}>
+      <dl className="sv-brief">
+        <div><dt>{nl ? 'Wie bezoekt de site' : 'Who visits the site'}</dt><dd>{nl ? 'Zaakvoerder die een offerte zoekt' : 'A business owner looking for a quote'}</dd></div>
+        <div className="is-goal"><dt>{nl ? 'De ene actie die telt' : 'The one action that counts'}</dt><dd>{goal}</dd></div>
+      </dl>
+      <div className="sv-map">
         <span className="sv-node sv-node--root">Home</span>
-        <div className="sv-node-row">{pages.map((p) => <span key={p} className="sv-node">{p}</span>)}</div>
-        <span className="sv-node sv-node--goal">{nl ? 'Contact · de ene actie' : 'Contact · the one action'}</span>
+        <ul className="sv-map-pages">
+          {pages.map(([name, role], i) => (
+            <li key={name} style={v({ '--d': `${0.25 + i * 0.1}s`, '--f': `${i * 0.5}s` })}>
+              <span className="sv-map-dot" aria-hidden="true" />
+              <span className="sv-leaf"><b>{name}</b><span>{role}</span><i>{button} ›</i></span>
+            </li>
+          ))}
+        </ul>
+        <span className="sv-node sv-node--goal">{goal} ›</span>
+        <p className="sv-map-note">{nl ? 'Elke pagina eindigt op dezelfde knop' : 'Every page ends on the same button'}</p>
       </div>
     </Win>
   )
