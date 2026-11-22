@@ -9,7 +9,7 @@ import SoftwareShowcase from '../components/home/SoftwareShowcase'
 import RunItSplit from '../components/home/RunItSplit'
 import PainsBlock from '../components/home/PainsBlock'
 import StartTour from '../components/home/StartTour'
-import WorksWith from '../components/brand/WorksWith'
+import FeatureMosaic from '../components/home/FeatureMosaic'
 import { NoteCard, Ribbon } from '../components/brand/Playful'
 
 /** The original line from the contact page, in Stef's hand. */
@@ -47,7 +47,7 @@ export default function Home() {
       <ServicesList />
       <SoftwareShowcase />
       <RunItSplit />
-      <WorksWith lang={lang} platforms={['meta', 'google', 'ga4', 'gtm', 'looker', 'tiktok', 'shopify', 'klaviyo', 'mailchimp', 'navigator']} />
+      <FeatureMosaic />
       <PlansSection />
       <StartTour />
       <section className="vs-wrap vs-section vs-note-wrap" aria-label={lang === 'nl' ? 'Een woordje van Stef' : 'A note from Stef'}>
