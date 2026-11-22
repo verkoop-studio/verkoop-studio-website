@@ -10,6 +10,7 @@ import RunItSplit from '../components/home/RunItSplit'
 import PainsBlock from '../components/home/PainsBlock'
 import StartTour from '../components/home/StartTour'
 import FeatureMosaic from '../components/home/FeatureMosaic'
+import StatementLine from '../components/home/StatementLine'
 import { NoteCard, Ribbon } from '../components/brand/Playful'
 
 /** The original line from the contact page, in Stef's hand. */
@@ -48,6 +49,7 @@ export default function Home() {
       <SoftwareShowcase />
       <RunItSplit />
       <FeatureMosaic />
+      <StatementLine />
       <PlansSection />
       <StartTour />
       <section className="vs-wrap vs-section vs-note-wrap" aria-label={lang === 'nl' ? 'Een woordje van Stef' : 'A note from Stef'}>
