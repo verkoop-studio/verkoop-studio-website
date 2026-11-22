@@ -56,8 +56,10 @@
 .vs-group--2 .vs-group-tile { --tone: #ff9fd0; --on: var(--vs-ink); }
 .vs-group-tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 80% at 90% 0%, rgb(255 255 255 / 0.28), transparent 65%); }
 .vs-group-tile h3 { margin: 0; font: 500 clamp(26px, 2.4vw, 34px)/1.05 var(--font-display); letter-spacing: -0.03em; }
-.vs-group-art svg { display: block; width: min(100%, 220px); height: auto; overflow: visible; }
-.vs-group-dots { fill: none; stroke: currentColor; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 0.01 8; opacity: 0.85; }
+/* Each stroke sets its own path length in steps of 8, so the dots are evenly spaced and one sits on every end and corner. */
+.vs-group-art svg { display: block; width: min(100%, 220px); height: auto; opacity: 0.9; }
+.vs-group-dots { fill: none; stroke: currentColor; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 0.01 7.99; }
+.vs-group-wheel { fill: currentColor; }
 .vs-group-dots--run { transition: stroke-dashoffset 1.4s linear; }
 .vs-group:hover .vs-group-dots--run, .vs-group:focus-within .vs-group-dots--run { stroke-dashoffset: -64; }
 .vs-group-art { transition: translate 0.5s var(--vs-ease), rotate 0.5s var(--vs-ease); }

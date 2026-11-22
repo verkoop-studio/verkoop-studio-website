@@ -13,11 +13,30 @@ const COPY = {
   en: { title: [{ text: 'What we' }, { text: 'do', tone: 'accent' as const }] },
 }
 
-/** One dotted line drawing per group: a signal going out, a path to the till, a loop that runs itself. */
+/**
+ * One stroke of a drawing, as a row of dots. `gaps` is the number of spaces between the dots, so a dot
+ * lands on both ends of every stroke and the corners close.
+ */
+const dots = (d: string, gaps: number, run = false) => (
+  <path key={d} className={`vs-group-dots${run ? ' vs-group-dots--run' : ''}`} d={d} pathLength={gaps * 8 + 0.02} />
+)
+
+/** One dotted drawing per group: a megaphone calling out, a path into a shopping cart, a loop that hands on by itself. */
 const ART = [
-  <svg key="attract" viewBox="0 0 160 90" aria-hidden="true"><path className="vs-group-dots" d="M18 62h26l30-26v62L44 72H18Z" /><path className="vs-group-dots vs-group-dots--run" d="M92 30c14 10 14 30 0 40M106 18c24 18 24 46 0 64M120 6c34 26 34 62 0 88" /></svg>,
-  <svg key="buy" viewBox="0 0 160 90" aria-hidden="true"><path className="vs-group-dots vs-group-dots--run" d="M8 70C40 70 44 24 78 24s40 40 74 40" /><path className="vs-group-dots" d="M112 20h10l8 30h22l6-20h-32M130 62a4 4 0 1 0 0.1 0M148 62a4 4 0 1 0 0.1 0" /></svg>,
-  <svg key="smarter" viewBox="0 0 160 90" aria-hidden="true"><path className="vs-group-dots vs-group-dots--run" d="M44 45a26 26 0 1 1 52 0a26 26 0 1 1-52 0" /><path className="vs-group-dots" d="M96 45h40M126 35l10 10-10 10M70 19v-12M70 83v-12" /></svg>,
+  <svg key="attract" viewBox="0 0 160 90" aria-hidden="true">
+    {[['M14 38H40', 3], ['M40 38L72 14', 5], ['M72 14V76', 8], ['M72 76L40 52', 5], ['M40 52H14', 3], ['M14 52V38', 2]].map(([d, n]) => dots(d as string, n as number))}
+    {[['M94.9 31.6A20 20 0 0 1 94.9 58.4', 4], ['M108.2 19.6A38 38 0 0 1 108.2 70.4', 7], ['M121.6 7.5A56 56 0 0 1 121.6 82.5', 10]].map(([d, n]) => dots(d as string, n as number, true))}
+  </svg>,
+  <svg key="buy" viewBox="0 0 160 90" aria-hidden="true">
+    {dots('M8 76C42 76 40 24 98 24', 15, true)}
+    {[['M98 24H108', 1], ['M108 24L116 56', 4], ['M116 56H146', 4], ['M146 56L152 34', 3], ['M152 34H110.5', 5]].map(([d, n]) => dots(d as string, n as number))}
+    <circle className="vs-group-wheel" cx="122" cy="69" r="3.8" />
+    <circle className="vs-group-wheel" cx="141" cy="69" r="3.8" />
+  </svg>,
+  <svg key="smarter" viewBox="0 0 160 90" aria-hidden="true">
+    {dots('M84 45A28 28 0 1 1 28 45A28 28 0 1 1 84 45', 22, true)}
+    {[['M84 45H140', 7], ['M128 33L140 45', 2], ['M128 57L140 45', 2]].map(([d, n]) => dots(d as string, n as number))}
+  </svg>,
 ]
 
 /** What we do, in the three groups of the services menu: a tile per group, its services listed below. */
