@@ -1320,15 +1320,18 @@
 .vs-mega-strip .vs-cta-text { font-size: 13.5px; padding: 6px 15px; }
 .vs-mega-strip .vs-cta-circle { width: 32px; height: 32px; }
 .vs-mega-strip .vs-cta-bed { width: calc(100% - 5px - 5px - 32px - 6px); }
-@property --vs-draw { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
-.vs-mega-strip-link { position: relative; display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 0 16px; border-radius: 99px; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink-2); font: 500 13.5px/1 var(--font-sans); text-decoration: none; transition: color 0.2s, scale 0.2s var(--vs-ease); }
-.vs-mega-strip-link::before { content: ''; position: absolute; inset: 0; padding: 1.5px; border-radius: inherit; background: conic-gradient(from 180deg, #25d366 var(--vs-draw), transparent 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; transition: --vs-draw 0.55s ease; pointer-events: none; }
-.vs-mega-strip-link:hover, .vs-mega-strip-link:focus-visible { color: var(--vs-ink); }
-.vs-mega-strip-link:hover::before, .vs-mega-strip-link:focus-visible::before { --vs-draw: 360deg; }
-.vs-mega-strip-link:hover svg, .vs-mega-strip-link:focus-visible svg { animation: vs-icon-wiggle 0.5s var(--vs-ease); }
+/* WhatsApp in the menu: the mark in a green disc, and on hover the green grows out of the disc to fill the pill. */
+.vs-mega-strip-link { position: relative; isolation: isolate; overflow: hidden; display: inline-flex; align-items: center; gap: 9px; min-height: 40px; padding: 4px 14px 4px 4px; box-sizing: border-box; border-radius: 99px; background: #fff; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); font: 500 13.5px/1 var(--font-sans); text-decoration: none; transition: color 0.3s, box-shadow 0.3s, scale 0.2s var(--vs-ease); }
+.vs-mega-strip-link::before { content: ''; position: absolute; inset: 0; z-index: -1; background: #0f8043; clip-path: circle(14px at 20px 50%); opacity: 0; transition: clip-path 0.55s var(--vs-ease), opacity 0.2s; }
+.vs-mega-strip-link:hover, .vs-mega-strip-link:focus-visible { box-shadow: inset 0 0 0 1px #0f8043; color: #fff; }
+.vs-mega-strip-link:hover::before, .vs-mega-strip-link:focus-visible::before { clip-path: circle(150% at 20px 50%); opacity: 1; }
+.vs-mega-wa-disc { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; background: #25d366; color: #fff; animation: sk-pulse-green 2.2s ease-out infinite; transition: background-color 0.3s, color 0.3s; }
+.vs-mega-strip-link:hover .vs-mega-wa-disc, .vs-mega-strip-link:focus-visible .vs-mega-wa-disc { background: #fff; color: #0f8043; animation: none; }
+.vs-mega-strip-link:hover .vs-mega-wa-disc svg, .vs-mega-strip-link:focus-visible .vs-mega-wa-disc svg { animation: vs-icon-wiggle 0.5s var(--vs-ease); }
+.vs-mega-strip-link .vs-arrow { opacity: 0.6; }
 .vs-mega-strip-link:active { scale: 0.97; }
 .vs-mega-strip-link:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 2px; }
-.vs-mega-wa-dot { width: 7px; height: 7px; border-radius: 50%; background: #25d366; animation: sk-pulse-green 1.8s ease-out infinite; }
+@media (prefers-reduced-motion: reduce) { .vs-mega-wa-disc { animation: none; } .vs-mega-strip-link, .vs-mega-strip-link::before, .vs-mega-wa-disc { transition: none; } }
 .vs-mega-strip .vs-textlink { font-size: 13.5px; font-weight: 600; color: var(--vs-ink); }
 .vs-mega-count { display: inline-grid; place-items: center; min-width: 20px; height: 20px; padding: 0 5px; border-radius: 99px; background: var(--vs-blue); color: #fff; font-size: 11px; font-weight: 700; scale: 0; transition: scale 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
 .vs-mega-more:hover .vs-mega-count, .vs-mega-more:focus-visible .vs-mega-count { scale: 1; }

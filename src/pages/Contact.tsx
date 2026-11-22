@@ -1,5 +1,6 @@
 import { motion } from 'motion/react'
-import { Mail, MapPin, MessageCircle, Phone } from 'lucide-react'
+import { Mail, MapPin, Phone } from 'lucide-react'
+import WhatsAppIcon from '../components/brand/WhatsAppIcon'
 import { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { caseHeadline, cases } from '../data/cases'
@@ -98,7 +99,7 @@ export default function Contact() {
           <motion.ul className="ct-routes" {...arrive(0.75)} aria-label={t.routes}>
             <li><a href="mailto:stef@verkoop.studio"><Mail size={16} aria-hidden="true" />stef@verkoop.studio</a></li>
             <li><a href={`tel:${STUDIO_PHONE}`}><Phone size={16} aria-hidden="true" />{STUDIO_PHONE_LOCAL}</a></li>
-            <li><a href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement: 'contact_routes', channel: 'whatsapp' })}><MessageCircle size={16} aria-hidden="true" />WhatsApp</a></li>
+            <li><a href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement: 'contact_routes', channel: 'whatsapp' })}><WhatsAppIcon size={16} />WhatsApp</a></li>
             <li><MapPin size={16} aria-hidden="true" />{t.where}</li>
           </motion.ul>
           <motion.div className="ct-who" {...arrive(0.8)}>

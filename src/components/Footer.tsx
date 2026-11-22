@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from 'motion/react'
-import { Mail, MessageCircle } from 'lucide-react'
+import { Mail } from 'lucide-react'
+import WhatsAppIcon from './brand/WhatsAppIcon'
 import { useRef, type PointerEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import stef from '../assets/stef-desk-640.webp'
@@ -101,7 +102,7 @@ function CtaBand({ home }: { home: boolean }) {
         <p className="vs-band-ask">{t.bandAsk}</p>
         <div className="vs-band-actions">
           <Cta to="/contact" variant="paper" onClick={() => trackEvent('audit_cta_clicked', { placement })}>{t.bandCta}</Cta>
-          <a className="vs-band-link" href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement })}><MessageCircle size={17} aria-hidden="true" />WhatsApp</a>
+          <a className="vs-band-link" href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement })}><WhatsAppIcon size={17} />WhatsApp</a>
           <HandNote point="up-left" className="vs-band-note">{t.bandNote}</HandNote>
         </div>
         <Link to="/crm" className="vs-band-cross">
@@ -163,7 +164,7 @@ export default function Footer() {
             <p className="vs-bento-who"><img src={stef} alt="" width={44} height={44} loading="lazy" decoding="async" /><span><b>Stef Keppens</b><em className="vs-bento-pill">{t.reply}</em></span></p>
             <ul className="vs-bento-lines">
               <li><a href="mailto:stef@verkoop.studio"><Mail size={15} aria-hidden="true" />stef@verkoop.studio</a></li>
-              <li><a href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement: 'footer', channel: 'whatsapp' })}><MessageCircle size={15} aria-hidden="true" />WhatsApp</a></li>
+              <li><a href={whatsappHref()} target="_blank" rel="noopener noreferrer" onClick={() => trackEvent('whatsapp_clicked', { placement: 'footer', channel: 'whatsapp' })}><WhatsAppIcon size={15} />WhatsApp</a></li>
               <li><Link to={persistentCtaHref} className="vs-bento-cta">{persistentCta[lang]}<Arrow size={14} /></Link></li>
               <li className="vs-bento-where">{t.where}</li>
             </ul>

@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion, useSpring, type Variants } from 'motion/react'
 import { usePhoneScrollingDown } from '../../lib/usePhoneScrollingDown'
-import { MessageCircle, Phone } from 'lucide-react'
+import { Phone } from 'lucide-react'
+import WhatsAppIcon from './WhatsAppIcon'
 import { useEffect, useRef, useState, type PointerEvent } from 'react'
 import stef from '../../assets/stef-desk-640.webp'
 import { STUDIO_PHONE, STUDIO_PHONE_LOCAL, whatsappHref } from '../../data/contact'
@@ -193,7 +194,7 @@ export default function ContactDock() {
                     onClick={() => trackEvent('whatsapp_clicked', { placement: 'dock', channel: 'whatsapp' })}
                     {...wa}
                   >
-                    <MessageCircle size={15} aria-hidden="true" /><span>{t.whatsapp}</span><span className="vs-dock-btn-go"><Arrow size={13} /></span>
+                    <WhatsAppIcon size={15} /><span>{t.whatsapp}</span><span className="vs-dock-btn-go"><Arrow size={13} /></span>
                   </motion.a>
                   <motion.a
                     href={`tel:${STUDIO_PHONE}`}

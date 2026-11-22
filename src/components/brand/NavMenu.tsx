@@ -1,11 +1,12 @@
 import { AnimatePresence, motion, useReducedMotion, type Variants } from 'motion/react'
-import { ChevronDown, CircleCheck, Megaphone, MessageCircle, ShoppingBag, Sparkles } from 'lucide-react'
+import { ChevronDown, CircleCheck, Megaphone, ShoppingBag, Sparkles } from 'lucide-react'
 import team from '../../assets/studio-flyers-640.webp'
 import { caseHeadline, getCase } from '../../data/cases'
 import { whatsappHref } from '../../data/contact'
 import { trackEvent } from '../../lib/analytics'
 import CasePoster from '../home/CasePoster'
 import HandNote from './HandNote'
+import WhatsAppIcon from './WhatsAppIcon'
 import Arrow, { Go } from './Arrow'
 import Cta from './Cta'
 import ProductMini from './ProductMini'
@@ -221,7 +222,7 @@ function PanelContent({ tab, width, dir, lang, reduce, onNavigate }: { tab: Menu
       {body}
       <motion.div className="vs-mega-strip" variants={strip}>
         <motion.span variants={item}><Cta to="/contact" className="vs-mega-strip-cta" onClick={() => { trackEvent('audit_cta_clicked', { placement: 'nav_panel' }); onNavigate() }}>{c.call}</Cta></motion.span>
-        <motion.a variants={item} href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="vs-mega-strip-link" onClick={() => trackEvent('whatsapp_clicked', { placement: 'nav_panel', channel: 'whatsapp' })}><span className="vs-mega-wa-dot" aria-hidden="true" /><MessageCircle size={15} aria-hidden="true" />{c.whatsapp}</motion.a>
+        <motion.a variants={item} href={whatsappHref()} target="_blank" rel="noopener noreferrer" className="vs-mega-strip-link" onClick={() => trackEvent('whatsapp_clicked', { placement: 'nav_panel', channel: 'whatsapp' })}><span className="vs-mega-wa-disc" aria-hidden="true"><WhatsAppIcon size={17} /></span>{c.whatsapp}<Arrow direction="up-right" size={14} /></motion.a>
         {tab.more && <motion.span variants={item} className="vs-mega-strip-more"><Link className="vs-textlink vs-textlink--arrow vs-mega-more" to={tab.href} onClick={onNavigate}>{tab.more[lang]}<span className="vs-mega-count" aria-hidden="true">{count}</span><Arrow size={15} /></Link></motion.span>}
       </motion.div>
     </motion.div>
