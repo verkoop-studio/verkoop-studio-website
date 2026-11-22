@@ -53,12 +53,14 @@ export default function SiteHeader() {
   }, [open])
 
   const onCta = (placement: string) => () => trackEvent('audit_cta_clicked', { placement })
+  /* The homepage opens on a dark picture: until the bar becomes the pill, its words are white. */
+  const onDark = pathname === '/' && !scrolled
 
   return (
     <>
       <ScrollProgress />
       <motion.header
-        className={`vs-header${scrolled ? ' is-scrolled' : ''}`}
+        className={`vs-header${scrolled ? ' is-scrolled' : ''}${onDark ? ' is-on-dark' : ''}`}
         initial={reduce ? false : { y: -40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: 'spring', damping: 24, stiffness: 240, delay: 0.1 }}
@@ -67,7 +69,7 @@ export default function SiteHeader() {
           <Logo />
           <NavMenu compact={scrolled} />
           <div className="vs-header-end">
-            <LangPicker />
+            <LangPicker dark={onDark} />
             <Cta to={persistentCtaHref} className={past ? '' : 'is-quiet'} onClick={onCta('nav')}>{cta[lang]}</Cta>
             <button
               ref={menuButton}

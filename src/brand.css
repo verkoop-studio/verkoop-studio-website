@@ -197,6 +197,23 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-lang--dark .vs-lang-btn { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); color: #fff; min-height: 44px; font-size: 14px; }
 .vs-lang--dark .vs-lang-btn:hover, .vs-lang--dark .vs-lang-btn[aria-expanded='true'] { box-shadow: inset 0 0 0 1px #fff; }
 .vs-lang--dark .vs-lang-globe, .vs-lang--dark .vs-lang-chev { color: #b9b5ac; }
+/* Over the dark first screen of the homepage, before the bar becomes the pill. */
+.vs-logo, .vs-logo-dot { transition: color 0.4s var(--vs-ease); }
+.vs-header.is-on-dark { max-width: calc(100vw - 28px); }
+.vs-header.is-on-dark .vs-logo { color: #fff; }
+.vs-header.is-on-dark .vs-logo-dot { color: #8fa2ff; }
+.vs-header.is-on-dark .vs-tab { color: rgb(255 255 255 / 0.84); }
+.vs-header.is-on-dark .vs-tab:hover, .vs-header.is-on-dark .vs-tab[aria-current], .vs-header.is-on-dark .vs-tab[aria-expanded='true'], .vs-header.is-on-dark .vs-tab.is-current { color: #fff; }
+.vs-header.is-on-dark .vs-nav-pill--active { background: rgb(255 255 255 / 0.16); }
+.vs-header.is-on-dark .vs-nav-pill--hover { background: rgb(255 255 255 / 0.1); }
+.vs-header .vs-lang--dark .vs-lang-btn { min-height: 38px; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4); font-size: 13px; }
+.vs-header .vs-lang--dark .vs-lang-globe, .vs-header .vs-lang--dark .vs-lang-chev { color: #fff; }
+.vs-header.is-on-dark .vs-cta.is-quiet .vs-cta-bed { box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.85); }
+.vs-header.is-on-dark .vs-cta.is-quiet .vs-cta-text { color: #fff; }
+.vs-header.is-on-dark .vs-cta.is-quiet .vs-cta-circle { color: #fff; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.85); }
+.vs-header.is-on-dark .vs-cta.is-quiet:hover .vs-cta-bed, .vs-header.is-on-dark .vs-cta.is-quiet:focus-visible .vs-cta-bed { background: #fff; }
+.vs-header.is-on-dark .vs-cta.is-quiet:hover .vs-cta-text, .vs-header.is-on-dark .vs-cta.is-quiet:focus-visible .vs-cta-text { color: var(--vs-ink); }
+.vs-header.is-on-dark .vs-menu-btn { background: #fff; color: var(--vs-ink); }
 .vs-header .vs-cta { min-height: 44px; }
 .vs-header .vs-cta-text { font-size: 14px; padding: 6px 17px; }
 .vs-header .vs-cta-circle { width: 34px; height: 34px; }
@@ -412,27 +429,121 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 /* ---------- Full-screen hero ---------- */
 
 .vs-page .studio-hero.vs-hero { position: relative; overflow-x: clip; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 120px 0 72px; box-sizing: border-box; }
-.vs-hero-line { position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--vs-ink); transform-origin: 0 50%; opacity: 0.12; }
-.vs-hero .vs-h1 { font-size: clamp(54px, 8.6vw, 156px); line-height: 1.02; letter-spacing: -0.045em; }
 .vs-h1 .vs-h1-sub { display: block; max-width: 30ch; margin-top: 0.45em; font-size: 0.36em; letter-spacing: -0.02em; line-height: 1.2; }
 .vs-hero .vs-hero-actions { margin-top: clamp(32px, 4vw, 52px); }
-.vs-scroll-cue { position: absolute; left: 50%; bottom: 24px; translate: -50% 0; display: inline-flex; flex-direction: column; align-items: center; gap: 8px; color: var(--vs-mute); font-size: 13px; }
-.vs-scroll-cue span { width: 1px; height: 38px; background: linear-gradient(var(--vs-ink), transparent); animation: vs-cue 1.8s var(--vs-ease) infinite; transform-origin: top; }
-@keyframes vs-cue { 0% { transform: scaleY(0); } 60% { transform: scaleY(1); opacity: 1; } 100% { transform: scaleY(1); opacity: 0; } }
 
-/* Video opens from an inset window as the page scrolls. */
-.vs-video-stage { height: 170vh; }
-.vs-video-sticky { position: sticky; top: 0; height: 100svh; display: flex; align-items: center; justify-content: center; padding: 84px var(--vs-gutter) 24px; box-sizing: border-box; }
-.vs-video-frame { width: min(100%, 1440px); aspect-ratio: 16 / 9; max-height: 100%; overflow: hidden; border-radius: 22px; background: var(--vs-stone); }
-.vs-video-zoom { width: 100%; height: 100%; }
-.vs-video-frame .hero-video { width: 100%; height: 100%; aspect-ratio: auto; border-radius: 0; box-shadow: none; }
 .vs-plan-form { display: flex; justify-content: center; padding-block: clamp(80px, 10vw, 140px) clamp(40px, 6vw, 80px); }
 .vs-plan-form .vs-hero-form { width: min(100%, 1040px); margin: 0; }
 .vs-plan-form .vs-hero-form > .vs-form-duo { width: 100%; }
+
+/* ---------- Hero: one frame. Stef's video still, graded dark, with the headline, the proof and the cases on it ---------- */
+
+.vs-page .studio-hero.vs-hero.hc { position: relative; display: block; min-height: 0; padding: 8px; box-sizing: border-box; overflow: visible; }
+.hc-frame { --hc-strip: 68px; position: relative; height: calc(100svh - 16px); min-height: 600px; max-height: 1120px; overflow: hidden; border-radius: 28px; background: #0b0d16; color: #fff; isolation: isolate; }
+.hc-media { position: absolute; inset: -3% -6% -3% 3%; z-index: -2; }
+.hc-zoom { width: 100%; height: 100%; }
+/* Taller than the frame and pinned to the top-left: the caption burned into the bottom of the still falls below the frame, and Stef sits right of the headline. */
+.hc-media img { display: block; width: 100%; height: 114%; object-fit: cover; object-position: 0% 0%; filter: saturate(0.9) contrast(1.05) brightness(0.92); transform-origin: 70% 35%; animation: hc-drift 24s ease-in-out infinite alternate; }
+@keyframes hc-drift { from { transform: scale(1); } to { transform: scale(1.06) translate(-1%, -1%); } }
+.hc-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(96deg, rgb(8 10 22 / 0.96) 0%, rgb(8 10 22 / 0.84) 27%, rgb(8 10 22 / 0.3) 55%, rgb(8 10 22 / 0.06) 74%), linear-gradient(0deg, rgb(8 10 22 / 0.96) 0%, rgb(8 10 22 / 0.72) 14%, rgb(8 10 22 / 0) 40%); }
+
+.hc-copy { position: absolute; left: clamp(20px, 4.2vw, 68px); bottom: calc(var(--hc-strip) + clamp(22px, 4.4vh, 48px)); display: grid; justify-items: start; max-width: min(64%, 900px); }
+.hc-eyebrow { display: inline-flex; align-items: center; gap: 8px; margin-bottom: clamp(14px, 2.6vh, 26px); padding: 6px 13px 6px 11px; border-radius: 99px; background: rgb(255 255 255 / 0.12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.14); backdrop-filter: blur(12px); font-size: 13px; font-weight: 500; }
+.hc-eyebrow i { width: 7px; height: 7px; border-radius: 50%; background: #7d93ff; }
+.vs-hero.hc .vs-h1.hc-h1 { --vs-mute: rgb(255 255 255 / 0.76); max-width: 7.6em; margin: 0; color: #fff; font-size: clamp(44px, min(8vw, 13.2vh), 128px); line-height: 1; letter-spacing: -0.045em; }
+.vs-hero.hc .hc-h1 .vs-h1-sub { max-width: 30ch; margin-top: 0.9em; font-size: clamp(17px, 0.21em, 25px); font-weight: 400; line-height: 1.3; letter-spacing: -0.012em; }
+.hc-actions { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: clamp(22px, 3.8vh, 40px); }
+
+/* The second action plays the video in the frame. */
+.hc-play { display: inline-flex; align-items: center; gap: 12px; min-height: 52px; padding: 5px 20px 5px 5px; border: 0; border-radius: 99px; background: rgb(255 255 255 / 0.12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); backdrop-filter: blur(14px); color: #fff; font: inherit; text-align: left; cursor: pointer; transition: background-color 0.3s var(--vs-ease), box-shadow 0.3s var(--vs-ease), translate 0.3s var(--vs-ease); }
+.hc-play:hover { background: rgb(255 255 255 / 0.2); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4); translate: 0 -1px; }
+.hc-play:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
+.hc-play-disc { position: relative; display: grid; place-items: center; flex: none; width: 42px; height: 42px; padding-left: 2px; box-sizing: border-box; border-radius: 50%; background: #fff; color: var(--vs-ink); transition: background-color 0.25s, color 0.25s, scale 0.35s var(--vs-ease); }
+.hc-play:hover .hc-play-disc { background: var(--vs-blue); color: #fff; scale: 1.06; }
+.hc-play:active .hc-play-disc { scale: 0.92; }
+.hc-play-ring { position: absolute; inset: -6px; border-radius: 50%; border: 1.5px solid rgb(255 255 255 / 0.7); animation: hc-pulse 2.4s ease-out infinite; }
+@keyframes hc-pulse { 0% { scale: 0.85; opacity: 0.9; } 100% { scale: 1.26; opacity: 0; } }
+.hc-play-text { display: grid; line-height: 1.2; }
+.hc-play-text b { font-size: 15px; font-weight: 600; }
+.hc-play-text small { color: rgb(255 255 255 / 0.74); font-size: 12.5px; }
+.hc-actions .hc-hand { position: absolute; left: calc(100% + 4px); bottom: 34px; color: #fff; text-shadow: 0 2px 14px rgb(0 0 0 / 0.5); }
+
+/* The published Pinacello figures, as two cards that float over the picture. */
+.hc-proof { position: absolute; top: clamp(92px, 13vh, 136px); right: clamp(20px, 3.6vw, 60px); width: clamp(264px, 20vw, 300px); }
+.hc-win { display: block; height: auto; border-width: 1px; border-color: transparent; border-radius: 16px; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.7); color: var(--vs-ink); text-decoration: none; transition: translate 0.5s var(--vs-ease), box-shadow 0.5s var(--vs-ease); }
+.hc-win:hover { translate: 0 -6px; box-shadow: 0 50px 90px -30px rgb(0 0 0 / 0.75); }
+.hc-win .tx-win-bar { display: flex; }
+.hc-win .tx-win-bar b { font-size: 12.5px; white-space: nowrap; }
+.hc-win .tx-win-bar em { margin-right: 0; white-space: nowrap; }
+.hc-proof .hc-win .vs-proof-body { flex: none; padding: 16px 18px 18px; gap: 8px; overflow: visible; }
+.hc-win .vs-proof-figure { font-size: clamp(52px, 4.6vw, 72px); }
+.hc-win .vs-proof-caption { color: #6b685f; font-size: 13.5px; }
+.hc-win .vs-proof-bars { height: 80px; gap: 6px; }
+.hc-win .vs-proof-bars i { animation: hc-bar 0.7s var(--vs-ease) both; }
+@keyframes hc-bar { from { scale: 1 0; } }
+.hc-more { display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 500; }
+.hc-more svg { transition: translate 0.25s var(--vs-ease); }
+.hc-win:hover .hc-more svg { translate: 3px 0; }
+.hc-ping { position: absolute; right: clamp(48px, 10vw, 170px); bottom: calc(var(--hc-strip) + clamp(26px, 8vh, 92px)); width: min(318px, 26vw); }
+.hc-ping .vs-proof-video-link { border-color: transparent; box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.7); }
+.hc-ping .vs-proof-video-text span { color: #6b685f; }
+
+/* The cases along the bottom edge. */
+.hc-strip { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; height: var(--hc-strip); padding: 0 84px 0 clamp(20px, 4.2vw, 68px); border-top: 1px solid rgb(255 255 255 / 0.14); background: rgb(8 10 22 / 0.5); backdrop-filter: blur(14px); }
+.hc-strip-label { flex: none; margin-right: clamp(16px, 2.4vw, 36px); color: rgb(255 255 255 / 0.66); font-size: 13px; }
+.hc-strip ul { display: flex; flex: 1; min-width: 0; height: 100%; margin: 0; padding: 0; list-style: none; }
+.hc-strip li { flex: 1 1 0; min-width: 0; border-left: 1px solid rgb(255 255 255 / 0.12); }
+.hc-strip a { display: flex; align-items: center; gap: 10px; height: 100%; padding: 0 clamp(12px, 1.5vw, 22px); color: #fff; text-decoration: none; white-space: nowrap; transition: background-color 0.25s var(--vs-ease); }
+.hc-strip a b { flex: none; font: 600 16px/1 var(--font-display); letter-spacing: -0.01em; }
+.hc-strip a span { overflow: hidden; color: rgb(255 255 255 / 0.72); font-size: 13px; text-overflow: ellipsis; }
+.hc-strip a svg { flex: none; margin-left: auto; opacity: 0.5; transition: translate 0.25s var(--vs-ease), opacity 0.25s; }
+.hc-strip a:hover, .hc-strip a:focus-visible { background: rgb(255 255 255 / 0.1); }
+.hc-strip a:hover svg, .hc-strip a:focus-visible svg { translate: 3px 0; opacity: 1; }
+.hc-strip a:focus-visible { outline: 3px solid #839bff; outline-offset: -3px; }
+
+/* The player, in the same frame, under the menu. */
+.hc-player { position: absolute; inset: 0; z-index: 5; padding-top: 72px; box-sizing: border-box; background: #000; }
+.hc-player iframe { display: block; width: 100%; height: 100%; border: 0; }
+.hc-close { position: absolute; top: 86px; right: 14px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px 0 12px; border: 0; border-radius: 99px; background: rgb(11 13 22 / 0.72); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); backdrop-filter: blur(10px); color: #fff; font: 500 14px/1 var(--font-sans); cursor: pointer; transition: background-color 0.25s; }
+.hc-close:hover { background: rgb(11 13 22 / 0.92); }
+.hc-close:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
+.hc-frame noscript a { position: absolute; z-index: 6; left: 20px; top: 84px; color: #fff; }
+
+
+@media (max-width: 1240px) { .hc-actions .hc-hand { display: none; } }
+@media (max-width: 1100px), (max-height: 700px) { .hc-ping { display: none; } }
+/* Tablets and phones: the picture fills the top with Stef in the middle, the words sit on solid ink under it, and the cases swipe sideways. */
+@media (max-width: 980px) {
+  .hc-proof { display: none; }
+  .hc-media { inset: 0; }
+  .hc-media img { height: 72%; object-position: 50% 0%; animation: none; }
+  .hc-shade { background: linear-gradient(0deg, #0b0d16 0%, #0b0d16 34%, rgb(11 13 22 / 0.86) 46%, rgb(11 13 22 / 0) 68%), linear-gradient(180deg, rgb(11 13 22 / 0.45), rgb(11 13 22 / 0) 22%); }
+  .hc-copy { left: clamp(18px, 4.2vw, 68px); right: clamp(18px, 4.2vw, 68px); bottom: calc(var(--hc-strip) + 22px); max-width: none; }
+  .hc-strip { padding: 0; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .hc-strip::-webkit-scrollbar { display: none; }
+  .hc-strip-label { display: none; }
+  .hc-strip ul { flex: none; padding-right: 76px; }
+  .hc-strip li { flex: none; scroll-snap-align: start; }
+  .hc-strip li:first-child { border-left: 0; }
+  .hc-strip a { padding: 0 clamp(16px, 3vw, 26px); }
+  .hc-strip a svg { margin-left: 2px; }
+}
 @media (max-width: 760px) {
-  .vs-video-stage { height: auto; }
-  .vs-video-sticky { position: static; height: auto; padding-block: 0; }
-  .vs-scroll-cue { display: none; }
+  .hc-frame { --hc-strip: 58px; min-height: 540px; border-radius: 22px; }
+  .hc-copy { bottom: calc(var(--hc-strip) + 18px); }
+  .vs-hero.hc .vs-h1.hc-h1 { max-width: none; font-size: clamp(38px, 11.4vw, 56px); }
+  .vs-hero.hc .hc-h1 .vs-h1-sub { font-size: 16.5px; }
+  .hc-actions { gap: 10px; margin-top: 20px; }
+}
+/* Short phones: the picture gets smaller and the label goes, so the words never cover Stef's face. */
+@media (max-width: 760px) and (max-height: 720px) {
+  .hc-eyebrow { display: none; }
+  .hc-media img { height: 56%; }
+  .hc-shade { background: linear-gradient(0deg, #0b0d16 0%, #0b0d16 44%, rgb(11 13 22 / 0.86) 54%, rgb(11 13 22 / 0) 72%), linear-gradient(180deg, rgb(11 13 22 / 0.45), rgb(11 13 22 / 0) 22%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hc-media img, .hc-play-ring, .hc-win .vs-proof-bars i { animation: none; }
+  .hc-play, .hc-play-disc, .hc-win, .hc-strip a, .hc-strip a svg { transition: none; }
 }
 
 /* Contact page: the plan a visitor picked on the homepage. */
@@ -480,12 +591,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-band .vs-cta-circle, [data-surface="accent"] .vs-cta-circle { background: var(--vs-ink); color: var(--vs-paper); }
 @media (prefers-reduced-motion: reduce) { .vs-arrow > span { transition: none; } }
 
-/* ---------- Hero: headline beside a live proof card ---------- */
 
-.vs-hero-split { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr); gap: clamp(28px, 4vw, 64px); align-items: center; }
-.vs-hero-split .vs-h1 { font-size: clamp(48px, 6.4vw, 116px); }
-.vs-hero-proof { position: relative; }
-.vs-hero-proof-note { position: absolute; left: 18px; bottom: calc(100% + 4px); }
 .vs-proof-win { border-radius: 16px; border-width: 1px; box-shadow: 0 40px 80px -40px rgb(17 17 16 / 0.35); }
 .vs-proof-body { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px 22px; }
 .vs-proof-figure { font: 500 clamp(56px, 5vw, 84px)/0.9 var(--font-display); letter-spacing: -0.05em; color: var(--vs-ink); }
@@ -501,15 +607,10 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-mark-link:hover { transform: translateY(-2px); }
 .vs-mark-link:hover strong { color: var(--vs-blue); }
 
-/* Proof card at full size, with the organic-video result as its own tilted card over the corner. */
-.vs-hero-split { grid-template-columns: minmax(0, 1.12fr) minmax(320px, 0.88fr); }
-.vs-hero-split .vs-h1 { font-size: clamp(46px, 5.6vw, 104px); }
-.vs-hero-proof { padding-bottom: 56px; }
 .vs-proof-body { padding: 26px 28px 30px; gap: 14px; }
 .vs-proof-figure { font-size: clamp(72px, 7vw, 124px); }
 .vs-proof-caption { font-size: 15px; }
 .vs-proof-bars { height: clamp(96px, 9vw, 140px); gap: 8px; }
-.vs-proof-video { position: absolute; left: -36px; bottom: 0; width: min(78%, 330px); z-index: 2; }
 .vs-proof-video-link { display: flex; align-items: center; gap: 14px; padding: 12px 18px 12px 12px; border-radius: 16px; background: var(--vs-card); border: 1px solid var(--vs-line); box-shadow: 0 24px 50px -24px rgb(17 17 16 / 0.4); color: var(--vs-ink); text-decoration: none; transition: transform 0.4s var(--vs-ease), box-shadow 0.4s var(--vs-ease); }
 .vs-proof-video-link:hover { transform: translateY(-3px) rotate(1.5deg); box-shadow: 0 30px 60px -24px rgb(17 17 16 / 0.45); }
 .vs-proof-thumb { position: relative; flex: none; width: 60px; height: 76px; border-radius: 10px; overflow: hidden; background: var(--vs-stone); }
@@ -518,20 +619,6 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-proof-video-text { display: flex; flex-direction: column; gap: 2px; }
 .vs-proof-video-text strong { font: 600 22px/1 var(--font-display); letter-spacing: -0.02em; }
 .vs-proof-video-text span { color: var(--vs-mute); font-size: 13.5px; line-height: 1.3; }
-@media (max-width: 960px) {
-  .vs-hero-split { grid-template-columns: minmax(0, 1fr); }
-  .vs-hero-proof { max-width: 440px; margin-top: 20px; }
-  .vs-proof-video { left: -8px; }
-}
-/* Phones: the headline gets the full width and the proof stacks under the actions at full width. */
-@media (max-width: 767px) {
-  .vs-hero-split .vs-h1 { font-size: clamp(40px, 11.5vw, 60px); }
-  .vs-hero-proof { max-width: none; margin-top: 36px; padding-bottom: 72px; }
-  .vs-proof-video { left: 0; width: min(88%, 330px); }
-  .vs-hero-copy { display: contents; }
-  .vs-hero-split > .vs-hero-proof { order: 1; margin-top: 20px; }
-  .vs-hero-copy > .vs-proof { order: 2; margin-top: 8px; }
-}
 @media (prefers-reduced-motion: reduce) { .vs-proof-bars i { transition: none; } }
 
 /* Watcher, the Verkoop dot: a shape with eyes that follows the pointer and talks when poked. */
