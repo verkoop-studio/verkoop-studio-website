@@ -1,10 +1,13 @@
 import { useInView, useReducedMotion } from 'motion/react'
-import { Check, ChevronRight, MessageCircle } from 'lucide-react'
+import { Check, MessageCircle } from 'lucide-react'
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
-import { PLATFORMS, type Platform } from '../../data/platforms'
+import type { Platform } from '../../data/platforms'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
+import { Go } from '../brand/Arrow'
+import Cta from '../brand/Cta'
+import PlatformMark from '../brand/PlatformMark'
 
 const COPY = {
   nl: {
@@ -53,9 +56,9 @@ const COPY = {
   },
 }
 
-/** The platforms the homepage names, as rows of chips; the last one floats, tilted, above the stack. */
-const ROWS: Platform[][] = [['navigator'], ['looker', 'tiktok'], ['gtm', 'ga4'], ['klaviyo', 'mailchimp'], ['google', 'shopify']]
-const FLOAT: Platform = 'meta'
+/** The platforms the homepage names, as rows of logo chips; one floats, tilted, above the stack. */
+const ROWS: Platform[][] = [['meta', 'google'], ['gtm'], ['ga4', 'looker'], ['shopify', 'klaviyo'], ['mailchimp']]
+const FLOAT: Platform = 'tiktok'
 const BARS = [43.2, 80.9, 131.7, 165.5, 203.2, 235.2, 265]
 
 type Phase = 'idle' | 'pending' | 'run'
@@ -100,11 +103,11 @@ export default function FeatureMosaic() {
         <div className="fm-card fm-connect">
           <h3>{t.tools[0]}<br />{t.tools[1]}</h3>
           <p className="fm-sub">{t.toolsSub}</p>
-          <span className="fm-chip fm-chip-float">{PLATFORMS[FLOAT]}</span>
+          <span className="fm-chip fm-chip-float"><PlatformMark platform={FLOAT} /></span>
           <ul className="fm-chips">
             {ROWS.map((row, r) => (
               <li key={r} className={`fm-chip-row fm-chip-row--${r}`}>
-                {row.map((key) => <span key={key} className="fm-chip">{PLATFORMS[key]}</span>)}
+                {row.map((key) => <span key={key} className="fm-chip"><PlatformMark platform={key} /></span>)}
               </li>
             ))}
           </ul>
@@ -142,16 +145,16 @@ export default function FeatureMosaic() {
               </li>
             ))}
           </ul>
-          <span className="fm-go" aria-hidden="true"><ChevronRight size={18} strokeWidth={2.4} /></span>
+          <Go size={17} className="fm-go" />
         </Link>
 
         <div className="fm-card fm-search">
           <h3>{t.ask[0]}{' '}<br />{t.ask[1]}</h3>
-          <Link to="/#groeiplan" className="fm-bar-search" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_mosaic' })}>
+          <div className="fm-bar-search">
             <span className="fm-bar-icon" aria-hidden="true"><MessageCircle size={19} strokeWidth={2.1} /></span>
-            <span className="fm-bar-hint" aria-hidden="true">{t.askHint}</span>
-            <span className="fm-bar-cta">{t.askCta}<ChevronRight size={16} strokeWidth={2.4} aria-hidden="true" /></span>
-          </Link>
+            <span className="fm-bar-hint">{t.askHint}</span>
+            <Cta to="/#groeiplan" className="fm-bar-cta" onClick={() => trackEvent('audit_cta_clicked', { placement: 'home_mosaic' })}>{t.askCta}</Cta>
+          </div>
         </div>
       </div>
     </section>
