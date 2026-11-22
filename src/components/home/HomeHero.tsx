@@ -15,7 +15,6 @@ import { EASE } from '../brand/motion'
 
 const COPY = {
   nl: {
-    eyebrow: 'Marketingbureau · Lochristi',
     headline: [
       { text: 'Wij helpen kmo’s' },
       { text: 'groeien', tone: 'accent' },
@@ -37,7 +36,6 @@ const COPY = {
     videoNote: 'kijk even mee :)',
   },
   en: {
-    eyebrow: 'Performance marketing studio · Lochristi, Belgium',
     headline: [
       { text: 'We help small businesses' },
       { text: 'grow', tone: 'accent' },
@@ -121,7 +119,6 @@ export default function HomeHero() {
           <span className="hc-shade" aria-hidden="true" />
 
           <motion.div className="hc-copy" style={reduce ? undefined : { y: lift }}>
-            <motion.span className="hc-eyebrow" {...arrive(0.15)}><i aria-hidden="true" />{t.eyebrow}</motion.span>
             <SplitHeadline as="h1" id="hero-title" className="vs-h1 hc-h1" parts={t.headline} onMount />
             <motion.div className="hc-actions" {...arrive(0.7)}>
               <Cta variant="paper" to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'hero' })}>{t.primary}</Cta>
