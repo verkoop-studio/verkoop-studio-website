@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
+import { AnimatePresence, motion } from 'motion/react'
 import { Menu, X } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -25,7 +25,6 @@ export function Logo() {
 export default function SiteHeader() {
   const { lang } = useLang()
   const { pathname, hash } = useLocation()
-  const reduce = useReducedMotion()
   const [scrolled, setScrolled] = useState(false)
   /* The header's call to action stays an outline while a page's own first screen is in view,
      so that screen has one filled button: the hero's. It fills once the hero is passed. */
@@ -59,12 +58,8 @@ export default function SiteHeader() {
   return (
     <>
       <ScrollProgress />
-      <motion.header
-        className={`vs-header${scrolled ? ' is-scrolled' : ''}${onDark ? ' is-on-dark' : ''}`}
-        initial={reduce ? false : { y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ type: 'spring', damping: 24, stiffness: 240, delay: 0.1 }}
-      >
+      {/* The parts of the bar arrive in turn on load; that sequence is in the stylesheet, so it runs before the scripts do. */}
+      <header className={`vs-header${scrolled ? ' is-scrolled' : ''}${onDark ? ' is-on-dark' : ''}`}>
         <div className="vs-header-bar">
           <Logo />
           <NavMenu compact={scrolled} />
@@ -84,7 +79,7 @@ export default function SiteHeader() {
             </button>
           </div>
         </div>
-      </motion.header>
+      </header>
 
       <AnimatePresence>
         {open && (

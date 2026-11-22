@@ -114,7 +114,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 
 /* ---------- Header: transparent, then compressing ---------- */
 
-/* Centred with left/right + auto margins, not a transform: motion animates transform on entry. */
+/* Centred with left/right + auto margins, not a transform. */
 .vs-header {
   position: fixed; left: 14px; right: 14px; margin-inline: auto; z-index: 50;
   top: 14px; max-width: 1440px;
@@ -224,6 +224,29 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .vs-header .vs-cta.is-quiet:hover .vs-cta-bed, .vs-header .vs-cta.is-quiet:focus-visible .vs-cta-bed { background: var(--vs-ink); }
 .vs-header .vs-cta.is-quiet:hover .vs-cta-text, .vs-header .vs-cta.is-quiet:focus-visible .vs-cta-text { color: var(--vs-paper); }
 .vs-header .vs-cta .vs-cta-bed, .vs-header .vs-cta .vs-cta-circle { transition-property: width, transform, background-color, box-shadow, color; transition-duration: 0.35s; }
+
+/* On load the parts of the bar arrive in turn: the logo, the links from left to right, the language picker,
+   then the button, which opens from its right edge and gets its circle last. */
+@media (prefers-reduced-motion: no-preference) {
+  .vs-header .vs-logo-word { animation: vs-in-word 0.8s var(--vs-ease) 0.1s backwards; }
+  .vs-header .vs-logo-dot { display: inline-block; animation: vs-in-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.62s backwards; }
+  .vs-header .vs-logo-sub { animation: vs-in-rise 0.6s var(--vs-ease) 0.5s backwards; }
+  .vs-header .vs-nav > .vs-tab { animation: vs-in-rise 0.6s var(--vs-ease) 0.24s backwards; }
+  .vs-header .vs-nav > .vs-tab:nth-child(2) { animation-delay: 0.29s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(3) { animation-delay: 0.34s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(4) { animation-delay: 0.39s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(5) { animation-delay: 0.44s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(6) { animation-delay: 0.49s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(7) { animation-delay: 0.54s; }
+  .vs-header .vs-header-end > .vs-lang { animation: vs-in-rise 0.6s var(--vs-ease) 0.58s backwards; }
+  .vs-header .vs-header-end > .vs-cta { animation: vs-in-wipe 0.75s var(--vs-ease) 0.66s backwards; }
+  .vs-header .vs-header-end > .vs-cta .vs-cta-circle { animation: vs-in-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.05s backwards; }
+  .vs-header .vs-menu-btn { animation: vs-in-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s backwards; }
+}
+@keyframes vs-in-word { from { opacity: 0; clip-path: inset(0 100% -20% 0); } to { opacity: 1; clip-path: inset(0 -5% -20% 0); } }
+@keyframes vs-in-rise { from { opacity: 0; translate: 0 10px; filter: blur(6px); } }
+@keyframes vs-in-wipe { from { opacity: 0; clip-path: inset(0 0 0 100% round 99px); } to { opacity: 1; clip-path: inset(0 0 0 0 round 99px); } }
+@keyframes vs-in-pop { from { opacity: 0; scale: 0; } }
 
 .vs-menu-btn { display: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: var(--vs-ink); color: var(--vs-paper); align-items: center; justify-content: center; cursor: pointer; }
 
@@ -462,10 +485,13 @@ html:lang(en) .vs-hero.hc .vs-h1.hc-h1 { font-size: clamp(44px, min(7.2vw, 11.6v
 .hc-play:hover .hc-play-disc { background: var(--vs-blue); color: #fff; scale: 1.06; }
 .hc-play:active .hc-play-disc { scale: 0.92; }
 .hc-play-ring { position: absolute; inset: -6px; border-radius: 50%; border: 1.5px solid rgb(255 255 255 / 0.7); animation: hc-pulse 2.4s ease-out infinite; }
+@media (prefers-reduced-motion: no-preference) { .hc-actions .hc-hand { animation: hc-hand-in 0.7s ease 1.75s backwards; } }
+@keyframes hc-hand-in { from { opacity: 0; } }
 @keyframes hc-pulse { 0% { scale: 0.85; opacity: 0.9; } 100% { scale: 1.26; opacity: 0; } }
 .hc-play-text { display: grid; line-height: 1.2; }
 .hc-play-text b { font-size: 15px; font-weight: 600; }
 .hc-play-text small { color: rgb(255 255 255 / 0.74); font-size: 12.5px; }
+.hc-act { display: inline-flex; }
 .hc-actions .hc-hand { position: absolute; left: calc(100% + 4px); bottom: 34px; color: #fff; text-shadow: 0 2px 14px rgb(0 0 0 / 0.5); }
 
 /* The published Pinacello figures, as two cards that float over the picture. */

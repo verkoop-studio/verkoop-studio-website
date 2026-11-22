@@ -90,8 +90,10 @@ export default function HomeHero() {
     py.set((event.clientY - box.top) / box.height - 0.5)
   }
   const onPointerLeave = () => { px.set(0); py.set(0) }
-  const arrive = (delay: number) =>
-    reduce ? {} : { initial: { opacity: 0, y: 18, filter: 'blur(10px)' }, animate: { opacity: 1, y: 0, filter: 'blur(0px)' }, transition: { duration: 0.9, delay, ease: EASE } }
+  /* The two actions arrive after the headline: the first opens from its left edge, the second springs in with its disc a beat later. */
+  const wipe = reduce ? {} : { initial: { opacity: 0, clipPath: 'inset(-30% 105% -30% -5% round 99px)' }, animate: { opacity: 1, clipPath: 'inset(-30% -5% -30% -5% round 99px)' }, transition: { duration: 0.85, delay: 0.75, ease: EASE } }
+  const spring = (delay: number, from: Record<string, number>, stiffness = 180, damping = 17) =>
+    reduce ? {} : { initial: { opacity: 0, ...from }, animate: { opacity: 1, x: 0, y: 0, scale: 1, rotate: 0 }, transition: { type: 'spring' as const, stiffness, damping, delay } }
 
   useEffect(() => {
     if (!playing) return
@@ -120,17 +122,19 @@ export default function HomeHero() {
 
           <motion.div className="hc-copy" style={reduce ? undefined : { y: lift }}>
             <SplitHeadline as="h1" id="hero-title" className="vs-h1 hc-h1" parts={t.headline} onMount />
-            <motion.div className="hc-actions" {...arrive(0.7)}>
-              <Cta variant="paper" to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'hero' })}>{t.primary}</Cta>
-              <button type="button" className="hero-video-play hc-play" aria-label={`${t.playLabel}: ${t.videoHeading}`} onClick={() => setPlaying(true)}>
-                <span className="hc-play-disc" aria-hidden="true">
+            <div className="hc-actions">
+              <motion.span className="hc-act" {...wipe}>
+                <Cta variant="paper" to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'hero' })}>{t.primary}</Cta>
+              </motion.span>
+              <motion.button type="button" className="hero-video-play hc-play" aria-label={`${t.playLabel}: ${t.videoHeading}`} onClick={() => setPlaying(true)} {...spring(0.95, { x: -22, scale: 0.86 })}>
+                <motion.span className="hc-play-disc" aria-hidden="true" {...spring(1.08, { scale: 0, rotate: -90 }, 320, 16)}>
                   <span className="hc-play-ring" />
                   <svg width="15" height="15" viewBox="0 0 14 14"><path d="M4.2 2.4v9.2L11.8 7Z" fill="currentColor" /></svg>
-                </span>
-                <span className="hc-play-text"><b>{t.watch}</b><small>Stef · 1:14</small></span>
-              </button>
+                </motion.span>
+                <motion.span className="hc-play-text" {...spring(1.2, { x: -10 }, 200, 22)}><b>{t.watch}</b><small>Stef · 1:14</small></motion.span>
+              </motion.button>
               <HandNote point="down-left" className="hc-hand">{t.videoNote}</HandNote>
-            </motion.div>
+            </div>
           </motion.div>
 
           <motion.div className="hc-proof" style={reduce ? undefined : { x: nearX, y: nearY }}>
@@ -172,17 +176,17 @@ export default function HomeHero() {
             </motion.div>
           </motion.div>
 
-          <motion.nav className="hc-strip" aria-label="Cases" {...arrive(1)}>
+          <motion.nav className="hc-strip" aria-label="Cases" initial={reduce ? false : { y: '100%' }} animate={{ y: 0 }} transition={{ duration: 0.9, delay: 0.85, ease: EASE }}>
             <span className="hc-strip-label">{t.work}</span>
             <ul>
-              {cases.map((item) => (
-                <li key={item.slug}>
+              {cases.map((item, i) => (
+                <motion.li key={item.slug} {...spring(1.2 + i * 0.08, { y: 18 }, 200, 22)}>
                   <Link to={`/cases/${item.slug}`}>
                     <b>{item.name}</b>
                     <span>{caseHeadline(item, lang)}</span>
                     <ChevronRight size={16} aria-hidden="true" />
                   </Link>
-                </li>
+                </motion.li>
               ))}
             </ul>
           </motion.nav>
