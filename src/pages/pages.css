@@ -458,7 +458,7 @@
   .cs-stats, .cs-step-grid { grid-template-columns: minmax(0, 1fr); }
   .cs-window-view { aspect-ratio: 4 / 3; }
   .cs-window-bar em { display: none; }
-  .cs-proof-note { display: none; }
+  .cs-proof-phone .cs-proof-note { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cs-spark path { animation: none; stroke-dashoffset: 0; }
