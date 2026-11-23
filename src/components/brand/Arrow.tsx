@@ -1,9 +1,9 @@
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowUpRight, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-react'
 
-type Direction = 'right' | 'left' | 'up-right'
+type Direction = 'right' | 'left' | 'up' | 'up-right'
 
 /* A chevron points the way inside the site; the up-and-right arrow is kept for links that leave it. */
-const ICONS = { right: ChevronRight, left: ChevronLeft, 'up-right': ArrowUpRight }
+const ICONS = { right: ChevronRight, left: ChevronLeft, up: ChevronUp, 'up-right': ArrowUpRight }
 
 /**
  * Arrow that leaves on hover while a copy arrives from the other side.

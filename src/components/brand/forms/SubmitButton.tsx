@@ -1,4 +1,5 @@
 import { animate, motion, useMotionValue, useReducedMotion, useTransform } from 'motion/react'
+import Arrow from '../Arrow'
 import { ChevronRight } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
 
@@ -88,7 +89,7 @@ export default function SubmitButton({ label, pendingLabel, state, confirm = tru
     >
       <span className="vs-submit-label">{pending ? pendingLabel : label}</span>
       <span className="vs-submit-icon" aria-hidden="true">
-        {pending ? <span className="vs-submit-spinner" /> : <ChevronRight size={19} strokeWidth={2.4} />}
+        {pending ? <span className="vs-submit-spinner" /> : <Arrow size={18} />}
       </span>
     </motion.button>
   )

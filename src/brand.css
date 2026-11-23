@@ -597,6 +597,9 @@ html:lang(en) .vs-hero.hc .vs-h1.hc-h1 { font-size: clamp(44px, min(7.2vw, 11.6v
 .vs-arrow > span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.45s var(--vs-ease); }
 .vs-arrow > span + span { transform: translateX(-110%); }
 .vs-arrow--left > span + span { transform: translateX(110%); }
+.vs-arrow--up > span + span { transform: translateY(110%); }
+:is(a, button):hover .vs-arrow.vs-arrow--up > span:first-child, :is(a, button):focus-visible .vs-arrow.vs-arrow--up > span:first-child { transform: translateY(-110%); }
+:is(a, button):hover .vs-arrow--up > span + span, :is(a, button):focus-visible .vs-arrow--up > span + span { transform: none; }
 .vs-arrow--up-right > span + span { transform: translate(-110%, 110%); }
 :is(a, button, .vs-cta):hover .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-arrow > span:first-child { transform: translateX(110%); }
 :is(a, button, .vs-cta):hover .vs-arrow--left > span:first-child { transform: translateX(-110%); }
@@ -672,3 +675,19 @@ html:lang(en) .vs-hero.hc .vs-h1.hc-h1 { font-size: clamp(44px, min(7.2vw, 11.6v
 :where(a[class]:not(.vs-cta), button:not(:disabled)):active { scale: 0.98; }
 .vs-dock-trigger:hover { box-shadow: 0 18px 34px -12px rgb(17 17 16 / 0.55), 0 0 0 4px rgb(43 75 242 / 0.18); }
 @media (prefers-reduced-motion: reduce) { :where(a[class]:not(.vs-cta), button:not(:disabled)):active { scale: none; } }
+
+/* ---------- Hover states for the controls that had none ---------- */
+@media (hover: hover) {
+  .vs-menu-btn:hover, .vs-header.is-on-dark .vs-menu-btn:hover { background: var(--vs-blue); color: #fff; }
+  .vs-drawer-close:hover { background: var(--vs-ink); color: var(--vs-paper); rotate: 90deg; }
+  .vs-drawer :is(a, button).vs-drawer-link:hover { color: var(--vs-blue); padding-left: 6px; }
+  .vs-mega-more:hover { color: var(--vs-blue); }
+  .hc-close:hover { background: #fff; color: var(--vs-ink); }
+  .back-to-top:hover { background: var(--vs-blue); border-color: var(--vs-blue); translate: 0 -3px; }
+}
+.vs-drawer-close { transition: rotate 0.4s var(--vs-ease), background-color 0.2s ease, color 0.2s ease, transform 0.15s ease; }
+.vs-drawer :is(a, button).vs-drawer-link { transition: color 0.2s ease, padding-left 0.3s var(--vs-ease); }
+.vs-mega-more { transition: color 0.2s ease; }
+.hc-close { transition: background-color 0.2s ease, color 0.2s ease; }
+.back-to-top { transition: background-color 0.25s ease, border-color 0.25s ease, translate 0.3s var(--vs-ease); }
+@media (prefers-reduced-motion: reduce) { .vs-drawer-close:hover { rotate: none; } .back-to-top:hover { translate: none; } }

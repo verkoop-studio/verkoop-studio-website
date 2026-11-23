@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
+import Cta from '../components/brand/Cta'
+import Arrow from '../components/brand/Arrow'
 import ChannelLogo from '../components/brand/ChannelLogo'
 import { Link } from 'react-router-dom'
 import FaqFolder from '../components/brand/FaqFolder'
@@ -247,7 +249,7 @@ export default function Academy() {
         <div className="ac-hero-copy">
           <h1 id="academy-title">{t("Leer hoe je je merk schaalt") + " "}<span>{t("in 60 dagen.")}</span></h1>
           <p className="ac-hero-target">{t('Doel: 3× rendement op je advertentiebudget.')}</p>
-          <div className="ac-hero-cta"><button className="ac-button" onClick={goToSignup}>{t('Vraag je gratis les aan')}<span aria-hidden="true">↗</span></button></div>
+          <div className="ac-hero-cta"><Cta href="#academy-hero-signup" className="ac-cta" onClick={(event) => { event.preventDefault(); goToSignup() }}>{t('Vraag je gratis les aan')}</Cta></div>
         </div>
         <div className="ac-hero-video">
           <HeroVideo lang={lang} videoId="pXlZ6lWWg68" title="Verkoop Studio Academy — VSL" heading={t('Zo werkt de Academy')} />
@@ -289,9 +291,9 @@ export default function Academy() {
         <div className="ac-proof-heading">
           <h2 id="proof-title">{t("Case studies")}</h2>
           <div className="ac-case-controls">
-            <button type="button" aria-label={t('Vorige case')} aria-controls="academy-case-slides" disabled={caseSlide === 0} onClick={() => showCase(0)}>←</button>
+            <button type="button" aria-label={t('Vorige case')} aria-controls="academy-case-slides" disabled={caseSlide === 0} onClick={() => showCase(0)}><Arrow direction="left" size={18} /></button>
             <span aria-live="polite">{caseSlide + 1} / 2</span>
-            <button type="button" aria-label={t('Volgende case')} aria-controls="academy-case-slides" disabled={caseSlide === 1} onClick={() => showCase(1)}>→</button>
+            <button type="button" aria-label={t('Volgende case')} aria-controls="academy-case-slides" disabled={caseSlide === 1} onClick={() => showCase(1)}><Arrow size={18} /></button>
           </div>
         </div>
         <div id="academy-case-slides" className="ac-case-slides" ref={caseTrack} role="region" aria-label={t('Case studies')} tabIndex={0} onScroll={event => {
@@ -330,7 +332,7 @@ export default function Academy() {
           <p className="ac-quiet-kicker ac-quiet-kicker-light">{t("Onze belofte")}</p>
           <p className="ac-promise-figure"><strong>3–4</strong><span>{t("ROAS op je Meta ads")}</span></p>
           <p>{t("Elke euro die je in Meta ads steekt, levert") + " "}<b>{t("€3 tot €4 omzet")}</b>{(lang === 'nl' ? ' ' : '') + t("op. Daar werkt elke les naartoe.")}</p>
-          {signedUp ? <p className="ac-promise-done">{t("Je aanvraag is binnen.")}</p> : <button className="ac-button ac-button-light" onClick={goToSignup}>{t("Vraag je gratis les aan")}</button>}
+          {signedUp ? <p className="ac-promise-done">{t("Je aanvraag is binnen.")}</p> : <Cta href="#academy-hero-signup" variant="paper" className="ac-cta" onClick={(event) => { event.preventDefault(); goToSignup() }}>{t("Vraag je gratis les aan")}</Cta>}
           <small>{t("Prijs op maat na de kennismaking. Advertentiebudget niet inbegrepen.")}</small>
         </aside>
 
@@ -360,7 +362,7 @@ export default function Academy() {
             <h3 id="tracking-access-title">{t('Krijg toegang tot onze')} <span>{t('trackingsoftware.')}</span></h3>
             <p>{t('Zie waar je aanvragen vandaan komen en welke campagnes omzet opleveren.')}</p>
             <ul>{[t('Advertentiekosten en conversies bij elkaar'), t('Inzicht in de herkomst van je leads'), t('Samen instellen tijdens je lessen')].map(text => <li key={text}><span aria-hidden="true">✓</span>{text}</li>)}</ul>
-            <button className="ac-button" onClick={goToSignup}>{t('Vraag je gratis les aan')}<span aria-hidden="true">↗</span></button>
+            <Cta href="#academy-hero-signup" className="ac-cta" onClick={(event) => { event.preventDefault(); goToSignup() }}>{t('Vraag je gratis les aan')}</Cta>
           </div>
         </aside>
       </section>
@@ -426,7 +428,7 @@ export default function Academy() {
       </section>
 
       <section className="ac-final ac-wrap" aria-labelledby="final-title">
-        <div className="ac-final-inner ac-reveal"><div><p className="ac-quiet-kicker ac-quiet-kicker-light">{t("Kennismaken met Stef")}</p><h2 id="final-title">{t("Even kennismaken?")}</h2><p>{t("Bespreek je doelen met Stef en ontdek hoe de lessen bij jouw bedrijf passen.")}</p></div><div className="ac-final-actions"><button className="ac-button ac-button-light" onClick={goToSignup}>{t("Vraag je gratis les aan")}</button><Link className="ac-text-link ac-text-link-light" to={contactAcademy}>{t("Of stel eerst een vraag")}</Link></div></div>
+        <div className="ac-final-inner ac-reveal"><div><p className="ac-quiet-kicker ac-quiet-kicker-light">{t("Kennismaken met Stef")}</p><h2 id="final-title">{t("Even kennismaken?")}</h2><p>{t("Bespreek je doelen met Stef en ontdek hoe de lessen bij jouw bedrijf passen.")}</p></div><div className="ac-final-actions"><Cta href="#academy-hero-signup" variant="paper" className="ac-cta" onClick={(event) => { event.preventDefault(); goToSignup() }}>{t("Vraag je gratis les aan")}</Cta><Link className="ac-text-link ac-text-link-light" to={contactAcademy}>{t("Of stel eerst een vraag")}</Link></div></div>
       </section>
     </main>
 

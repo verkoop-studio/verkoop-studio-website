@@ -5,7 +5,8 @@
 .hero-request form { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
 .hero-request-trap { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .hero-request-note { margin: 14px 0 0; color: var(--vs-mute); font-size: 13px; line-height: 1.5; }
-.hero-request-note a { color: var(--vs-ink); }
+.hero-request-note a { color: var(--vs-ink); text-decoration: underline; text-decoration-color: var(--vs-line); text-underline-offset: 3px; transition: color 0.2s ease, text-decoration-color 0.2s ease; }
+.hero-request-note a:hover { color: var(--vs-blue); text-decoration-color: currentColor; }
 .hero-request-error { margin: 0; padding: 10px 12px; border-radius: 10px; background: #fff1ec; color: #8a2a12; font-size: 14px; animation: vs-drop 0.3s var(--vs-ease) both; }
 
 /* Field: floating label, border drawn from the corner, tick, message. */
@@ -41,7 +42,6 @@
 .vs-submit { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 54px; margin-top: 4px; padding: 6px 6px 6px 22px; border: 0; border-radius: 999px; background: var(--vs-ink); color: var(--vs-paper); font: 600 15px/1 var(--font-sans); cursor: pointer; transition: background 0.3s ease, opacity 0.3s ease, max-width 0.45s var(--vs-ease), padding 0.45s var(--vs-ease); max-width: 100%; }
 .vs-submit[data-state='locked'] { background: var(--vs-paper); color: var(--vs-mute); box-shadow: inset 0 0 0 1px var(--vs-line); cursor: not-allowed; }
 .vs-submit[data-state='locked'] .vs-submit-icon { background: var(--vs-stone); color: var(--vs-mute); }
-.vs-submit[data-state='ready']:hover { background: var(--vs-blue); }
 .vs-submit[data-state='pending'] { max-width: 54px; padding: 6px; margin-inline: auto; }
 .vs-submit[data-state='pending'] .vs-submit-label { display: none; }
 .vs-submit-icon { display: inline-flex; align-items: center; justify-content: center; width: 42px; height: 42px; border-radius: 50%; background: var(--vs-blue); flex: none; }
@@ -147,7 +147,7 @@
   .vs-field-glyph, .vs-field-glyph path, .vs-field-done path { transition: none; }
   .vs-field[data-focus] .vs-field-glyph { animation: none; }
 }
-.vs-submit:not([data-state='locked']):not(:disabled):hover { background: #2a2a28; }
-.vs-submit:not([data-state='locked']):not(:disabled):hover svg { translate: 3px 0; }
-.vs-submit svg { transition: translate 0.3s var(--vs-ease); }
+.vs-submit:not([data-state='locked']):not(:disabled):hover { background: #2b2a27; }
+.vs-submit-icon { transition: translate 0.35s var(--vs-ease), background-color 0.3s ease; }
+.vs-submit:not([data-state='locked']):not(:disabled):hover .vs-submit-icon { translate: -6px 0; }
 .vs-submit:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }

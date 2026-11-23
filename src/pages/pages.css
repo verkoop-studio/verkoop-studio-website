@@ -648,7 +648,9 @@
 .sv-approve-sample { margin-left: auto; color: var(--vs-mute); font-style: normal; font-size: 11.5px; }
 .sv-approve-card .sv-ad { border: 1px solid var(--vs-line); }
 .sv-approve-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; border: 0; border-radius: 99px; background: var(--vs-ink); color: var(--vs-paper); font: 600 15px/1 var(--font-sans); cursor: pointer; transition: background-color 0.25s ease, transform 0.2s var(--vs-ease); }
-.sv-approve-btn:hover { background: var(--vs-blue); }
+.sv-approve-btn { transition: background-color 0.25s ease, box-shadow 0.3s var(--vs-ease), translate 0.3s var(--vs-ease), transform 0.15s ease; }
+.sv-approve-btn:hover { background: var(--vs-blue); box-shadow: 0 12px 24px -12px rgb(43 75 242 / 0.75); translate: 0 -2px; }
+.sv-approve-btn[aria-pressed='true']:hover { background: #17702a; box-shadow: 0 12px 24px -12px rgb(23 112 42 / 0.6); }
 .sv-approve-btn:active { transform: scale(0.97); }
 .sv-approve-btn:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
 .sv-approve-btn path { stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.4s var(--vs-ease); }
@@ -666,7 +668,8 @@
 .bl-h1 { margin: 0; font-size: clamp(38px, 4.8vw, 72px); }
 .bl-head .vs-lead { margin: 0; max-width: 48ch; }
 .bl-byline { margin: 0; color: var(--vs-mute); font-size: 14px; }
-.bl-byline a { color: var(--vs-ink); }
+.bl-byline a { color: var(--vs-ink); text-decoration: underline; text-decoration-color: var(--vs-line); text-underline-offset: 3px; transition: color 0.2s ease, text-decoration-color 0.2s ease; }
+.bl-byline a:hover { color: var(--vs-blue); text-decoration-color: currentColor; }
 .bl-note { margin: 0; padding: 10px 14px; border-radius: 12px; background: var(--vs-stone); color: var(--vs-ink-2); font-size: 14px; }
 .bl-index { position: relative; padding-bottom: clamp(40px, 6vw, 80px); }
 .bl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr)); gap: clamp(16px, 2vw, 28px); margin: 0; padding: 0; list-style: none; }
@@ -970,3 +973,14 @@
   .bl-cover { aspect-ratio: auto; place-items: center start; margin-bottom: 2px; padding: 12px 16px; border-radius: 12px; font-size: 16px; }
   .bl-cover::after { display: none; }
 }
+
+/* ---------- Hover states for the controls that had none ---------- */
+.ct-routes li { transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, translate 0.3s var(--vs-ease), box-shadow 0.3s var(--vs-ease); }
+.ct-routes li:has(a:hover) { border-color: var(--vs-ink); background: var(--vs-ink); color: var(--vs-paper); translate: 0 -2px; box-shadow: 0 12px 22px -14px rgb(17 17 16 / 0.6); }
+.ct-routes li:has(a:hover) a { color: inherit; }
+@media (hover: hover) {
+  .pr-switch button[aria-checked='false']:hover { color: var(--vs-ink); background: rgb(17 17 16 / 0.06); }
+  .bl-toc-chip summary:hover { color: var(--vs-blue); }
+  .bl-toc-chip a:hover { color: var(--vs-blue); }
+}
+.pr-switch button { transition: color 0.2s ease, background-color 0.2s ease; }

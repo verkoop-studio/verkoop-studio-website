@@ -1995,7 +1995,7 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
 
 /* ---------- Statement line: the site's headline as one large line that travels sideways while the page scrolls ---------- */
 /* Without scripts, or with reduced motion, it is a wrapped paragraph. */
-.sl { position: relative; margin-block: clamp(40px, 6vw, 80px); background-color: #0b0d16; background-image: var(--vs-grain); color: #fff; }
+.sl { position: relative; overflow-x: clip; margin-block: clamp(40px, 6vw, 80px); background-color: #0b0d16; background-image: var(--vs-grain); color: #fff; }
 .sl-stage { padding: clamp(64px, 9vw, 120px) var(--vs-gutter); }
 .sl-track { --mfs: clamp(34px, 5vw, 72px); display: flex; flex-wrap: wrap; align-items: center; gap: 0.22em 0.32em; max-width: var(--vs-max); margin-inline: auto; font: 500 var(--mfs)/1.15 var(--font-display); letter-spacing: -0.03em; }
 .sl-word { display: inline-flex; white-space: nowrap; }
@@ -2026,3 +2026,18 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
 @media (max-width: 760px) {
   .sl[data-live] .sl-track { --mfs: min(11vw, 7.5vh); }
 }
+
+/* ---------- Hover states for the controls that had none ---------- */
+.vs-band-link { transition: border-color 0.25s ease, color 0.25s ease, gap 0.3s var(--vs-ease); }
+.vs-band-link:hover { gap: 12px; border-color: #ffd23f; color: #ffd23f; }
+.vs-bento-lines a, .vs-footer .vs-bento-cta { transition: color 0.2s ease, gap 0.3s var(--vs-ease); }
+.vs-bento-lines a:hover { color: #fff; gap: 11px; }
+.vs-footer .vs-bento-cta:hover { color: #ffd23f; gap: 10px; }
+.vs-news-submit { transition: background-color 0.25s ease, box-shadow 0.3s var(--vs-ease), translate 0.3s var(--vs-ease); }
+.vs-news-submit:hover { background: #1f38c9; box-shadow: 0 10px 22px -10px rgb(43 75 242 / 0.8); translate: 0 -1px; }
+@media (hover: hover) {
+  .vs-plans-switch button:not(.is-on):hover { background: rgb(17 17 16 / 0.07); color: var(--vs-ink); }
+  .tx-chip:not([aria-pressed='true']):not([aria-selected='true']):hover { background: var(--vs-paper); color: var(--vs-ink); }
+  .wk-step-dot:not([data-on]):hover::before { background: color-mix(in srgb, var(--vs-ink) 45%, transparent); }
+}
+.wk-step-dot::before { transition: background-color 0.2s ease; }
