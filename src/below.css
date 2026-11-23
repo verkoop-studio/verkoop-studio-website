@@ -2127,3 +2127,20 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
 .vs-footer-links ul a::after, .vs-footer-legal a::after { content: ''; position: absolute; left: 0; right: 0; top: calc(50% + 0.7em); height: 1.5px; border-radius: 2px; background: #ffd23f; transform: scaleX(0); transform-origin: right; transition: transform 0.32s var(--vs-ease); }
 .vs-footer-links ul a:hover::after, .vs-footer-legal a:hover::after, .vs-footer-links ul a:focus-visible::after { transform: scaleX(1); transform-origin: left; }
 @media (prefers-reduced-motion: reduce) { .vs-footer-links ul a::after, .vs-footer-legal a::after { transition: none; } }
+
+/* ---------- Hover and press states the second hover check still found missing ---------- */
+/* FAQ "Stel ze rechtstreeks": the underline thickens and turns yellow */
+.vs-faq-lede a { text-decoration-thickness: 1px; transition: text-decoration-color 0.2s ease, text-decoration-thickness 0.2s ease, color 0.2s ease; }
+.vs-faq-lede a:hover, .vs-faq-lede a:focus-visible { color: #fff; text-decoration-color: #ffd23f; text-decoration-thickness: 2px; }
+/* footer card links ("Alle artikels", "Bespreek je project"): the same yellow underline wipe as the footer columns */
+.vs-footer .vs-bento-cta { position: relative; }
+.vs-footer .vs-bento-cta::after { content: ''; position: absolute; left: 0; right: 0; top: calc(50% + 0.75em); height: 1.5px; border-radius: 2px; background: #ffd23f; transform: scaleX(0); transform-origin: right; transition: transform 0.32s var(--vs-ease); }
+.vs-footer .vs-bento-cta:hover::after, .vs-footer .vs-bento-cta:focus-visible::after { transform: scaleX(1); transform-origin: left; }
+/* the chat button wakes up fully under the pointer, even while it sits tucked away */
+@media (hover: hover) { .vs-dock.is-tucked .vs-dock-trigger:hover, .vs-dock.is-away .vs-dock-trigger:hover { scale: 1; translate: 0 0; opacity: 1; } }
+/* the work carousel: a press sinks the poster slightly */
+.vs-slide a .vs-slide-frame { transition: scale 0.2s var(--vs-ease); }
+.vs-slide a:active .vs-slide-frame { scale: 0.985; }
+/* phone plan switch: a clear press */
+.vs-plans-switch button:active { scale: 0.95; }
+@media (prefers-reduced-motion: reduce) { .vs-footer .vs-bento-cta::after { transition: none; } .vs-slide a:active .vs-slide-frame, .vs-plans-switch button:active { scale: none; } }

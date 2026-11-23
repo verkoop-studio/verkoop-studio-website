@@ -60,6 +60,10 @@ body:has(.pp) .back-to-top { display: none; }
 .pp-slider input::-moz-range-thumb { width: 30px; height: 30px; border-radius: 50%; background: var(--vs-paper); border: 0; }
 .pp-slider input:active { cursor: grabbing; }
 .pp-slider input:active::-webkit-slider-thumb { scale: 1.2; }
+.pp-slider input::-webkit-slider-thumb { transition: scale 0.2s var(--vs-ease), box-shadow 0.2s ease; }
+.pp-slider input::-moz-range-thumb { transition: scale 0.2s ease, box-shadow 0.2s ease; }
+.pp-slider input:hover::-webkit-slider-thumb, .pp-slider input:focus-visible::-webkit-slider-thumb { scale: 1.12; box-shadow: 0 6px 16px rgb(0 0 0 / 0.5), 0 0 0 6px rgb(125 147 255 / 0.35); }
+.pp-slider input:hover::-moz-range-thumb, .pp-slider input:focus-visible::-moz-range-thumb { scale: 1.12; box-shadow: 0 0 0 6px rgb(125 147 255 / 0.35); }
 .pp-tiers { list-style: none; margin: 34px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); gap: 16px; }
 .pp-tiers li { padding: 26px 28px; border-radius: 20px; border: 1px solid var(--vs-line-dark); color: #e9e6df; background: rgb(255 255 255 / 0.04); transition: opacity 0.4s, background 0.4s, color 0.4s, rotate 0.5s var(--vs-ease), translate 0.5s var(--vs-ease); }
 .pp-tiers li.is-on { opacity: 1; background: var(--vs-paper); color: var(--vs-ink); rotate: -1.4deg; translate: 0 -8px; }
