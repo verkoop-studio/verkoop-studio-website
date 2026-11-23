@@ -1,89 +1,106 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { motion, useInView, useReducedMotion } from 'motion/react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import pinacelloSite from '../../assets/pinacello-site.webp'
+import overview from '../../assets/performance/overview.webp'
 import { menuTabs } from '../../data/nav'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
+import { useWide } from '../../lib/useWide'
 import { Go } from '../brand/Arrow'
 import SplitHeadline from '../brand/SplitHeadline'
-import { DoodleField, WaveEdge } from '../brand/Playful'
+import { WaveEdge } from '../brand/Playful'
 import { EASE, VIEWPORT } from '../brand/motion'
 
 const COPY = {
-  nl: { title: [{ text: 'Wat we' }, { text: 'doen', tone: 'accent' as const }] },
-  en: { title: [{ text: 'What we' }, { text: 'do', tone: 'accent' as const }] },
+  nl: { title: [{ text: 'Wat we' }, { text: 'doen', tone: 'accent' as const }], count: (n: number) => `${n} diensten` },
+  en: { title: [{ text: 'What we' }, { text: 'do', tone: 'accent' as const }], count: (n: number) => `${n} services` },
 }
 
-/**
- * One stroke of a drawing, as a row of dots. `gaps` is the number of spaces between the dots, so a dot
- * lands on both ends of every stroke and the corners close.
- */
-const dots = (d: string, gaps: number, run = false) => (
-  <path key={d} className={`vs-group-dots${run ? ' vs-group-dots--run' : ''}`} d={d} pathLength={gaps * 8 + 0.02} />
-)
-
-/** One dotted drawing per group: a megaphone calling out, a path into a shopping cart, a loop that hands on by itself. */
-const ART = [
-  <svg key="attract" viewBox="0 0 160 90" aria-hidden="true">
-    {[['M14 38H40', 3], ['M40 38L72 14', 5], ['M72 14V76', 8], ['M72 76L40 52', 5], ['M40 52H14', 3], ['M14 52V38', 2]].map(([d, n]) => dots(d as string, n as number))}
-    {[['M94.9 31.6A20 20 0 0 1 94.9 58.4', 4], ['M108.2 19.6A38 38 0 0 1 108.2 70.4', 7], ['M121.6 7.5A56 56 0 0 1 121.6 82.5', 10]].map(([d, n]) => dots(d as string, n as number, true))}
-  </svg>,
-  <svg key="buy" viewBox="0 0 160 90" aria-hidden="true">
-    {dots('M8 76C42 76 40 24 98 24', 15, true)}
-    {[['M98 24H108', 1], ['M108 24L116 56', 4], ['M116 56H146', 4], ['M146 56L152 34', 3], ['M152 34H110.5', 5]].map(([d, n]) => dots(d as string, n as number))}
-    <circle className="vs-group-wheel" cx="122" cy="69" r="3.8" />
-    <circle className="vs-group-wheel" cx="141" cy="69" r="3.8" />
-  </svg>,
-  <svg key="smarter" viewBox="0 0 160 90" aria-hidden="true">
-    {dots('M84 45A28 28 0 1 1 28 45A28 28 0 1 1 84 45', 22, true)}
-    {[['M84 45H140', 7], ['M128 33L140 45', 2], ['M128 57L140 45', 2]].map(([d, n]) => dots(d as string, n as number))}
-  </svg>,
+/** Our own work behind each group: a real ad we made, a webshop we built, and our own dashboard. */
+const MEDIA = [
+  { video: '/videos/ads/healthfactor-personal.mp4', src: '/images/ads/healthfactor-personal.jpg', position: '50% 22%' },
+  { src: pinacelloSite, position: '50% 0%' },
+  { src: overview, position: '38% 0%' },
 ]
 
-/** What we do, in the three groups of the services menu: a tile per group, its services listed below. */
+/**
+ * What we do, as three tall panels in the colours of the three groups, each over our own work.
+ * The panel you point at or tab into opens wide and lists its services; the others narrow to
+ * their name, set upright. On phones and tablets the three are stacked and always open.
+ */
 export default function ServicesList() {
   const { lang } = useLang()
   const t = COPY[lang]
   const reduce = useReducedMotion()
+  const wide = useWide()
   const groups = menuTabs.find((tab) => tab.id === 'diensten')?.groups ?? []
+  const [active, setActive] = useState(0)
+  const wrap = useRef<HTMLDivElement>(null)
+  const video = useRef<HTMLVideoElement>(null)
+  const near = useInView(wrap, { margin: '120px 0px' })
+
+  // the ad plays only while its panel is open, on screen, on a wide screen, and motion is welcome
+  useEffect(() => {
+    const el = video.current
+    if (!el) return
+    if (active === 0 && near && wide && !reduce) el.play().catch(() => {})
+    else el.pause()
+  }, [active, near, wide, reduce])
 
   return (
     <div className="vs-dark">
       <WaveEdge />
-      <DoodleField />
       <section id="expertise" className="vs-section vs-wrap" aria-labelledby="services-title">
         <div className="vs-section-head">
           <SplitHeadline id="services-title" className="vs-h2" parts={t.title} />
         </div>
-        <div className="vs-groups">
-          {groups.map((group, g) => (
-            <motion.div
-              key={group.label.en}
-              className={`vs-group vs-group--${g}`}
-              initial={reduce ? false : { opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={VIEWPORT}
-              transition={{ duration: 0.7, delay: g * 0.08, ease: EASE }}
-            >
-              <div className="vs-group-tile">
-                <span className="vs-group-art">{ART[g]}</span>
-                <h3>{group.label[lang]}</h3>
-              </div>
-              <ul className="vs-group-list">
-                {group.links.map((link) => {
-                  const slug = link.href.slice(1)
-                  return (
-                    <li key={link.href}>
-                      <Link to={link.href} className="vs-group-link" onClick={() => trackEvent('service_viewed', { service: slug, placement: 'home_list' })}>
-                        <span><b>{link.title[lang]}</b><em>{link.note[lang]}</em></span>
-                        <Go />
-                      </Link>
-                    </li>
-                  )
-                })}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
+        <motion.div
+          ref={wrap}
+          className="vs-panels"
+          initial={reduce ? false : { opacity: 0, y: 32 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={VIEWPORT}
+          transition={{ duration: 0.8, ease: EASE }}
+        >
+          {groups.map((group, g) => {
+            const media = MEDIA[g]
+            const open = !wide || active === g
+            return (
+              <article
+                key={group.label.en}
+                className={`vs-panel vs-panel--${g}`}
+                data-open={open || undefined}
+                onPointerEnter={() => setActive(g)}
+                onFocus={() => setActive(g)}
+              >
+                <div className="vs-panel-media" aria-hidden="true">
+                  {media.video
+                    ? <video ref={video} src={media.video} poster={media.src} muted loop playsInline preload="none" style={{ '--pos': media.position } as React.CSSProperties} />
+                    : <img src={media.src} alt="" loading="lazy" decoding="async" style={{ '--pos': media.position } as React.CSSProperties} />}
+                </div>
+                <span className="vs-panel-spine" aria-hidden="true"><b>0{g + 1}</b>{group.label[lang]}</span>
+                <div className="vs-panel-body">
+                  <h3 className="vs-panel-title"><span>0{g + 1}</span>{group.label[lang]}</h3>
+                  <p className="vs-panel-count">{t.count(group.links.length)}</p>
+                  <ul className="vs-panel-list">
+                    {group.links.map((link, i) => {
+                      const slug = link.href.slice(1)
+                      return (
+                        <li key={link.href} style={{ '--i': i } as React.CSSProperties}>
+                          <Link to={link.href} className="vs-panel-link" onClick={() => trackEvent('service_viewed', { service: slug, placement: 'home_list' })}>
+                            <span><b>{link.title[lang]}</b><em>{link.note[lang]}</em></span>
+                            <Go />
+                          </Link>
+                        </li>
+                      )
+                    })}
+                  </ul>
+                </div>
+              </article>
+            )
+          })}
+        </motion.div>
       </section>
       <WaveEdge flip />
     </div>

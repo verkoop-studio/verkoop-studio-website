@@ -48,38 +48,66 @@
 .vs-result p { max-width: 400px; }
 @media (max-width: 760px) { .vs-result { flex-direction: column; align-items: flex-start; } }
 
-/* ---------- What we do: a tile per group, the services listed below it ---------- */
+/* ---------- What we do: three tall panels over our own work; the one you point at opens wide ---------- */
 
-.vs-groups { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2vw, 28px); margin-top: clamp(28px, 4vw, 48px); }
-.vs-group-tile { --tone: var(--vs-blue); --on: var(--vs-paper); position: relative; display: grid; align-content: space-between; min-height: 220px; padding: 22px; overflow: hidden; border-radius: 24px; background: var(--tone); color: var(--on); isolation: isolate; }
-.vs-group--1 .vs-group-tile { --tone: #ffd23f; --on: var(--vs-ink); }
-.vs-group--2 .vs-group-tile { --tone: #ff9fd0; --on: var(--vs-ink); }
-.vs-group-tile::after { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(70% 80% at 90% 0%, rgb(255 255 255 / 0.28), transparent 65%); }
-.vs-group-tile h3 { margin: 0; font: 500 clamp(26px, 2.4vw, 34px)/1.05 var(--font-display); letter-spacing: -0.03em; }
-/* Each stroke sets its own path length in steps of 8, so the dots are evenly spaced and one sits on every end and corner. */
-.vs-group-art svg { display: block; width: min(100%, 220px); height: auto; opacity: 0.9; }
-.vs-group-dots { fill: none; stroke: currentColor; stroke-width: 3.2; stroke-linecap: round; stroke-dasharray: 0.01 7.99; }
-.vs-group-wheel { fill: currentColor; }
-.vs-group-dots--run { transition: stroke-dashoffset 1.4s linear; }
-.vs-group:hover .vs-group-dots--run, .vs-group:focus-within .vs-group-dots--run { stroke-dashoffset: -64; }
-.vs-group-art { transition: translate 0.5s var(--vs-ease), rotate 0.5s var(--vs-ease); }
-.vs-group:hover .vs-group-art { translate: 4px -4px; rotate: -2deg; }
-.vs-group-list { margin: 14px 0 0; padding: 0; list-style: none; border-top: 1px solid rgb(255 255 255 / 0.12); }
-.vs-group-list li { border-bottom: 1px solid rgb(255 255 255 / 0.12); }
-.vs-group-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 14px 4px; color: var(--vs-paper); text-decoration: none; transition: padding 0.35s var(--vs-ease), background-color 0.3s; border-radius: 10px; }
-.vs-group-link > span:first-child { display: grid; gap: 2px; }
-.vs-group-link b { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
-.vs-group-link em { color: #9c988f; font-style: normal; font-size: 14px; line-height: 1.4; }
-.vs-group-link:hover, .vs-group-link:focus-visible { padding-left: 12px; background: rgb(255 255 255 / 0.04); }
-.vs-group-link:focus-visible { outline: 2px solid var(--vs-paper); outline-offset: 2px; }
-.vs-group-link:active { scale: 0.99; }
-@media (max-width: 900px) {
-  .vs-groups { grid-template-columns: minmax(0, 1fr); }
-  .vs-group-tile { min-height: 170px; }
+.vs-panels { display: flex; gap: clamp(10px, 1.2vw, 16px); height: clamp(560px, 72vh, 700px); margin-top: clamp(28px, 4vw, 48px); }
+.vs-panel { --tone: var(--vs-blue); --on: var(--vs-paper); --soft: rgb(245 243 238 / 0.78); position: relative; flex: 1 1 0; min-width: 0; overflow: hidden; border-radius: 26px; background: var(--tone); color: var(--on); isolation: isolate; transition: flex-grow 0.75s cubic-bezier(0.22, 1, 0.36, 1); }
+.vs-panel--1 { --tone: #ffd23f; --on: var(--vs-ink); --soft: rgb(17 17 16 / 0.72); }
+.vs-panel--2 { --tone: #ff9fd0; --on: var(--vs-ink); --soft: rgb(17 17 16 / 0.72); }
+.vs-panel[data-open] { flex-grow: 2.7; }
+
+/* the work behind: tinted in the group's colour while narrow, clearer once open */
+.vs-panel-media { position: absolute; inset: 0; z-index: -2; }
+.vs-panel-media :is(img, video) { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--pos, 50% 50%); scale: 1.08; filter: blur(3px) saturate(0.6); transition: scale 1.1s cubic-bezier(0.22, 1, 0.36, 1), filter 0.6s ease; }
+.vs-panel[data-open] .vs-panel-media :is(img, video) { scale: 1; filter: none; }
+.vs-panel-media::after { content: ''; position: absolute; inset: 0; background: var(--tone); opacity: 0.86; transition: opacity 0.6s ease; }
+.vs-panel[data-open] .vs-panel-media::after { opacity: 0; }
+.vs-panel::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(to top, var(--tone) 0%, var(--tone) 34%, color-mix(in srgb, var(--tone) 82%, transparent) 50%, color-mix(in srgb, var(--tone) 30%, transparent) 70%, transparent 88%); opacity: 0; transition: opacity 0.6s ease; }
+.vs-panel[data-open]::before { opacity: 1; }
+.vs-panel::after { content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; background-image: var(--vs-grain); opacity: 0.5; mix-blend-mode: overlay; }
+
+/* narrow: the name set upright along the bottom-left edge */
+.vs-panel-spine { position: absolute; left: clamp(18px, 1.8vw, 26px); bottom: clamp(20px, 2vw, 28px); display: flex; align-items: center; gap: 14px; writing-mode: vertical-lr; rotate: 180deg; font: 500 clamp(30px, 3vw, 44px)/1 var(--font-display); letter-spacing: -0.035em; white-space: nowrap; transition: opacity 0.35s ease, translate 0.5s var(--vs-ease); }
+.vs-panel-spine b { font: 600 14px/1 var(--font-sans); letter-spacing: 0; opacity: 0.8; }
+.vs-panel[data-open] .vs-panel-spine { opacity: 0; translate: -12px 0; pointer-events: none; }
+
+/* open: the name, then the services */
+.vs-panel-body { position: absolute; inset: auto 0 0 0; display: grid; gap: 4px; padding: clamp(22px, 2.4vw, 34px); opacity: 0; translate: 0 16px; visibility: hidden; transition: opacity 0.3s ease, translate 0.5s var(--vs-ease), visibility 0s linear 0.3s; }
+.vs-panel[data-open] .vs-panel-body { opacity: 1; translate: 0 0; visibility: visible; transition: opacity 0.45s ease 0.25s, translate 0.6s var(--vs-ease) 0.25s, visibility 0s; }
+.vs-panel-title { display: flex; align-items: baseline; gap: 14px; margin: 0; font: 500 clamp(34px, 3.4vw, 52px)/1 var(--font-display); letter-spacing: -0.04em; }
+.vs-panel-title span { font: 600 14px/1 var(--font-sans); letter-spacing: 0; opacity: 0.8; translate: 0 -0.9em; }
+.vs-panel-count { margin: 2px 0 10px; color: var(--soft); font-size: 14.5px; }
+.vs-panel-list { display: grid; max-width: 560px; margin: 0; padding: 0; list-style: none; border-top: 1px solid color-mix(in srgb, var(--on) 22%, transparent); }
+.vs-panel-list li { border-bottom: 1px solid color-mix(in srgb, var(--on) 22%, transparent); }
+.vs-panel[data-open] .vs-panel-list li { animation: vs-panel-row 0.55s var(--vs-ease) both; animation-delay: calc(0.3s + var(--i) * 0.06s); }
+@keyframes vs-panel-row { from { opacity: 0; translate: 0 10px; } }
+.vs-panel-link { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 14px; padding: 12px 4px; border-radius: 12px; color: var(--on); text-decoration: none; transition: padding 0.35s var(--vs-ease), background-color 0.3s ease; }
+.vs-panel-link > span:first-child { display: grid; gap: 2px; min-width: 0; }
+.vs-panel-link b { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+.vs-panel-link em { overflow: hidden; color: var(--soft); font-size: 14px; font-style: normal; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+.vs-panel-link .vs-go { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--on) 35%, transparent); color: var(--on); }
+.vs-panel-link:hover, .vs-panel-link:focus-visible { padding-left: 12px; background: color-mix(in srgb, var(--on) 9%, transparent); }
+.vs-panel-link:hover .vs-go, .vs-panel-link:focus-visible .vs-go { background: var(--on); box-shadow: none; color: var(--tone); }
+.vs-panel-link:focus-visible { outline: 2px solid var(--on); outline-offset: 2px; }
+.vs-panel-link:active { scale: 0.99; }
+
+/* phones and tablets: stacked, each one open, its work as a picture on top */
+@media (max-width: 899px) {
+  .vs-panels { flex-direction: column; height: auto; }
+  .vs-panel, .vs-panel[data-open] { display: grid; flex: none; grid-template-rows: clamp(170px, 42vw, 260px) auto; }
+  .vs-panel-media { position: relative; inset: auto; z-index: 0; grid-row: 1; }
+  .vs-panel-media::after { display: none; }
+  .vs-panel-media :is(img, video) { scale: 1; filter: none; }
+  .vs-panel--0 .vs-panel-media :is(img, video) { object-position: 50% 14%; }
+  .vs-panel::before { display: none; }
+  .vs-panel-spine { display: none; }
+  .vs-panel-body, .vs-panel[data-open] .vs-panel-body { position: relative; inset: auto; grid-row: 2; opacity: 1; translate: none; visibility: visible; transition: none; padding: 22px 20px 12px; }
+  .vs-panel[data-open] .vs-panel-list li { animation: none; }
+  .vs-panel-link em { white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .vs-group-dots--run, .vs-group-art, .vs-group-link { transition: none; }
-  .vs-group:hover .vs-group-art { translate: none; rotate: none; }
+  .vs-panel, .vs-panel-media :is(img, video), .vs-panel-media::after, .vs-panel::before, .vs-panel-spine, .vs-panel-body, .vs-panel[data-open] .vs-panel-body, .vs-panel-link { transition: none; }
+  .vs-panel[data-open] .vs-panel-list li { animation: none; }
 }
 
 /* ---------- Software ---------- */
@@ -1292,7 +1320,7 @@
 /* ---------- Texture: a fine grain on the dark and accent grounds, soft glows behind key cards ---------- */
 
 :root { --vs-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E"); }
-.vs-dark, .vs-band, .vs-footer, .vs-group-tile, .pb-stat { background-image: var(--vs-grain); }
+.vs-dark, .vs-band, .vs-footer, .pb-stat { background-image: var(--vs-grain); }
 
 /* ---------- Menu panels: live tiles, coloured rows, the strip of actions ---------- */
 
