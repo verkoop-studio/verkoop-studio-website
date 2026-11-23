@@ -1975,3 +1975,37 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
   .fm-chip, .fm-win, .fm-cursor, .fm-insights, .fm-bar { transition: none; }
   .fm-insights:hover { translate: none; }
 }
+
+/* ---------- Statement line: the site's headline as one large line that travels sideways while the page scrolls ---------- */
+/* Without scripts, or with reduced motion, it is a wrapped paragraph. */
+.sl { position: relative; margin-block: clamp(40px, 6vw, 80px); background-color: #0b0d16; background-image: var(--vs-grain); color: #fff; }
+.sl-stage { padding: clamp(64px, 9vw, 120px) var(--vs-gutter); }
+.sl-track { --mfs: clamp(34px, 5vw, 72px); display: flex; flex-wrap: wrap; align-items: center; gap: 0.22em 0.32em; max-width: var(--vs-max); margin-inline: auto; font: 500 var(--mfs)/1.15 var(--font-display); letter-spacing: -0.03em; }
+.sl-word { display: inline-flex; white-space: nowrap; }
+.sl-word.is-mute { color: #8b8fa3; }
+.sl-ch { display: inline-block; transform-origin: 0 100%; }
+.sl-labels { display: inline-flex; align-items: center; }
+.sl-labels--stack { display: inline-grid; justify-items: start; gap: 0.1em; }
+.sl-labels--stack .sl-label + .sl-label { margin-left: 0.7em; }
+.sl-label { display: inline-block; padding: 0.28em 0.62em 0.3em; border-radius: 0.2em; background: var(--tone); box-shadow: 0 0.12em 0.3em rgb(0 0 0 / 0.35); color: var(--vs-ink); font: 600 0.42em/1.1 var(--font-sans); letter-spacing: -0.01em; white-space: nowrap; rotate: var(--tilt); }
+.sl-orb { flex: none; box-shadow: inset -0.06em -0.08em 0.16em rgb(0 0 0 / 0.28), 0 0.14em 0.32em rgb(0 0 0 / 0.45); }
+.sl-orb--ball { width: 0.78em; height: 0.78em; border-radius: 50%; background: radial-gradient(circle at 32% 28%, #fff 0%, var(--tone) 40%, color-mix(in srgb, var(--tone) 58%, #1a1030) 100%); }
+.sl-orb--pill { width: 1.1em; height: 0.52em; border-radius: 99px; background: linear-gradient(180deg, #fff 0%, var(--tone) 34%, color-mix(in srgb, var(--tone) 62%, #3a2500) 100%); rotate: -9deg; }
+.sl-cta { display: inline-flex; margin-left: 0.2em; font: 500 16px/1 var(--font-sans); letter-spacing: 0; }
+.sl-end { display: none; }
+
+.sl[data-live] { height: calc(100svh + var(--sl-travel, 250vh)); }
+.sl[data-live] .sl-stage { position: sticky; top: 0; height: 100svh; padding: 0; overflow: hidden; }
+.sl[data-live] .sl-track { --mfs: min(5.6vw, 11.5vh); position: absolute; left: 0; top: 50%; flex-wrap: nowrap; gap: 0.32em; max-width: none; margin: 0; translate: 0 -50%; white-space: nowrap; will-change: transform; }
+.sl[data-live] .sl-end { display: block; flex: none; width: 26vw; height: 1px; }
+.sl[data-live] [data-item]:not([data-in]) .sl-ch, .sl[data-live] [data-item]:not([data-in]) .sl-label { opacity: 0; }
+.sl[data-live] .sl-orb:not([data-in]), .sl[data-live] .sl-cta:not([data-in]) { opacity: 0; }
+.sl[data-live] [data-in] .sl-ch { animation: sl-drop 0.5s cubic-bezier(0.22, 1, 0.36, 1) calc(var(--c) * 35ms) backwards; }
+.sl[data-live] [data-in] .sl-label { animation: sl-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) calc(0.12s + var(--n) * 0.1s) backwards; }
+.sl[data-live] .sl-orb[data-in] { animation: sl-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.12s backwards; }
+.sl[data-live] .sl-cta[data-in] { animation: sl-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s backwards; }
+@keyframes sl-drop { from { opacity: 0; translate: 0 0.55em; rotate: 14deg; } }
+@keyframes sl-pop { from { opacity: 0; scale: 0; rotate: -14deg; } }
+@media (max-width: 760px) {
+  .sl[data-live] .sl-track { --mfs: min(11vw, 7.5vh); }
+}
