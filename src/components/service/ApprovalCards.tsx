@@ -1,6 +1,7 @@
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { useState } from 'react'
 import type { Lang } from '../../data/types'
+import ChannelLogo from '../brand/ChannelLogo'
 import Reveal from '../brand/Reveal'
 import { AdCard, type AdArt } from './ServiceScreens'
 
@@ -30,7 +31,7 @@ export default function ApprovalCards({ lang, platforms = 'meta' }: { lang: Lang
             <Reveal as="li" key={i} delay={i * 0.1} y={40}>
               <article className="sv-approve-card" data-live={done || undefined}>
                 <header className="sv-approve-head">
-                  <span className="sv-tag sv-tag--blue">{PLATFORMS[platforms][i]}</span>
+                  <span className="sv-tag sv-tag--blue"><ChannelLogo name={PLATFORMS[platforms][i]} />{PLATFORMS[platforms][i]}</span>
                   <span className="sv-approve-status">
                     <AnimatePresence mode="wait" initial={false}>
                       <motion.span key={done ? 'live' : 'wait'} className={done ? 'sv-tag sv-tag--green' : 'sv-tag sv-tag--grey'} initial={reduce ? false : { y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -12, opacity: 0 }} transition={{ duration: 0.25 }}>

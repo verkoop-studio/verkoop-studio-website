@@ -7,6 +7,8 @@ import type { CSSProperties, ReactNode } from 'react'
 import type { ServiceScreen } from '../../data/serviceSteps'
 import type { Lang } from '../../data/types'
 import BotAvatar from '../brand/BotAvatar'
+import ChannelLogo from '../brand/ChannelLogo'
+import { logoForName } from '../../data/platforms'
 import { StackedBars } from '../brand/blocks/StackedBars'
 import { WorkAd } from '../work/Work'
 
@@ -130,7 +132,7 @@ function Tracking({ lang }: ScreenProps) {
   const events = nl ? [['Formulier verstuurd', 'Google Ads · GA4'], ['Telefoonklik', 'Google Ads'], ['Offerte aangevraagd', 'GA4 · CRM'], ['Aankoop', 'GA4 · Meta']] : [['Form sent', 'Google Ads · GA4'], ['Phone click', 'Google Ads'], ['Quote requested', 'GA4 · CRM'], ['Purchase', 'GA4 · Meta']]
   return (
     <Win title={nl ? 'Conversies' : 'Conversions'} lang={lang}>
-      <ul className="sv-events">{events.map(([name, where], i) => <li key={name} style={v({ '--d': `${0.15 + i * 0.12}s` })}><Tick /><b>{name}</b><em>{where}</em><span className="sv-live">{nl ? 'meet' : 'live'}</span></li>)}</ul>
+      <ul className="sv-events">{events.map(([name, where], i) => <li key={name} style={v({ '--d': `${0.15 + i * 0.12}s` })}><Tick /><b>{name}</b><em>{where.split(' · ').map((part, j) => <span key={part}>{j > 0 && <span aria-hidden="true">·</span>}<ChannelLogo name={part} />{part}</span>)}</em><span className="sv-live">{nl ? 'meet' : 'live'}</span></li>)}</ul>
     </Win>
   )
 }
@@ -155,7 +157,7 @@ function Sources({ lang }: ScreenProps) {
   const rows = [['Meta', '#1877f2'], ['Google', '#ea4335'], [nl ? 'E-mail' : 'Email', '#2b4bf2'], ['Referral', '#28c840']]
   return (
     <Win title={nl ? 'Hoe bezoekers binnenkomen' : 'How visitors arrive'} lang={lang}>
-      <ul className="sv-sources">{rows.map(([name, color], i) => <li key={name} style={v({ '--c': color, '--d': `${i * 0.12}s` })}><i />{name}<span className="sv-arrow-line" /><b>{nl ? 'pagina' : 'page'}</b></li>)}</ul>
+      <ul className="sv-sources">{rows.map(([name, color], i) => <li key={name} style={v({ '--c': color, '--d': `${i * 0.12}s` })}>{logoForName(name) ? <ChannelLogo name={name} className="sv-src-logo" /> : <i />}{name}<span className="sv-arrow-line" /><b>{nl ? 'pagina' : 'page'}</b></li>)}</ul>
     </Win>
   )
 }

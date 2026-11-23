@@ -4,6 +4,7 @@ import Seo from '../components/Seo'
 import { useFooterInView } from '../lib/useFooterInView'
 import { usePhoneScrollingDown } from '../lib/usePhoneScrollingDown'
 import WorksWith from '../components/brand/WorksWith'
+import ChannelLogo from '../components/brand/ChannelLogo'
 import PerformanceSignupForm from '../components/PerformanceSignupForm'
 import AudienceRows from '../components/brand/AudienceRows'
 import Cta from '../components/brand/Cta'
@@ -79,7 +80,7 @@ function TruthTable({ lang }: { lang: 'nl' | 'en' }) {
           <div className="pp-row pp-row--head"><span>{t.channel}</span><span>{t.says}</span><span>{t.sold}</span></div>
           {ROWS.map((row, i) => (
             <div key={row.name} className="pp-row" style={{ '--d': `${0.5 + i * 0.35}s` } as CSSProperties}>
-              <span>{row.name}</span>
+              <span className="pp-name"><ChannelLogo name={row.name} />{row.name}</span>
               <span className="pp-claim"><Count to={row.says} on={on} /><svg viewBox="0 0 60 16" preserveAspectRatio="none"><path d="M2 11C16 3 40 14 58 5" pathLength={1} /></svg></span>
               <strong><Count to={row.sold} on={on} /></strong>
             </div>

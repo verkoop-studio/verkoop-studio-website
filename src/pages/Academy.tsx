@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import ChannelLogo from '../components/brand/ChannelLogo'
 import { Link } from 'react-router-dom'
 import FaqFolder from '../components/brand/FaqFolder'
 import AcademyRaffleCard from '../components/AcademyRaffleCard'
@@ -348,7 +349,7 @@ export default function Academy() {
             <div className="ac-tracking-topline" aria-hidden="true"><span className="ac-tracking-symbol">↗</span><span>verkoop<span className="ac-tracking-wordmark-dot">.</span> tracking</span><span className="ac-tracking-spark">✦</span></div>
             <div className="ac-tracking-window" aria-hidden="true">
               <div className="ac-tracking-window-bar"><span /><span /><span /><b>{t('Jouw overzicht')}</b></div>
-              <div className="ac-tracking-sources"><span>Meta Ads</span><span>Google Ads</span><span>{t('Website')}</span></div>
+              <div className="ac-tracking-sources"><span><ChannelLogo name="Meta Ads" />Meta Ads</span><span><ChannelLogo name="Google Ads" />Google Ads</span><span>{t('Website')}</span></div>
               <div className="ac-tracking-connector"><i /><i /><i /></div>
               <div className="ac-tracking-destination"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="4" /><path d="M7 16v-4m5 4V8m5 8v-6" /></svg><span>{t('Alles in één dashboard')}</span></div>
             </div>

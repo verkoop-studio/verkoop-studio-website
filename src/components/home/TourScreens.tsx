@@ -5,6 +5,7 @@ import { AUDIT_SCOPE } from '../../data/audit'
 import type { Lang } from '../../data/types'
 import { useHoverPause, usePhase } from '../../lib/demo'
 import { Pointer, Ticker, Typed } from '../brand/demo'
+import ChannelLogo from '../brand/ChannelLogo'
 
 /** Words inside the sample screens, taken from the teardown and the service pages. */
 const UI = {
@@ -110,7 +111,7 @@ export function FunnelScreen({ lang, on }: ScreenProps) {
     <Win title={t.funnel} lang={lang} win={win}>
       <p className={`st-flow${p >= 3 ? ' is-run' : ''}`}>{t.flow.map((step, i) => <span key={step} className={i === 0 ? 'is-on' : ''} style={{ '--i': i } as CSSProperties}>{step}</span>).flatMap((pill, i) => (i ? [<i key={`to-${i}`}>→</i>, pill] : [pill]))}</p>
       <div className="st-creative">
-        <p className="st-creative-head"><span className="st-pill st-pill--blue">{t.platform}</span>
+        <p className="st-creative-head"><span className="st-pill st-pill--blue"><ChannelLogo name={t.platform} />{t.platform}</span>
           <AnimatePresence mode="wait" initial={false}>
             <motion.span key={live ? 'live' : 'wait'} className={`st-pill ${live ? 'st-pill--green' : 'st-pill--grey'}`} initial={{ y: 10, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -10, opacity: 0 }} transition={{ duration: 0.22 }}>{live ? t.live : t.waiting}</motion.span>
           </AnimatePresence>
@@ -172,7 +173,7 @@ export function GrowScreen({ lang, on }: ScreenProps) {
       <div className="st-feeds">
         {t.feed.map(([what, detail, src], i) => (
           <motion.p key={what} className="st-feed" data-on={p >= 2 || undefined} style={{ '--i': i } as CSSProperties} animate={{ scale: p >= 2 ? [1, 1.03, 1] : 1 }} transition={{ delay: i * 0.6, duration: 0.45 }}>
-            <span className="st-feed-dot" /><b>{what}</b><em>{detail}</em><i className={src === 'Meta' ? 'is-meta' : ''}>{src}</i><small>{t.now}</small>
+            <span className="st-feed-dot" /><b>{what}</b><em>{detail}</em><i className={src === 'Meta' ? 'is-meta' : ''}><ChannelLogo name={src} />{src}</i><small>{t.now}</small>
           </motion.p>
         ))}
       </div>

@@ -31,3 +31,22 @@ export const PLATFORM_LOGOS: Partial<Record<Platform, { src: string; wordmark?: 
   resend: { src: '/platforms/resend.svg' },
   chatgpt: { src: '/platforms/openai.svg' },
 }
+
+/** Logos for channel names as sample screens and labels write them; a name without a logo file stays text only. */
+const LOGO_BY_NAME: Record<string, string> = {
+  meta: '/platforms/meta.svg',
+  'meta ads': '/platforms/meta.svg',
+  facebook: '/platforms/facebook.svg',
+  instagram: '/platforms/instagram.svg',
+  google: '/platforms/google.svg',
+  'google ads': '/platforms/google.svg',
+  ga4: '/platforms/googleanalytics.svg',
+  'google analytics': '/platforms/googleanalytics.svg',
+  tiktok: '/platforms/tiktok.svg',
+  shopify: '/platforms/shopify.svg',
+  mailchimp: '/platforms/mailchimp.svg',
+  whatsapp: '/platforms/whatsapp.svg',
+  youtube: '/platforms/youtube.svg',
+}
+
+export const logoForName = (name: string): string | undefined => LOGO_BY_NAME[name.trim().toLowerCase()]

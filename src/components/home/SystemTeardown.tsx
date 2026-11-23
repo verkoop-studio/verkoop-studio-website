@@ -5,6 +5,8 @@ import type { Bi, Lang } from '../../data/types'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
 import BotAvatar from '../brand/BotAvatar'
+import ChannelLogo from '../brand/ChannelLogo'
+import { logoForName } from '../../data/platforms'
 import { StackedBars } from '../brand/blocks/StackedBars'
 import { COMPANY, DEALS, PEOPLE, SOURCE } from '../../data/samples'
 import { useBeat } from '../../lib/useBeat'
@@ -180,9 +182,9 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
           <div key={name} className="tx-col">
             <p className="tx-col-head" title={total}><b>{name}</b><span>{c.cards.filter((_, i) => i % 4 === col && i !== 0).length + (move === col ? 1 : 0)}</span></p>
             {c.cards.filter((_, i) => i % 4 === col && i !== 0).map(([ini, who, value, src, due]) => (
-              <span key={who} className="tx-deal" {...more(() => <DealDetail deal={[ini, who, value, src, due]} stage={name} lang={lang} />)}><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></span>
+              <span key={who} className="tx-deal" {...more(() => <DealDetail deal={[ini, who, value, src, due]} stage={name} lang={lang} />)}><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>{logoForName(src) ? <ChannelLogo name={src} /> : '● '}{src}</i><small>{due}</small></span>
             ))}
-            {move === col && (() => { const [ini, who, value, src, due] = c.cards[0]; return <motion.span layoutId={`deal-${lang}`} className="tx-deal tx-deal--hot" transition={{ type: 'spring', stiffness: 240, damping: 24 }} {...more(() => <DealDetail deal={[ini, who, value, src, due]} stage={name} lang={lang} />)}><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>● {src}</i><small>{due}</small></motion.span> })()}
+            {move === col && (() => { const [ini, who, value, src, due] = c.cards[0]; return <motion.span layoutId={`deal-${lang}`} className="tx-deal tx-deal--hot" transition={{ type: 'spring', stiffness: 240, damping: 24 }} {...more(() => <DealDetail deal={[ini, who, value, src, due]} stage={name} lang={lang} />)}><BotAvatar shape={PEOPLE[ini]?.[0] ?? "chat"} color={PEOPLE[ini]?.[1] ?? "#7d93ff"} size={20} className="tx-ava-bot" /><b>{who}</b><em><Num v={value} /></em><i style={{ color: SOURCE[src] }}>{logoForName(src) ? <ChannelLogo name={src} /> : '● '}{src}</i><small>{due}</small></motion.span> })()}
           </div>
         ))}
         <p className="tx-meter"><span><b style={{ width: `${((38 + move) / 500) * 100 + 3}%` }} /></span><Num v={String(38 + move)} suf=" / 500" /> {c.meter}</p>
@@ -203,7 +205,7 @@ function Screen({ k, lang, on }: { k: LayerKey; lang: Lang; on: boolean }) {
               const [what, detail, src] = p.events[n % p.events.length]
               return (
                 <motion.li key={n} layout initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }} transition={{ type: 'spring', stiffness: 360, damping: 30 }} className={what.startsWith('Aankoop') || what.startsWith('Purchase') ? 'is-sale' : ''} {...more(() => <EventDetail event={p.events[n % p.events.length]} time={clock(n)} consent={p.consent} lang={lang} />)}>
-                  <span className="tx-ev" style={{ background: SOURCE[src] }} /><b>{what}</b><em>{detail}</em><i>{src}</i><small>{clock(n)}</small>
+                  <span className="tx-ev" style={{ background: SOURCE[src] }} /><b>{what}</b><em>{detail}</em><i><ChannelLogo name={src} />{src}</i><small>{clock(n)}</small>
                   {i === 0 && on && <span className="tx-new">{lang === 'nl' ? 'nieuw' : 'new'}</span>}
                 </motion.li>
               )
@@ -348,9 +350,16 @@ const TABLES: Record<Lang, Record<LayerKey, Table>> = {
   },
 }
 
+/** A row's avatar: the platform's own logo for a channel, otherwise a small character. */
+function WhoAvatar({ c, size }: { c: { shape: string; color: string; name: string }; size: number }) {
+  const logo = logoForName(c.name)
+  if (logo) return <span className="tx-logo-ava" style={{ width: size, height: size }}><img src={logo} alt="" width={size} height={size} loading="lazy" decoding="async" /></span>
+  return <BotAvatar shape={c.shape} color={c.color} eyeColor={c.color === '#111110' || c.color === '#2b4bf2' ? '#ffffff' : undefined} size={size} />
+}
+
 function CellView({ c }: { c: Cell }) {
-  if (c.t === 'who') return <span className="tx-who"><BotAvatar shape={c.shape} color={c.color} eyeColor={c.color === '#111110' || c.color === '#2b4bf2' ? '#ffffff' : undefined} size={20} /><span><b>{c.name}</b>{c.sub && <em>{c.sub}</em>}</span></span>
-  if (c.t === 'pill') return <span className={`tx-pill tx-pill--${c.tone}`}>{c.v}</span>
+  if (c.t === 'who') return <span className="tx-who"><WhoAvatar c={c} size={20} /><span><b>{c.name}</b>{c.sub && <em>{c.sub}</em>}</span></span>
+  if (c.t === 'pill') return <span className={`tx-pill tx-pill--${c.tone}`}><ChannelLogo name={c.v} />{c.v}</span>
   if (c.t === 'pills') return <span className="tx-pills">{c.v.map(([v, tone]) => <span key={v} className={`tx-pill tx-pill--${tone}`}>{v}</span>)}</span>
   if (c.t === 'odds') return <Odds v={c.v} />
   if (c.t === 'spark') return <Spark v={c.v} />
@@ -378,8 +387,8 @@ function RowDetail({ table, row, lang }: { table: Table; row: Cell[]; lang: Lang
   const first = row[lead]
   const title = first.t === 'who' ? first.name : first.t === 'text' ? first.v : ''
   const value = (c: Cell) => {
-    if (c.t === 'who') return <span className="dv-who"><BotAvatar shape={c.shape} color={c.color} eyeColor={c.color === '#111110' || c.color === '#2b4bf2' ? '#ffffff' : undefined} size={18} /><b>{c.name}</b></span>
-    if (c.t === 'pill') return <span className={`tx-pill tx-pill--${c.tone}`}>{c.v}</span>
+    if (c.t === 'who') return <span className="dv-who"><WhoAvatar c={c} size={18} /><b>{c.name}</b></span>
+    if (c.t === 'pill') return <span className={`tx-pill tx-pill--${c.tone}`}><ChannelLogo name={c.v} />{c.v}</span>
     if (c.t === 'pills') return <span className="tx-pills">{c.v.map(([v, tone]) => <span key={v} className={`tx-pill tx-pill--${tone}`}>{v}</span>)}</span>
     if (c.t === 'odds') return <span className="dv-odds"><span className="dv-meter"><i data-tone={c.v >= 7 ? 'hi' : c.v >= 4 ? 'mid' : 'lo'} style={{ width: `${c.v * 10}%` }} /></span><b>{c.v}</b> {d.of10}</span>
     if (c.t === 'spark') { const delta = c.v[c.v.length - 1] - c.v[0]; return <span className="dv-trend"><Spark v={c.v} /><b>{delta > 0 ? d.up : delta < 0 ? d.down : d.flat}</b></span> }
@@ -387,7 +396,7 @@ function RowDetail({ table, row, lang }: { table: Table; row: Cell[]; lang: Lang
     return <b>{c.v}</b>
   }
   return (
-    <DetailShell lang={lang} head={<>{first.t === 'who' && <BotAvatar shape={first.shape} color={first.color} eyeColor={first.color === '#111110' || first.color === '#2b4bf2' ? '#ffffff' : undefined} size={26} />}<span className="dv-title"><b>{title}</b>{first.t === 'who' && first.sub && <small>{first.sub}</small>}</span></>} foot={<><b>{d.view}</b>{table.chips.join(' · ')}</>}>
+    <DetailShell lang={lang} head={<>{first.t === 'who' && <WhoAvatar c={first} size={26} />}<span className="dv-title"><b>{title}</b>{first.t === 'who' && first.sub && <small>{first.sub}</small>}</span></>} foot={<><b>{d.view}</b>{table.chips.join(' · ')}</>}>
       <dl className="dv-rows">
         {row.map((c, j) => j === lead ? null : <div key={j}><dt>{table.cols[j]}</dt><dd>{value(c)}</dd></div>)}
       </dl>

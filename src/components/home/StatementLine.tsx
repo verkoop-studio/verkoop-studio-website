@@ -2,6 +2,7 @@ import { motion, useMotionValue, useMotionValueEvent, useReducedMotion, useScrol
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useLang } from '../../i18n/LanguageContext'
 import { trackEvent } from '../../lib/analytics'
+import ChannelLogo from '../brand/ChannelLogo'
 import Cta from '../brand/Cta'
 
 type Item =
@@ -108,7 +109,7 @@ export default function StatementLine() {
             if (item.kind === 'labels') {
               return (
                 <span key={i} data-item className={`sl-labels${item.labels.length > 1 ? ' sl-labels--stack' : ''}`} aria-hidden="true">
-                  {item.labels.map((label, n) => <span key={label.text} className="sl-label" style={{ '--tone': label.tone, '--tilt': `${label.tilt}deg`, '--n': n } as CSSProperties}>{label.text}</span>)}
+                  {item.labels.map((label, n) => <span key={label.text} className="sl-label" style={{ '--tone': label.tone, '--tilt': `${label.tilt}deg`, '--n': n } as CSSProperties}><ChannelLogo name={label.text} />{label.text}</span>)}
                 </span>
               )
             }
