@@ -300,12 +300,12 @@
 /* Unfocused posters: one even paper veil over the whole frame instead of a filter on the art,
    which Chrome can paint in tiles when the poster is half outside the scroller. */
 .vs-slide .vs-poster, .vs-slide:not(.is-active) .vs-poster { opacity: 1; filter: none; animation: none; }
-.vs-slide-frame::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #ebe8e0; opacity: 0.74; transition: opacity 0.4s ease; }
+.vs-slide-frame::after { content: ''; position: absolute; inset: 0; z-index: 2; pointer-events: none; background: #ebe8e0; opacity: 0.38; transition: opacity 0.4s ease; }
 :is(.vs-slide.is-active, .vs-case-live) .vs-slide-frame::after { opacity: 0; }
 @supports (animation-timeline: view()) {
   .vs-slide .vs-slide-frame::after { opacity: unset; animation: vs-veil linear both; animation-timeline: --vs-slide; }
 }
-@keyframes vs-veil { 0% { opacity: 0.74; } 42%, 58% { opacity: 0; } 100% { opacity: 0.74; } }
+@keyframes vs-veil { 0% { opacity: 0.38; } 42%, 58% { opacity: 0; } 100% { opacity: 0.38; } }
 @media (prefers-reduced-motion: reduce) { .vs-slide .vs-slide-frame::after { animation: none; } }
 
 
