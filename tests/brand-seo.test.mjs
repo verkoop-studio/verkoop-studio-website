@@ -6,7 +6,11 @@ test('homepage connects the visible brand, search title and a single website ide
   const html = await readFile('dist/index.html', 'utf8')
   const title = html.match(/<title>(.*?)<\/title>/)[1]
   assert.match(title, /^Verkoop Studio \| .+/)
-  assert.match(html, /<p class="hero-description">Verkoop Studio helpt je met online marketing en websites\./)
+  // the brand is visible on the page itself, not only in the metadata: the header logo and the page text name it
+  const body = html.split('<body')[1].replace(/<script\b[\s\S]*?<\/script>/g, '')
+  assert.match(body, /class="vs-logo-word">verkoop</)
+  assert.match(body, />[^<]*Verkoop Studio[^<]*</)
+  assert.match(body, /<h1\b/)
   assert.match(html, /property="og:site_name" content="Verkoop Studio"/)
   const graph = JSON.parse(html.match(/<script type="application\/ld\+json">(.*?)<\/script>/s)[1])['@graph']
   const websites = graph.filter(node => node['@type'] === 'WebSite')

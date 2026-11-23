@@ -148,11 +148,13 @@ test('articles have crawlable content, authorship, links and sitemap entries', a
 
 test('hero video is discoverable before hydration and defers the YouTube player', async () => {
   const html = await readFile('dist/index.html', 'utf8')
-  const hero = html.match(/<section class="studio-hero"[\s\S]*?<\/section>/)?.[0]
+  const hero = html.match(/<section class="studio-hero[^"]*"[\s\S]*?<\/section>/)?.[0]
   assert(hero, 'Homepage includes the hero section')
-  assert.match(hero, /aria-label="Speel video af: Waarom je Meta Ads geld VERBRANDEN/)
-  assert.match(hero, /<img[^>]+src="https:\/\/i\.ytimg\.com\/vi\/tSjPY9J6ynk\/maxresdefault\.jpg"/)
-  assert.match(hero, /href="https:\/\/www\.youtube\.com\/watch\?v=tSjPY9J6ynk"/)
+  // a labelled play button over the video's own poster, a plain link to the same video, and no player yet
+  const id = hero.match(/https:\/\/i\.ytimg\.com\/vi\/([\w-]{11})\//)?.[1]
+  assert(id, 'Hero shows the video poster')
+  assert.match(hero, /<button[^>]+aria-label="Speel video af: [^"]+"/)
+  assert(hero.includes(`href="https://www.youtube.com/watch?v=${id}"`), 'Hero links to the same video')
   assert.doesNotMatch(hero, /<iframe\b/)
   assert.match(html, /href="\/cases\/pinacello"/)
 })

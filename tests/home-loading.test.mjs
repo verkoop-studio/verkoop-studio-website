@@ -59,14 +59,16 @@ test('every page embeds the shared CSS and deprioritizes hydration download', as
 })
 
 test('home and academy heroes show the video without loading a player before interaction', async () => {
-  for (const [file, heroClass] of [['dist/index.html', 'studio-hero'], ['dist/academy/index.html', 'ac-hero ac-wrap']]) {
+  for (const [file, heroClass] of [['dist/index.html', 'studio-hero[^"]*'], ['dist/academy/index.html', 'ac-hero ac-wrap']]) {
     const html = await readFile(file, 'utf8')
     const hero = html.match(new RegExp(`<section class="${heroClass}"[\\s\\S]*?<\\/section>`))?.[0]
     assert(hero, file)
+    // whichever video the hero shows: its poster, a labelled play button, a link without scripts, and no player before a click
+    const id = hero.match(/https:\/\/i\.ytimg\.com\/vi\/([\w-]{11})\//)?.[1]
+    assert(id, `${file}: video poster`)
     assert.match(hero, /<button[^>]+aria-label="Speel video af:/)
-    assert.match(hero, /https:\/\/i\.ytimg\.com\/vi\/tSjPY9J6ynk\/maxresdefault\.jpg/)
     assert.doesNotMatch(hero, /<iframe\b/)
-    assert.match(hero, /<noscript><a href="https:\/\/www\.youtube\.com\/watch\?v=tSjPY9J6ynk"/)
+    assert(hero.includes(`<noscript><a href="https://www.youtube.com/watch?v=${id}"`), `${file}: link to the video without scripts`)
   }
 })
 

@@ -2,7 +2,8 @@ import { test } from 'node:test'
 import assert from 'node:assert/strict'
 import { readFile } from 'node:fs/promises'
 
-const text = await readFile(new URL('../public/llms.txt', import.meta.url), 'utf8')
+// line endings as served, whatever the checkout's settings
+const text = (await readFile(new URL('../public/llms.txt', import.meta.url), 'utf8')).replace(/\r\n/g, '\n')
 
 test('llms.txt is a plain-text site summary an assistant can read in one request', () => {
   assert.match(text, /^# Verkoop Studio\n/)
