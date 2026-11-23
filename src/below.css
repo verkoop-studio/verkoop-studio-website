@@ -2088,3 +2088,8 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
 
 /* ---------- FAQ card: a breathing dot field rising from the bottom, swelling near the pointer ---------- */
 .vs-dotfield { position: absolute; inset: 0; z-index: -1; display: block; width: 100%; height: 100%; pointer-events: none; }
+
+/* ---------- Featured plan: a hairline in the brand gradient and a soft coloured glow that warms on hover ---------- */
+.vs-plan.vs-plan--dark { border-color: transparent; background: linear-gradient(var(--vs-ink), var(--vs-ink)) padding-box, linear-gradient(137deg, #2b4bf2, #b9c8ff 52%, #ff9fd0) border-box;
+  box-shadow: -22px 26px 64px -30px rgb(43 75 242 / 0.55), 22px 30px 64px -30px rgb(255 159 208 / 0.45), 0 -12px 48px -30px rgb(185 200 255 / 0.5); }
+.vs-plan.vs-plan--dark:hover { box-shadow: -26px 34px 80px -28px rgb(43 75 242 / 0.75), 26px 38px 80px -28px rgb(255 159 208 / 0.6), 0 -16px 60px -28px rgb(185 200 255 / 0.65); }
