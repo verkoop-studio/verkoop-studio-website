@@ -82,7 +82,8 @@ export default function StatementLine() {
       const end = Math.min(start, -(track.current.scrollWidth - width * 0.9))
       from.set(start)
       to.set(end)
-      setTravel(Math.round((start - end) * 0.62))
+      // the scroll it takes to carry the line across; shorter on phones, where a screen holds fewer words
+      setTravel(Math.round((start - end) * (width < 760 ? 0.36 : 0.62)))
       reveal()
     }
     const frame = requestAnimationFrame(measure)
