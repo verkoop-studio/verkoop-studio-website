@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'motion/react'
+import { motion, useInView, useReducedMotion } from 'motion/react'
 import { Mail } from 'lucide-react'
 import WhatsAppIcon from './brand/WhatsAppIcon'
 import { useRef, type PointerEvent } from 'react'
@@ -90,8 +90,11 @@ function CtaBand({ home }: { home: boolean }) {
   const t = COPY[lang]
   const reduce = useReducedMotion()
   const placement = home ? 'home_closing' : 'footer_band'
+  const band = useRef<HTMLElement>(null)
+  const near = useInView(band, { margin: '200px 0px' })
   return (
-    <section className="vs-band" aria-labelledby="band-title">
+    <section ref={band} className="vs-band" data-near={near || undefined} aria-labelledby="band-title">
+      <span className="vs-band-glow" aria-hidden="true" />
       <svg className="vs-band-wave" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
         <path className="vs-band-wave-fill" d="M0 80V40C160 8 320 8 480 32s320 56 480 32 320-48 480-24V80Z" />
         <motion.path className="vs-band-wave-line" d="M0 40C160 8 320 8 480 32s320 56 480 32 320-48 480-24" initial={reduce ? false : { pathLength: 0 }} whileInView={{ pathLength: 1 }} viewport={{ once: true }} transition={{ duration: 1.4, ease: EASE }} />

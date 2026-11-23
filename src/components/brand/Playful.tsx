@@ -64,7 +64,7 @@ export function Ribbon({ className = '' }: { className?: string }) {
       <span className="vs-ribbon-sit"><BotAvatar shape="cat" size={56} color="#ffd23f" live /></span>
       <motion.span className="vs-ribbon-hang" style={reduce ? undefined : { rotate: swing }}>
         <i className="vs-ribbon-string" />
-        <BotAvatar shape="star" size={48} color="#ff9fd0" live />
+        <BotAvatar shape="cloud" size={48} color="#ff9fd0" live />
       </motion.span>
     </div>
   )

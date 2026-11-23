@@ -2041,3 +2041,47 @@ a:hover .vs-poster-shot--work .wk-cursor i { animation: wk-press 0.6s ease-out 3
   .wk-step-dot:not([data-on]):hover::before { background: color-mix(in srgb, var(--vs-ink) 45%, transparent); }
 }
 .wk-step-dot::before { transition: background-color 0.2s ease; }
+
+/* ---------- Closing band: five soft colour fields drifting and breathing under the words ---------- */
+@property --bx1 { syntax: '<percentage>'; inherits: false; initial-value: 8%; }
+@property --by1 { syntax: '<percentage>'; inherits: false; initial-value: 20%; }
+@property --bx2 { syntax: '<percentage>'; inherits: false; initial-value: 92%; }
+@property --by2 { syntax: '<percentage>'; inherits: false; initial-value: 20%; }
+@property --bx3 { syntax: '<percentage>'; inherits: false; initial-value: 12%; }
+@property --by3 { syntax: '<percentage>'; inherits: false; initial-value: 92%; }
+@property --bx4 { syntax: '<percentage>'; inherits: false; initial-value: 88%; }
+@property --by4 { syntax: '<percentage>'; inherits: false; initial-value: 88%; }
+@property --bx5 { syntax: '<percentage>'; inherits: false; initial-value: 55%; }
+@property --by5 { syntax: '<percentage>'; inherits: false; initial-value: 55%; }
+@property --bs1 { syntax: '<percentage>'; inherits: false; initial-value: 50%; }
+@property --bs2 { syntax: '<percentage>'; inherits: false; initial-value: 50%; }
+@property --bs3 { syntax: '<percentage>'; inherits: false; initial-value: 40%; }
+@property --bs4 { syntax: '<percentage>'; inherits: false; initial-value: 50%; }
+@property --bs5 { syntax: '<percentage>'; inherits: false; initial-value: 45%; }
+.vs-band { isolation: isolate; }
+.vs-band-glow { position: absolute; inset: 0; z-index: -1; overflow: hidden; pointer-events: none;
+  background-color: var(--vs-blue);
+  background-image:
+    radial-gradient(circle at var(--bx1) var(--by1), #5d79ff 0, transparent var(--bs1)),
+    radial-gradient(circle at var(--bx2) var(--by2), #1a2ec0 0, transparent var(--bs2)),
+    radial-gradient(circle at var(--bx3) var(--by3), rgb(255 159 208 / 0.5) 0, transparent var(--bs3)),
+    radial-gradient(circle at var(--bx4) var(--by4), #1d33cf 0, transparent var(--bs4)),
+    radial-gradient(circle at var(--bx5) var(--by5), rgb(185 200 255 / 0.42) 0, transparent var(--bs5));
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 140px);
+  mask-image: linear-gradient(180deg, transparent 0, #000 140px);
+  animation: vs-bb1 16s ease-in-out infinite, vs-bb2 19s ease-in-out infinite, vs-bb3 17s ease-in-out infinite, vs-bb4 21s ease-in-out infinite, vs-bb5 13s ease-in-out infinite,
+    vs-bs1 11s ease-in-out infinite, vs-bs2 13s ease-in-out infinite, vs-bs3 12s ease-in-out infinite, vs-bs4 14s ease-in-out infinite, vs-bs5 10s ease-in-out infinite;
+  animation-play-state: paused; }
+.vs-band[data-near] .vs-band-glow { animation-play-state: running; }
+.vs-band-glow::after { content: ''; position: absolute; inset: 0; background-image: var(--vs-grain); opacity: 0.55; mix-blend-mode: overlay; }
+@keyframes vs-bb1 { 0%, 100% { --bx1: 5%; --by1: 25%; } 25% { --bx1: 40%; --by1: 35%; } 50% { --bx1: 28%; --by1: 70%; } 75% { --bx1: 2%; --by1: 50%; } }
+@keyframes vs-bb2 { 0%, 100% { --bx2: 95%; --by2: 20%; } 33% { --bx2: 60%; --by2: 40%; } 66% { --bx2: 82%; --by2: 70%; } }
+@keyframes vs-bb3 { 0%, 100% { --bx3: 8%; --by3: 95%; } 40% { --bx3: 42%; --by3: 72%; } 70% { --bx3: 24%; --by3: 100%; } }
+@keyframes vs-bb4 { 0%, 100% { --bx4: 95%; --by4: 95%; } 30% { --bx4: 62%; --by4: 74%; } 60% { --bx4: 100%; --by4: 55%; } }
+@keyframes vs-bb5 { 0%, 100% { --bx5: 55%; --by5: 55%; } 25% { --bx5: 72%; --by5: 38%; } 50% { --bx5: 42%; --by5: 74%; } 75% { --bx5: 32%; --by5: 46%; } }
+@keyframes vs-bs1 { 0%, 100% { --bs1: 40%; } 50% { --bs1: 70%; } }
+@keyframes vs-bs2 { 0%, 100% { --bs2: 40%; } 50% { --bs2: 72%; } }
+@keyframes vs-bs3 { 0%, 100% { --bs3: 28%; } 50% { --bs3: 50%; } }
+@keyframes vs-bs4 { 0%, 100% { --bs4: 40%; } 50% { --bs4: 70%; } }
+@keyframes vs-bs5 { 0%, 100% { --bs5: 32%; } 50% { --bs5: 56%; } }
+@media (prefers-reduced-motion: reduce) { .vs-band-glow { animation: none; } }
