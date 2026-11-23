@@ -1,6 +1,7 @@
 import { useInView, useReducedMotion } from 'motion/react'
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react'
 import type { Lang } from '../../data/types'
+import DotField from './DotField'
 
 export interface FaqRow { question: string; answer: string; extra?: boolean }
 
@@ -64,6 +65,7 @@ export default function FaqFolder({ id, title, items, lang, lede, group, titleId
         <span className="vs-faq-tab-face"><i>?</i>FAQ · {visible.length} {nl ? 'vragen' : 'questions'}</span>
       </p>
       <div className="vs-faq-card">
+        <DotField className="vs-faq-dots" alpha={0.22} from={0.45} dense={1.1} step={20} />
         <div className="vs-faq-head">
           <h2 id={headId} className="vs-h2">{title}</h2>
           {lede && <p className="vs-faq-lede">{lede}</p>}
