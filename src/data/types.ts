@@ -33,6 +33,8 @@ export interface CaseStudy {
   slug: CaseSlug
   name: string
   sector: Bi<string>
+  /** The one published result, shown wherever the case is listed. Cases without one show their sector. */
+  result?: Bi<string>
   status: 'ongoing' | 'afgerond' | 'showcase'
   summary: Bi<string>
   situation: Bi<string>
@@ -49,29 +51,6 @@ export interface CaseStudy {
   comingSoon?: boolean
   unavailable?: boolean
   liveUrl?: string
-}
-
-export interface Client {
-  name: string
-  description: Bi<string>
-  image?: string
-}
-
-export interface PortfolioItem {
-  id: string
-  project: string
-  caseSlug: CaseSlug
-  category: 'B2B' | 'B2C' | 'ecommerce' | 'lokaal' | 'launch'
-  audience: Bi<string>
-  objective: Bi<string>
-  conversion: Bi<string>
-  description: Bi<string>
-  liveUrl?: string
-}
-
-export interface AIFlow {
-  title: Bi<string>
-  steps: Bi<string[]>
 }
 
 export interface ProcessStep {

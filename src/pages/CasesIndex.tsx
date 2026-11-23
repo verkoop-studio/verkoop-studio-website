@@ -1,8 +1,16 @@
+import { motion, useReducedMotion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import LyteWork from '../components/LyteWork'
+import Wordmarks from '../components/cases/Wordmarks'
 import Seo from '../components/Seo'
-import CaseVisual from '../components/CaseVisual'
-import { cases } from '../data/cases'
+import Arrow from '../components/brand/Arrow'
+import Cta from '../components/brand/Cta'
+import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
+import Reveal from '../components/brand/Reveal'
+import SplitHeadline from '../components/brand/SplitHeadline'
+import { EASE } from '../components/brand/motion'
+import CasePoster from '../components/home/CasePoster'
+import { caseHeadline, cases } from '../data/cases'
 import { trackEvent } from '../lib/analytics'
 import { useLang } from '../i18n/LanguageContext'
 
@@ -11,61 +19,78 @@ const COPY = {
     seoTitle: 'Cases',
     seoDescription:
       "Ecommerce, hospitality en consumer brands: cases van Pinacello, Healthfactor, E-Kart en Nooms.",
-    title: 'Werk dat ideeën verder brengt',
-    body: 'Van groeicampagnes en ecommerce tot de websites eronder. Ontdek de ervaring achter Verkoop Studio, met de oorspronkelijke uitvoerder bij elk project.',
+    label: 'Cases',
+    title: [{ text: 'Werk uit' }, { text: 'de praktijk.', tone: 'accent' as const }],
+    body: 'Campagnes, webshops en websites. Bij elk project staat wie het maakte.',
     ongoing: 'Lopend project',
+    cta: 'Plan een gesprek',
     view: 'Bekijk de case',
   },
   en: {
     seoTitle: 'Cases',
     seoDescription:
       "Ecommerce, hospitality and consumer brands: cases from Pinacello, Healthfactor, E-Kart and Nooms.",
-    title: 'Work that takes ideas further',
-    body: 'From growth campaigns and ecommerce to the websites underneath. Explore the experience behind Verkoop Studio, with the original team credited on each project.',
+    label: 'Cases',
+    title: [{ text: 'Selected' }, { text: 'work.', tone: 'accent' as const }],
+    body: 'Campaigns, shops and websites. Every project says who made it.',
     ongoing: 'Ongoing project',
+    cta: 'Plan a call',
     view: 'View the case',
   },
 }
 
 export default function CasesIndex() {
+  usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
   const t = COPY[lang]
+  const reduce = useReducedMotion()
+  const list = cases.filter((c) => !c.unavailable)
 
   return (
-    <div>
+    <div className="vs-page">
       <Seo title={t.seoTitle} description={t.seoDescription} path="/cases" />
 
-      <section className="border-b border-line">
-        <div className="mx-auto max-w-4xl px-5 py-16 sm:px-8 sm:py-24">
-          <h1 className="font-display text-4xl text-paper text-balance sm:text-5xl">{t.title}</h1>
-          <p className="mt-5 max-w-2xl text-lg text-bone">{t.body}</p>
+      <section className="vs-wrap vs-cases-hero" aria-labelledby="cases-title">
+        <div className="vs-cases-hero-copy">
+          <p className="vs-label">{t.label}</p>
+          <SplitHeadline as="h1" id="cases-title" className="vs-h1" parts={t.title} onMount />
+          <motion.p className="vs-lead" initial={reduce ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6, ease: EASE }}>{t.body}</motion.p>
+          <motion.div className="vs-cases-cta" initial={reduce ? false : { opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.75, ease: EASE }}>
+            <Cta to="/contact" onClick={() => trackEvent('audit_cta_clicked', { placement: 'cases_hero' })}>{t.cta}</Cta>
+          </motion.div>
         </div>
       </section>
 
-      <section>
-        <div className="mx-auto grid max-w-6xl gap-5 px-5 py-16 sm:grid-cols-2 sm:px-8 sm:py-20">
-          {cases.map((c) => (
-            <Link
-              key={c.slug}
-              to={`/cases/${c.slug}`}
-              onClick={() => trackEvent('case_viewed', { case: c.slug, placement: 'cases_index' })}
-              className="group rounded-2xl border border-line bg-surface p-6 transition hover:border-accent"
-            >
-              <CaseVisual case={c} lang={lang} ratio="aspect-[16/10]" />
-              <div className="mt-5 flex items-center gap-3">
-                <h2 className="font-display text-xl text-paper">{c.name}</h2>
-                {c.status === 'ongoing' && <span className="text-xs italic text-accent-2">{t.ongoing}</span>}
-              </div>
-              <p className="mt-2 text-xs text-accent-2">Stef Keppens · Growth & strategy</p>
-              <p className="mt-3 text-sm leading-relaxed text-bone">{c.summary[lang]}</p>
-              <span className="mt-5 text-sm font-medium text-accent-2 underline decoration-transparent underline-offset-4 transition group-hover:decoration-accent-2">
-                {t.view}
-              </span>
-            </Link>
+      <section className="vs-wrap vs-section vs-cases-grid-wrap" aria-label={t.label}>
+        <ul className="vs-cases-grid">
+          {list.map((c, i) => (
+            <Reveal as="li" key={c.slug} delay={(i % 2) * 0.1} y={40}>
+              <Link
+                to={`/cases/${c.slug}`}
+                className="vs-case-card vs-case-live"
+                onClick={() => trackEvent('case_viewed', { case: c.slug, placement: 'cases_index' })}
+              >
+                <div className="vs-case-card-frame">
+                  <CasePoster slug={c.slug} name={c.name} caption={caseHeadline(c, lang)} lang={lang} />
+                </div>
+                <div className="vs-case-card-meta">
+                  <div>
+                    <h2 className="vs-case-card-name">{c.name}</h2>
+                    <p className="vs-case-card-result">{caseHeadline(c, lang)}</p>
+                  </div>
+                  {c.status === 'ongoing' && <span className="vs-case-card-chip">{t.ongoing}</span>}
+                </div>
+                <span className="vs-textlink vs-textlink--arrow vs-case-card-link">{t.view}<Arrow size={15} /></span>
+              </Link>
+            </Reveal>
           ))}
-        </div>
+        </ul>
       </section>
+
+      <Wordmarks lang={lang} />
+
       <LyteWork />
+
     </div>
   )
 }

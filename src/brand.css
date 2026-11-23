@@ -1,0 +1,697 @@
+/* Verkoop Studio design system.
+   Warm paper and ink, one blue accent. Geist for text, Funnel Display for headlines, a blue chip for accent words,
+   Caveat for hand-written notes, Bebas Neue for small step numbers.
+   Classes are prefixed `vs-` so they never collide with the older page styles. */
+
+:root {
+  --vs-paper: #f5f3ee;
+  --vs-stone: #ece9e1;
+  --vs-card: #fbfaf7;
+  --vs-ink: #111110;
+  --vs-ink-2: #3b3a36;
+  --vs-mute: #66635d;
+  --vs-line: #dcd8ce;
+  --vs-line-dark: #2a2926;
+  --vs-blue: #2b4bf2;
+  --vs-blue-on-ink: #7d93ff;
+  --vs-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --vs-ease-wipe: cubic-bezier(0.58, 0.14, 0.06, 0.97);
+  --vs-gutter: clamp(20px, 4vw, 40px);
+  --vs-max: 1280px;
+}
+
+body { background: var(--vs-paper); color: var(--vs-ink); }
+
+/* The new homepage runs full-bleed; older pages keep their framed layout until they are rebuilt. */
+.site-shell:has(.vs-page) { max-width: none; margin: 0; padding: 0; }
+.site-shell main > div.vs-page { margin: 0; background: transparent; border: 0; border-radius: 0; overflow: visible; }
+.site-shell:not(:has(.vs-page)) > main { padding-top: 84px; }
+
+.vs-page { overflow-x: clip; }
+
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  html:has(.vs-page) { scroll-snap-type: y proximity; scroll-padding-top: 96px; }
+  .vs-page > section { scroll-snap-align: start; }
+}
+
+.vs-wrap { width: 100%; max-width: var(--vs-max); margin-inline: auto; padding-inline: var(--vs-gutter); box-sizing: border-box; }
+
+.vs-label {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 450;
+  letter-spacing: -0.005em;
+  color: var(--vs-mute);
+}
+
+.vs-h1 {
+  margin: 0;
+  font-size: clamp(42px, 6.4vw, 92px);
+  line-height: 1.02;
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.vs-h2 {
+  margin: 0;
+  font-size: clamp(34px, 4.2vw, 58px);
+  line-height: 1.04;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  text-wrap: balance;
+}
+
+.vs-lead { margin: 0; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5; color: var(--vs-ink-2); text-wrap: pretty; }
+
+.vs-section { padding-block: clamp(72px, 10vw, 128px); }
+.vs-section-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: clamp(28px, 4vw, 48px); }
+
+/* ---------- CTA: sliding bed and icon circle ---------- */
+
+.vs-cta {
+  position: relative; overflow: hidden; display: inline-flex; align-items: center;
+  border-radius: 9999px; padding: 5px; cursor: pointer; text-decoration: none;
+  min-height: 48px; box-sizing: border-box; isolation: isolate;
+}
+.vs-cta-bed {
+  position: absolute; top: 5px; bottom: 5px; left: 5px;
+  width: calc(100% - 5px - 5px - 38px - 6px);
+  border-radius: 9999px; z-index: -1;
+  transition: width 0.45s var(--vs-ease), background-color 0.3s ease, box-shadow 0.3s ease;
+}
+/* on hover the pill keeps its width, so the words stay centred in it; the circle slides over to meet it */
+.vs-cta--ink:hover .vs-cta-bed, .vs-cta--ink:focus-visible .vs-cta-bed { background: #2b2a27; }
+.vs-cta--paper:hover .vs-cta-bed, .vs-cta--paper:focus-visible .vs-cta-bed { background: #e9e5dc; }
+.vs-cta-bed--full { width: calc(100% - 10px); }
+.vs-cta-text { position: relative; font-weight: 500; font-size: 15px; padding: 8px 21px; margin-right: 6px; white-space: nowrap; transition: color 0.3s ease; }
+.vs-cta-circle {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  width: 38px; height: 38px; border-radius: 9999px; flex-shrink: 0;
+  transition: transform 0.35s var(--vs-ease), background-color 0.3s ease, color 0.3s ease;
+}
+.vs-cta:hover .vs-cta-circle, .vs-cta:focus-visible .vs-cta-circle { transform: translateX(-6px); }
+
+.vs-cta--ink { background: transparent; }
+.vs-cta--ink .vs-cta-bed { background: var(--vs-ink); }
+.vs-cta--ink .vs-cta-text { color: var(--vs-paper); }
+.vs-cta--ink .vs-cta-circle { background: var(--vs-blue); color: #fff; }
+
+.vs-cta--paper .vs-cta-bed { background: var(--vs-paper); }
+.vs-cta--paper .vs-cta-text { color: var(--vs-ink); }
+.vs-cta--paper .vs-cta-circle { background: var(--vs-blue); color: #fff; }
+
+.vs-cta--line { box-shadow: inset 0 0 0 1px var(--vs-line); transition: box-shadow 0.3s ease; }
+.vs-cta--line:hover { box-shadow: inset 0 0 0 1px var(--vs-ink); }
+.vs-cta--line .vs-cta-text { color: var(--vs-ink); padding-inline: 20px; }
+/* the words fill the pill exactly; the 6px after them is the gap before the circle */
+.vs-cta--line .vs-cta-text, .vs-cta-bed--full ~ .vs-cta-text { margin-right: 0; }
+
+.vs-cta:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
+
+.vs-textlink { color: var(--vs-ink-2); text-decoration: none; font-size: 15px; background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat; transition: background-size 0.4s var(--vs-ease), color 0.2s; padding-bottom: 2px; }
+.vs-textlink:hover { color: var(--vs-ink); background-size: 100% 1px; }
+
+/* ---------- Header: transparent, then compressing ---------- */
+
+/* Centred with left/right + auto margins, not a transform. */
+.vs-header {
+  position: fixed; left: 14px; right: 14px; margin-inline: auto; z-index: 50;
+  top: 14px; max-width: 1440px;
+  transition: top 0.5s var(--vs-ease), max-width 0.5s var(--vs-ease);
+}
+.vs-header.is-scrolled { top: 10px; max-width: 1040px; }
+.vs-header-bar {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+  border-radius: 9999px; padding: 8px 8px 8px 20px; min-height: 56px; box-sizing: border-box;
+  border: 1px solid transparent; background: transparent;
+  transition: background 0.5s var(--vs-ease), border-color 0.5s var(--vs-ease), box-shadow 0.5s var(--vs-ease), padding 0.5s var(--vs-ease);
+}
+.vs-header.is-scrolled .vs-header-bar {
+  background: rgb(251 250 247 / 0.86); border-color: rgb(220 216 206 / 0.7);
+  box-shadow: 0 12px 40px rgb(17 17 16 / 0.08);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4); backdrop-filter: blur(20px) saturate(1.4);
+}
+.vs-logo { display: inline-flex; align-items: baseline; gap: 5px; color: var(--vs-ink); text-decoration: none; min-width: 0; }
+.vs-logo-word { font-size: 24px; font-weight: 700; letter-spacing: -1.3px; line-height: 1; }
+.vs-logo-dot { color: var(--vs-blue); }
+.vs-logo-sub { font-size: 12px; font-weight: 500; letter-spacing: -0.2px; }
+
+.vs-nav { position: relative; display: flex; gap: 2px; justify-self: center; }
+.vs-tab { position: relative; display: inline-flex; align-items: center; gap: 3px; min-height: 40px; padding: 0 12px; border-radius: 9999px; color: var(--vs-ink-2); font-size: 14px; font-weight: 450; text-decoration: none; cursor: pointer; transition: color 0.2s; }
+.vs-tab:hover, .vs-tab[aria-current], .vs-tab[aria-expanded='true'], .vs-tab.is-current { color: var(--vs-ink); }
+.vs-tab-caret { opacity: 0.55; transition: transform 0.35s var(--vs-ease); }
+[aria-expanded='true'] > .vs-tab-caret { transform: rotate(180deg); }
+.vs-nav-pill { position: absolute; inset: 0; border-radius: 9999px; z-index: -1; }
+.vs-nav-pill--active { background: rgb(17 17 16 / 0.07); }
+.vs-nav-pill--hover { background: rgb(17 17 16 / 0.045); }
+
+/* Menu panel: one box under the tabs, sized and placed by NavMenu.tsx. */
+.vs-mega { position: absolute; top: calc(100% + 18px); left: 0; overflow: hidden; border-radius: 20px; background: var(--vs-card); box-shadow: 0 0 0 1px var(--vs-line), 0 24px 60px -24px rgb(17 17 16 / 0.3); }
+.vs-mega-in { position: absolute; top: 0; left: 0; box-sizing: border-box; padding: 14px; }
+.vs-mega-label { padding: 6px 12px 8px; color: var(--vs-mute); font-size: 13px; }
+.vs-mega-more { display: flex; align-items: center; gap: 6px; min-height: 44px; margin-top: 8px; padding: 6px 12px 0; border-top: 1px solid var(--vs-line); color: var(--vs-ink); font-size: 14px; font-weight: 500; text-decoration: none; }
+.vs-mega-more svg { transition: transform 0.3s var(--vs-ease); }
+.vs-mega-more:hover svg { transform: translateX(3px); }
+.vs-mi { --mi: var(--vs-blue); --mi-on: #fff; --mi-tint: rgb(43 75 242 / 0.08); position: relative; isolation: isolate; display: grid; grid-template-columns: minmax(0, 1fr) 26px; column-gap: 10px; align-items: center; padding: 10px 12px; border-radius: 12px; color: var(--vs-ink); text-decoration: none; }
+.vs-mi::before { content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: var(--mi-tint); opacity: 0; transform: translateX(-10px); transition: opacity 0.25s, transform 0.35s var(--vs-ease); }
+.vs-mi-t { font-size: 14.5px; font-weight: 550; line-height: 1.4; transition: transform 0.3s var(--vs-ease); }
+.vs-mi-t { grid-column: 1; }
+.vs-mi-n { grid-column: 1; color: var(--vs-mute); font-size: 13px; line-height: 1.4; }
+.vs-mi--t1 { --mi: #f5c400; --mi-on: var(--vs-ink); --mi-tint: rgb(255 210 63 / 0.2); }
+.vs-mi--t2 { --mi: #ff7ab8; --mi-on: var(--vs-ink); --mi-tint: rgb(255 159 208 / 0.22); }
+.vs-mi-go { grid-column: 2; grid-row: 1 / span 2; justify-self: end; display: grid; place-items: center; width: 8px; height: 8px; border-radius: 50%; background: var(--mi); color: var(--mi-on); transition: width 0.3s var(--vs-ease), height 0.3s var(--vs-ease); }
+.vs-mi-go .vs-arrow { opacity: 0; transition: opacity 0.2s, rotate 0.25s var(--vs-ease); }
+.vs-mi:hover .vs-mi-go, .vs-mi:focus-visible .vs-mi-go, .vs-mi[aria-current] .vs-mi-go { width: 26px; height: 26px; }
+.vs-mi:hover .vs-mi-go .vs-arrow, .vs-mi:focus-visible .vs-mi-go .vs-arrow { opacity: 1; }
+.vs-mi:active { scale: 0.99; }
+.vs-mi:focus-visible { outline: 2px solid var(--vs-blue); outline-offset: 1px; }
+.vs-mi:hover::before, .vs-mi:focus-visible::before { opacity: 1; transform: none; }
+.vs-mi:hover .vs-mi-t, .vs-mi:focus-visible .vs-mi-t { transform: translateX(4px); }
+
+.vs-header-end { display: flex; align-items: center; justify-content: flex-end; gap: 10px; }
+/* Language picker: a pill that opens a short list */
+.vs-lang { position: relative; display: inline-flex; }
+.vs-lang-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 10px 0 11px; border: 0; border-radius: 9999px; background: transparent; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); font: 500 13px/1 var(--font-sans); letter-spacing: 0; cursor: pointer; }
+.vs-lang-btn:hover, .vs-lang-btn[aria-expanded='true'] { box-shadow: inset 0 0 0 1px var(--vs-ink); }
+.vs-lang-btn:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
+.vs-lang-globe { color: var(--vs-ink-2); transition: rotate 0.6s var(--vs-ease); }
+.vs-lang-btn:hover .vs-lang-globe, .vs-lang-btn[aria-expanded='true'] .vs-lang-globe { rotate: 30deg; }
+.vs-lang-code { position: relative; display: inline-grid; overflow: hidden; padding-block: 3px; line-height: 1.1; }
+.vs-lang-code > span { display: block; }
+.vs-lang-chev { color: var(--vs-mute); transition: rotate 0.3s var(--vs-ease); }
+.vs-lang-btn[aria-expanded='true'] .vs-lang-chev { rotate: 180deg; }
+.vs-lang-menu { position: absolute; left: 0; top: calc(100% + 12px); z-index: 60; min-width: 216px; padding: 6px; border-radius: 18px; background: #fff; box-shadow: 0 0 0 1px var(--vs-line), 0 28px 50px -26px rgb(17 17 16 / 0.5); transform-origin: 0 0; }
+.vs-lang-menu[data-open='false'] { visibility: hidden; pointer-events: none; transition: visibility 0s linear 0.16s; }
+.vs-lang--up .vs-lang-menu { top: auto; bottom: calc(100% + 10px); transform-origin: 0 100%; }
+.vs-lang-title { margin: 0; padding: 8px 12px 6px; color: var(--vs-mute); font-size: 13px; }
+.vs-lang-list { display: grid; gap: 2px; margin: 0; padding: 0; list-style: none; }
+.vs-lang-opt { position: relative; isolation: isolate; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; padding: 0 12px; border-radius: 12px; color: var(--vs-ink); font-size: 15px; font-weight: 500; cursor: pointer; }
+.vs-lang-hl { position: absolute; inset: 0; z-index: -1; border-radius: 12px; background: var(--vs-stone); }
+.vs-lang-hello { color: var(--vs-mute); font: 500 15px/1 var(--font-display); letter-spacing: -0.01em; transition: color 0.25s, translate 0.35s var(--vs-ease); }
+.vs-lang-opt[data-at] .vs-lang-hello { color: var(--vs-blue); translate: -2px 0; }
+.vs-lang-tick { flex: none; color: var(--vs-blue); }
+.vs-lang--up .vs-lang-btn { min-height: 46px; padding: 0 14px 0 15px; font-size: 15px; }
+.vs-lang--end .vs-lang-menu { left: auto; right: 0; transform-origin: 100% 0; }
+.vs-lang--up.vs-lang--end .vs-lang-menu { transform-origin: 100% 100%; }
+.vs-lang--dark .vs-lang-btn { box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); color: #fff; min-height: 44px; font-size: 14px; }
+.vs-lang--dark .vs-lang-btn:hover, .vs-lang--dark .vs-lang-btn[aria-expanded='true'] { box-shadow: inset 0 0 0 1px #fff; }
+.vs-lang--dark .vs-lang-globe, .vs-lang--dark .vs-lang-chev { color: #b9b5ac; }
+/* Over the dark first screen of the homepage, before the bar becomes the pill. */
+.vs-logo, .vs-logo-dot { transition: color 0.4s var(--vs-ease); }
+.vs-header.is-on-dark { max-width: calc(100vw - 28px); }
+.vs-header.is-on-dark .vs-logo { color: #fff; }
+.vs-header.is-on-dark .vs-logo-dot { color: #8fa2ff; }
+.vs-header.is-on-dark .vs-tab { color: rgb(255 255 255 / 0.84); }
+.vs-header.is-on-dark .vs-tab:hover, .vs-header.is-on-dark .vs-tab[aria-current], .vs-header.is-on-dark .vs-tab[aria-expanded='true'], .vs-header.is-on-dark .vs-tab.is-current { color: #fff; }
+.vs-header.is-on-dark .vs-nav-pill--active { background: rgb(255 255 255 / 0.16); }
+.vs-header.is-on-dark .vs-nav-pill--hover { background: rgb(255 255 255 / 0.1); }
+.vs-header .vs-lang--dark .vs-lang-btn { min-height: 38px; box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4); font-size: 13px; }
+.vs-header .vs-lang--dark .vs-lang-globe, .vs-header .vs-lang--dark .vs-lang-chev { color: #fff; }
+.vs-header.is-on-dark .vs-cta.is-quiet .vs-cta-bed { box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.85); }
+.vs-header.is-on-dark .vs-cta.is-quiet .vs-cta-text { color: #fff; }
+.vs-header.is-on-dark .vs-cta.is-quiet .vs-cta-circle { color: #fff; box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / 0.85); }
+.vs-header.is-on-dark .vs-cta.is-quiet:hover .vs-cta-bed, .vs-header.is-on-dark .vs-cta.is-quiet:focus-visible .vs-cta-bed { background: #fff; }
+.vs-header.is-on-dark .vs-cta.is-quiet:hover .vs-cta-text, .vs-header.is-on-dark .vs-cta.is-quiet:focus-visible .vs-cta-text { color: var(--vs-ink); }
+.vs-header.is-on-dark .vs-menu-btn { background: #fff; color: var(--vs-ink); }
+.vs-header .vs-cta { min-height: 44px; }
+.vs-header .vs-cta-text { font-size: 14px; padding: 6px 17px; }
+.vs-header .vs-cta-circle { width: 34px; height: 34px; }
+.vs-header .vs-cta-bed { width: calc(100% - 5px - 5px - 34px - 6px); }
+.vs-header .vs-cta.is-quiet .vs-cta-bed { background: transparent; box-shadow: inset 0 0 0 1.5px var(--vs-ink); }
+.vs-header .vs-cta.is-quiet .vs-cta-text { color: var(--vs-ink); }
+.vs-header .vs-cta.is-quiet .vs-cta-circle { background: transparent; color: var(--vs-ink); box-shadow: inset 0 0 0 1.5px var(--vs-ink); }
+.vs-header .vs-cta.is-quiet:hover .vs-cta-bed, .vs-header .vs-cta.is-quiet:focus-visible .vs-cta-bed { background: var(--vs-ink); }
+.vs-header .vs-cta.is-quiet:hover .vs-cta-text, .vs-header .vs-cta.is-quiet:focus-visible .vs-cta-text { color: var(--vs-paper); }
+.vs-header .vs-cta .vs-cta-bed, .vs-header .vs-cta .vs-cta-circle { transition-property: width, transform, background-color, box-shadow, color; transition-duration: 0.35s; }
+
+/* On load the parts of the bar arrive in turn: the logo, the links from left to right, the language picker,
+   then the button, which opens from its right edge and gets its circle last. */
+@media (prefers-reduced-motion: no-preference) {
+  .vs-header .vs-logo-word { animation: vs-in-word 0.8s var(--vs-ease) 0.1s backwards; }
+  .vs-header .vs-logo-dot { display: inline-block; animation: vs-in-pop 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.62s backwards; }
+  .vs-header .vs-logo-sub { animation: vs-in-rise 0.6s var(--vs-ease) 0.5s backwards; }
+  .vs-header .vs-nav > .vs-tab { animation: vs-in-rise 0.6s var(--vs-ease) 0.24s backwards; }
+  .vs-header .vs-nav > .vs-tab:nth-child(2) { animation-delay: 0.29s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(3) { animation-delay: 0.34s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(4) { animation-delay: 0.39s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(5) { animation-delay: 0.44s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(6) { animation-delay: 0.49s; }
+  .vs-header .vs-nav > .vs-tab:nth-child(7) { animation-delay: 0.54s; }
+  .vs-header .vs-header-end > .vs-lang { animation: vs-in-rise 0.6s var(--vs-ease) 0.58s backwards; }
+  .vs-header .vs-header-end > .vs-cta { animation: vs-in-wipe 0.75s var(--vs-ease) 0.66s backwards; }
+  .vs-header .vs-header-end > .vs-cta .vs-cta-circle { animation: vs-in-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.05s backwards; }
+  .vs-header .vs-menu-btn { animation: vs-in-pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s backwards; }
+}
+@keyframes vs-in-word { from { opacity: 0; clip-path: inset(0 100% -20% 0); } to { opacity: 1; clip-path: inset(0 -5% -20% 0); } }
+@keyframes vs-in-rise { from { opacity: 0; translate: 0 10px; filter: blur(6px); } }
+@keyframes vs-in-wipe { from { opacity: 0; clip-path: inset(0 0 0 100% round 99px); } to { opacity: 1; clip-path: inset(0 0 0 0 round 99px); } }
+@keyframes vs-in-pop { from { opacity: 0; scale: 0; } }
+
+.vs-menu-btn { display: none; width: 44px; height: 44px; border: 0; border-radius: 9999px; background: var(--vs-ink); color: var(--vs-paper); align-items: center; justify-content: center; cursor: pointer; }
+
+.vs-drawer-shade { position: fixed; inset: 0; z-index: 80; background: rgb(17 17 16 / 0.5); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
+.vs-drawer {
+  position: fixed; top: 0; right: 0; z-index: 90; height: 100%; width: 84%; max-width: 360px;
+  display: flex; flex-direction: column; gap: 8px; padding: 20px 24px 32px; box-sizing: border-box;
+  overflow-y: auto; overscroll-behavior: contain;
+  background: var(--vs-paper); box-shadow: -20px 0 60px rgb(17 17 16 / 0.15);
+}
+.vs-drawer-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+.vs-drawer-close { width: 44px; height: 44px; border: 0; border-radius: 9999px; background: var(--vs-stone); color: var(--vs-ink); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+.vs-drawer :is(a, button).vs-drawer-link { display: flex; justify-content: space-between; align-items: center; width: 100%; min-height: 56px; border-bottom: 1px solid var(--vs-line); color: var(--vs-ink); font-size: 24px; font-weight: 500; letter-spacing: -0.02em; text-decoration: none; cursor: pointer; }
+.vs-drawer-group { overflow: hidden; margin-inline: -12px; }
+.vs-drawer-group .vs-mega-more { margin: 4px 12px 12px; padding-inline: 0; }
+.vs-drawer-foot { margin-top: auto; padding-top: 16px; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+
+@media (max-width: 1100px) {
+  .vs-tab { padding-inline: 9px; }
+  .vs-header-bar { gap: 10px; }
+}
+@media (max-width: 1023px) {
+  .vs-nav { display: none; }
+  .vs-header-bar { grid-template-columns: 1fr auto; }
+  .vs-header-end .vs-cta, .vs-header-end .vs-lang { display: none; }
+  .vs-menu-btn { display: inline-flex; }
+}
+
+/* ---------- Hero ---------- */
+
+.vs-page .studio-hero.vs-hero { display: block; min-height: 0; margin: 0; gap: 0; background: none; border: 0; border-radius: 0; box-shadow: none; overflow: visible; padding: clamp(140px, 18vw, 200px) 0 clamp(56px, 8vw, 96px); }
+.vs-hero .vs-label { display: block; margin-bottom: 28px; }
+.vs-hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; margin-top: 44px; }
+.vs-hero-form { min-width: 0; display: flex; }
+
+/* Letter-slide headline: words in clipped masks, letters counter-slide */
+.vs-split-word { display: inline-flex; overflow-x: clip; overflow-y: visible; padding-bottom: 0.08em; margin-bottom: -0.08em; padding-inline-end: 0.06em; margin-inline-end: -0.06em; }
+.vs-split-inner { display: inline-flex; }
+.vs-split-letter { display: inline-block; white-space: pre; }
+
+/* ---------- Contact dock ---------- */
+
+.vs-dock { position: fixed; right: 20px; bottom: 20px; z-index: 60; display: flex; align-items: flex-end; gap: 10px; }
+.vs-dock-card { display: grid; gap: 10px; width: 280px; padding: 16px; border-radius: 20px; background: var(--vs-card); border: 1px solid var(--vs-line); box-shadow: 0 24px 60px -24px rgb(17 17 16 / 0.35); }
+.vs-dock-head { display: flex; align-items: center; gap: 10px; }
+.vs-dock-head > span:last-child { display: grid; line-height: 1.25; }
+.vs-dock-head b { font-size: 14px; }
+.vs-dock-head em { color: #1d7a45; font-style: normal; font-size: 12px; font-weight: 600; }
+.vs-dock-ava { position: relative; flex: none; width: 40px; height: 40px; }
+.vs-dock-ava img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+.vs-dock-ava i { position: absolute; right: 0; bottom: 0; width: 11px; height: 11px; border: 2px solid var(--vs-card); border-radius: 50%; background: #2fbf71; animation: vs-online 1.8s ease-out infinite; }
+@keyframes vs-online { 0% { box-shadow: 0 0 0 0 rgb(47 191 113 / 0.55); } 100% { box-shadow: 0 0 0 7px rgb(47 191 113 / 0); } }
+.vs-dock-title { font-size: 16px; font-weight: 600; letter-spacing: -0.01em; }
+.vs-dock-body { margin: 0; color: var(--vs-ink-2); font-size: 14px; line-height: 1.45; }
+.vs-dock-typing { display: inline-flex; gap: 4px; justify-self: start; margin: 0; padding: 10px 12px; border-radius: 14px 14px 14px 4px; background: var(--vs-stone); }
+.vs-dock-typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--vs-mute); animation: vs-typing 1s ease-in-out infinite; }
+.vs-dock-typing i:nth-child(2) { animation-delay: 0.15s; }
+.vs-dock-typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes vs-typing { 0%, 100% { opacity: 0.35; translate: 0 0; } 40% { opacity: 1; translate: 0 -3px; } }
+.vs-dock-actions { display: flex; gap: 8px; margin-top: 2px; }
+.vs-dock-btn { position: relative; isolation: isolate; flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 42px; padding: 0 12px; overflow: hidden; border-radius: 9999px; font-size: 13.5px; font-weight: 600; text-decoration: none; transition: color 0.25s, box-shadow 0.25s; }
+.vs-dock-btn:active { scale: 0.97; }
+.vs-dock-btn:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
+.vs-dock-btn--wa { background: var(--vs-ink); color: var(--vs-paper); }
+.vs-dock-btn--wa::before { content: ''; position: absolute; inset: 0; z-index: -1; background: #1fa855; transform: scaleX(0); transform-origin: 0 50%; transition: transform 0.4s var(--vs-ease); }
+.vs-dock-btn--wa:hover::before, .vs-dock-btn--wa:focus-visible::before { transform: scaleX(1); }
+.vs-dock-btn--wa:hover svg, .vs-dock-btn--wa:focus-visible svg { animation: vs-dock-wiggle 0.5s var(--vs-ease); }
+.vs-dock-btn-go { display: inline-flex; width: 0; overflow: hidden; opacity: 0; transition: width 0.3s var(--vs-ease), opacity 0.25s; }
+.vs-dock-btn--wa:hover .vs-dock-btn-go, .vs-dock-btn--wa:focus-visible .vs-dock-btn-go { width: 13px; opacity: 1; }
+.vs-dock-btn--call { color: var(--vs-ink); box-shadow: inset 0 0 0 1px var(--vs-line); }
+.vs-dock-btn--call::before { content: ''; position: absolute; inset: 0; padding: 1.5px; border-radius: inherit; background: conic-gradient(from 180deg, var(--vs-ink) var(--vs-ring, 0deg), transparent 0); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; transition: --vs-ring 0.5s ease; pointer-events: none; }
+.vs-dock-btn--call:hover::before, .vs-dock-btn--call:focus-visible::before { --vs-ring: 360deg; }
+.vs-dock-btn--call:hover svg, .vs-dock-btn--call:focus-visible svg { animation: vs-dock-ring 0.6s ease; }
+.vs-dock-btn .vs-roll { line-height: 1.35; }
+@property --vs-ring { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes vs-dock-wiggle { 25% { rotate: -14deg; } 55% { rotate: 10deg; } 80% { rotate: -4deg; } }
+@keyframes vs-dock-ring { 10%, 30%, 50% { rotate: -16deg; } 20%, 40%, 60% { rotate: 16deg; } 70% { rotate: 0deg; } }
+/* The button: the eyes fold into a close mark while the card is open; the mark turns on hover. */
+.vs-dock-eyes, .vs-dock-x { position: absolute; inset: 0; display: grid; place-items: center; transition: opacity 0.25s, scale 0.35s var(--vs-ease), rotate 0.35s var(--vs-ease); }
+.vs-dock-x { opacity: 0; scale: 0.4; }
+.vs-dock-x i { position: absolute; width: 20px; height: 2.5px; border-radius: 2px; background: currentColor; rotate: 0deg; transition: rotate 0.35s var(--vs-ease); }
+.vs-dock-trigger.is-open .vs-dock-eyes { opacity: 0; scale: 1 0.1; }
+.vs-dock-trigger.is-open .vs-dock-x { opacity: 1; scale: 1; }
+.vs-dock-trigger.is-open .vs-dock-x i:first-child { rotate: 45deg; }
+.vs-dock-trigger.is-open .vs-dock-x i:last-child { rotate: -45deg; }
+.vs-dock-trigger.is-open:hover .vs-dock-x { rotate: 90deg; }
+@media (prefers-reduced-motion: reduce) {
+  .vs-dock-ava i, .vs-dock-typing i, .vs-dock-btn--wa:hover svg, .vs-dock-btn--call:hover svg { animation: none; }
+  .vs-dock-eyes, .vs-dock-x, .vs-dock-x i, .vs-dock-btn--wa::before, .vs-dock-btn-go { transition: none; }
+  .vs-dock-btn:active { scale: none; }
+  .vs-dock-trigger.is-open:hover .vs-dock-x { rotate: none; }
+}
+.vs-dock-trigger { position: relative; width: 56px; height: 56px; border-radius: 9999px; border: 0; background: var(--vs-ink); color: var(--vs-paper); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 14px 30px -12px rgb(17 17 16 / 0.5); }
+.vs-dock-halo { position: absolute; inset: 0; border-radius: 9999px; background: rgb(43 75 242 / 0.45); pointer-events: none; }
+@media (max-width: 600px) { .vs-dock { right: 14px; bottom: 14px; } .vs-dock-card { width: min(280px, calc(100vw - 100px)); } }
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-marquee { animation: none; }
+  .vs-slide .vs-slide-frame, .vs-slide .vs-slide-frame img, .vs-slide .vs-slide-tag { animation: none !important; }
+  .vs-cta-bed, .vs-cta-circle, .vs-plan, .vs-product-stage img, .vs-slide-frame img { transition: none; }
+}
+
+/* ---------- Motion tokens ---------- */
+
+:root {
+  --vs-dur-micro: 80ms;
+  --vs-dur-quick: 150ms;
+  --vs-dur-fast: 250ms;
+  --vs-dur-medium: 350ms;
+  --vs-dur-slow: 500ms;
+  --vs-ease-bounce: cubic-bezier(0.34, 1.36, 0.64, 1);
+}
+
+/* ---------- Scroll progress ---------- */
+
+.vs-progress { position: fixed; inset: 0 0 auto 0; height: 2px; z-index: 70; background: var(--vs-blue); transform-origin: 0 50%; pointer-events: none; }
+
+/* ---------- Press ripple ---------- */
+
+.vs-ripple { position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; pointer-events: none; background: rgb(255 255 255 / 0.38); animation: vs-ripple 0.65s var(--vs-ease) forwards; }
+.vs-cta--paper .vs-ripple, .vs-cta--line .vs-ripple { background: rgb(17 17 16 / 0.16); }
+@keyframes vs-ripple { from { transform: scale(0); opacity: 1; } to { transform: scale(34); opacity: 0; } }
+
+/* ---------- Press feedback on plain controls ---------- */
+
+.vs-round-btn, .vs-menu-btn, .vs-drawer-close, .vs-dock-trigger, .vs-lang-btn { transition-property: transform, background, color, box-shadow; transition-duration: var(--vs-dur-fast); transition-timing-function: var(--vs-ease); }
+.vs-round-btn:active, .vs-menu-btn:active, .vs-drawer-close:active, .vs-dock-trigger:active { transform: scale(0.9); }
+.vs-round-btn:disabled { opacity: 0.35; cursor: default; }
+.vs-round-btn:disabled:hover { background: transparent; color: var(--vs-ink); box-shadow: inset 0 0 0 1px var(--vs-line); }
+
+/* ---------- Rolling label (nav links) ---------- */
+
+.vs-roll { position: relative; display: inline-block; overflow: hidden; line-height: 1.35; vertical-align: bottom; }
+.vs-roll > span { display: block; transition: transform 0.5s var(--vs-ease); }
+.vs-roll > span + span { position: absolute; inset: 100% auto auto 0; }
+:is(a, button):hover > .vs-roll > span, :is(a, button):focus-visible > .vs-roll > span { transform: translateY(-100%); }
+
+
+/* ---------- Form feedback: error shake, success check ---------- */
+
+.hero-request-error { animation: vs-drop 0.3s var(--vs-ease) both; }
+@keyframes vs-drop { from { opacity: 0; transform: translateY(-4px); } }
+
+.vs-check { display: block; margin: 0 0 14px; color: var(--vs-blue); animation: vs-check-in var(--vs-dur-slow) var(--vs-ease-bounce) both; }
+.vs-check-ring { stroke: currentColor; stroke-width: 2; opacity: 0.25; }
+.vs-check-tick { stroke: currentColor; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: vs-check-draw 0.45s var(--vs-ease) 0.25s forwards; }
+@keyframes vs-check-in { from { opacity: 0; transform: translateY(10px) rotate(-12deg) scale(0.8); filter: blur(8px); } }
+@keyframes vs-check-draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-ripple, .vs-cursor { display: none; }
+  .vs-roll > span, .vs-tab-caret, .vs-mi::before, .vs-mi-t, .vs-mi-go, .vs-mega-more svg { transition: none; }
+  .hero-request-error, .vs-check { animation: none; }
+  .vs-check-tick { animation: none; stroke-dashoffset: 0; }
+}
+
+/* ---------- Display type ---------- */
+
+.vs-h1, .vs-h2, .vs-product-name, .vs-plan-price, .vs-result-figure, .vs-hero-form .hero-request h2 { font-family: var(--font-display); }
+.vs-h1 { letter-spacing: -0.035em; font-weight: 500; }
+.vs-h2 { letter-spacing: -0.03em; }
+.vs-result-figure { letter-spacing: -0.045em; }
+
+/* ---------- Hero video: no sound toggle on the homepage ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-slide .vs-poster { animation: none !important; transition: none; }
+}
+
+/* ---------- Highlighted words in headlines ---------- */
+
+.vs-mark { position: relative; display: inline-block; isolation: isolate; white-space: nowrap; color: #fff; padding: 0.02em 0.17em 0.07em; margin-inline: 0.02em; line-height: 1.04; }
+.vs-mark-bg { position: absolute; inset: 0; z-index: -1; border-radius: 0.16em; background: var(--vs-blue); transform-origin: 0 50%; }
+.vs-h1 { line-height: 1.1; }
+.vs-h2 { line-height: 1.12; }
+
+/* ---------- Client pills under the hero ---------- */
+
+.vs-proof { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: clamp(32px, 4vw, 48px); }
+.vs-proof ul { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+
+/* ---------- Hero video: still frame until the first frame plays ---------- */
+
+/* ---------- Touch: every control at least 44px ---------- */
+
+@media (pointer: coarse) {
+  .vs-tab, .vs-lang-btn, .vs-dock-actions a { min-height: 44px; }
+  .vs-textlink { display: inline-flex; align-items: center; min-height: 44px; }
+  .vs-round-btn, .vs-menu-btn, .vs-drawer-close { min-width: 44px; min-height: 44px; }
+  .site-shell footer a, .site-shell footer button { display: inline-flex; align-items: center; min-height: 44px; }
+}
+
+/* Larger hit areas for mouse users on the small text links. */
+.site-shell footer a, .site-shell footer button { display: inline-flex; align-items: center; min-height: 36px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .vs-ticker-live, .vs-ticker-head, .vs-glow-breathe, .vs-glow-ghosts { animation: none; }
+  .vs-stipple-dot { opacity: 1; transition: none; }
+}
+
+/* ---------- Full-screen hero ---------- */
+
+.vs-page .studio-hero.vs-hero { position: relative; overflow-x: clip; min-height: 100svh; display: flex; flex-direction: column; justify-content: center; padding: 120px 0 72px; box-sizing: border-box; }
+.vs-h1 .vs-h1-sub { display: block; max-width: 30ch; margin-top: 0.45em; font-size: 0.36em; letter-spacing: -0.02em; line-height: 1.2; }
+.vs-hero .vs-hero-actions { margin-top: clamp(32px, 4vw, 52px); }
+
+.vs-plan-form { display: flex; justify-content: center; padding-block: clamp(80px, 10vw, 140px) clamp(40px, 6vw, 80px); }
+.vs-plan-form .vs-hero-form { width: min(100%, 1040px); margin: 0; }
+.vs-plan-form .vs-hero-form > .vs-form-duo { width: 100%; }
+
+/* ---------- Hero: one frame. Stef's video still, graded dark, with the headline, the proof and the cases on it ---------- */
+
+.vs-page .studio-hero.vs-hero.hc { position: relative; display: block; min-height: 0; padding: 8px; box-sizing: border-box; overflow: visible; }
+.hc-frame { --hc-strip: 68px; position: relative; height: calc(100svh - 16px); min-height: 600px; max-height: 1120px; overflow: hidden; border-radius: 28px; background: #0b0d16; color: #fff; isolation: isolate; }
+.hc-media { position: absolute; inset: -3% -6% -3% 3%; z-index: -2; }
+.hc-zoom { width: 100%; height: 100%; }
+/* Taller than the frame and pinned to the top-left: the caption burned into the bottom of the still falls below the frame, and Stef sits right of the headline. */
+.hc-media img { display: block; width: 100%; height: 114%; object-fit: cover; object-position: 0% 0%; filter: saturate(0.9) contrast(1.05) brightness(0.92); transform-origin: 70% 35%; animation: hc-drift 24s ease-in-out infinite alternate; }
+@keyframes hc-drift { from { transform: scale(1); } to { transform: scale(1.06) translate(-1%, -1%); } }
+.hc-shade { position: absolute; inset: 0; z-index: -1; background: linear-gradient(96deg, rgb(8 10 22 / 0.96) 0%, rgb(8 10 22 / 0.84) 27%, rgb(8 10 22 / 0.3) 55%, rgb(8 10 22 / 0.06) 74%), linear-gradient(0deg, rgb(8 10 22 / 0.96) 0%, rgb(8 10 22 / 0.72) 14%, rgb(8 10 22 / 0) 40%); }
+
+.hc-copy { position: absolute; left: clamp(20px, 4.2vw, 68px); bottom: calc(var(--hc-strip) + clamp(22px, 4.4vh, 48px)); display: grid; justify-items: start; max-width: min(64%, 900px); }
+.vs-hero.hc .vs-h1.hc-h1 { --vs-mute: rgb(255 255 255 / 0.76); max-width: 7.6em; margin: 0; color: #fff; font-size: clamp(44px, min(8vw, 13.2vh), 128px); line-height: 1; letter-spacing: -0.045em; }
+.vs-hero.hc .hc-h1 .vs-h1-sub { max-width: 30ch; margin-top: 0.9em; font-size: clamp(17px, 0.21em, 25px); font-weight: 400; line-height: 1.3; letter-spacing: -0.012em; }
+/* English runs to three lines: a size smaller, so it stays clear of the menu and of Stef. */
+html:lang(en) .vs-hero.hc .vs-h1.hc-h1 { font-size: clamp(44px, min(7.2vw, 11.6vh), 114px); }
+.hc-actions { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: clamp(22px, 3.8vh, 40px); }
+
+/* The second action plays the video in the frame. */
+.hc-play { display: inline-flex; align-items: center; gap: 12px; min-height: 52px; padding: 5px 20px 5px 5px; border: 0; border-radius: 99px; background: rgb(255 255 255 / 0.12); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); backdrop-filter: blur(14px); color: #fff; font: inherit; text-align: left; cursor: pointer; transition: background-color 0.3s var(--vs-ease), box-shadow 0.3s var(--vs-ease), translate 0.3s var(--vs-ease); }
+.hc-play:hover { background: rgb(255 255 255 / 0.2); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.4); translate: 0 -1px; }
+.hc-play:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
+.hc-play-disc { position: relative; display: grid; place-items: center; flex: none; width: 42px; height: 42px; padding-left: 2px; box-sizing: border-box; border-radius: 50%; background: #fff; color: var(--vs-ink); transition: background-color 0.25s, color 0.25s, scale 0.35s var(--vs-ease); }
+.hc-play:hover .hc-play-disc { background: var(--vs-blue); color: #fff; scale: 1.06; }
+.hc-play:active .hc-play-disc { scale: 0.92; }
+.hc-play-ring { position: absolute; inset: -6px; border-radius: 50%; border: 1.5px solid rgb(255 255 255 / 0.7); animation: hc-pulse 2.4s ease-out infinite; }
+@media (prefers-reduced-motion: no-preference) { .hc-actions .hc-hand { animation: hc-hand-in 0.7s ease 1.75s backwards; } }
+@keyframes hc-hand-in { from { opacity: 0; } }
+@keyframes hc-pulse { 0% { scale: 0.85; opacity: 0.9; } 100% { scale: 1.26; opacity: 0; } }
+.hc-play-text { display: grid; line-height: 1.2; }
+.hc-play-text b { font-size: 15px; font-weight: 600; }
+.hc-play-text small { color: rgb(255 255 255 / 0.74); font-size: 12.5px; }
+.hc-act { display: inline-flex; }
+.hc-actions .hc-hand { position: absolute; left: calc(100% + 4px); bottom: 34px; color: #fff; text-shadow: 0 2px 14px rgb(0 0 0 / 0.5); }
+
+/* The published Pinacello figures, as two cards that float over the picture. */
+.hc-proof { position: absolute; top: clamp(92px, 13vh, 136px); right: clamp(20px, 3.6vw, 60px); width: clamp(264px, 20vw, 300px); }
+.hc-win { display: block; height: auto; border-width: 1px; border-color: transparent; border-radius: 16px; box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.7); color: var(--vs-ink); text-decoration: none; transition: translate 0.5s var(--vs-ease), box-shadow 0.5s var(--vs-ease); }
+.hc-win:hover { translate: 0 -6px; box-shadow: 0 50px 90px -30px rgb(0 0 0 / 0.75); }
+.hc-win .tx-win-bar { display: flex; }
+.hc-win .tx-win-bar b { font-size: 12.5px; white-space: nowrap; }
+.hc-win .tx-win-bar em { margin-right: 0; white-space: nowrap; }
+.hc-proof .hc-win .vs-proof-body { flex: none; padding: 16px 18px 18px; gap: 8px; overflow: visible; }
+.hc-win .vs-proof-figure { font-size: clamp(52px, 4.6vw, 72px); }
+.hc-win .vs-proof-caption { color: #6b685f; font-size: 13.5px; }
+.hc-win .vs-proof-bars { height: 80px; gap: 6px; }
+.hc-win .vs-proof-bars i { animation: hc-bar 0.7s var(--vs-ease) both; }
+@keyframes hc-bar { from { scale: 1 0; } }
+.hc-more { display: inline-flex; align-items: center; gap: 3px; font-size: 13.5px; font-weight: 500; }
+.hc-more svg { transition: translate 0.25s var(--vs-ease); }
+.hc-win:hover .hc-more svg { translate: 3px 0; }
+.hc-ping { position: absolute; right: clamp(48px, 10vw, 170px); bottom: calc(var(--hc-strip) + clamp(26px, 8vh, 92px)); width: min(318px, 26vw); }
+.hc-ping .vs-proof-video-link { border-color: transparent; box-shadow: 0 30px 60px -24px rgb(0 0 0 / 0.7); }
+.hc-ping .vs-proof-video-text span { color: #6b685f; }
+
+/* The cases along the bottom edge. */
+.hc-strip { position: absolute; left: 0; right: 0; bottom: 0; display: flex; align-items: center; height: var(--hc-strip); padding: 0 84px 0 clamp(20px, 4.2vw, 68px); border-top: 1px solid rgb(255 255 255 / 0.14); background: rgb(8 10 22 / 0.5); backdrop-filter: blur(14px); }
+.hc-strip-label { flex: none; margin-right: clamp(16px, 2.4vw, 36px); color: rgb(255 255 255 / 0.66); font-size: 13px; }
+.hc-strip ul { display: flex; flex: 1; min-width: 0; height: 100%; margin: 0; padding: 0; list-style: none; }
+.hc-strip li { flex: 1 1 0; min-width: 0; border-left: 1px solid rgb(255 255 255 / 0.12); }
+.hc-strip a { display: flex; align-items: center; gap: 10px; height: 100%; padding: 0 clamp(12px, 1.5vw, 22px); color: #fff; text-decoration: none; white-space: nowrap; transition: background-color 0.25s var(--vs-ease); }
+.hc-strip a b { flex: none; font: 600 16px/1 var(--font-display); letter-spacing: -0.01em; }
+.hc-strip a span { overflow: hidden; color: rgb(255 255 255 / 0.72); font-size: 13px; text-overflow: ellipsis; }
+.hc-strip a svg { flex: none; margin-left: auto; opacity: 0.5; transition: translate 0.25s var(--vs-ease), opacity 0.25s; }
+.hc-strip a:hover, .hc-strip a:focus-visible { background: rgb(255 255 255 / 0.1); }
+.hc-strip a:hover svg, .hc-strip a:focus-visible svg { translate: 3px 0; opacity: 1; }
+.hc-strip a:focus-visible { outline: 3px solid #839bff; outline-offset: -3px; }
+
+/* The player, in the same frame, under the menu. */
+.hc-player { position: absolute; inset: 0; z-index: 5; padding-top: 72px; box-sizing: border-box; background: #000; }
+.hc-player iframe { display: block; width: 100%; height: 100%; border: 0; }
+.hc-close { position: absolute; top: 86px; right: 14px; display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 16px 0 12px; border: 0; border-radius: 99px; background: rgb(11 13 22 / 0.72); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.22); backdrop-filter: blur(10px); color: #fff; font: 500 14px/1 var(--font-sans); cursor: pointer; transition: background-color 0.25s; }
+.hc-close:hover { background: rgb(11 13 22 / 0.92); }
+.hc-close:focus-visible { outline: 3px solid #839bff; outline-offset: 2px; }
+.hc-frame noscript a { position: absolute; z-index: 6; left: 20px; top: 84px; color: #fff; }
+
+
+@media (max-width: 1240px) { .hc-actions .hc-hand { display: none; } }
+@media (max-width: 1100px), (max-height: 700px) { .hc-ping { display: none; } }
+/* Tablets and phones: the picture fills the top with Stef in the middle, the words sit on solid ink under it, and the cases swipe sideways. */
+@media (max-width: 980px) {
+  .hc-proof { display: none; }
+  .hc-media { inset: 0; }
+  .hc-media img { height: 72%; object-position: 50% 0%; animation: none; }
+  .hc-shade { background: linear-gradient(0deg, #0b0d16 0%, #0b0d16 34%, rgb(11 13 22 / 0.86) 46%, rgb(11 13 22 / 0) 68%), linear-gradient(180deg, rgb(11 13 22 / 0.45), rgb(11 13 22 / 0) 22%); }
+  .hc-copy { left: clamp(18px, 4.2vw, 68px); right: clamp(18px, 4.2vw, 68px); bottom: calc(var(--hc-strip) + 22px); max-width: none; }
+  .hc-strip { padding: 0; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+  .hc-strip::-webkit-scrollbar { display: none; }
+  .hc-strip-label { display: none; }
+  .hc-strip ul { flex: none; padding-right: 76px; }
+  .hc-strip li { flex: none; scroll-snap-align: start; }
+  .hc-strip li:first-child { border-left: 0; }
+  .hc-strip a { padding: 0 clamp(16px, 3vw, 26px); }
+  .hc-strip a svg { margin-left: 2px; }
+}
+@media (max-width: 760px) {
+  .hc-frame { --hc-strip: 58px; min-height: 540px; border-radius: 22px; }
+  .hc-copy { bottom: calc(var(--hc-strip) + 18px); }
+  .vs-hero.hc .vs-h1.hc-h1 { max-width: none; font-size: clamp(38px, 11.4vw, 56px); }
+  .vs-hero.hc .hc-h1 .vs-h1-sub { font-size: 16.5px; }
+  .hc-actions { gap: 10px; margin-top: 20px; }
+  html:lang(en) .vs-hero.hc .vs-h1.hc-h1 { font-size: clamp(36px, 10.4vw, 52px); }
+}
+/* Short phones: the picture gets smaller, so the words never cover Stef's face. */
+@media (max-width: 760px) and (max-height: 720px) {
+  .hc-media img { height: 56%; }
+  .hc-shade { background: linear-gradient(0deg, #0b0d16 0%, #0b0d16 44%, rgb(11 13 22 / 0.86) 54%, rgb(11 13 22 / 0) 72%), linear-gradient(180deg, rgb(11 13 22 / 0.45), rgb(11 13 22 / 0) 22%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hc-media img, .hc-play-ring, .hc-win .vs-proof-bars i { animation: none; }
+  .hc-play, .hc-play-disc, .hc-win, .hc-strip a, .hc-strip a svg { transition: none; }
+}
+
+/* Contact page: the plan a visitor picked on the homepage. */
+
+/* ---------- Card anatomy: tinted stage, app window, step, title, body ---------- */
+/* Shared by the homepage system cards (below the fold) and the product pages (first screen). */
+.tx-card { width: min(100%, 680px); border-radius: 24px; background: var(--vs-card); border: 1px solid var(--vs-line); box-shadow: 0 30px 60px -34px rgb(17 17 16 / 0.42), 0 2px 4px rgb(17 17 16 / 0.05); overflow: hidden; }
+.tx-stage { position: relative; height: clamp(220px, 35svh, 310px); padding: 26px 0 0 clamp(56px, 12%, 96px); background: color-mix(in srgb, var(--t) 15%, var(--vs-stone)); border-bottom: 1px solid var(--vs-line); overflow: hidden; }
+.tx-win { height: 100%; border-radius: 14px 0 0 0; background: #fff; border: 1px solid var(--vs-line); border-width: 1px 0 0 1px; box-shadow: -18px 20px 40px -26px rgb(17 17 16 / 0.35); display: flex; flex-direction: column; font-size: 13px; color: var(--vs-ink); }
+.tx-win-bar { display: flex; align-items: center; gap: 6px; padding: 11px 14px; border-bottom: 1px solid var(--vs-line); }
+.tx-win-bar i { width: 9px; height: 9px; border-radius: 50%; background: #ff5f57; }
+.tx-win-bar i:nth-child(2) { background: #febc2e; }
+.tx-win-bar i:nth-child(3) { background: #28c840; margin-right: 8px; }
+.tx-win-bar b { font-weight: 600; }
+.tx-win-bar em { margin-left: auto; margin-right: 14px; padding: 3px 8px; border-radius: 99px; background: var(--vs-stone); color: var(--vs-mute); font-style: normal; font-size: 12px; }
+.tx-win > :last-child { flex: 1; padding: 12px 18px 50px; min-height: 0; overflow: hidden; }
+.tx-info { padding: clamp(18px, 2.4vw, 28px) clamp(20px, 2.6vw, 32px) clamp(20px, 2.6vw, 30px); }
+.tx-step { margin: 0 0 6px; color: var(--vs-blue); font: 400 20px/1 var(--font-condensed); letter-spacing: 0.03em; }
+.tx-title { margin: 0 0 8px; font: 500 clamp(30px, 3vw, 44px)/1 var(--font-display); letter-spacing: -0.035em; }
+.tx-body { margin: 0 0 14px; color: var(--vs-ink-2); font-size: 17px; line-height: 1.45; }
+
+/* ---------- Arrows: leave on hover while a copy arrives ---------- */
+
+.vs-arrow { position: relative; display: inline-block; flex: none; overflow: hidden; vertical-align: -0.15em; }
+.vs-arrow > span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; transition: transform 0.45s var(--vs-ease); }
+.vs-arrow > span + span { transform: translateX(-110%); }
+.vs-arrow--left > span + span { transform: translateX(110%); }
+.vs-arrow--up > span + span { transform: translateY(110%); }
+:is(a, button):hover .vs-arrow.vs-arrow--up > span:first-child, :is(a, button):focus-visible .vs-arrow.vs-arrow--up > span:first-child { transform: translateY(-110%); }
+:is(a, button):hover .vs-arrow--up > span + span, :is(a, button):focus-visible .vs-arrow--up > span + span { transform: none; }
+.vs-arrow--up-right > span + span { transform: translate(-110%, 110%); }
+:is(a, button, .vs-cta):hover .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-arrow > span:first-child { transform: translateX(110%); }
+:is(a, button, .vs-cta):hover .vs-arrow--left > span:first-child { transform: translateX(-110%); }
+:is(a, button, .vs-cta):hover .vs-arrow--up-right > span:first-child, :is(a, button):focus-visible .vs-arrow--up-right > span:first-child { transform: translate(110%, -110%); }
+:is(a, button, .vs-cta):hover .vs-arrow > span + span, :is(a, button):focus-visible .vs-arrow > span + span { transform: none; }
+.vs-cta:hover .vs-cta-circle:has(.vs-arrow--up-right) { rotate: 45deg; }
+.vs-cta:hover .vs-cta-circle:has(.vs-arrow--up-right) .vs-arrow { rotate: -45deg; }
+.vs-textlink--arrow { display: inline-flex; align-items: center; gap: 6px; }
+/* The round arrow button: a quiet ring at rest; under the hovered link it fills, the arrow swaps through, then turns to point up and right. */
+.vs-go { display: inline-grid; place-items: center; flex: none; width: 36px; height: 36px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--vs-line); color: var(--vs-ink); transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease; }
+.vs-go .vs-arrow { transition: translate 0.25s var(--vs-ease); }
+:is(a, button):hover .vs-go, :is(a, button):focus-visible .vs-go { background: var(--vs-blue); box-shadow: none; color: #fff; }
+:is(a, button):hover .vs-go .vs-arrow, :is(a, button):focus-visible .vs-go .vs-arrow, .vs-textlink:hover .vs-arrow, .vs-textlink:focus-visible .vs-arrow { translate: 2px 0; transition: translate 0.25s var(--vs-ease) 0.22s; }
+:is(.vs-dark, .vs-footer, .vs-split-panel--dark, .pp-pricing, .vs-mega-dark) .vs-go { background: rgb(255 255 255 / 0.08); box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16); color: var(--vs-paper); }
+.vs-textlink:focus-visible { color: var(--vs-ink); background-size: 100% 1px; outline: 2px solid var(--vs-blue); outline-offset: 4px; border-radius: 4px; }
+.vs-textlink:active { scale: 0.98; }
+/* The CTA's arrow circle never takes the colour of the ground it sits on: on the accent it turns ink. */
+.vs-band .vs-cta-circle, [data-surface="accent"] .vs-cta-circle { background: var(--vs-ink); color: var(--vs-paper); }
+@media (prefers-reduced-motion: reduce) { .vs-arrow > span { transition: none; } }
+
+
+.vs-proof-win { border-radius: 16px; border-width: 1px; box-shadow: 0 40px 80px -40px rgb(17 17 16 / 0.35); }
+.vs-proof-body { display: flex; flex-direction: column; gap: 10px; padding: 20px 22px 22px; }
+.vs-proof-figure { font: 500 clamp(56px, 5vw, 84px)/0.9 var(--font-display); letter-spacing: -0.05em; color: var(--vs-ink); }
+.vs-proof-caption { margin: 0; color: var(--vs-mute); font-size: 14px; }
+.vs-proof-bars { display: flex; align-items: flex-end; gap: 6px; height: 72px; padding-top: 6px; }
+.vs-proof-bars i { flex: 1; border-radius: 4px 4px 0 0; background: var(--vs-blue); transform-origin: bottom; transition: scale 0.3s var(--vs-ease); }
+.vs-proof-win:hover .vs-proof-bars i { scale: 1 1.04; }
+.vs-proof-bars i:last-child { background: var(--vs-ink); }
+.vs-marks { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 0; padding: 0; list-style: none; }
+.vs-mark-link { display: inline-flex; flex-direction: column; gap: 2px; min-height: 44px; justify-content: center; color: var(--vs-ink); text-decoration: none; transition: transform var(--vs-dur-fast) var(--vs-ease); }
+.vs-mark-link strong { font: 600 19px/1 var(--font-display); letter-spacing: -0.02em; }
+.vs-mark-link span { color: var(--vs-mute); font-size: 12.5px; }
+.vs-mark-link:hover { transform: translateY(-2px); }
+.vs-mark-link:hover strong { color: var(--vs-blue); }
+
+.vs-proof-body { padding: 26px 28px 30px; gap: 14px; }
+.vs-proof-figure { font-size: clamp(72px, 7vw, 124px); }
+.vs-proof-caption { font-size: 15px; }
+.vs-proof-bars { height: clamp(96px, 9vw, 140px); gap: 8px; }
+.vs-proof-video-link { display: flex; align-items: center; gap: 14px; padding: 12px 18px 12px 12px; border-radius: 16px; background: var(--vs-card); border: 1px solid var(--vs-line); box-shadow: 0 24px 50px -24px rgb(17 17 16 / 0.4); color: var(--vs-ink); text-decoration: none; transition: transform 0.4s var(--vs-ease), box-shadow 0.4s var(--vs-ease); }
+.vs-proof-video-link:hover { transform: translateY(-3px) rotate(1.5deg); box-shadow: 0 30px 60px -24px rgb(17 17 16 / 0.45); }
+.vs-proof-thumb { position: relative; flex: none; width: 60px; height: 76px; border-radius: 10px; overflow: hidden; background: var(--vs-stone); }
+.vs-proof-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.vs-proof-play { position: absolute; inset: 0; margin: auto; width: 28px; height: 28px; border-radius: 50%; background: rgb(255 255 255 / 0.92); color: var(--vs-ink); display: flex; align-items: center; justify-content: center; padding-left: 2px; box-sizing: border-box; }
+.vs-proof-video-text { display: flex; flex-direction: column; gap: 2px; }
+.vs-proof-video-text strong { font: 600 22px/1 var(--font-display); letter-spacing: -0.02em; }
+.vs-proof-video-text span { color: var(--vs-mute); font-size: 13.5px; line-height: 1.3; }
+@media (prefers-reduced-motion: reduce) { .vs-proof-bars i { transition: none; } }
+
+/* Watcher, the Verkoop dot: a shape with eyes that follows the pointer and talks when poked. */
+.eyt { position: relative; display: inline-block; flex: none; width: var(--eyt-size); height: var(--eyt-size); vertical-align: middle; }
+.eyt-poke { display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: 50%; background: none; cursor: pointer; }
+.eyt-poke:focus-visible { outline: 3px solid #839bff; outline-offset: 3px; }
+.eyt-ball { display: block; width: 100%; height: 100%; overflow: visible; transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.eyt-poke:active .eyt-ball { transform: scale(0.9); }
+.eyt-body { fill: var(--eyt-body, var(--vs-blue)); }
+.eyt-eye { fill: var(--eyt-eye, #fff); }
+.eyt-say { position: absolute; left: 72%; top: 86%; z-index: 5; padding: 7px 11px; border-radius: 12px 12px 12px 4px; background: #fff; color: var(--vs-ink); box-shadow: 0 12px 30px -12px rgb(17 17 16 / 0.4); font: 500 13px/1.2 var(--font-sans); white-space: nowrap; opacity: 0; scale: 0.8; transform-origin: 0 0; pointer-events: none; transition: opacity 0.2s ease, scale 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.eyt-say[data-on] { opacity: 1; scale: 1; }
+.eyt-caret { display: inline-block; width: 1.5px; height: 1em; margin-left: 1px; vertical-align: -2px; background: currentColor; animation: eyt-blink 1s steps(2) infinite; }
+@keyframes eyt-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .eyt-ball, .eyt-say { transition: none; } .eyt-caret { animation: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  :is(a, button):hover .vs-go .vs-arrow > span:first-child, :is(a, button):focus-visible .vs-go .vs-arrow > span:first-child, .vs-textlink:hover .vs-arrow > span:first-child { transform: none; }
+  :is(a, button):hover .vs-go .vs-arrow > span + span, :is(a, button):focus-visible .vs-go .vs-arrow > span + span, .vs-textlink:hover .vs-arrow > span + span { transform: translateX(-110%); }
+  :is(a, button):hover .vs-go .vs-arrow, :is(a, button):focus-visible .vs-go .vs-arrow, .vs-textlink:hover .vs-arrow, .vs-textlink:focus-visible .vs-arrow { rotate: none; }
+  .vs-textlink:active { scale: none; }
+}
+
+/* Every control answers a press, even without its own rule; specific rules win over this. */
+:where(a[class]:not(.vs-cta), button:not(:disabled)):active { scale: 0.98; }
+.vs-dock-trigger:hover { box-shadow: 0 18px 34px -12px rgb(17 17 16 / 0.55), 0 0 0 4px rgb(43 75 242 / 0.18); }
+@media (prefers-reduced-motion: reduce) { :where(a[class]:not(.vs-cta), button:not(:disabled)):active { scale: none; } }
+
+/* ---------- Hover states for the controls that had none ---------- */
+@media (hover: hover) {
+  .vs-menu-btn:hover, .vs-header.is-on-dark .vs-menu-btn:hover { background: var(--vs-blue); color: #fff; }
+  .vs-drawer-close:hover { background: var(--vs-ink); color: var(--vs-paper); rotate: 90deg; }
+  .vs-drawer :is(a, button).vs-drawer-link:hover { color: var(--vs-blue); padding-left: 6px; }
+  .vs-mega-more:hover { color: var(--vs-blue); }
+  .hc-close:hover { background: #fff; color: var(--vs-ink); }
+  .back-to-top:hover { background: var(--vs-blue); border-color: var(--vs-blue); translate: 0 -3px; }
+}
+.vs-drawer-close { transition: rotate 0.4s var(--vs-ease), background-color 0.2s ease, color 0.2s ease, transform 0.15s ease; }
+.vs-drawer :is(a, button).vs-drawer-link { transition: color 0.2s ease, padding-left 0.3s var(--vs-ease); }
+.vs-mega-more { transition: color 0.2s ease; }
+.hc-close { transition: background-color 0.2s ease, color 0.2s ease; }
+.back-to-top { transition: background-color 0.25s ease, border-color 0.25s ease, translate 0.3s var(--vs-ease); }
+@media (prefers-reduced-motion: reduce) { .vs-drawer-close:hover { rotate: none; } .back-to-top:hover { translate: none; } }
+
+/* The logo: its dot hops on hover */
+.vs-logo-dot { display: inline-block; transition: color 0.4s var(--vs-ease), translate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) { .vs-logo:hover .vs-logo-dot { translate: 0 -5px; } }

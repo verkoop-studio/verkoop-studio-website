@@ -5,14 +5,17 @@ import ts from 'typescript'
 
 const source = await readFile(new URL('../src/lib/academy-popup.ts', import.meta.url), 'utf8')
 const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext } }).outputText
-const { canShowAcademyPopup, ACADEMY_POPUP_DELAY, ACADEMY_POPUP_COOLDOWN } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`)
-const base = { now: 1_000_000, startedAt: 900_000, scrollProgress: .3, history: {}, blocked: false }
+const { canShowAcademyPopup, ACADEMY_POPUP_DELAY, ACADEMY_POPUP_COOLDOWN, ACADEMY_POPUP_SCROLL } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString('base64')}`)
+const base = { now: 1_000_000, startedAt: 900_000, scrollProgress: .6, history: {}, blocked: false }
 
-test('invitation becomes eligible after five seconds without requiring a deep scroll', () => {
-  assert.equal(canShowAcademyPopup({ ...base, startedAt: base.now - ACADEMY_POPUP_DELAY + 1 }), false)
+test('invitation never covers the first screen: it waits for half the page or exit intent', () => {
   assert.equal(ACADEMY_POPUP_DELAY, 5_000)
-  assert.equal(canShowAcademyPopup({ ...base, scrollProgress: 0 }), true)
-  assert.equal(canShowAcademyPopup({ ...base, startedAt: base.now - ACADEMY_POPUP_DELAY, scrollProgress: .25 }), true)
+  assert.equal(ACADEMY_POPUP_SCROLL, 0.5)
+  assert.equal(canShowAcademyPopup({ ...base, startedAt: base.now - ACADEMY_POPUP_DELAY + 1 }), false)
+  assert.equal(canShowAcademyPopup({ ...base, scrollProgress: 0 }), false)
+  assert.equal(canShowAcademyPopup({ ...base, scrollProgress: .49 }), false)
+  assert.equal(canShowAcademyPopup({ ...base, scrollProgress: .5 }), true)
+  assert.equal(canShowAcademyPopup({ ...base, scrollProgress: 0, exitIntent: true }), true)
 })
 
 test('recently shown invitations and captured leads are suppressed', () => {

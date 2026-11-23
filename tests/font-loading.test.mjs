@@ -1,32 +1,27 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { readFile } from 'node:fs/promises'
-import { runInNewContext } from 'node:vm'
+import { access, readFile } from 'node:fs/promises'
 
-const fontUrl = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
 const routes = JSON.parse(await readFile('dist/routes.json', 'utf8'))
+const families = ['Geist Variable', 'Funnel Display Variable', 'Caveat Variable', 'Bebas Neue']
 
-test('every production page loads Inter without blocking initial rendering', async () => {
+test('every production page self-hosts its fonts without blocking initial rendering', async () => {
   for (const route of [...routes, '/404']) {
     const html = await readFile(`dist${route === '/' ? '' : route}/index.html`, 'utf8')
     const head = html.split('</head>')[0]
-    const fallback = head.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1]
-    assert(fallback, `${route}: font fallback for JavaScript-disabled browsers`)
-    assert(fallback.includes(`href="${fontUrl}"`), route)
-    assert.match(fallback, /rel="stylesheet"/)
-    assert(!fallback.includes('media="print"'), `${route}: fallback must apply to screens`)
-    const activeHead = head.replace(/<noscript>[\s\S]*?<\/noscript>/g, '')
-    const fontLinks = [...activeHead.matchAll(/<link\b[^>]*>/g)].map(m => m[0]).filter(tag => tag.includes(fontUrl))
-    assert.equal(fontLinks.length, 1, route)
-    assert.match(fontLinks[0], /rel="stylesheet"/)
-    assert.match(fontLinks[0], /media="print"/)
-    const handler = fontLinks[0].match(/onload="([^"]+)"/)?.[1]
-    assert(handler, `${route}: apply the stylesheet after loading`)
-    const element = { media: 'print', onload: handler }
-    runInNewContext(`(function () { ${handler} }).call(element)`, { element })
-    assert.equal(element.media, 'all', route)
-    assert.equal(element.onload, null, route)
-    assert.match(head, /rel="preconnect" href="https:\/\/fonts\.googleapis\.com"/)
-    assert.match(head, /rel="preconnect" href="https:\/\/fonts\.gstatic\.com" crossorigin/)
+    assert(!head.includes('fonts.googleapis.com'), `${route}: no third-party font stylesheet`)
+    assert(!head.includes('fonts.gstatic.com'), `${route}: no third-party font files`)
+
+    const css = [...head.matchAll(/<style data-home-styles="[^"]+">([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n')
+    const faces = [...css.matchAll(/@font-face\s*\{([^}]*)\}/g)].map(m => m[1])
+    for (const family of families) {
+      const face = faces.find(body => body.includes(`font-family:${family}`) || body.includes(`font-family:"${family}"`) || body.includes(`font-family: '${family}'`))
+      assert(face, `${route}: @font-face for ${family}`)
+      assert.match(face, /font-display:\s*swap/, `${route}: ${family} renders with the fallback first`)
+    }
+
+    const files = new Set([...css.matchAll(/url\((\/assets\/[^)]+\.woff2)\)/g)].map(m => m[1]))
+    assert(files.size > 0, `${route}: font files are served from /assets/`)
+    for (const file of files) await access(`dist${file}`)
   }
 })

@@ -3,7 +3,7 @@ import type { FaqItem } from './types'
 export const faqItems: FaqItem[] = [
   {
     question: { nl: 'Wie is Verkoop Studio?', en: 'Who is Verkoop Studio?' },
-    answer: { nl: 'Verkoop Studio is een studio in Lochristi voor strategie, marketing, design en development. We verbinden commerciële groei met de websites, apps en systemen erachter. In ons portfolio vermelden we wie de bestaande projecten uitvoerde.', en: 'Verkoop Studio is a studio in Lochristi for strategy, marketing, design and development. We connect commercial growth with the websites, apps and systems behind it. Our portfolio credits the teams behind existing projects.' },
+    answer: { nl: 'Verkoop Studio is een studio in Lochristi voor strategie, marketing, design en development. We verbinden commerciële groei met de websites, apps en systemen erachter. Bij elk project in ons portfolio staat wie het gemaakt heeft.', en: 'Verkoop Studio is a studio in Lochristi for strategy, marketing, design and development. We connect commercial growth with the websites, apps and systems behind it. Every project in our portfolio says who made it.' },
   },
   {
     question: { nl: 'Kunnen we ook alleen een website of app laten bouwen?', en: 'Can we work with you just on a website or app?' },

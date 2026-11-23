@@ -1,4 +1,4 @@
-import type { CaseStudy } from './types'
+import type { CaseStudy, Lang } from './types'
 import nooms from '../assets/cases/nooms.webp'
 import pinacello from '../assets/cases/pinacello.webp'
 import ekart from '../assets/cases/ekart.webp'
@@ -9,6 +9,7 @@ export const cases: CaseStudy[] = [
     slug: 'pinacello',
     name: 'Pinacello',
     sector: { nl: 'Consumer ecommerce', en: 'Consumer ecommerce' },
+    result: { nl: '+120% online omzet', en: '+120% online revenue' },
     status: 'ongoing',
     liveUrl: 'https://promo.pinacello.com/',
     image: pinacello,
@@ -103,6 +104,7 @@ export const cases: CaseStudy[] = [
     slug: 'nooms',
     name: 'Nooms',
     sector: { nl: 'Supplementen en ecommerce', en: 'Supplements and ecommerce' },
+    result: { nl: 'Pre-sale uitverkocht', en: 'Pre-sale sold out' },
     status: 'ongoing',
     liveUrl: 'https://noomsdaily.com/',
     image: nooms,
@@ -199,3 +201,6 @@ export const cases: CaseStudy[] = [
 
 export const getCase = (slug: string) =>
   cases.find((c) => c.slug === slug)
+
+/** What a case shows when it is listed: its published result, otherwise its sector. */
+export const caseHeadline = (item: CaseStudy, lang: Lang) => item.result?.[lang] ?? item.sector[lang]

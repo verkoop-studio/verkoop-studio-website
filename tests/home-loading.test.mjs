@@ -39,19 +39,36 @@ test('every page embeds the shared CSS and deprioritizes hydration download', as
       assert(html.indexOf(tag) < html.indexOf('</head>'))
       assert(!html.includes(`href="${href}"`), `${route} still requests ${href} separately`)
     }
-    if (route === '/') assert(!/<link\b(?=[^>]*rel="stylesheet")(?=[^>]*href="\/assets\/)/.test(html))
+    // Below-the-fold CSS is the one stylesheet requested separately, and it never blocks the first paint.
+    const head = html.split('</head>')[0]
+    const deferred = [...head.matchAll(/<link\b[^>]*data-deferred-styles[^>]*>/g)].map(m => m[0])
+    assert.equal(deferred.length, 1, `${route}: one deferred stylesheet`)
+    const href = deferred[0].match(/href="(\/assets\/[^"]+\.css)"/)?.[1]
+    assert(href, route)
+    assert.match(deferred[0], /media="print"/, `${route}: deferred stylesheet does not block rendering`)
+    assert.match(deferred[0], /onload="this\.onload=null;this\.media='all'"/, route)
+    assert(head.includes(`<noscript><link rel="stylesheet" href="${href}"></noscript>`), `${route}: deferred stylesheet applies without JavaScript`)
+    await readFile(`dist${href}`, 'utf8')
+    if (route === '/') {
+      const scripted = html.replace(/<noscript>[\s\S]*?<\/noscript>/g, '')
+      const blocking = [...scripted.matchAll(/<link\b(?=[^>]*rel="stylesheet")(?=[^>]*href="\/assets\/)[^>]*>/g)].map(m => m[0])
+        .filter(tag => !tag.includes('data-deferred-styles'))
+      assert.equal(blocking.length, 0, 'homepage has no render-blocking stylesheet request')
+    }
   }
 })
 
 test('home and academy heroes show the video without loading a player before interaction', async () => {
-  for (const [file, heroClass] of [['dist/index.html', 'studio-hero'], ['dist/academy/index.html', 'ac-hero ac-wrap']]) {
+  for (const [file, heroClass] of [['dist/index.html', 'studio-hero[^"]*'], ['dist/academy/index.html', 'ac-hero ac-wrap']]) {
     const html = await readFile(file, 'utf8')
     const hero = html.match(new RegExp(`<section class="${heroClass}"[\\s\\S]*?<\\/section>`))?.[0]
     assert(hero, file)
+    // whichever video the hero shows: its poster, a labelled play button, a link without scripts, and no player before a click
+    const id = hero.match(/https:\/\/i\.ytimg\.com\/vi\/([\w-]{11})\//)?.[1]
+    assert(id, `${file}: video poster`)
     assert.match(hero, /<button[^>]+aria-label="Speel video af:/)
-    assert.match(hero, /https:\/\/i\.ytimg\.com\/vi\/tSjPY9J6ynk\/maxresdefault\.jpg/)
     assert.doesNotMatch(hero, /<iframe\b/)
-    assert.match(hero, /<noscript><a href="https:\/\/www\.youtube\.com\/watch\?v=tSjPY9J6ynk"/)
+    assert(hero.includes(`<noscript><a href="https://www.youtube.com/watch?v=${id}"`), `${file}: link to the video without scripts`)
   }
 })
 
@@ -63,15 +80,15 @@ test('homepage retains all existing tracking scripts verbatim', async () => {
   for (const script of scripts) assert(html.includes(script), 'Tracking source must not be changed by prerendering')
 })
 
-test('Meta Pixel starts before fonts, and the other trackers wait until load', async () => {
+test('Meta Pixel starts first, fonts are self-hosted, and the other trackers wait until load', async () => {
   const heroPoster = 'https://i.ytimg.com/vi/tSjPY9J6ynk/maxresdefault.jpg'
   const routes = JSON.parse(await readFile('dist/routes.json', 'utf8'))
   for (const route of [...routes, '/404']) {
     const html = await readFile(`dist${route === '/' ? '' : route}/index.html`, 'utf8')
     const head = html.split('</head>')[0]
     const pixel = head.indexOf('https://connect.facebook.net/en_US/fbevents.js')
-    const font = head.indexOf('https://fonts.googleapis.com/css2')
-    assert(pixel > -1 && font > pixel, `${route}: pixel request before the font stylesheet`)
+    assert(pixel > -1, `${route}: pixel request in the head`)
+    assert(!head.includes('https://fonts.googleapis.com/'), `${route}: no third-party font request`)
     assert(head.includes("fbq('init'"), route)
     assert(head.includes("fbq('track', 'PageView')"), route)
     assert(head.includes("t.fetchPriority='high'"), route)

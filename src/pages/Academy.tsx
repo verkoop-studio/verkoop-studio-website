@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
-import type { FormEvent } from 'react'
+import Cta from '../components/brand/Cta'
+import Arrow from '../components/brand/Arrow'
+import ChannelLogo from '../components/brand/ChannelLogo'
 import { Link } from 'react-router-dom'
-import AcademySignup from '../components/AcademySignup'
-import AcademyCapturePopup from '../components/AcademyCapturePopup'
+import FaqFolder from '../components/brand/FaqFolder'
+import AcademyRaffleCard from '../components/AcademyRaffleCard'
 import { recordAcademyPopup } from '../lib/academy-popup'
 import BrandMark from '../components/BrandMark'
 import ResponsiveImage from '../components/ResponsiveImage'
@@ -12,7 +14,6 @@ import HeroRequestForm from '../components/HeroRequestForm'
 import { academyFaq as sourceFaq, academyModules as sourceModules, academyTests as sourceTests } from '../data/academy'
 import { cases } from '../data/cases'
 import { useAcademyTranslation } from '../i18n/academy'
-import { trackNewsletterConversion } from '../lib/analytics'
 import studentUpdate from '../assets/academy-student-update.png'
 import pinacelloResults from '../assets/cases/pinacello-results.png'
 // Loaded only on this page, so the homepage's inlined stylesheet stays within its size budget.
@@ -30,7 +31,7 @@ function useReveal(lang: string) {
     const motion = matchMedia('(prefers-reduced-motion: reduce)')
     const animations = new Set<Animation>()
     let observer: IntersectionObserver | undefined
-    const selector = '.ac-reveal, .ac-hero-copy > *, .ac-hero > .hero-video, .ac-hero-conversion > *, main section h2, .ac-dot-kicker, .ac-ledger > li, .ac-promise, .ac-focus-card, .ac-mini-case, .ac-signup-card, .ac-faq-list details, .ac-footer-top, .ac-footer-columns > div'
+    const selector = '.ac-reveal, .ac-hero-copy > *, .ac-hero > .hero-video, .ac-hero-conversion > *, main section h2, .ac-dot-kicker, .ac-ledger > li, .ac-promise, .ac-focus-card, .ac-mini-case, .ac-signup-card, .ac-footer-top, .ac-footer-columns > div'
     const stop = () => {
       observer?.disconnect()
       animations.forEach(animation => animation.cancel())
@@ -50,11 +51,12 @@ function useReveal(lang: string) {
           seen.current.add(element)
           if (typeof element.animate !== 'function') return
           const siblings = Array.from(element.parentElement?.children ?? []).filter(child => targets.includes(child as HTMLElement))
-          const delay = Math.min(Math.max(siblings.indexOf(element), 0), 4) * 55
+          const delay = Math.min(Math.max(siblings.indexOf(element), 0), 4) * 40
+          // Starts readable, so a frame caught mid-reveal still reads.
           const animation = element.animate([
-            { opacity: 0, transform: 'translateY(20px)' },
+            { opacity: 0.35, transform: 'translateY(12px)' },
             { opacity: 1, transform: 'translateY(0)' },
-          ], { duration: 650, delay, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' })
+          ], { duration: 420, delay, easing: 'cubic-bezier(.22, 1, .36, 1)', fill: 'backwards' })
           animations.add(animation)
           animation.onfinish = () => { animations.delete(animation) }
         })
@@ -149,49 +151,8 @@ function TestChart({ selected }: { selected: string }) {
   </svg>
 }
 
-function NewsletterForm() {
-  const { lang, t } = useAcademyTranslation()
-  const [status, setStatus] = useState<'idle' | 'pending' | 'success'>('idle')
-  const [error, setError] = useState('')
-  const submissionId = useRef('')
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (status === 'pending') return
-    setStatus('pending')
-    setError('')
-    const data = new FormData(event.currentTarget)
-    try {
-      submissionId.current ||= crypto.randomUUID()
-      const response = await fetch('/api/newsletter', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' }, signal: AbortSignal.timeout(20_000),
-        body: JSON.stringify({ email: data.get('email'), company_website: data.get('company_website'), consent: data.get('consent') === 'on', consent_version: 'website-newsletter-v1', lang }),
-      })
-      const result = await response.json()
-      if (!response.ok || result.ok !== true) {
-        setError(result.error === 'subscription_preferences' ? "Je hebt je eerder uitgeschreven. Mail ons als je weer berichten wilt ontvangen." : response.status === 429 ? "Even te veel pogingen. Probeer het over enkele minuten opnieuw." : "Inschrijven lukte niet. Probeer het later opnieuw.")
-        setStatus('idle')
-        return
-      }
-      trackNewsletterConversion(result, submissionId.current)
-      setStatus('success')
-    } catch {
-      setError("Inschrijven lukte niet. Probeer het later opnieuw.")
-      setStatus('idle')
-    }
-  }
-  if (status === 'success') return <p className="ac-newsletter-done" role="status">{" " + t("Je bent ingeschreven. Nieuwe tips komen in je inbox.")}</p>
-  return <form className="ac-newsletter" onSubmit={submit} data-clarity-mask="true">
-    <label htmlFor="academy-newsletter-email">{t("Advertentietips in je inbox")}</label>
-    <p>{t("Praktische tips over Meta Ads, Google Ads en opschalen van Verkoop Studio.")}</p>
-    <div className="ac-newsletter-row"><input id="academy-newsletter-email" name="email" type="email" autoComplete="email" required maxLength={254} placeholder={t("naam@bedrijf.be")} /><button type="submit" className="ac-button" disabled={status === 'pending'}>{status === 'pending' ? t("Bezig…") : t("Inschrijven")}</button></div>
-    <input className="ac-honeypot" name="company_website" tabIndex={-1} autoComplete="off" aria-hidden="true" />
-    <label className="ac-consent"><input type="checkbox" name="consent" required /><span>{t("Ja, ik ontvang graag marketingtips en nieuws van Verkoop Studio per e-mail.")}</span></label>
-    {error && <p className="ac-form-error" role="alert">{t(error)}</p>}
-  </form>
-}
-
 export default function Academy() {
-  const { lang, setLang, t } = useAcademyTranslation()
+  const { lang, t } = useAcademyTranslation()
   const euro = (value: number) => new Intl.NumberFormat(lang === 'nl' ? 'nl-BE' : 'en-GB', { style: 'currency', currency: 'EUR', minimumFractionDigits: Number.isInteger(value) ? 0 : 2, maximumFractionDigits: 2 }).format(value)
   const ratio = (value: number) => value.toFixed(2).replace('.', lang === 'nl' ? ',' : '.')
   const academyModules = sourceModules.map(item => ({ ...item, tag: t(item.tag), shortTitle: t(item.shortTitle), title: t(item.title), summary: t(item.summary), points: item.points.map(t), outcome: t(item.outcome) }))
@@ -235,34 +196,11 @@ export default function Academy() {
   const [slide, setSlide] = useState(0)
   const [testId, setTestId] = useState(academyTests[0].id)
   const [signedUp, setSignedUp] = useState<{ naam: string; via: string } | null>(null)
-  const [popupVisible, setPopupVisible] = useState(false)
-  const [popupSuppressed, setPopupSuppressed] = useState(false)
-  const [sticky, setSticky] = useState(false)
-  const [stickyArmed, setStickyArmed] = useState(false)
   const topic = academyModules[slide]
   const test = academyTests.find(item => item.id === testId) ?? academyTests[0]
   const testModule = academyModules.find(item => item.id === test.module)
   const totals = academyTests.reduce((sum, item) => ({ spend: sum.spend + item.spend, purchases: sum.purchases + item.purchases, newCustomers: sum.newCustomers + item.newCustomers }), { spend: 0, purchases: 0, newCustomers: 0 })
   const thanks = signedUp?.naam ? `${t('Bedankt')}, ${signedUp.naam}!` : t("Bedankt!")
-
-  useEffect(() => {
-    const update = () => {
-      const hero = document.getElementById('academy-hero-signup')?.getBoundingClientRect()
-      const signup = document.getElementById('aanmelden')?.getBoundingClientRect()
-      const footer = document.querySelector('.ac-footer')?.getBoundingClientRect()
-      const card = document.querySelector('.ac-focus-card')?.getBoundingClientRect()
-      const promise = document.querySelector('.ac-promise')?.getBoundingClientRect()
-      const visible = (rect?: DOMRect) => !!rect && rect.top < innerHeight && rect.bottom > 0
-      // Keep the reading card quiet and avoid repeating other visible join buttons.
-      setSticky(!!hero && hero.bottom < 0 && !visible(signup) && !visible(footer) && !visible(card) && !visible(promise))
-      // Mount the bar only once the visitor scrolls, so it never animates while the stylesheet is still loading.
-      if (scrollY > 40) setStickyArmed(true)
-    }
-    update()
-    addEventListener('scroll', update, { passive: true })
-    addEventListener('resize', update)
-    return () => { removeEventListener('scroll', update); removeEventListener('resize', update) }
-  }, [])
 
   function scrollToId(id: string, focus?: string) {
     requestAnimationFrame(() => {
@@ -272,16 +210,7 @@ export default function Academy() {
   }
 
   const exampleRef = useRef<HTMLDetailsElement>(null)
-  /** A link to the worked example opens it, instead of landing on a closed summary. */
-  function openExample(event: { preventDefault: () => void }) {
-    event.preventDefault()
-    if (exampleRef.current) exampleRef.current.open = true
-    scrollToId('testlog')
-  }
-
   function goToSignup() {
-    recordAcademyPopup()
-    setPopupSuppressed(true)
     scrollToId('academy-hero-signup', signedUp ? undefined : '#academy-hero-signup input[name="naam"]')
   }
 
@@ -309,29 +238,26 @@ export default function Academy() {
     if (Math.abs(distance) > 50) step(distance < 0 ? 1 : -1)
   }
 
-  return <div className="academy-page" lang={lang} ref={pageRef}>
+  return <div className="academy-page vs-page" lang={lang} ref={pageRef}>
     <link rel="stylesheet" href={academyStylesheet} precedence="academy" />
     <Seo title={t("Ads Academy: 1-op-1 Meta Ads en Google Ads lessen")} description={t("Leer je merk schalen met 1-op-1 begeleiding in Meta Ads, Google Ads, landingspagina’s en tracking. Samen met Stef van Verkoop Studio.")} path="/academy" language={lang} />
     <a className="ac-skip" href="#academy-main">{t("Naar de inhoud")}</a>
 
-    <header className="ac-header">
-      <div className="ac-wrap ac-header-inner">
-        <div className="ac-identity"><Link to="/" aria-label={t("Verkoop Studio, naar de homepage")}><BrandMark /></Link><span className="ac-identity-line" /><a href="#academy-main" className="ac-identity-label">academy</a></div>
-        <nav className="ac-pill-nav" aria-label={t("Academy navigatie")}><a href="#aanbod">{t("Aanbod")}</a><a href="#resultaten">{t("Resultaten")}</a><a href="#aanpak">{t("Aanpak")}</a><a href="#programma">{t("Programma")}</a><a href="#testlog" onClick={openExample}>{t("Voorbeeld")}</a><a href="#faq">FAQ</a></nav>
-        <div className="ac-header-actions">
-          <button className="ac-header-cta" onClick={goToSignup}>{t("Vraag je gratis les aan")}</button>
-        </div>
-      </div>
-    </header>
 
     <main id="academy-main">
       <section className="ac-hero ac-wrap" aria-labelledby="academy-title">
         <div className="ac-hero-copy">
           <h1 id="academy-title">{t("Leer hoe je je merk schaalt") + " "}<span>{t("in 60 dagen.")}</span></h1>
           <p className="ac-hero-target">{t('Doel: 3× rendement op je advertentiebudget.')}</p>
-          <p className="ac-hero-intro">{t('Van bedrijfsanalyse tot campagnes en opvolging. Van A tot Z, 1-op-1 met Stef.')}</p>
+          <div className="ac-hero-cta"><Cta href="#academy-hero-signup" className="ac-cta" onClick={(event) => { event.preventDefault(); goToSignup() }}>{t('Vraag je gratis les aan')}</Cta></div>
         </div>
-        <HeroVideo lang={lang} videoId="pXlZ6lWWg68" title="Verkoop Studio Academy — VSL" autoPlay />
+        <div className="ac-hero-video">
+          <HeroVideo lang={lang} videoId="pXlZ6lWWg68" title="Verkoop Studio Academy — VSL" heading={t('Zo werkt de Academy')} />
+        </div>
+      </section>
+
+      {/* The request form, straight under the hero: the hero itself keeps one promise, one action and the video. */}
+      <section className="ac-wrap ac-hero-request" aria-label={t('Vraag je gratis les aan')}>
         <div className="ac-hero-conversion">
           <div id="academy-hero-signup" className="ac-hero-signup">
             {signedUp ? <div className="ac-welcome-card" role="status">
@@ -365,9 +291,9 @@ export default function Academy() {
         <div className="ac-proof-heading">
           <h2 id="proof-title">{t("Case studies")}</h2>
           <div className="ac-case-controls">
-            <button type="button" aria-label={t('Vorige case')} aria-controls="academy-case-slides" disabled={caseSlide === 0} onClick={() => showCase(0)}>←</button>
+            <button type="button" aria-label={t('Vorige case')} aria-controls="academy-case-slides" disabled={caseSlide === 0} onClick={() => showCase(0)}><Arrow direction="left" size={18} /></button>
             <span aria-live="polite">{caseSlide + 1} / 2</span>
-            <button type="button" aria-label={t('Volgende case')} aria-controls="academy-case-slides" disabled={caseSlide === 1} onClick={() => showCase(1)}>→</button>
+            <button type="button" aria-label={t('Volgende case')} aria-controls="academy-case-slides" disabled={caseSlide === 1} onClick={() => showCase(1)}><Arrow size={18} /></button>
           </div>
         </div>
         <div id="academy-case-slides" className="ac-case-slides" ref={caseTrack} role="region" aria-label={t('Case studies')} tabIndex={0} onScroll={event => {
@@ -406,7 +332,7 @@ export default function Academy() {
           <p className="ac-quiet-kicker ac-quiet-kicker-light">{t("Onze belofte")}</p>
           <p className="ac-promise-figure"><strong>3–4</strong><span>{t("ROAS op je Meta ads")}</span></p>
           <p>{t("Elke euro die je in Meta ads steekt, levert") + " "}<b>{t("€3 tot €4 omzet")}</b>{(lang === 'nl' ? ' ' : '') + t("op. Daar werkt elke les naartoe.")}</p>
-          {signedUp ? <p className="ac-promise-done">{t("Je aanvraag is binnen.")}</p> : <button className="ac-button ac-button-light" onClick={goToSignup}>{t("Vraag je gratis les aan")}</button>}
+          {signedUp ? <p className="ac-promise-done">{t("Je aanvraag is binnen.")}</p> : <Cta href="#academy-hero-signup" variant="paper" className="ac-cta" onClick={(event) => { event.preventDefault(); goToSignup() }}>{t("Vraag je gratis les aan")}</Cta>}
           <small>{t("Prijs op maat na de kennismaking. Advertentiebudget niet inbegrepen.")}</small>
         </aside>
 
@@ -425,7 +351,7 @@ export default function Academy() {
             <div className="ac-tracking-topline" aria-hidden="true"><span className="ac-tracking-symbol">↗</span><span>verkoop<span className="ac-tracking-wordmark-dot">.</span> tracking</span><span className="ac-tracking-spark">✦</span></div>
             <div className="ac-tracking-window" aria-hidden="true">
               <div className="ac-tracking-window-bar"><span /><span /><span /><b>{t('Jouw overzicht')}</b></div>
-              <div className="ac-tracking-sources"><span>Meta Ads</span><span>Google Ads</span><span>{t('Website')}</span></div>
+              <div className="ac-tracking-sources"><span><ChannelLogo name="Meta Ads" />Meta Ads</span><span><ChannelLogo name="Google Ads" />Google Ads</span><span>{t('Website')}</span></div>
               <div className="ac-tracking-connector"><i /><i /><i /></div>
               <div className="ac-tracking-destination"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="3" width="18" height="18" rx="4" /><path d="M7 16v-4m5 4V8m5 8v-6" /></svg><span>{t('Alles in één dashboard')}</span></div>
             </div>
@@ -436,7 +362,7 @@ export default function Academy() {
             <h3 id="tracking-access-title">{t('Krijg toegang tot onze')} <span>{t('trackingsoftware.')}</span></h3>
             <p>{t('Zie waar je aanvragen vandaan komen en welke campagnes omzet opleveren.')}</p>
             <ul>{[t('Advertentiekosten en conversies bij elkaar'), t('Inzicht in de herkomst van je leads'), t('Samen instellen tijdens je lessen')].map(text => <li key={text}><span aria-hidden="true">✓</span>{text}</li>)}</ul>
-            <button className="ac-button" onClick={goToSignup}>{t('Vraag je gratis les aan')}<span aria-hidden="true">↗</span></button>
+            <Cta href="#academy-hero-signup" className="ac-cta" onClick={(event) => { event.preventDefault(); goToSignup() }}>{t('Vraag je gratis les aan')}</Cta>
           </div>
         </aside>
       </section>
@@ -495,59 +421,27 @@ export default function Academy() {
         </details>
       </section>
 
-      <section id="aanmelden" className="ac-signup-section ac-wrap" aria-labelledby="signup-title">
-        <div className="ac-signup-card">
-          {signedUp ? <div className="ac-signup-done" role="status">
-            <h2 id="signup-title">{thanks}</h2>
-            <p>{t("Je aanvraag is binnen. Stef neemt contact op om je gratis les te plannen. Je krijgt ook een bevestiging per mail.")}</p>
-            <div><Link className="ac-button" to="/cases">{t("Bekijk intussen onze cases")}</Link></div>
-          </div> : <>
-            <h2 id="signup-title">{t("Vraag je gratis les aan")}</h2>
-            <p className="ac-signup-lead">{t("Laat je gegevens achter. Stef neemt contact op om je gratis les te plannen.")}</p>
-            <AcademySignup formId="academy-signup" variant="full" requestType="free_lesson" submitLabel={t("Vraag mijn gratis les aan")} onSuccess={joined('academy-signup')} />
-            <p className="ac-privacy">{t("We gebruiken je gegevens alleen om contact met je op te nemen over de academy. Nieuwsbrieven krijg je enkel als je dat aanvinkt.")} <Link to="/privacy">{t("Privacybeleid")}</Link></p>
-          </>}
-        </div>
-      </section>
+      <div className="ac-wrap ac-raffle"><AcademyRaffleCard /></div>
 
       <section id="faq" className="ac-faq ac-wrap" aria-labelledby="faq-title">
-        <div><p className="ac-dot-kicker"><span />{" " + t("Goed om te weten")}</p><h2 id="faq-title">{t("Nog even dit.")}</h2><p>{t("Staat je vraag er niet bij?") + " "}<Link to={contactAcademy}>{t("Stel ze rechtstreeks.")}</Link></p></div>
-        <div className="ac-glass ac-faq-list">{academyFaq.map(item => <details key={item.question}><summary>{item.question}<span aria-hidden="true">+</span></summary><p>{item.answer}</p></details>)}</div>
+        <FaqFolder id="academy-faq" titleId="faq-title" title={t("Nog even dit.")} lang={lang} lede={<>{t("Staat je vraag er niet bij?") + " "}<Link to={contactAcademy}>{t("Stel ze rechtstreeks.")}</Link></>} items={academyFaq} />
       </section>
 
       <section className="ac-final ac-wrap" aria-labelledby="final-title">
-        <div className="ac-final-inner ac-reveal"><div><p className="ac-quiet-kicker ac-quiet-kicker-light">{t("Kennismaken met Stef")}</p><h2 id="final-title">{t("Even kennismaken?")}</h2><p>{t("Bespreek je doelen met Stef en ontdek hoe de lessen bij jouw bedrijf passen.")}</p></div><div className="ac-final-actions"><button className="ac-button ac-button-light" onClick={goToSignup}>{t("Vraag je gratis les aan")}</button><Link className="ac-text-link ac-text-link-light" to={contactAcademy}>{t("Of stel eerst een vraag")}</Link></div></div>
+        <div className="ac-final-inner ac-reveal"><div><p className="ac-quiet-kicker ac-quiet-kicker-light">{t("Kennismaken met Stef")}</p><h2 id="final-title">{t("Even kennismaken?")}</h2><p>{t("Bespreek je doelen met Stef en ontdek hoe de lessen bij jouw bedrijf passen.")}</p></div><div className="ac-final-actions"><Cta href="#academy-hero-signup" variant="paper" className="ac-cta" onClick={(event) => { event.preventDefault(); goToSignup() }}>{t("Vraag je gratis les aan")}</Cta><Link className="ac-text-link ac-text-link-light" to={contactAcademy}>{t("Of stel eerst een vraag")}</Link></div></div>
       </section>
     </main>
 
-    <AcademyCapturePopup completed={!!signedUp} suppressed={popupSuppressed} onVisibilityChange={setPopupVisible} />
+    {/* No newsletter pop-up here: the monthly raffle sits in the page as a card instead. */}
 
-    {!signedUp && !popupVisible && stickyArmed && <div className={`ac-sticky ${sticky ? 'is-visible' : ''}`} aria-hidden={!sticky}>
-      <button className="ac-button" tabIndex={sticky ? 0 : -1} onClick={goToSignup}>{t('Vraag je gratis les aan')}</button>
-    </div>}
 
-    <footer className="ac-footer">
+    <section className="ac-footer" aria-label="Academy">
       <div className="ac-wrap">
         <div className="ac-footer-top">
           <div><div className="ac-identity"><Link to="/" aria-label={t("Verkoop Studio, naar de homepage")}><BrandMark /></Link><span className="ac-identity-line" /><span className="ac-identity-label">academy</span></div><p>{t("Leer je merk schalen met 1-op-1 lessen over Meta Ads, Google Ads en je volledige funnel. Van Verkoop Studio.")}</p></div>
-          <NewsletterForm />
         </div>
-        <div className="ac-footer-columns">
-          <div><h3>Academy</h3><a href="#aanbod">{t("Aanbod")}</a><a href="#programma">{t("Programma")}</a><a href="#testlog" onClick={openExample}>{t("Voorbeeld")}</a><a href="#aanmelden">{t("Kennismaking")}</a></div>
-          <div><h3>Verkoop Studio</h3><Link to="/">Home</Link><Link to="/meta-ads">Meta Ads</Link><Link to="/cases">Cases</Link><Link to="/agency">Agency</Link></div>
-          <div><h3>Contact</h3><a href="mailto:stef@verkoop.studio">stef@verkoop.studio</a><a href="#aanmelden">{t("Vraag je gratis les aan")}</a></div>
-          <div><h3>{t("Goed om te weten")}</h3><span>{t("Niet verbonden aan of gecertificeerd door Meta of Google.")}</span><span>{t("Resultaten hangen af van je product, marge en budget.")}</span></div>
-        </div>
-        <div className="ac-footer-bottom">
-          <p className="ac-copyright">© {new Date().getFullYear()}{" " + t("Verkoop Studio. Alle rechten voorbehouden.")}</p>
-          <p className="ac-legal"><Link to="/privacy">{t("Privacybeleid")}</Link><Link to="/voorwaarden">{t("Algemene voorwaarden")}</Link></p>
-          <div className="ac-lang-switch" role="group" aria-label={t('Taal kiezen')}>
-            <button type="button" lang="nl" aria-label="Nederlands" className={lang === 'nl' ? 'is-active' : undefined} aria-pressed={lang === 'nl'} onClick={() => setLang('nl')}>NL</button>
-            <i aria-hidden="true" />
-            <button type="button" lang="en" aria-label="English" className={lang === 'en' ? 'is-active' : undefined} aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
-          </div>
-        </div>
+        <p className="ac-footer-note">{t("Niet verbonden aan of gecertificeerd door Meta of Google.")}{" "}{t("Resultaten hangen af van je product, marge en budget.")}</p>
       </div>
-    </footer>
+    </section>
   </div>
 }

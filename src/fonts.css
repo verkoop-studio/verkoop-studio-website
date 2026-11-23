@@ -1,0 +1,35 @@
+/* Self-hosted fonts, Latin subset only (covers Dutch and English, including é, ë, ’ and €).
+   One @font-face per face keeps the inlined homepage CSS inside its budget.
+   All families are open-licence (OFL) and served from /assets. */
+
+@font-face {
+  font-family: 'Geist Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url(../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2) format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Funnel Display Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300 800;
+  src: url(../node_modules/@fontsource-variable/funnel-display/files/funnel-display-latin-wght-normal.woff2) format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Caveat Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400 700;
+  src: url(../node_modules/@fontsource-variable/caveat/files/caveat-latin-wght-normal.woff2) format('woff2-variations');
+}
+
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../node_modules/@fontsource/bebas-neue/files/bebas-neue-latin-400-normal.woff2) format('woff2');
+}

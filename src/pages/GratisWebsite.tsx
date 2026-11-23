@@ -1,204 +1,138 @@
+import { motion, useReducedMotion } from 'motion/react'
+import { Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import Seo from '../components/Seo'
 import GiveawayEntryForm from '../components/GiveawayEntryForm'
 import ResponsiveImage from '../components/ResponsiveImage'
-import CaseVisual from '../components/CaseVisual'
-import CheckList from '../components/CheckList'
+import Arrow from '../components/brand/Arrow'
+import { useArrive } from '../components/brand/useArrive'
+import Cta from '../components/brand/Cta'
+import HandNote from '../components/brand/HandNote'
+import Reveal from '../components/brand/Reveal'
+import SplitHeadline from '../components/brand/SplitHeadline'
+import CasePoster from '../components/home/CasePoster'
 import { giveaway } from '../data/giveaway'
-import { getCase } from '../data/cases'
+import { caseHeadline, getCase } from '../data/cases'
 import { trackEvent } from '../lib/analytics'
+import { PAGES_STYLES, usePageStyles } from '../lib/deferredStyles'
 import { useLang } from '../i18n/LanguageContext'
 import pinacelloSite from '../assets/pinacello-site.webp'
 import healthfactorSite from '../assets/cases/healthfactor-website.webp'
 import studioFlyers from '../assets/studio-flyers.webp'
-import studioFlyersSmall from '../assets/studio-flyers-640.webp'
-import stefDesk from '../assets/stef-desk.webp'
-import stefDeskSmall from '../assets/stef-desk-640.webp'
+import stefSmall from '../assets/stef-desk-640.webp'
 
-/** One content rail for the whole page, so every heading starts on the same line.
- *  max-w-6xl is the width the rest of the site uses. */
-const RAIL = 'mx-auto w-full max-w-6xl px-5 sm:px-8'
+/** A browser window around a real screenshot. */
+function Shot({ src, alt, url, eager = false }: { src: string; alt: string; url: string; eager?: boolean }) {
+  return (
+    <div className="cs-window">
+      <div className="cs-window-bar"><i /><i /><i /><span className="cs-window-url">{url}</span></div>
+      <ResponsiveImage src={src} alt={alt} sizes="(max-width: 1024px) 100vw, 600px" loading={eager ? 'eager' : 'lazy'} fetchPriority={eager ? 'high' : undefined} className="gw-shot" />
+    </div>
+  )
+}
+
+/** The headline's last two words carry the blue chip. */
+function split(title: string) {
+  const words = title.split(' ')
+  return [{ text: words.slice(0, -2).join(' ') }, { text: words.slice(-2).join(' '), tone: 'accent' as const }]
+}
 
 export default function GratisWebsite() {
+  usePageStyles(PAGES_STYLES)
   const { lang } = useLang()
   const g = giveaway
-  const proofCases = g.proof.cases.map(slug => getCase(slug)).filter(Boolean)
+  const reduce = useReducedMotion()
+  const proofCases = g.proof.cases.map((slug) => getCase(slug)).filter((item) => item !== undefined)
+  const arrive = useArrive()
 
   return (
-    <div>
+    <div className="vs-page gw-page">
       <Seo title={g.seo.title[lang]} description={g.seo.description[lang]} path={g.path} />
 
-      {/* On a phone the screenshot sits between the lead and the facts, so the
-          thing being given away is on screen without scrolling. On desktop the
-          left column keeps its reading order and the screenshot spans it. */}
-      <section className="bg-surface/40">
-        <div className={`${RAIL} reveal grid items-center gap-x-16 gap-y-8 py-12 sm:py-20 lg:grid-cols-[1fr_1.1fr]`}>
-          <div className="order-1 lg:col-start-1 lg:row-start-1">
-            <h1 className="font-display text-4xl text-paper text-balance sm:text-5xl">{g.hero.title[lang]}</h1>
-            <p className="mt-4 max-w-xl text-lg text-bone">{g.hero.lead[lang]}</p>
-          </div>
-
-          <figure className="order-2 m-0 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center">
-            <ResponsiveImage
-              src={pinacelloSite}
-              alt={g.hero.figureAlt[lang]}
-              sizes="(max-width: 1024px) 100vw, 600px"
-              loading="eager"
-              fetchPriority="high"
-              className="w-full rounded-2xl border border-line object-cover object-top"
-            />
-            <figcaption className="mt-3 text-sm text-mute">{g.hero.figureCaption[lang]}</figcaption>
-          </figure>
-
-          <div className="order-3 lg:col-start-1 lg:row-start-2">
-            <dl className="grid gap-x-8 gap-y-4 sm:grid-cols-3">
-              {g.hero.facts[lang].map(fact => (
-                <div key={fact.label} className="border-t border-line pt-3">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.08em] text-mute">{fact.label}</dt>
-                  <dd className="mt-1 text-sm font-medium text-paper">{fact.value}</dd>
-                </div>
-              ))}
-            </dl>
-            <p className="mt-8">
-              <a href="#deelnemen" className="button-dark"
-                onClick={() => trackEvent('audit_cta_clicked', { placement: 'giveaway_hero' })}>
-                {g.hero.cta[lang]} <span aria-hidden="true">↗</span>
-              </a>
-            </p>
-          </div>
+      <section className="vs-wrap sv-hero" aria-labelledby="gw-title">
+        <div className="sv-hero-copy">
+          <SplitHeadline as="h1" id="gw-title" className="vs-h1 sv-h1" parts={split(g.hero.title[lang])} onMount />
+          <motion.p className="vs-lead" {...arrive(0.55)}>{g.hero.lead[lang]}</motion.p>
+          <motion.dl className="gw-facts" {...arrive(0.7)}>
+            {g.hero.facts[lang].map((fact) => <div key={fact.label}><dt>{fact.label}</dt><dd>{fact.value}</dd></div>)}
+          </motion.dl>
+          <motion.div className="sv-hero-actions" {...arrive(0.85)}>
+            <Cta href="#deelnemen" onClick={() => trackEvent('audit_cta_clicked', { placement: 'giveaway_hero' })}>{g.hero.cta[lang]}</Cta>
+          </motion.div>
         </div>
+        <motion.figure className="gw-hero-shot" initial={reduce ? false : { opacity: 0, x: 50, rotate: 4 }} animate={{ opacity: 1, x: 0, rotate: 1.5 }} transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.5 }}>
+          <Shot src={pinacelloSite} alt={g.hero.figureAlt[lang]} url="promo.pinacello.com" eager />
+          <figcaption>{g.hero.figureCaption[lang]}</figcaption>
+        </motion.figure>
       </section>
 
-      <section className="border-t border-line" aria-labelledby="prijs-titel">
-        <div className={`${RAIL} reveal py-16 sm:py-20`}>
-          <h2 id="prijs-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{g.prize.title[lang]}</h2>
-          <p className="mt-4 max-w-2xl text-bone">{g.prize.intro[lang]}</p>
-          <div className="mt-10 grid items-start gap-10 lg:grid-cols-[1fr_0.85fr] lg:gap-14">
-            <div>
-              <CheckList items={[...g.prize.items[lang]]} columns={1} />
-              <p className="mt-8 border-t border-line pt-5 text-sm text-mute">{g.prize.excluded[lang]}</p>
-            </div>
-            <figure className="m-0">
-              <ResponsiveImage
-                src={healthfactorSite}
-                alt={g.prize.figureAlt[lang]}
-                sizes="(max-width: 1024px) 100vw, 460px"
-                loading="lazy"
-                className="w-full rounded-2xl border border-line object-cover object-top"
-              />
-              <figcaption className="mt-3 text-sm text-mute">{g.prize.figureCaption[lang]}</figcaption>
-            </figure>
-          </div>
+      <section className="vs-wrap vs-section gw-prize" aria-labelledby="prijs-titel">
+        <div>
+          <Reveal as="h2" className="vs-h2" id="prijs-titel">{g.prize.title[lang]}</Reveal>
+          <p className="vs-lead">{g.prize.intro[lang]}</p>
+          <ul className="sv-deliver-list gw-list">{g.prize.items[lang].map((item) => <li key={item}><span className="sv-tick"><Check size={13} strokeWidth={2.6} /></span>{item}</li>)}</ul>
+          <p className="gw-excluded">{g.prize.excluded[lang]}</p>
         </div>
+        <figure className="gw-prize-shot">
+          <Shot src={healthfactorSite} alt={g.prize.figureAlt[lang]} url="healthfactor" />
+          <figcaption>{g.prize.figureCaption[lang]}</figcaption>
+        </figure>
       </section>
 
-      {/* Three true peers. This card is the page's one card treatment. */}
-      <section className="border-t border-line bg-surface/40" aria-labelledby="werk-titel">
-        <div className={`${RAIL} reveal py-16 sm:py-20`}>
-          <h2 id="werk-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{g.proof.title[lang]}</h2>
-          <p className="mt-4 max-w-2xl text-bone">{g.proof.body[lang]}</p>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {proofCases.map(item => (
-              <Link
-                key={item!.slug}
-                to={`/cases/${item!.slug}`}
-                className="group block rounded-2xl border border-line bg-surface-2 p-3 transition hover:border-accent"
-                onClick={() => trackEvent('case_viewed', { case: item!.slug, placement: 'giveaway_page' })}
-              >
-                <CaseVisual case={item!} lang={lang} ratio="aspect-[16/10]" />
-                <div className="px-2 pb-1 pt-4">
-                  <h3 className="text-base font-semibold text-paper">{item!.name}</h3>
-                  <p className="mt-1 text-sm text-mute">{item!.sector[lang]}</p>
-                  <span className="mt-3 inline-block text-sm font-medium text-accent-2 group-hover:text-accent">
-                    {g.proof.view[lang]} <span aria-hidden="true">↗</span>
-                  </span>
-                </div>
+      <section className="vs-wrap vs-section" aria-labelledby="werk-titel">
+        <Reveal as="h2" className="vs-h2" id="werk-titel">{g.proof.title[lang]}</Reveal>
+        <p className="vs-lead gw-proof-lead">{g.proof.body[lang]}</p>
+        <ul className="gw-proof">
+          {proofCases.map((item, i) => (
+            <Reveal as="li" key={item.slug} delay={i * 0.08} y={30}>
+              <Link to={`/cases/${item.slug}`} className="vs-case-card vs-case-live" onClick={() => trackEvent('case_viewed', { case: item.slug, placement: 'giveaway_page' })}>
+                <div className="vs-case-card-frame"><CasePoster slug={item.slug} name={item.name} caption={caseHeadline(item, lang)} lang={lang} /></div>
+                <h3 className="vs-case-card-name">{item.name}</h3>
+                <p className="vs-case-card-result">{caseHeadline(item, lang)}</p>
+                <span className="vs-textlink vs-textlink--arrow">{g.proof.view[lang]}<Arrow size={14} /></span>
               </Link>
-            ))}
-          </div>
-        </div>
+            </Reveal>
+          ))}
+        </ul>
       </section>
 
-      {/* A real sequence, so a numbered list. No card chrome: these are not peers to the cases. */}
-      <section className="border-t border-line" aria-labelledby="stappen-titel">
-        <div className={`${RAIL} reveal py-16 sm:py-20`}>
-          <h2 id="stappen-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{g.steps.title[lang]}</h2>
-          <ol className="mt-10 grid gap-10 sm:grid-cols-3 sm:gap-8">
-            {g.steps.items[lang].map((step, index) => (
-              <li key={step.title} className="border-t-2 border-accent pt-5">
-                <span className="font-display text-sm font-semibold text-accent">{String(index + 1).padStart(2, '0')}</span>
-                <h3 className="mt-2 text-base font-semibold text-paper">{step.title}</h3>
-                <p className="mt-2 text-sm text-bone">{step.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
+      <section className="vs-wrap vs-section gw-steps" aria-labelledby="stappen-titel">
+        <Reveal as="h2" className="vs-h2" id="stappen-titel">{g.steps.title[lang]}</Reveal>
+        <ol className="ct-call gw-call">
+          {g.steps.items[lang].map((step, index) => (
+            <li key={step.title}><span className="ct-call-num">0{index + 1}</span><span><b>{step.title}</b>{step.body}</span></li>
+          ))}
+        </ol>
       </section>
 
-      <section className="border-t border-line" aria-labelledby="waarom-titel">
-        <div className={`${RAIL} reveal grid items-center gap-10 py-16 sm:py-20 lg:grid-cols-[1fr_0.7fr]`}>
-          <div>
-            <h2 id="waarom-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{g.why.title[lang]}</h2>
-            <p className="mt-4 text-bone">{g.why.body[lang]}</p>
-          </div>
-          <figure className="m-0">
-            <picture>
-              <source media="(max-width: 640px)" srcSet={studioFlyersSmall} />
-              <ResponsiveImage
-                src={studioFlyers}
-                alt={g.why.photoAlt[lang]}
-                sizes="(max-width: 1024px) 100vw, 320px"
-                loading="lazy"
-                className="w-full rounded-2xl border border-line object-cover"
-              />
-            </picture>
-          </figure>
+      <section className="vs-wrap vs-section gw-why" aria-labelledby="waarom-titel">
+        <div>
+          <Reveal as="h2" className="vs-h2" id="waarom-titel">{g.why.title[lang]}</Reveal>
+          <p className="vs-lead">{g.why.body[lang]}</p>
         </div>
+        <figure className="ag-polaroid gw-polaroid">
+          <ResponsiveImage src={studioFlyers} alt={g.why.photoAlt[lang]} sizes="(max-width: 1024px) 70vw, 320px" loading="lazy" />
+          <figcaption>Lochristi</figcaption>
+        </figure>
       </section>
 
-      {/* The page ends on the action. */}
-      <section id="deelnemen" className="border-t border-line bg-surface/40" aria-labelledby="formulier-titel">
-        <div className={`${RAIL} py-16 sm:py-20`}>
-          <h2 id="formulier-titel" className="font-display text-3xl text-paper text-balance sm:text-4xl">{g.form.title[lang]}</h2>
-          <p className="mt-3 max-w-2xl text-bone">{g.form.body[lang]}</p>
-          <div className="mt-6 flex items-center gap-4">
-            <figure className="m-0 shrink-0">
-              <picture>
-                <source media="(max-width: 640px)" srcSet={stefDeskSmall} />
-                <ResponsiveImage
-                  src={stefDesk}
-                  alt={g.form.photoAlt[lang]}
-                  sizes="64px"
-                  loading="lazy"
-                  className="size-14 rounded-full border border-line object-cover"
-                />
-              </picture>
-            </figure>
-            <p className="text-sm text-mute">
-              <strong className="block font-medium text-paper">{g.form.who[lang]}</strong>
-              {g.form.where[lang]}
-            </p>
-          </div>
-          <div className="mt-10">
-            <GiveawayEntryForm />
-          </div>
+      <section id="deelnemen" className="vs-wrap vs-section sv-close" aria-labelledby="formulier-titel">
+        <div className="sv-close-intro">
+          <h2 id="formulier-titel" className="vs-h2">{g.form.title[lang]}</h2>
+          <p className="vs-lead">{g.form.body[lang]}</p>
+          <p className="ct-who gw-who">
+            <img src={stefSmall} alt={g.form.photoAlt[lang]} width={56} height={56} loading="lazy" decoding="async" />
+            <span><strong>{g.form.who[lang]}</strong><em>{g.form.where[lang]}</em></span>
+          </p>
+          <HandNote point="down-left" className="sv-close-note">{lang === 'nl' ? 'veel succes :)' : 'good luck :)'}</HandNote>
         </div>
+        <div className="sv-close-form"><GiveawayEntryForm /></div>
       </section>
 
-      {/* Quieter than the offer above it, but fully readable: a contest needs its rules in plain sight. */}
-      <section id="voorwaarden" className="border-t border-line" aria-labelledby="voorwaarden-titel">
-        <div className={`${RAIL} py-14 sm:py-16`}>
-          <h2 id="voorwaarden-titel" className="font-display text-xl text-paper sm:text-2xl">{g.rules.title[lang]}</h2>
-          <p className="mt-2 text-sm text-mute">{g.rules.notice[lang]}</p>
-          <ol className="mt-7 grid gap-x-10 gap-y-4 text-sm leading-relaxed text-bone sm:grid-cols-2">
-            {g.rules.items[lang].map((rule, index) => (
-              <li key={rule} className="flex gap-2.5">
-                <span className="shrink-0 tabular-nums text-mute">{index + 1}.</span>
-                <span>{rule}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
+      <section id="voorwaarden" className="vs-wrap gw-rules" aria-labelledby="voorwaarden-titel">
+        <h2 id="voorwaarden-titel">{g.rules.title[lang]}</h2>
+        <p>{g.rules.notice[lang]}</p>
+        <ol>{g.rules.items[lang].map((rule, index) => <li key={rule}><span>{index + 1}.</span>{rule}</li>)}</ol>
       </section>
     </div>
   )

@@ -103,13 +103,15 @@ test('production server returns route HTML, permanent redirects and real 404s', 
 test('FAQ answers exist in initial HTML and service sections use headings', async () => {
   const { faqItems } = await import('../dist-ssr/entry-server.js')
   const home = await readFile('dist/index.html', 'utf8')
-  const details = [...home.matchAll(/<details\b[^>]*name="studio-faq"[^>]*>([\s\S]*?)<\/details>/g)]
-  assert.equal(details.length, faqItems.length)
-  for (const [index, detail] of details.entries()) {
-    assert.match(detail[1], /<summary[\s>]/)
-    assert.match(detail[1], /<p[\s>]/)
+  // Each FAQ row is a heading with a toggle button and its answer region, closed rows included.
+  const rows = home.split('data-faq="studio-faq"').slice(1)
+  assert.equal(rows.length, faqItems.length)
+  for (const [index, row] of rows.entries()) {
+    assert.match(row, /<h3[^>]*><button[^>]*aria-expanded="(true|false)"/)
+    assert.match(row, /role="region"/)
+    const text = row.replace(/<[^>]+>/g, '')
     const escaped = faqItems[index].answer.nl.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-    assert(detail[1].includes(escaped), faqItems[index].question.nl)
+    assert(text.includes(escaped), faqItems[index].question.nl)
   }
   const service = await readFile('dist/google-ads/index.html', 'utf8')
   for (const heading of ['Waar het vastloopt', 'Wat je krijgt', 'Zo werken we']) assert.match(service, new RegExp(`<h2[^>]*>${heading}</h2>`))
@@ -146,11 +148,13 @@ test('articles have crawlable content, authorship, links and sitemap entries', a
 
 test('hero video is discoverable before hydration and defers the YouTube player', async () => {
   const html = await readFile('dist/index.html', 'utf8')
-  const hero = html.match(/<section class="studio-hero"[\s\S]*?<\/section>/)?.[0]
+  const hero = html.match(/<section class="studio-hero[^"]*"[\s\S]*?<\/section>/)?.[0]
   assert(hero, 'Homepage includes the hero section')
-  assert.match(hero, /aria-label="Speel video af: Waarom je Meta Ads geld VERBRANDEN/)
-  assert.match(hero, /<img[^>]+src="https:\/\/i\.ytimg\.com\/vi\/tSjPY9J6ynk\/maxresdefault\.jpg"/)
-  assert.match(hero, /href="https:\/\/www\.youtube\.com\/watch\?v=tSjPY9J6ynk"/)
+  // a labelled play button over the video's own poster, a plain link to the same video, and no player yet
+  const id = hero.match(/https:\/\/i\.ytimg\.com\/vi\/([\w-]{11})\//)?.[1]
+  assert(id, 'Hero shows the video poster')
+  assert.match(hero, /<button[^>]+aria-label="Speel video af: [^"]+"/)
+  assert(hero.includes(`href="https://www.youtube.com/watch?v=${id}"`), 'Hero links to the same video')
   assert.doesNotMatch(hero, /<iframe\b/)
   assert.match(html, /href="\/cases\/pinacello"/)
 })
