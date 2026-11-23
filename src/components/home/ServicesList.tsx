@@ -19,9 +19,9 @@ const COPY = {
 
 /** Our own work behind each group: a real ad we made, a webshop we built, and our own dashboard. */
 const MEDIA = [
-  { video: '/videos/ads/healthfactor-personal.mp4', src: '/images/ads/healthfactor-personal.jpg', position: '50% 22%' },
-  { src: pinacelloSite, position: '50% 0%' },
-  { src: overview, position: '38% 0%' },
+  { video: '/videos/ads/healthfactor-personal.mp4', src: '/images/ads/healthfactor-personal.jpg', width: 720, height: 1280, position: '50% 22%' },
+  { src: pinacelloSite, width: 1440, height: 846, position: '50% 0%' },
+  { src: overview, width: 1440, height: 700, position: '38% 0%' },
 ]
 
 /**
@@ -76,8 +76,8 @@ export default function ServicesList() {
               >
                 <div className="vs-panel-media" aria-hidden="true">
                   {media.video
-                    ? <video ref={video} src={media.video} poster={media.src} muted loop playsInline preload="none" style={{ '--pos': media.position } as React.CSSProperties} />
-                    : <img src={media.src} alt="" loading="lazy" decoding="async" style={{ '--pos': media.position } as React.CSSProperties} />}
+                    ? <video ref={video} src={media.video} poster={media.src} width={media.width} height={media.height} muted loop playsInline preload="none" style={{ '--pos': media.position } as React.CSSProperties} />
+                    : <img src={media.src} alt="" width={media.width} height={media.height} loading="lazy" decoding="async" style={{ '--pos': media.position } as React.CSSProperties} />}
                 </div>
                 <span className="vs-panel-spine" aria-hidden="true"><b>0{g + 1}</b>{group.label[lang]}</span>
                 <div className="vs-panel-body">
