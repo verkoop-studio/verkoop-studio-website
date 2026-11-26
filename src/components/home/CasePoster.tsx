@@ -267,11 +267,46 @@ function StipplePoster({ name, lang }: PosterProps) {
   )
 }
 
+/* ------------------------------------------------------------------- */
+/* Pitch: night-green ground with faint field lines, a crawling band.   */
+/* ------------------------------------------------------------------- */
+
+/** The activities O'Learys Gent lists on its own page; the same words in both languages. */
+const PITCH_BAND = 'LIVE SPORT · KARTING · BOWLING · KARAOKE · ARCADE · COCKTAILS · '
+
+function PitchPoster({ name, lang }: PosterProps) {
+  return (
+    <Art>
+      <defs>
+        <linearGradient id="pitch-ground" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#06120e" />
+          <stop offset="1" stopColor="#173d31" />
+        </linearGradient>
+      </defs>
+      <rect width={W} height={H} fill="url(#pitch-ground)" />
+      <g fill="none" stroke="#f5f3ee" strokeOpacity="0.1" strokeWidth="3">
+        <rect x="60" y="48" width={W - 120} height="520" />
+        <line x1={W / 2} x2={W / 2} y1="48" y2="568" />
+        <path d={circle(W / 2, 308, 92)} />
+        <rect x="60" y="188" width="128" height="240" />
+        <rect x={W - 188} y="188" width="128" height="240" />
+      </g>
+      <g transform={`translate(${W / 2} ${H / 2 - 4})`}>
+        <text textAnchor="middle" className="vs-p-display" fontSize="146" fontWeight="800" letterSpacing="-4" fill="#ffd60a" transform="skewX(-10)">{name.toUpperCase()}</text>
+        <text y="56" textAnchor="middle" className="vs-p-text" fontSize="20" letterSpacing="4" fill="#f5f3ee" opacity="0.75">{lang === 'nl' ? 'GENT' : 'GHENT'}</text>
+      </g>
+      <rect y={H - 92} width={W} height="56" fill="#239f87" />
+      <text x="0" y={H - 55} className="vs-p-display vs-pitch-run" fontSize="24" fontWeight="700" letterSpacing="1" fill="#ffd60a">{PITCH_BAND.repeat(6)}</text>
+    </Art>
+  )
+}
+
 const THEMES: Record<CaseSlug, { theme: string; Poster: (props: PosterProps) => ReactNode }> = {
   pinacello: { theme: 'paper', Poster: PaperPoster },
   'e-kart': { theme: 'ticker', Poster: TickerPoster },
   nooms: { theme: 'glow', Poster: GlowPoster },
   healthfactor: { theme: 'stipple', Poster: StipplePoster },
+  olearys: { theme: 'pitch', Poster: PitchPoster },
 }
 
 /**

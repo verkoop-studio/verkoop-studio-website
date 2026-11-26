@@ -45,10 +45,11 @@ Platforms named on the site, chosen per project: Meta, Google, TikTok, Instagram
 
 ## Work
 
-- [Cases](https://verkoop.studio/cases): Three ongoing cases. Read the case page before quoting a number.
-- [Pinacello](https://verkoop.studio/cases/pinacello): Consumer ecommerce. Stef works on campaigns, landing pages, conversion and online sales. The case states +120% online revenue and 20 sales from one organic video. The case page also says the reporting period, the comparison baseline and the attribution method are not published, so those figures cannot be reconstructed from the page. Public shop page: https://promo.pinacello.com/
+- [Cases](https://verkoop.studio/cases): Four ongoing cases. Read the case page before quoting a number.
+- [Pinacello](https://verkoop.studio/cases/pinacello): Consumer ecommerce. Stef works on campaigns, landing pages, conversion and online sales. The case states +120% online revenue and 20 sales from one organic video. The case page also says the reporting period, the comparison baseline and the attribution method are not published, so those figures cannot be reconstructed from the page. Public shop: https://www.pinacello.com/
 - [E-Kart](https://verkoop.studio/cases/e-kart): Indoor karting in Gent, for individual drivers and for groups. The goal is more customers and bookings. The case says no validated result figures are included. A client line on the site calls E-Kart the fastest indoor karting in Gent. That line is not a measured result.
 - [Nooms](https://verkoop.studio/cases/nooms): Supplements and ecommerce. Nooms is Stef Keppens’ own company, at https://noomsdaily.com/. The case says a pre-sale driven by influencer marketing sold out. The page does not publish stock, the sales period or revenue, and says that result does not by itself show ongoing profit or repeat purchase.
+- [O'Learys](https://verkoop.studio/cases/olearys): Sports bar, restaurant and activities in Gent, for visitors planning a night out and for companies organising an event. Stef works on B2C and B2B landing pages, funnels, campaigns, tracking and conversion. The goal is more completed bookings and more qualified B2B enquiries. The case says no validated result figures are included. Location page: https://olearys.be/gent/nl-be
 - [Eerder werk van LYTE Studios](https://verkoop.studio/cases#lyte-projects): EONLOG is shown as earlier work and credited to LYTE Studios. It is not published as a Verkoop Studio result. EONLOG: https://lytestudios.be/projects/eonlog-website/
 
 ## Guides
