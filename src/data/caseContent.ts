@@ -258,4 +258,55 @@ export const caseContent: Record<CaseSlug, CaseContent> = {
       cta: { nl: 'Bespreek je video', en: 'Discuss your video' },
     },
   },
+  olearys: {
+    seoTitle: { nl: 'O’Learys case: B2C en B2B in Gent', en: 'O’Learys case: B2C and B2B in Ghent' },
+    headline: { nl: ['Eén website,', 'twee routes.'], en: ['One website,', 'two routes.'] },
+    lead: {
+      nl: 'Sportsbar, restaurant en activiteiten onder één dak in Gent. Wie een avond uit plant en wie een bedrijfsevent organiseert, krijgt elk een eigen route.',
+      en: 'Sports bar, restaurant and activities under one roof in Ghent. People planning a night out and people organising a company event each get their own route.',
+    },
+    stats: [
+      { text: { nl: 'B2C + B2B', en: 'B2C + B2B' }, label: { nl: 'twee beslistrajecten', en: 'two decision paths' }, icon: 'people' },
+      { text: { nl: 'Gent', en: 'Ghent' }, label: { nl: 'sportsbar en restaurant', en: 'sports bar and restaurant' }, icon: 'pin' },
+      { text: { nl: 'Doorlopend', en: 'Ongoing' }, label: { nl: 'samenwerking', en: 'collaboration' }, icon: 'pulse' },
+    ],
+    challenge: {
+      title: { nl: 'Veel aanbod, één keuze.', en: 'A lot on offer, one choice.' },
+      body: {
+        nl: 'Van een avondje bowling met vrienden tot een volledig bedrijfsevent: het aanbod is breed. Een bezoeker wil snel de juiste activiteit vinden, een organisator wil weten wat een event voor zijn team inhoudt. Elk heeft een eigen weg naar een boeking of offerte nodig.',
+        en: 'From a night of bowling with friends to a full company event: there is a lot on offer. A visitor wants to find the right activity quickly; an organiser wants to know what an event means for their team. Each needs their own way to a booking or a proposal.',
+      },
+    },
+    windowLabel: { nl: 'website', en: 'website' },
+    stepsTitle: { nl: 'Twee doelgroepen. Elk een eigen route.', en: 'Two audiences. A route for each.' },
+    steps: [
+      {
+        title: { nl: 'Bezoekers snel naar een reservering', en: 'Visitors straight to a reservation' },
+        body: { nl: 'Wie een avond uit plant, vindt meteen de activiteit, het arrangement en de reserveerknop.', en: 'People planning a night out find the activity, the package and the booking button right away.' },
+        tags: { nl: ['B2C', 'Arrangementen'], en: ['B2C', 'Packages'] },
+        link: '/landing-pages', screen: 'booking',
+      },
+      {
+        title: { nl: 'Bedrijven een eigen pagina geven', en: 'A page of their own for companies' },
+        body: { nl: 'Organisatoren van bedrijfsevents krijgen een B2B-pagina met een duidelijke offerteaanvraag.', en: 'Company event organisers get a B2B page with a clear proposal request.' },
+        tags: { nl: ['B2B', 'Offerteaanvragen'], en: ['B2B', 'Proposal requests'] },
+        link: '/funnels', screen: 'group',
+      },
+      {
+        title: { nl: 'Gemeten van campagne tot omzet', en: 'Measured from campaign to revenue' },
+        body: { nl: 'Meta- en Google-campagnes landen op de juiste pagina; tracking volgt boekingen en aanvragen apart.', en: 'Meta and Google campaigns land on the right page; tracking follows bookings and enquiries separately.' },
+        tags: { nl: ['Tracking', 'Meta en Google Ads'], en: ['Tracking', 'Meta and Google Ads'] },
+        link: '/data-analytics', screen: 'goal',
+      },
+    ],
+    evidence: {
+      nl: 'Het doel is meer voltooide boekingen en meer gekwalificeerde B2B-aanvragen. Voor deze case zijn nog geen gemeten resultaten gepubliceerd.',
+      en: 'The goal is more completed bookings and more qualified B2B enquiries. No measured results have been published for this case yet.',
+    },
+    closing: {
+      title: { nl: 'Meer boekingen én bedrijfsaanvragen?', en: 'More bookings and company enquiries?' },
+      body: { nl: 'We bekijken hoe bezoekers en organisatoren nu bij je boeken en waar ze afhaken.', en: 'We look at how visitors and organisers book with you now and where they drop off.' },
+      cta: { nl: 'Bespreek je boekingen', en: 'Discuss your bookings' },
+    },
+  },
 }

@@ -3,10 +3,12 @@ import ekartSite from '../assets/cases/ekart-640.webp'
 import ekartFull from '../assets/cases/ekart.webp'
 import healthfactorFull from '../assets/cases/healthfactor-website.webp'
 import noomsFull from '../assets/cases/nooms.webp'
-import pinacelloFull from '../assets/cases/pinacello.webp'
+import olearysFull from '../assets/cases/olearys.webp'
+import pinacelloFull from '../assets/cases/pinacello-website.webp'
 import healthfactorSite from '../assets/cases/healthfactor-website-640.webp'
 import noomsSite from '../assets/cases/nooms-640.webp'
-import pinacelloSite from '../assets/cases/pinacello-640.webp'
+import olearysSite from '../assets/cases/olearys-640.webp'
+import pinacelloSite from '../assets/cases/pinacello-website-640.webp'
 import { Check, MapPin, Users } from 'lucide-react'
 import { useRef, type CSSProperties } from 'react'
 import { Link } from 'react-router-dom'
@@ -58,9 +60,10 @@ const ASSETS: Record<CaseSlug, { still?: string; site: string }> = {
   'e-kart': { site: ekartSite },
   nooms: { site: noomsSite },
   healthfactor: { still: '/images/ads/healthfactor-personal.jpg', site: healthfactorSite },
+  olearys: { site: olearysSite },
 }
 /** The same sites at full size, for the hero. */
-const HERO_SITE: Record<CaseSlug, string> = { pinacello: pinacelloFull, 'e-kart': ekartFull, nooms: noomsFull, healthfactor: healthfactorFull }
+const HERO_SITE: Record<CaseSlug, string> = { pinacello: pinacelloFull, 'e-kart': ekartFull, nooms: noomsFull, healthfactor: healthfactorFull, olearys: olearysFull }
 const domain = (url?: string) => (url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : '')
 
 /* The journey's screens, built from the case's own material and real labels, each marked as a sample. */
@@ -69,7 +72,7 @@ function Screen({ kind, lang, tags, c }: { kind: CaseScreen; lang: Lang; tags: s
   const name = c.name
   const art = ASSETS[c.slug]
   const site = domain(c.liveUrl)
-  const extra = ExtraScreen({ kind, nl, art, name, site })
+  const extra = ExtraScreen({ kind, nl, art, name, site, slug: c.slug })
   if (extra) return extra
   if (kind === 'ad') {
     return (
@@ -113,8 +116,14 @@ function Screen({ kind, lang, tags, c }: { kind: CaseScreen; lang: Lang; tags: s
   )
 }
 
+/** The two goal rows per case: who books (B2C) and who asks for a group or company offer (B2B). */
+const GOAL_ROWS: Partial<Record<CaseSlug, Record<Lang, [string, string]>>> = {
+  'e-kart': { nl: ['Boekingen van rijders', 'Aanvragen van groepen'], en: ['Bookings from drivers', 'Requests from groups'] },
+  olearys: { nl: ['Reserveringen van bezoekers', 'Aanvragen van bedrijven'], en: ['Reservations from visitors', 'Requests from companies'] },
+}
+
 /** The screens the other cases need. Same rules: skeleton content, real labels, marked as a sample. */
-function ExtraScreen({ kind, nl, art, name, site }: { kind: CaseScreen; nl: boolean; art: { still?: string; site: string }; name: string; site: string }) {
+function ExtraScreen({ kind, nl, art, name, site, slug }: { kind: CaseScreen; nl: boolean; art: { still?: string; site: string }; name: string; site: string; slug: CaseSlug }) {
   if (kind === 'booking') {
     const slots = ['14:00', '15:30', '17:00', '19:30']
     return (
@@ -139,12 +148,13 @@ function ExtraScreen({ kind, nl, art, name, site }: { kind: CaseScreen; nl: bool
     )
   }
   if (kind === 'goal') {
+    const [b2c, b2b] = (GOAL_ROWS[slug] ?? GOAL_ROWS['e-kart']!)[nl ? 'nl' : 'en']
     return (
       <div className="cs-mock cs-mock--card">
         <p className="cs-mock-title">{nl ? 'Doel' : 'Goal'}</p>
         <div className="cs-goal-rows">
-          <span><b>B2C</b>{nl ? 'Boekingen van rijders' : 'Bookings from drivers'}<i className="cs-goal-bar" /></span>
-          <span><b>B2B</b>{nl ? 'Aanvragen van groepen' : 'Requests from groups'}<i className="cs-goal-bar cs-goal-bar--b" /></span>
+          <span><b>B2C</b>{b2c}<i className="cs-goal-bar" /></span>
+          <span><b>B2B</b>{b2b}<i className="cs-goal-bar cs-goal-bar--b" /></span>
         </div>
       </div>
     )

@@ -40,6 +40,7 @@ export default function App({ location }: { location?: string }) {
           <Route path="cases/e-kart" element={<CaseStudyPage slug="e-kart" />} />
           <Route path="cases/nooms" element={<CaseStudyPage slug="nooms" />} />
           <Route path="cases/healthfactor" element={<CaseStudyPage slug="healthfactor" />} />
+          <Route path="cases/olearys" element={<CaseStudyPage slug="olearys" />} />
 
           <Route path="funnel-audit" element={<FunnelAudit />} />
           <Route path="gratis-website" element={<GratisWebsite />} />

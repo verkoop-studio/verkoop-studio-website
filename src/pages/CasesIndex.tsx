@@ -18,7 +18,7 @@ const COPY = {
   nl: {
     seoTitle: 'Cases',
     seoDescription:
-      "Ecommerce, hospitality en consumer brands: cases van Pinacello, Healthfactor, E-Kart en Nooms.",
+      "Ecommerce, hospitality en consumer brands: cases van Pinacello, Healthfactor, E-Kart, Nooms en O’Learys.",
     label: 'Cases',
     title: [{ text: 'Werk uit' }, { text: 'de praktijk.', tone: 'accent' as const }],
     body: 'Campagnes, webshops en websites. Bij elk project staat wie het maakte.',
@@ -29,7 +29,7 @@ const COPY = {
   en: {
     seoTitle: 'Cases',
     seoDescription:
-      "Ecommerce, hospitality and consumer brands: cases from Pinacello, Healthfactor, E-Kart and Nooms.",
+      "Ecommerce, hospitality and consumer brands: cases from Pinacello, Healthfactor, E-Kart, Nooms and O’Learys.",
     label: 'Cases',
     title: [{ text: 'Selected' }, { text: 'work.', tone: 'accent' as const }],
     body: 'Campaigns, shops and websites. Every project says who made it.',

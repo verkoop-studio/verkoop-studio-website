@@ -27,7 +27,7 @@ export interface Service {
   partnerCase?: { name: string; url: string; description: Bi<string> }
 }
 
-export type CaseSlug = 'pinacello' | 'e-kart' | 'nooms' | 'healthfactor'
+export type CaseSlug = 'pinacello' | 'e-kart' | 'nooms' | 'healthfactor' | 'olearys'
 
 export interface CaseStudy {
   slug: CaseSlug

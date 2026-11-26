@@ -1,8 +1,9 @@
 import type { CaseStudy, Lang } from './types'
 import nooms from '../assets/cases/nooms.webp'
-import pinacello from '../assets/cases/pinacello.webp'
+import pinacello from '../assets/cases/pinacello-website.webp'
 import ekart from '../assets/cases/ekart.webp'
 import healthfactor from '../assets/cases/healthfactor-website.webp'
+import olearys from '../assets/cases/olearys.webp'
 
 export const cases: CaseStudy[] = [
   {
@@ -11,7 +12,7 @@ export const cases: CaseStudy[] = [
     sector: { nl: 'Consumer ecommerce', en: 'Consumer ecommerce' },
     result: { nl: '+120% online omzet', en: '+120% online revenue' },
     status: 'ongoing',
-    liveUrl: 'https://promo.pinacello.com/',
+    liveUrl: 'https://www.pinacello.com/',
     image: pinacello,
     video: '/videos/ads/pinacello-personal.mp4',
     videoPoster: '/images/ads/pinacello-personal.jpg',
@@ -195,6 +196,60 @@ export const cases: CaseStudy[] = [
     objective: {
       nl: 'Bezoekers laten kennismaken met de sfeer en de mensen achter Healthfactor.',
       en: 'Introduce viewers to the atmosphere and people behind Healthfactor.',
+    },
+  },
+  {
+    slug: 'olearys',
+    name: "O'Learys",
+    sector: { nl: 'Hospitality en entertainment', en: 'Hospitality and entertainment' },
+    status: 'ongoing',
+    liveUrl: 'https://olearys.be/gent/nl-be',
+    image: olearys,
+    summary: {
+      nl: 'Van één website voor iedereen naar aparte, duidelijke beslistrajecten voor B2C-bezoekers en B2B-organisatoren bij O’Learys Gent.',
+      en: 'From one website for everyone to separate, clear decision paths for B2C visitors and B2B organisers at O’Learys Ghent.',
+    },
+    situation: {
+      nl: 'O’Learys biedt een breed aanbod aan activiteiten, arrangementen en doelgroepen, van een avondje bowling met vrienden tot een volledig bedrijfsevent. Die breedte is een sterkte, maar maakt het ook lastig voor een bezoeker om snel de juiste keuze te maken.',
+      en: 'O’Learys offers a wide range of activities, packages and audiences, from a night of bowling with friends to a full corporate event. That breadth is a strength, but it also makes it harder for a visitor to quickly find the right choice.',
+    },
+    challenge: {
+      nl: 'De website bevat veel activiteiten, arrangementen en doelgroepen, maar B2C-bezoekers en zakelijke organisatoren hebben elk een ander beslistraject nodig.',
+      en: 'The website contains many activities, packages and audiences, but B2C visitors and business organisers each need a different decision journey.',
+    },
+    role: {
+      nl: 'Ik werk aan de online digitale kant van O’Learys: B2C- en B2B-landingspagina’s, funnels, campagnes, tracking en conversie.',
+      en: 'I work on the digital side of O’Learys: B2C and B2B landing pages, funnels, campaigns, tracking and conversion.',
+    },
+    built: {
+      nl: [
+        'B2C landingpagina-structuur',
+        'B2B-pagina voor bedrijfsevents',
+        'Arrangement- en occasion-flows',
+        'Booking- en offerte-CTA’s',
+        'Vertrouwenselementen en sociale bewijskracht in de structuur',
+        'Afstemming van Meta- en Google-campagnes op de juiste pagina',
+        'Trackingstructuur',
+        'Strategie voor e-mailflows',
+      ],
+      en: [
+        'B2C landing-page structure',
+        'B2B page for company events',
+        'Package and occasion flows',
+        'Booking and proposal CTAs',
+        'Trust elements and social proof built into the structure',
+        'Alignment of Meta and Google campaigns to the right page',
+        'Tracking structure',
+        'Email-flow strategy',
+      ],
+    },
+    measurement: {
+      nl: 'Het doel is meer voltooide boekingen, meer gekwalificeerde B2B-aanvragen en duidelijkere meting van campagne tot omzet. Er zijn voor deze case nog geen gevalideerde resultaatcijfers opgenomen.',
+      en: 'The goal is more completed bookings, more qualified B2B enquiries and clearer measurement from campaign to revenue. No validated performance figures are included for this case yet.',
+    },
+    objective: {
+      nl: 'Meer voltooide boekingen, meer gekwalificeerde B2B-aanvragen en duidelijkere meting van campagne tot omzet.',
+      en: 'More completed bookings, more qualified B2B enquiries, and clearer measurement from campaign to revenue.',
     },
   },
 ]

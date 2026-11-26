@@ -21,7 +21,7 @@ import { Like } from '../brand/blocks/Like'
 const domain = (url?: string) => (url ? url.replace(/^https?:\/\//, '').replace(/\/$/, '') : '')
 
 /** Where each screenshot's own order button sits, as a share of the image, for the cursor to press. */
-const CTA: Record<string, [number, number]> = { pinacello: [35, 77], nooms: [61, 78], healthfactor: [74, 95] }
+const CTA: Record<string, [number, number]> = { pinacello: [12, 80], nooms: [61, 78], healthfactor: [74, 95], olearys: [31, 11] }
 
 const WORDS = {
   nl: { sponsored: 'Gesponsord', play: 'Speel de video', like: 'Vind ik leuk', comment: 'Reageer', share: 'Deel', save: 'Bewaar', view: 'Bekijk de case', live: 'Live site' },

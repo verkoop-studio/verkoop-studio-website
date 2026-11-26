@@ -445,7 +445,7 @@ body { background: var(--vs-paper); color: var(--vs-ink); }
 .site-shell footer a, .site-shell footer button { display: inline-flex; align-items: center; min-height: 36px; }
 
 @media (prefers-reduced-motion: reduce) {
-  .vs-ticker-live, .vs-ticker-head, .vs-glow-breathe, .vs-glow-ghosts { animation: none; }
+  .vs-ticker-live, .vs-ticker-head, .vs-glow-breathe, .vs-glow-ghosts, .vs-pitch-run { animation: none; }
   .vs-stipple-dot { opacity: 1; transition: none; }
 }
 

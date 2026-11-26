@@ -261,6 +261,7 @@
 .vs-poster--ticker { background: #0d1424; }
 .vs-poster--glow { background: #0c0b10; }
 .vs-poster--stipple { background: #a9b29c; }
+.vs-poster--pitch { background: #0b1f18; }
 
 /* Ticker: the bright row crawls, the playhead sweeps the evening. */
 .vs-ticker-live { animation: vs-ticker 38s linear infinite; }
@@ -277,6 +278,9 @@
 /* Stipple: the dots settle into the object row by row when the poster is centred. */
 .vs-stipple-dot { opacity: 0; transition: opacity 0.2s ease; }
 :is(.vs-slide.is-active, .vs-case-live) .vs-stipple-dot { opacity: 1; transition: opacity 0.5s ease calc(0.1s + var(--r) * 0.07s); }
+
+/* Pitch: the band of activities crawls along the touchline. */
+.vs-pitch-run { animation: vs-ticker 44s linear infinite; }
 
 
 /* ---------- The system, part by part: Arc-style cards on a light ground ---------- */
@@ -1292,6 +1296,7 @@
 .vs-wordmark--e-kart { font-style: italic; letter-spacing: -0.01em; }
 .vs-wordmark--nooms { text-transform: lowercase; letter-spacing: -0.05em; }
 .vs-wordmark--healthfactor { font-weight: 700; letter-spacing: 0.02em; }
+.vs-wordmark--olearys { font-style: italic; font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; }
 @media (prefers-reduced-motion: reduce) {
   .vs-wordmarks-track { animation: none; width: auto; justify-content: center; }
   .vs-wordmarks-row[aria-hidden] { display: none; }
